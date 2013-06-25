@@ -39,9 +39,11 @@ liquid_picture:
         width: "500"
       # Media queries will have IDs
       # underscore and number, NO LEADING ZEROS
-      media_1: "(min-width: 60em)"
+      media_1:
+        query: "(min-width: 60em)"
         width: "750"
-      media_2: "(min-width: 90em)"
+      media_2:
+        query: "(min-width: 90em)"
         width: "1000"
     # Any second tier name would be a preset to be referenced
     gallery:
@@ -52,9 +54,11 @@ liquid_picture:
       media_default:
         width: "250"
         height: "150"
-      media_1: "(min-width: 60em)"
+      media_1:
+        query: "(min-width: 60em)"
         width: "375"
         height: "225"
-      media_2: "(min-width: 90em)"
+      media_2:
+        query: "(min-width: 90em)"
         width: "500"
         height: "300"
