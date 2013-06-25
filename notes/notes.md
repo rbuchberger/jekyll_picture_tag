@@ -51,16 +51,27 @@ Full version:
 {% picture path/to/img.jpg attribute="value" preset: preset_name media_1: path/to/alt/img.jpg %}
 
 {% picture 
-   path/to/source/image.jpg
+  // Required
+  path/to/source/image.jpg // path with spaces? quote or _require them to escape_?
+                           // need to grab file name and extension for sized files name rewriting
 
-   // Any attribute
-   alt="value" 
-   id="value"
-   class="value"
+  // Optional (can be empty)
+  // Any attribute, with or without value 
+  // Require doublequotes
+  alt="value" 
+  id="value"
+  class="value" // can capture the whole thing as one string
+  
+  // Optional (falls back to default)
+  preset: preset_name // preset name must be string with no spaces
+                      // only need to capture preset name
 
-   preset: path/to/preset.yml
-   
-   media_1: path/to/alt/img.jpg
-   media_2: path/to/alt/img.jpg
+  // Optional (falls back to src img)
+  media_1: path/to/alt/img.jpg // must capture media_x and path
+  media_2: path/to/alt/img.jpg 
 %}
 ```
+
+## Questions
+
+Automatically generate prefixed resolution media queries, or have user input media queries by hand?

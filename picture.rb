@@ -5,11 +5,17 @@ module Jekyll
 
     def initialize(tag_name, markup, tokens)
 
-      # Regex out arguments, add to @picture
-        # image_file
-        # attributes as single string
-        # preset
-        # media_keys and path to alt sources
+      # if picture arguments are correct
+
+      # Regex out arguments
+      @markup = regex here
+
+      @image_src  = regex part
+      @attributes = regex part
+      # need to regex out alt value and then remove alt key and value from @attributes string
+        @alt      = regex part
+      @preset     = regex part
+      @media_src  = regex part
 
       super
     end
@@ -17,11 +23,28 @@ module Jekyll
     def render(context)
 
       # Get liquid_picture obj from _config.yml
-      # Grab universal settings, assign to variables
+      # @settings
+      # @settings[src_dir]
+      # @settings[dest_dir]
 
-      # run generate_image() for each media_ target
+      # create sources array to be rendered into html
+      # @sources = []
 
-      if @picture
+      # @preset = @settings[presets][@preset]
+
+      # each {| media_key, settings |
+
+        # settings[media]
+        # settings[width]
+        # settings[height]
+
+        # create generated img paths
+        # run generate_image() for each media_ target
+
+        # @sources[media_key][img_path]
+        # @sources[media_key][media]
+
+      if @picture # arguments are correct
 
       # construct and return tag
 
