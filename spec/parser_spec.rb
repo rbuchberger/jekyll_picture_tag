@@ -16,8 +16,8 @@ describe Parser do
 
   describe '#read_yaml' do
     it 'loads the correct file' do
-      subject.stubs(file_name: 'fixtures/filter.yml')
-      YAML.expects(:load).with('fixtures/filter.yml').returns(:blah)
+      subject.stubs(file_name: 'test/_config.yml')
+      YAML.expects(:load).with('test/_config.yml').returns(:blah)
       subject.read_yaml
     end
   end
