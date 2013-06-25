@@ -22,9 +22,6 @@ liquid_picture:
   dest_dir: "assets/images/generated"
   # Renders actual <picture> tag if true, picturefill if false
   picture_tag: false
-  # Array off PPIs, a variation will be generated for each, don't go too crazy!
-  # Can take out PPI since dimensions have to be specified in media anyways
-  # ppi: [1, 1.3, 3]
   presets:
     # If the tag is not given an argument it will use the following parameters
     default:
@@ -33,6 +30,10 @@ liquid_picture:
       # If you're not mobile first then you're not doing it right.
       # The base or mobile image size will not need a media query
       # This image will also serve as the <noscript> fallback
+      # If ppi is specified, adds cross browser mqs for hi ppi displays
+      # and correctly sized imgs. 1:1 ratio pixel* to dppx, err in the middle
+      # of bytes over wire vs pretty
+      # ppi: [1, 1.3, 3]
       media_default:
         # Obviously one size parameter is necessary
         # Width and height in CSS pixels
