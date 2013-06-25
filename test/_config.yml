@@ -28,16 +28,18 @@ liquidpicturefill:
       attr:
         class: "blogimage"
       # If you're not mobile first then you're not doing it right.
-      # The base, or mobile image size will not need a media query
+      # The base or mobile image size will not need a media query
       # This image will also serve as the <noscript> fallback
       base:
         # Obviously one size parameter is necessary
         # one argument scales
         # two arguments scale and crop
         width: "500"
-      media: "(min-width: 60em)"
+      # Media queries will have IDs
+      # underscore and number, NO LEADING ZEROS
+      media_1: "(min-width: 60em)"
         width: "750"
-      media: "(min-width: 90em)"
+      media_2: "(min-width: 90em)"
         width: "1000"
     # Any second tier name would be a preset to be referenced
     gallery:
@@ -48,9 +50,9 @@ liquidpicturefill:
       base:
         width: "250"
         height: "150"
-      media: "(min-width: 60em)"
+      media_1: "(min-width: 60em)"
         width: "375"
         height: "225"
-      media: "(min-width: 90em)"
+      media_2: "(min-width: 90em)"
         width: "500"
         height: "300"
