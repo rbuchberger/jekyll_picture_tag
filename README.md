@@ -106,7 +106,7 @@ Full version:
 `[ preset: xxx ] [2: path/to/2/src]  }}`
 
 ```
-{{ picture |
+{% picture 
    path/to/source/image.jpg
 
    // Any attribute
@@ -117,6 +117,6 @@ Full version:
    preset: path/to/preset.yml
    preset-target: path/to/alt/source
    preset-target-two: path/to/alt/source
-}}
+%}
 ```
 
