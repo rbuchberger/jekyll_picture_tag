@@ -1,5 +1,5 @@
 require 'mocha'
-require File.join(File.dirname(__FILE__), '..', 'liquid-picturefill/parser')
+require File.join(File.dirname(__FILE__), '..', 'liquid-picture/parser')
 
 Rspec.configure do |c|
   c.mock_with :mocha
@@ -17,14 +17,14 @@ describe Parser do
 
   describe '#read_yaml' do
     it 'loads the correct file' do
-      subject.stubs(file_name: 'test/_config.yml')
+      subject.stubs(file_name: 'notes/_config.yml')
       subject.read_yaml
     end
   end
 
   describe '#file_name' do
     it 'returns a garbage filename for now' do
-      subject.file_name.should == 'test/_config.yml'
+      subject.file_name.should == 'notes/_config.yml'
     end
   end
 
