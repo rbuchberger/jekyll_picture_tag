@@ -98,12 +98,12 @@ plugin_name:
 
 Short Version:
 
-`{{ picture | path/to/image.jpg [ alt: “description of the image” ] [ preset ] }}`
+`{% picture path/to/image.jpg [ alt: “description of the image” ] [ preset ] %}`
 
 Full version:
 
-`{{ picture | path/to/image.jpg [alt: “”] [attr: class=””, data-something=””]`  
-`[ preset: xxx ] [2: path/to/2/src]  }}`
+`{% picture path/to/image.jpg [alt: “”] [attr: class=””, data-something=””]`  
+`[ preset: xxx ] [2: path/to/2/src]  %}`
 
 ```
 {% picture 
