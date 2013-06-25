@@ -11,11 +11,13 @@ module Jekyll
       @markup = regex here
 
       @image_src  = regex part
-      @attributes = regex part
-      # need to regex out alt value and then remove alt key and value from @attributes string
-        @alt      = regex part
+      @attr       = regex part
+      # capture alt value from attr
+      @alt        = regex part
       @preset     = regex part
       @media_src  = regex part
+
+      # string replace alt=" with data-alt=" in attr.
 
       super
     end
@@ -23,30 +25,45 @@ module Jekyll
     def render(context)
 
       # Get liquid_picture obj from _config.yml
-      # @settings
+      # @settings = config[liquid_picture]
+      # to be used:
       # @settings[src_dir]
       # @settings[dest_dir]
 
-      # create sources array to be rendered into html
-      # @sources = []
+      # @sources = @settings[presets][@preset]
 
-      # @preset = @settings[presets][@preset]
+      # if @sources[ppi] generate extra media keys
+        # add new media key in correct place
+        # new width, height
+        # new media with cross browser mq
+      # remove @sources[ppi]
 
       # each {| media_key, settings |
 
+        # available:
         # settings[media]
         # settings[width]
         # settings[height]
 
-        # create generated img paths
-        # run generate_image() for each media_ target
+        # create generated img paths: jekyll absolute path + jekyll config source path + @settings[dest_dir]
+        # add @sources[media_key][img_path]
 
-        # @sources[media_key][img_path]
-        # @sources[media_key][media]
+        # generate_image()
+
 
       if @picture # arguments are correct
 
       # construct and return tag
+
+      # <span @attr>
+      #   each media_key in @sources
+      #   <span data-src="media_key[img_path]" (if media) data-media="media_key[media]"></span>
+      #   endeach
+      #
+      #   <noscript>
+      #     <img src="@sources[media_default][img_path]" alt="@alt">
+      #   </noscript>
+      # </span>
 
       else
         "Error processing input. Expected syntax: {% picture path/to/img.jpg [attribute=\"value\"] [preset: preset_name] [media_1: path/to/alt/img.jpg] %}"
