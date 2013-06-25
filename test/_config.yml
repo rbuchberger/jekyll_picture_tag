@@ -27,7 +27,10 @@ liquidpicturefill:
     default:
       attr:
         class: "blogimage"
-      default:
+      # If you're not mobile first then you're not doing it right.
+      # The base, or mobile image size will not need a media query
+      # This image will also serve as the <noscript> fallback
+      base:
         # Obviously one size parameter is necessary
         # one argument scales
         # two arguments scale and crop
@@ -42,7 +45,7 @@ liquidpicturefill:
         # Attributes are completely open ended, add whatever you like
         class: "blogimage"
         data-image: "gallery"
-      default:
+      base:
         width: "250"
         height: "150"
       media: "(min-width: 60em)"
