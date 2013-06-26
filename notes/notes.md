@@ -41,37 +41,18 @@ See [_config.yml](_config.yml)
 
 #### tag
 
-Short Version:
-
-{% picture path/to/img.jpg alt="A Picture" preset: gallery %}
-
-Full version:
-
 ```
-{% picture path/to/img.jpg attribute="value" preset: preset_name media_1: path/to/alt/img.jpg %}
+{% picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute="value"] %}
 
 {% picture 
-  // Required
-  path/to/source/image.jpg // path with spaces? quote or _require them to escape_?
-                           // need to grab file name and extension for sized files name rewriting
-
-  // Optional (can be empty)
-  // Any attribute, with or without value 
-  // Require doublequotes
-  alt="value" 
-  id="value"
-  class="value" // can capture the whole thing as one string
   
-  // Optional (falls back to default)
-  preset: preset_name // preset name must be string with no spaces
-                      // only need to capture preset name
-
-  // Optional (falls back to src img)
-  media_1: path/to/alt/img.jpg // must capture media_x and path
-  media_2: path/to/alt/img.jpg 
+  0 or 1 yml word without .ext
+  path with .ext
+    separate path, basename ext
+  0 or more media: path with .ext
+    separate path, basename ext
+  everything else
+    separate alt="value"
+  
 %}
 ```
-
-## Questions
-
-Automatically generate prefixed resolution media queries, or have user input media queries by hand?
