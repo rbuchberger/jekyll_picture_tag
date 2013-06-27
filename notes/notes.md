@@ -46,13 +46,28 @@ See [_config.yml](_config.yml)
 
 {% picture 
   
-  0 or 1 yml word without .ext
+  0 or 1 yml word without dot, space, .ext
+  ([^\s.:]+)\s+
+  
   path with .ext
+  ([^\s]+\.[a-zA-Z0-9]{3,4})\s+
     separate path, basename ext
-  0 or more media: path with .ext
+  
+  0 or more media_*: path with .ext
     separate path, basename ext
-  everything else
+  (media_[^\s:]+):\s*([^\s]+\.[a-zA-Z0-9]{3,4})\s+
+  
+  grab all (media_key: PATH)*, 
+  use string#scan to return an array of media_key, img_Path 
+  http://stackoverflow.com/questions/4692437/regex-with-named-capture-groups-getting-all-matches-in-ruby
+  
+  
+  everything else to end of string
+  [\s\S]+$
+    
     separate alt="value"
+    strip newlines, reduce whitespace to single spaces
+    "some text\nandsomemore".gsub("\n",'')
   
 %}
 ```

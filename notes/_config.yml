@@ -1,67 +1,35 @@
-# Base Jekyll configuration
+# Sample Jekyll Picture Tag settings
 
-name: Jane Doe
-description: The personal website of Jane Doe
-
-author:
-  name: Jane Doe
-  email: jane.doe@gmail.com
-  github: jdoe
-  twitter: jdoe
-
-# Technical Configuration
-
-exclude: ['_scss', 'image', 'css', 'js', 'fonts', 'bower_components', '**.png', '**.jpg', '**.jpeg', '**.gif', '**.webp', '**.svg', '**.ico']
-include: ['.htaccess']
-permalink: pretty
-
-# Liquid Picturefill Configuration
-
-liquid_picture:
-  src_dir: "assets/images"
-  dest_dir: "assets/images/generated"
-  # Renders actual <picture> tag if true, picturefill if false
-  picture_tag: false
+picture:
+  src: "assets/images"
+  dest: "assets/images/generated"
+  markup: picturefill
   presets:
-    # If the tag is not given an argument it will use the following parameters
     default:
+      ppi: [1, 1.3, 2]
       attr:
         class: "blogimage"
-      # If you're not mobile first then you're not doing it right.
-      # The base or mobile image size will not need a media query
-      # This image will also serve as the <noscript> fallback
-      # If ppi is specified, adds cross browser mqs for hi ppi displays
-      # and correctly sized imgs. 1:1 ratio pixel* to dppx, err in the middle
-      # of bytes over wire vs pretty
-      # ppi: [1, 1.3, 3]
-      media_default:
-        # Obviously one size parameter is necessary
-        # Width and height in CSS pixels
-        # one argument scales
-        # two arguments scale and crop
-        width: "500"
-      # Media queries will have IDs
-      # underscore and number, NO LEADING ZEROS
-      media_1:
-        media: "(min-width: 60em)"
-        width: "750"
-      media_2:
+        itemprop: "image"
+      source_lrg:
         media: "(min-width: 90em)"
         width: "1000"
-    # Any second tier name would be a preset to be referenced
+      source_med:
+        media: "(min-width: 60em)"
+        width: "750"
+      source_default:
+        width: "500"
+        height: "200"
     gallery:
       attr:
-        # Attributes are completely open ended, add whatever you like
-        class: "blogimage"
         data-image: "gallery"
-      media_default:
-        width: "250"
-        height: "150"
-      media_1:
+      source_wide_hi:
+        media: "(min-width: 60em) and (min-resolution: 1.5dppx)"
+        width: "750"
+        height: "450"
+      source_wide:
         media: "(min-width: 60em)"
         width: "375"
         height: "225"
-      media_2:
-        media: "(min-width: 90em) and (min-resolution: 1.5dppx)"
-        width: "750"
-        height: "450"
+      source_default:
+        width: "250"
+        height: "150"
