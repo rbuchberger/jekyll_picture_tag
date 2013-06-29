@@ -62,6 +62,8 @@ See [_config.yml](_config.yml)
   
   everything else to end of string
     
+    (?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s+
+    
     separate alt="value"
     strip newlines, reduce whitespace to single spaces
     "some text\nandsomemore".gsub("\n",'')
