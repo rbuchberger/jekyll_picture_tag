@@ -81,3 +81,11 @@ See [_config.yml](_config.yml)
   
 %}
 ```
+
+### Liquid/Ruby
+
+Liquid `render(context)` 
+
+- `context['page']` returns an object with page settings and yml
+- `context.registers[:site].config` returns an object with global config and settings in it
+

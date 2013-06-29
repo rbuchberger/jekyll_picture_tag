@@ -1,30 +1,39 @@
+# Title: Jekyll Picture
+# Authors:
+# Download:
+# Documentation:
+#
+# Syntax:
+# Example:
+# Output:
+
 module Jekyll
 
-  class Picture #< Liquid::Tag
+  class Picture < Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
-      # if picture arguments are correct
-      #
-      # {% picture [preset_name] path/to/img.jpg [source_1:path/to/alt/img.jpg] [attribute="value"] %}
 
-      @tag = /(?<markup>.*\s)(?<preset>.*\s)(?<image_src>.*\s)(?<sources>.*\s)(?<attributes>.)(?<alt>.)/.match(tag_name)
+      if markup =~ /^((?<preset>[^\s.:]+)\s+)?(?<img_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
 
-        # Full capture regex, tested pretty well, although there still might be some holes.
-        # Takes into account optional parameters, slightly strict so we can reject and obviously wrong tag.
-        # ((?<preset>[^\s.:]+)\s+)?(?<img_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<attr>[\s\S]+)?$
+        @preset = preset
+        @img_src = img_src
+        @source = source # create map, each source_key: source_src
+        @html_attr = html_attr # create map, each html_attr: value. If no value, set to false or null
 
-      #super
+      else
+        raise SyntaxError.new("Your picture tag doesn't seem to be formatted correctly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
+      end
+      super
     end
 
     def render(context)
 
-    def render#(context)
-      # Get liquid_picture obj from _config.yml
-      # @settings = config[liquid_picture]
-      # to be used:
-      # @settings[src_dir]
-      # @settings[dest_dir]
-      # @settings[presets][@tag[:preset]]
+      site = context.registers[:site]
+      settings = site.config['picture']
+      preset = settings['presets'][@preset]
+
+      src_path = File.join(site.source, settings['src'])
+      dest_path = File.join(site.source, settings['dest'])
 
       # @settings[presets][@tag[:preset]][attr]
       # Have to split attr into array/map, merge with preset attr, then re-render.
@@ -95,11 +104,9 @@ module Jekyll
         #                              cat-250-200.jpg
 
       end
+
     end
   end
 end
 
-# Liquid::Template.register_tag('picture', Jekyll::Picture)
-
-picture = Jekyll::Picture.new("picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute=\"value\"] %}","","")
-picture.render
+Liquid::Template.register_tag('picture', Jekyll::Picture)
