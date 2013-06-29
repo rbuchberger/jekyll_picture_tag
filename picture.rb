@@ -7,8 +7,7 @@ module Jekyll
       # if picture arguments are correct
       #
       # {% picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute="value"] %}
-      @tag = /(?<markup>.)(?<preset>.)(?<image_src>.)(?<sources>.)(?<attributes>.)(?<alt>.)/.match(tag_name)
-
+      @tag = /(?<markup>.*\s)(?<preset>.*\s)(?<image_src>.*\s)(?<sources>.*\s)(?<attributes>.)(?<alt>.)/.match(tag_name)
       #super
     end
 
