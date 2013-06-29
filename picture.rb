@@ -5,9 +5,14 @@ module Jekyll
     def initialize(tag_name, markup, tokens)
       # if picture arguments are correct
       #
-      # {% picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute="value"] %}
+      # {% picture [preset_name] path/to/img.jpg [source_1:path/to/alt/img.jpg] [attribute="value"] %}
 
       @tag = /(?<markup>.*\s)(?<preset>.*\s)(?<image_src>.*\s)(?<sources>.*\s)(?<attributes>.)(?<alt>.)/.match(tag_name)
+
+        # Full capture regex, tested pretty well, although there still might be some holes.
+        # Takes into account optional parameters, slightly strict so we can reject and obviously wrong tag.
+        # ((?<preset>[^\s.:]+)\s+)?(?<img_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<attr>[\s\S]+)?$
+
       #super
     end
 
