@@ -1,6 +1,6 @@
 module Jekyll
 
-  class Picture < Liquid::Tag
+  class Picture #< Liquid::Tag
     @picture = nil
 
     def initialize(tag_name, markup, tokens)
@@ -21,11 +21,10 @@ module Jekyll
       # capture alt value from attr
       @alt        = regex part
 
-      super
+      #super
     end
 
-    def render(context)
-
+    def render#(context)
       # Get liquid_picture obj from _config.yml
       # @settings = config[liquid_picture]
       # to be used:
@@ -106,4 +105,7 @@ module Jekyll
   end
 end
 
-Liquid::Template.register_tag('picture', Jekyll::Picture)
+# Liquid::Template.register_tag('picture', Jekyll::Picture)
+
+picture = Jekyll::Picture.new("picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute=\"value\"] %}","","")
+picture.render
