@@ -1,15 +1,17 @@
 module Jekyll
 
   class Picture #< Liquid::Tag
-    @picture = nil
 
     def initialize(tag_name, markup, tokens)
       # if picture arguments are correct
       #
       # {% picture [preset_name] path/to/img.jpg [media_1:path/to/alt/img.jpg] [attribute="value"] %}
+
       @tag = /(?<markup>.*\s)(?<preset>.*\s)(?<image_src>.*\s)(?<sources>.*\s)(?<attributes>.)(?<alt>.)/.match(tag_name)
       #super
     end
+
+    def render(context)
 
     def render#(context)
       # Get liquid_picture obj from _config.yml

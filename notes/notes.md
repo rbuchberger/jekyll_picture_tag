@@ -46,28 +46,36 @@ See [_config.yml](_config.yml)
 
 {% picture 
   
+  Full damn regex: 
+  
+  ((?<preset>[^\s.:]+)\s+)?(?<img_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<attr>[\s\S]+)?$
+    
   0 or 1 yml word without dot, space, .ext
-  ([^\s.:]+)\s+
   
   path with .ext
-  ([^\s]+\.[a-zA-Z0-9]{3,4})\s+
     separate path, basename ext
   
-  0 or more media_*: path with .ext
+  0 or more source_*: path with .ext
     separate path, basename ext
-  (media_[^\s:]+):\s*([^\s]+\.[a-zA-Z0-9]{3,4})\s+
-  
-  grab all (media_key: PATH)*, 
-  use string#scan to return an array of media_key, img_Path 
-  http://stackoverflow.com/questions/4692437/regex-with-named-capture-groups-getting-all-matches-in-ruby
-  
+    use string#scan to return a map of source_key, img_Path 
+    http://stackoverflow.com/questions/4692437/regex-with-named-capture-groups-getting-all-matches-in-ruby
   
   everything else to end of string
-  [\s\S]+$
     
     separate alt="value"
     strip newlines, reduce whitespace to single spaces
     "some text\nandsomemore".gsub("\n",'')
+    
+    regex out into map:
+    
+    (word)(="(capture to)")?\s 
+    
+    http://stackoverflow.com/questions/13040585/split-string-by-spaces-properly-accounting-for-quotes-and-backslashes-ruby
+    
+    input.scan(/(?:"(?:\\.|[^"])*"|[^" ])+/)\\\\
+    
+    http://www.ruby-forum.com/topic/146473
+    
   
 %}
 ```

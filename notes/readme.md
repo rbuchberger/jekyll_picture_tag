@@ -11,7 +11,7 @@ Jekyll Picture Tag adds a responsive image tag to the [Jekyll](http://jekyllrb.c
 ## Installation
 
 Make sure you have [Jekyll](http://jekyllrb.com) `>=1.0` and [Minimagick](https://github.com/minimagick/minimagick) `>=3.6` installed.  
-Copy picturetag.rb into your Jekyll _plugins folder.  
+Copy picture_tag.rb into your Jekyll _plugins folder.  
 
 ## Usage
 
@@ -40,11 +40,12 @@ Defaults to the `default` preset.
 
 #### path/to/img.jpg
 
-Specify an image relative to the `picture[src]` setting in _config.yml. Any file type supported by Minimagick is allowed.
+Specify an image relative to the `picture[src]` setting in _config.yml.  
+?? Any file type supported by Minimagick is allowed.
 
 #### source_key: path/to/alt/img.jpg
 
-Optionally specify an alternate image for a pictue source. Enjoy your art direction!
+Optionally specify an alternate image for a picture source. Enjoy your art direction!
 
 #### attributes
 
