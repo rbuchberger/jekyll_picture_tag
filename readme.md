@@ -42,6 +42,7 @@ Defaults to the `default` preset.
 
 Specify an image relative to the `picture[src]` setting in _config.yml.  
 ?? Any file type supported by Minimagick is allowed.
+[edit] must be local filesystem, no http/s image locations
 
 #### source_key: path/to/alt/img.jpg
 
@@ -89,7 +90,7 @@ gallery:
 #### src
 
 The directory to look for source images in, relative to Jekyll's source directory.  
-Defaults to `assets/images`.
+Defaults to `.`.
 
 #### dest
 

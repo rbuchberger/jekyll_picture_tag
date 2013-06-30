@@ -89,3 +89,16 @@ Liquid `render(context)`
 - `context['page']` returns an object with page settings and yml
 - `context.registers[:site].config` returns an object with global config and settings in it
 
+### Minimagic
+
+Huh, insanely easy for straight resize:
+
+```
+# Resize and write the thumbnail image, if it doesn't exist yet
+if not File.exists?(thumb_path)
+  thumb = MiniMagick::Image.open(image_path)
+  thumb.resize(@dimensions)
+  thumb.write(thumb_path)
+end
+```
+Need to check how scale/crop works.

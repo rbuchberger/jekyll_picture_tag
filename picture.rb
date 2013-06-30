@@ -7,6 +7,8 @@
 # Example:
 # Output:
 
+### ruby 1.9
+
 module Jekyll
 
   class Picture < Liquid::Tag
@@ -15,7 +17,7 @@ module Jekyll
 
       if markup =~ /^((?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
 
-        @preset = preset
+        @preset = preset || 'default'
         @image_src = img_src
         @sources_src = sources_src ### create map, each source_key => {:src => source_src}
         @html_attr = html_attr ### create map, each html_attr => value || nil
@@ -32,27 +34,31 @@ module Jekyll
       settings = site.config['picture']
 
       site_path = site.source
-      source_path = settings['src']
-      dest_path = settings['dest']
+      src_path = settings['src'] || ''
+      dest_path = settings['dest'] || File.join(src_path, 'generated')
+
+      markup = settings['markup'] || 'picturefill'
 
       sources = settings['presets'][@preset]
-      html_attr = sources.delete('attr') ### Will this error out if attr/ppi are absent?
-      ppi = sources.delete('ppi').sort.reverse ### Will this error out if attr/ppi are absent?
+      html_attr = sources.delete('attr')
+      ppi = sources['ppi'] ? sources.delete('ppi').sort.reverse : nil
       source_keys = source.keys
-
-      ### Set settings defaults?
 
       # Process html_attr
       html_attr.merge!(@html_attr)
 
-      if settings['markup'] == 'picturefill'
+      if markup == 'picturefill'
         html_attr['data-picture'] = nil
         html_attr['data-alt'] = preset['attr'].delete('alt')
       end
-
-      ### process into string
+      ### Process html_attr into string
+      ### pseudo code: each attr, add " "+key, if value add "=\"#{value}\""
 
       # Process source
+
+      # Add default image source
+      sources.each { |key, value| sources[key][:src] = @image_src }
+
       # Add alternate source images
 
       ### if @source
@@ -88,8 +94,7 @@ module Jekyll
 
       # Generate sized images
       sources.each { |source|
-        src = source['src'] || @image_src
-        sources[source][:generated_src] = generate_image(src, site_path, src_path, dest_path, source['width'], source['height'])
+        sources[source][:generated_src] = generate_image(source, site_path, src_path, dest_path)
       }
 
       # Construct and return tag
@@ -122,17 +127,33 @@ module Jekyll
 
     def generate_image(source, site_path, src_path, dest_path)
 
+      # source_default:
+      #   width: "500"
+      #   height: "200"
+      #   :src: somepath.com/this.img
+
+      # We need
+      # abs path orig
+      # dimensions
+      # abs path generated
+      # path for html
+
+      # original_path
+
+
       # Get absolute file path
       absolute_orig_image = File.join(site_path, src_path, source[:src])
 
+      ## RWRW only thing we need these for is constr new name
       ext = File.extname(source[:src])
       orig_name = File.basename(source[:src], src_ext)
+
       ### orig_width = minimagic something
       ### orig_height = minimagic something
 
       dest_width = source['width'] || orig_width/orig_height * source['height']
       dest_height = source['height'] || orig_height/orig_width * source['width']
-      dest_name = orig_name + "-" + width + "-" + height
+      dest_name = orig_name + '-' + width + '-' + height
       relative_dest_img = File.join(dest_path, dest_name + ext)
       absolute_dest_image = File.join(site_path, dest_path, dest_name + ext)
 
