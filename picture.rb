@@ -114,6 +114,7 @@ module Jekyll
 
       if settings['markup'] == 'picturefill'
 
+      ### Not updated for new variables
       # <span @tag[:attributes]>
       #   each source_key in @tag[:sources]
       #     if !source_key['source'], source_key['source'] = @image_src
@@ -127,6 +128,7 @@ module Jekyll
 
       elsif settings['markup'] == 'picture'
 
+      ### Not updated for new variables
       # <picture @tag[:attributes]>
       #   each source_key in @tag[:sources]
       #   <source src="source_key[img_path]"
@@ -152,27 +154,39 @@ module Jekyll
 
       ### Damn, this is so many vars. Can it be simplified?
 
-      orig_dir = File.dirname(source[:src])
+      ori_dir = File.dirname(source[:src])
       ext = File.extname(source[:src])
-      orig_name = File.basename(source[:src], ext)
-      orig_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
+      ori_name = File.basename(source[:src], ext)
+      ori_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
+
+      ori_ratio = ori_image[:width]/ori_image[:height]
 
       ### Need to round calcs, or does minimaj take care of that?
-      gen_width = source['width'].to_i || orig_image[:width]/orig_image[:height] * source['height']
-      gen_height = source['height'].to_i || orig_image[:height]/orig_image[:width] * source['width']
+      gen_width = source['width'].to_i || ori_ratio * source['height'].to_i
+      gen_height = source['height'].to_i || ori_ratio/source['width'].to_i
+
       gen_name = "#{base_name}-#{gen_width}-#{gen_height}"
-      gen_absolute_path = File.join(site_path, gen_path, orig_dir, gen_name + ext)
-      gen_return_path = File.join(gen_path, orig_dir, gen_name + ext)
+      gen_absolute_path = File.join(site_path, gen_path, ori_dir, gen_name + ext)
+      gen_return_path = File.join(gen_path, ori_dir, gen_name + ext)
 
       if not File.exists?(gen_absolute_path)
-        orig_image.combine_options do |i|
+        ori_image.combine_options do |i|
+          i.resize "#{gen_width}-#{gen_height}^"
 
-          ### check if ratios equal each other
-          ### scale by appropriate dimension
-          ### crop by other
+          # get which doesn't match?
+          if i[:width] != gen_width
+            i.shave "#{(i[:width] - gen_width)/2}x0"
+          elsif i[:height] != gen_height
+            i.shave "0x#{(i[:height] - gen_height)/2}"
+          end
 
+          ### Do we need an absolute path, or can we do everything locally?
+          ### What is cwd?
+          i.write gen_absolute_path
         end
       end
+
+      gen_return_path
     end
   end
 end
