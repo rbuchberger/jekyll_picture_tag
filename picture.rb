@@ -13,12 +13,12 @@ require 'mini_magick'
 
 module Jekyll
 
-  class Picture #< Liquid::Tag
+  class Picture < Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
 
       if @tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
-        @preset = @tag.fetch(:preset, 'default')
+        @preset = @tag[:preset] || 'default'
         @image_src = @tag[:image_src]
 
         @sources = {}
@@ -50,22 +50,23 @@ module Jekyll
       sources = settings['presets'][@preset]
       html_attr = sources.delete('attr')
       ppi = sources['ppi'] ? sources.delete('ppi').sort.reverse : nil
-      source_keys = source.keys
+      source_keys = sources.keys
 
       # Process html_attr
       html_attr.merge!(@html_attr)
 
       if markup == 'picturefill'
         html_attr['data-picture'] = nil
-        html_attr['data-alt'] = preset['attr'].delete('alt')
+        html_attr['data-alt'] = @html_attr.delete('alt')
       end
 
       # Process html_attr into string.
-      html_attr_string = html_attr.each {|key, value|
+      html_attr_string = ""
+      html_attr.each {|key, value|
         if value
-          html_attr_string = html_attr_string + "#{key}=\"#{value}\" "
+          html_attr_string += "#{key}=\"#{value}\" "
         else
-          html_attr_string = html_attr_string + "#{key} "
+          html_attr_string += "#{key} "
         end
       }
 
@@ -73,7 +74,7 @@ module Jekyll
 
       # Add image path for each source
       sources.each { |key, value|
-        sources[key] = @sources_src.key?(key) ? @sources_src[key] : @image_src
+        sources[key] = @sources.fetch(key, @image_src)
       }
 
       ### check if sources don't exist in preset, raise error?
@@ -176,5 +177,5 @@ module Jekyll
   end
 end
 
-# Liquid::Template.register_tag('picture', Jekyll::Picture)
+Liquid::Template.register_tag('picture', Jekyll::Picture)
 picture = Jekyll::Picture.new("","preset_name path/to/img.jpg source_anything: path/to/alt/img.jpg source_second: path/to/second/img.jpg alt=\"alt_text\" disabled title=\"title text\"", "")
