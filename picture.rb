@@ -13,12 +13,12 @@ module Jekyll
 
     def initialize(tag_name, markup, tokens)
 
-      if markup =~ /^((?<preset>[^\s.:]+)\s+)?(?<img_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
+      if markup =~ /^((?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
 
         @preset = preset
-        @img_src = img_src
-        @source = source # create map, each source_key: source_src
-        @html_attr = html_attr # create map, each html_attr: value. If no value, set to false or null
+        @image_src = img_src
+        @sources_src = sources_src ### create map, each source_key => {:src => source_src}
+        @html_attr = html_attr ### create map, each html_attr => value || nil
 
       else
         raise SyntaxError.new("Your picture tag doesn't seem to be formatted correctly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
@@ -30,47 +30,74 @@ module Jekyll
 
       site = context.registers[:site]
       settings = site.config['picture']
-      preset = settings['presets'][@preset]
 
       src_path = File.join(site.source, settings['src'])
       dest_path = File.join(site.source, settings['dest'])
 
-      # @settings[presets][@tag[:preset]][attr]
-      # Have to split attr into array/map, merge with preset attr, then re-render.
-        # hash1.merge(hash2)
-        # duplicate keys in hash2 will overwrite the ones in hash1
+      sources = settings['presets'][@preset]
+      html_attr = sources.delete('attr') ### Will this error out if attr/ppi are absent?
+      ppi = sources.delete('ppi').sort.reverse ### Will this error out if attr/ppi are absent?
+      source_keys = source.keys
 
-        # add data-picture, if markup picturefill replace alt -> data-alt
+      ### Set settings defaults?
 
-      # add source_key source, then if !source_key.source use img_src
+      # Process html_attr
+      html_attr.merge!(@html_attr)
 
-      # if @tag[:sources][ppi] generate extra source keys
-        # add new source_key in correct place
-        # new width, height
-        # new media with cross browser mq
-      # remove @tag[:sources][ppi]
+      if settings['markup'] == 'picturefill'
+        html_attr['data-picture'] = nil
+        html_attr['data-alt'] = preset['attr'].delete('alt')
+      end
 
-      # each {| source_key, settings |
+      ### process into string
 
-        # available:
-        # settings[media]
-        # settings[width]
-        # settings[height]
+      # Process source
+      # Add alternate source images
 
-        # create generated img paths: jekyll absolute path + jekyll config source path + @settings[dest_dir]
-        # add @tag[:sources][source_key][img_path]
+      ### if @source
+      ### Check if each @sources_src property is a sources property
+      ### if so, sources.merge!(@sources_src)
+      ### else,
+        ### raise SyntaxError.new("#{@sources_src[key]} doesn't exist in #{@preset}. Please check _config.yml for available sources.")
 
-        # generate_image()
+      # Add resolution based sources
 
+      ### Not sure what the most elegant way to do this is.
+      ### Here's the pieces though, with some suggestions.
 
-      if @picture # arguments are correct
+      ### if ppi
 
-      # construct and return tag
+      ### sources.each { |key, source|
+      ### ppi.each { |p|
 
-      # if picturefill
+      ### if p != 1
+      ### new_key = key + "_" + (p * 1000)
+      ### new_width = source['width'] * p
+      ### new_height = source['height'] * p
+      ### new_media = source['media'] + " and (min-resolution: " + p + "dppx), " +
+      ###             source['media'] + " and (min-resolution: " + (p * 96) + "dpi), " +
+      ###             source['media'] + " and (-webkit-min-device-pixel-ratio: " + p + ")"
+      ### use existing src
+
+      ### create new hash
+      ### append new hash onto end of source hash
+
+      ### if p > 1, insert new_key before key in source_keys
+      ### if p < 1, insert new_key after key in source_keys
+
+      # Generate sized images
+      sources.each { |source|
+        src = source['src'] || @image_src
+        sources[source][:generated_src] = generate_image(src, src_path, dest_path, source['width'], source['height'])
+      }
+
+      # Construct and return tag
+
+      if settings['markup'] == 'picturefill'
 
       # <span @tag[:attributes]>
       #   each source_key in @tag[:sources]
+      #     if !source_key['source'], source_key['source'] = @image_src
       #   <span data-src="source_key[img_path]" (if media) data-media="source_key[media]"></span>
       #   endeach
       #
@@ -79,7 +106,7 @@ module Jekyll
       #   </noscript>
       # </span>
 
-      # if picture
+      elsif settings['markup'] == 'picture'
 
       # <picture @tag[:attributes]>
       #   each source_key in @tag[:sources]
@@ -89,21 +116,30 @@ module Jekyll
       #    <p>@tag[:alt]</p>
       # </picture>
 
-      else
-        "Error processing input. Expected syntax: {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}"
       end
+    end
 
-      def generate_image(img, width, height)
+    def generate_image(src, src_path, dest_path, width, height)
 
-        # get image width, height
-        # calculate new img dimensions
-        # Check if generated images exist for specified preset
-        # Generate missing images with minimagic
+      # Get absolute file path
+      src_image = File.join(src_path, src)
+      src_path = File.dirname(src_image)
+      src_basename = File.basename(src_image, src_ext)
+      ext = File.extname(src_image)
+      # src_width = minimagic something
+      # src_height = minimagic something
 
-        # image destination file name: src_name-WIDTH-HEIGHT.ext
-        #                              cat-250-200.jpg
+      dest_width = width || src_width/src_height * height
+      dest_height = height || src_height/src_width * width
+      dest_basename = src_basename + "-" + width + "-" + height
 
-      end
+      # Check if dest image exists
+      # Generate missing images with minimagic
+
+      # image destination file name: src_name-WIDTH-HEIGHT.ext
+      #                              cat-250-200.jpg
+
+      # return generated image name/local path
 
     end
   end
