@@ -13,19 +13,23 @@ require 'mini_magick'
 
 module Jekyll
 
-  class Picture < Liquid::Tag
+  class Picture #< Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
 
-      if markup =~ /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
+      if @tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
+        @preset = @tag.fetch(:preset, 'default')
+        @image_src = @tag[:image_src]
 
-        @preset = preset || 'default'
-        @image_src = img_src
-        @sources_src = sources_src ### create hash, each source_key => {:src => source_src}
-        ### expected @sources_src: {'source_default' => {:src => 'some/path.jpg'}, 'source_1' => {:src => 'some/path2.jpg'}}
-        @html_attr = html_attr ### create hash, each html_attr => value || nil
-        ### expected @html_attr: {'attr1' => 'value', 'attr2' => nil}
+        @sources = {}
+        @tag[:sources_src].split.each_slice(2) do |set|
+          @sources.merge! Hash[*set]
+        end
 
+        @html_attr = {}
+        @tag[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).each do |html_attr|
+          @html_attr.merge! Hash[*html_attr]
+        end
       else
         raise SyntaxError.new("Your picture tag doesn't seem to be formatted correctly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
       end
@@ -69,7 +73,7 @@ module Jekyll
 
       # Add image path for each source
       sources.each { |key, value|
-        sources[key][:src] = @sources_src.key?(key) ? @sources_src[key][:src] : @image_src
+        sources[key] = @sources_src.key?(key) ? @sources_src[key] : @image_src
       }
 
       ### check if sources don't exist in preset, raise error?
@@ -172,4 +176,5 @@ module Jekyll
   end
 end
 
-Liquid::Template.register_tag('picture', Jekyll::Picture)
+# Liquid::Template.register_tag('picture', Jekyll::Picture)
+picture = Jekyll::Picture.new("","preset_name path/to/img.jpg source_anything: path/to/alt/img.jpg source_second: path/to/second/img.jpg alt=\"alt_text\" disabled title=\"title text\"", "")
