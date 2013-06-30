@@ -119,9 +119,13 @@ You can optionally set a list of attributes to add to every tag generated with t
 
 A shorthand to generate resolution alternates for your source keys. The setting `[1, 1.3]` will create sources that switch to 1.3x sized images on devices with a minimum dppx of 1.3. For finer grained control omit the `ppi` key and write out resolution sources by hand.
 
+[edit] ppi max decimal depth = 2
+
 #### source_key
 
-Source keys generate the sources for the picture tag. The `source_default` key is required. Source keys are named with the pattern `source_` plus a descriptive string, and can't contain the `.` or `:` characters. They're rendered in the order you list them.
+Source keys generate the sources for the picture tag. The `source_default` key is required. Source keys are named with the pattern `source_` plus a descriptive string, and can't contain the `.` or `:` characters. Sources also can't be named `attr` or `ppi`. They're rendered in the order you list them.
+
+[edit] Picture uses the first source that matches, so order your sources appropriately. If you're doing mobile first, the largest, highest resolution media source should be first.
 
 #### width and height
 
