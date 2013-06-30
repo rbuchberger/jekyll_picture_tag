@@ -13,6 +13,11 @@ Jekyll Picture Tag adds a responsive image tag to the [Jekyll](http://jekyllrb.c
 Make sure you have [Jekyll](http://jekyllrb.com) `>=1.0` and [Minimagick](https://github.com/minimagick/minimagick) `>=3.6` installed.  
 Copy picture_tag.rb into your Jekyll _plugins folder.  
 
+[edit] add minimagick/imagemagick instructions?
+brew up
+brew install ImageMagick
+or download the binary from http://www.imagemagick.org/script/binary-releases.php
+
 ## Usage
 
 There are three parts to Jekyll Picture Tag: the polyfill, the tag, and the settings.

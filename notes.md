@@ -101,4 +101,8 @@ if not File.exists?(thumb_path)
   thumb.write(thumb_path)
 end
 ```
-Need to check how scale/crop works.
+
+Scale-crop example:
+https://gist.github.com/maxivak/3924976#file-resize_with_crop-L8-L25
+http://www.codeblog.it/en/snippet/ruby/2012/08/27/how-scale-center-and-crop-image-ruby-and-mini-magic
+http://blog.aclarke.eu/crop-and-resize-an-image-using-minimagick/

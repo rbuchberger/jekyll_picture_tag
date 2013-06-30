@@ -7,7 +7,9 @@
 # Example:
 # Output:
 
-### ruby 1.9
+### ruby 1.9+
+
+require 'mini_magick'
 
 module Jekyll
 
@@ -15,12 +17,14 @@ module Jekyll
 
     def initialize(tag_name, markup, tokens)
 
-      if markup =~ /^((?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>((source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
+      if markup =~ /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<sources_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/
 
         @preset = preset || 'default'
         @image_src = img_src
-        @sources_src = sources_src ### create map, each source_key => {:src => source_src}
-        @html_attr = html_attr ### create map, each html_attr => value || nil
+        @sources_src = sources_src ### create hash, each source_key => {:src => source_src}
+        ### expected @sources_src: {'source_default' => {:src => 'some/path.jpg'}, 'source_1' => {:src => 'some/path2.jpg'}}
+        @html_attr = html_attr ### create hash, each html_attr => value || nil
+        ### expected @html_attr: {'attr1' => 'value', 'attr2' => nil}
 
       else
         raise SyntaxError.new("Your picture tag doesn't seem to be formatted correctly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
@@ -51,21 +55,25 @@ module Jekyll
         html_attr['data-picture'] = nil
         html_attr['data-alt'] = preset['attr'].delete('alt')
       end
-      ### Process html_attr into string
-      ### pseudo code: each attr, add " "+key, if value add "=\"#{value}\""
+
+      # Process html_attr into string.
+      html_attr_string = html_attr.each {|key, value|
+        if value
+          html_attr_string = html_attr_string + "#{key}=\"#{value}\" "
+        else
+          html_attr_string = html_attr_string + "#{key} "
+        end
+      }
 
       # Process source
 
-      # Add default image source
-      sources.each { |key, value| sources[key][:src] = @image_src }
+      # Add image path for each source
+      sources.each { |key, value|
+        sources[key][:src] = @sources_src.key?(key) ? @sources_src[key][:src] : @image_src
+      }
 
-      # Add alternate source images
-
-      ### if @source
-      ### Check if each @sources_src property is a sources property
-      ### if so, sources.merge!(@sources_src)
-      ### else,
-        ### raise SyntaxError.new("#{@sources_src[key]} doesn't exist in #{@preset}. Please check _config.yml for available sources.")
+      ### check if sources don't exist in preset, raise error?
+      ### raise SyntaxError.new("#{@sources_src[key]} doesn't exist in #{@preset}. Please check _config.yml for available sources.")
 
       # Add resolution based sources
 
@@ -82,9 +90,9 @@ module Jekyll
       ### new_width = source['width'] * p
       ### new_height = source['height'] * p
       ### new_media = source['media'] + " and (min-resolution: " + p + "dppx), " +
-      ###             source['media'] + " and (min-resolution: " + (p * 96) + "dpi), " +
-      ###             source['media'] + " and (-webkit-min-device-pixel-ratio: " + p + ")"
+      ###             source['media'] + " and (min-resolution: " + (p * 96) + "dpi)"
       ### use existing src
+      ### MQ Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
 
       ### create new hash
       ### append new hash onto end of sources hash
@@ -125,43 +133,41 @@ module Jekyll
       end
     end
 
-    def generate_image(source, site_path, asset_path, generated_path)
+    def generate_image(source, site_path, asset_path, gen_path)
 
+      ### Source input
       # source_default:
       #   width: "500"
       #   height: "200"
       #   :src: somepath.com/this.img
 
-      # We need
-      # abs path orig
-      # dimensions
-      # abs path generated
-      # path for html
+      if source['width'].nil? && source['height'].nil?
+        raise SyntaxError.new("Source keys must have at least one of width and height. Please check _config.yml.")
+      end
 
-      # original_path
+      ### Damn, this is so many vars. Can it be simplified?
 
-
-      # Get absolute file path
-      absolute_orig_image = File.join(site_path, asset_path, source[:src])
-
-      ## RWRW only thing we need these for is constr new name
+      orig_dir = File.dirname(source[:src])
       ext = File.extname(source[:src])
-      orig_name = File.basename(source[:src], src_ext)
+      orig_name = File.basename(source[:src], ext)
+      orig_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
 
-      ### orig_width = minimagic something
-      ### orig_height = minimagic something
+      ### Need to round calcs, or does minimaj take care of that?
+      gen_width = source['width'].to_i || orig_image[:width]/orig_image[:height] * source['height']
+      gen_height = source['height'].to_i || orig_image[:height]/orig_image[:width] * source['width']
+      gen_name = "#{base_name}-#{gen_width}-#{gen_height}"
+      gen_absolute_path = File.join(site_path, gen_path, orig_dir, gen_name + ext)
+      gen_return_path = File.join(gen_path, orig_dir, gen_name + ext)
 
-      dest_width = source['width'] || orig_width/orig_height * source['height']
-      dest_height = source['height'] || orig_height/orig_width * source['width']
-      dest_name = orig_name + '-' + width + '-' + height
-      relative_dest_img = File.join(generated_path, dest_name + ext)
-      absolute_dest_image = File.join(site_path, generated_path, dest_name + ext)
+      if not File.exists?(gen_absolute_path)
+        orig_image.combine_options do |i|
 
-      # Check if dest image exists
-      # Generate missing images with minimagic
+          ### check if ratios equal each other
+          ### scale by appropriate dimension
+          ### crop by other
 
-      # return relative_dest_img
-
+        end
+      end
     end
   end
 end

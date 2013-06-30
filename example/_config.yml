@@ -1,9 +1,10 @@
 # Sample Jekyll Picture Tag settings
+### Run through the image sizes and make sure they make sense
 
 picture:
   asset_path: "assets/images"
   generated_path: "assets/images/generated"
-  markup: picturefill
+  markup: "picturefill"
   presets:
     default:
       ppi: [1, 1.3, 2]
