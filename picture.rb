@@ -31,8 +31,9 @@ module Jekyll
       site = context.registers[:site]
       settings = site.config['picture']
 
-      src_path = File.join(site.source, settings['src'])
-      dest_path = File.join(site.source, settings['dest'])
+      site_path = site.source
+      source_path = settings['src']
+      dest_path = settings['dest']
 
       sources = settings['presets'][@preset]
       html_attr = sources.delete('attr') ### Will this error out if attr/ppi are absent?
@@ -80,7 +81,7 @@ module Jekyll
       ### use existing src
 
       ### create new hash
-      ### append new hash onto end of source hash
+      ### append new hash onto end of sources hash
 
       ### if p > 1, insert new_key before key in source_keys
       ### if p < 1, insert new_key after key in source_keys
@@ -88,7 +89,7 @@ module Jekyll
       # Generate sized images
       sources.each { |source|
         src = source['src'] || @image_src
-        sources[source][:generated_src] = generate_image(src, src_path, dest_path, source['width'], source['height'])
+        sources[source][:generated_src] = generate_image(src, site_path, src_path, dest_path, source['width'], source['height'])
       }
 
       # Construct and return tag
@@ -119,27 +120,26 @@ module Jekyll
       end
     end
 
-    def generate_image(src, src_path, dest_path, width, height)
+    def generate_image(source, site_path, src_path, dest_path)
 
       # Get absolute file path
-      src_image = File.join(src_path, src)
-      src_path = File.dirname(src_image)
-      src_basename = File.basename(src_image, src_ext)
-      ext = File.extname(src_image)
-      # src_width = minimagic something
-      # src_height = minimagic something
+      absolute_orig_image = File.join(site_path, src_path, source[:src])
 
-      dest_width = width || src_width/src_height * height
-      dest_height = height || src_height/src_width * width
-      dest_basename = src_basename + "-" + width + "-" + height
+      ext = File.extname(source[:src])
+      orig_name = File.basename(source[:src], src_ext)
+      ### orig_width = minimagic something
+      ### orig_height = minimagic something
+
+      dest_width = source['width'] || orig_width/orig_height * source['height']
+      dest_height = source['height'] || orig_height/orig_width * source['width']
+      dest_name = orig_name + "-" + width + "-" + height
+      relative_dest_img = File.join(dest_path, dest_name + ext)
+      absolute_dest_image = File.join(site_path, dest_path, dest_name + ext)
 
       # Check if dest image exists
       # Generate missing images with minimagic
 
-      # image destination file name: src_name-WIDTH-HEIGHT.ext
-      #                              cat-250-200.jpg
-
-      # return generated image name/local path
+      # return relative_dest_img
 
     end
   end
