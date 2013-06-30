@@ -60,8 +60,8 @@ Jekyll Picture Tag stores settings and picture presets in _config.yml. It takes 
 
 ```yml
 picture:
-  src: "assets/images"
-  dest: "assets/images/generated"
+  asset_path: "assets/images"
+  generated_path: "assets/images/generated"
   markup: picturefill
   presets:
     default:
@@ -87,12 +87,13 @@ gallery:
     height: "200"
 ```
 
-#### src
+#### asset_path
+
+To make it easier to add images, you can specify an asset path that will be prepended to any image source in the picture tag...
 
 The directory to look for source images in, relative to Jekyll's source directory.  
-Defaults to `.`.
 
-#### dest
+#### generated_path
 
 The directory to output generated images to, relative to Jekyll's source directory. Generated images are created in Jekyll's source directory so they can be cached for the future.  
 Defaults to `generated` inside of the `src` directory.

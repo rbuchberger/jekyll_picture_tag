@@ -1,8 +1,8 @@
 # Sample Jekyll Picture Tag settings
 
 picture:
-  src: "assets/images"
-  dest: "assets/images/generated"
+  asset_path: "assets/images"
+  generated_path: "assets/images/generated"
   markup: picturefill
   presets:
     default:

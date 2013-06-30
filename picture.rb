@@ -34,8 +34,8 @@ module Jekyll
       settings = site.config['picture']
 
       site_path = site.source
-      src_path = settings['src'] || ''
-      dest_path = settings['dest'] || File.join(src_path, 'generated')
+      asset_path = settings['asset_path'] || ''
+      generated_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
       markup = settings['markup'] || 'picturefill'
 
@@ -94,7 +94,7 @@ module Jekyll
 
       # Generate sized images
       sources.each { |source|
-        sources[source][:generated_src] = generate_image(source, site_path, src_path, dest_path)
+        sources[source][:generated_src] = generate_image(source, site_path, asset_path, generated_path)
       }
 
       # Construct and return tag
@@ -125,7 +125,7 @@ module Jekyll
       end
     end
 
-    def generate_image(source, site_path, src_path, dest_path)
+    def generate_image(source, site_path, asset_path, generated_path)
 
       # source_default:
       #   width: "500"
@@ -142,7 +142,7 @@ module Jekyll
 
 
       # Get absolute file path
-      absolute_orig_image = File.join(site_path, src_path, source[:src])
+      absolute_orig_image = File.join(site_path, asset_path, source[:src])
 
       ## RWRW only thing we need these for is constr new name
       ext = File.extname(source[:src])
@@ -154,8 +154,8 @@ module Jekyll
       dest_width = source['width'] || orig_width/orig_height * source['height']
       dest_height = source['height'] || orig_height/orig_width * source['width']
       dest_name = orig_name + '-' + width + '-' + height
-      relative_dest_img = File.join(dest_path, dest_name + ext)
-      absolute_dest_image = File.join(site_path, dest_path, dest_name + ext)
+      relative_dest_img = File.join(generated_path, dest_name + ext)
+      absolute_dest_image = File.join(site_path, generated_path, dest_name + ext)
 
       # Check if dest image exists
       # Generate missing images with minimagic
