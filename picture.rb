@@ -22,12 +22,12 @@ module Jekyll
         @image_src = @tag[:image_src]
 
         @sources = {}
-        @tag[:sources_src].split.each_slice(2) do |set|
+        @tag[:sources_src] || ''.split.each_slice(2) do |set|
           @sources.merge! Hash[*set]
         end
 
         @html_attr = {}
-        @tag[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).each do |html_attr|
+        @tag[:html_attr] || ''.scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).each do |html_attr|
           @html_attr.merge! Hash[*html_attr]
         end
       else
@@ -48,6 +48,10 @@ module Jekyll
       markup = settings['markup'] || 'picturefill'
 
       sources = settings['presets'][@preset]
+
+      puts sources.class
+      puts "-----------------"
+
       html_attr = sources.delete('attr')
       ppi = sources['ppi'] ? sources.delete('ppi').sort.reverse : nil
       source_keys = sources.keys
@@ -74,7 +78,7 @@ module Jekyll
 
       # Add image path for each source
       sources.each { |key, value|
-        sources[key] = @sources.fetch(key, @image_src)
+        sources[key][:src] = @sources.fetch(key, @image_src)
       }
 
       ### check if sources don't exist in preset, raise error?
@@ -106,7 +110,7 @@ module Jekyll
       ### if p < 1, insert new_key after key in source_keys
 
       # Generate sized images
-      sources.each { |source|
+      sources.each { |key, source|
         sources[source][:generated_src] = generate_image(source, site_path, asset_path, generated_path)
       }
 
@@ -142,6 +146,10 @@ module Jekyll
 
     def generate_image(source, site_path, asset_path, gen_path)
 
+      puts source.class
+
+      puts '------------'
+
       ### Source input
       # source_default:
       #   width: "500"
@@ -165,7 +173,7 @@ module Jekyll
       gen_width = source['width'].to_i || ori_ratio * source['height'].to_i
       gen_height = source['height'].to_i || ori_ratio/source['width'].to_i
 
-      gen_name = "#{base_name}-#{gen_width}-#{gen_height}"
+      gen_name = "#{ori_name}-#{gen_width}-#{gen_height}"
       gen_absolute_path = File.join(site_path, gen_path, ori_dir, gen_name + ext)
       gen_return_path = File.join(gen_path, ori_dir, gen_name + ext)
 
