@@ -126,7 +126,8 @@ You can optionally set a list of attributes to add to every tag generated with t
 
 A shorthand to generate resolution alternates for your source keys. The setting `[1, 1.3]` will create sources that switch to 1.3x sized images on devices with a minimum dppx of 1.3. For finer grained control omit the `ppi` key and write out resolution sources by hand.
 
-[edit] ppi max decimal depth = 2
+[edit files are named for maximum reuse]
+
 
 #### source_key
 

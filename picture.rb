@@ -12,13 +12,13 @@
 require 'fileutils'
 require 'mini_magick'
 require 'digest/md5'
+require 'pathname'
 
 module Jekyll
 
   class Picture < Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
-
 
       if tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
 
@@ -36,38 +36,14 @@ module Jekyll
         end
 
       else
-        raise SyntaxError.new("Your picture tag doesn't seem to be formatted correctly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
+        raise SyntaxError.new("A picture tag is formatted incorrectly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
       end
       super
     end
 
-    ### Ruby style assignment notes
-    ### If parent_id is nil or undefined before that line you can simply write:
-    ### parent_id = params[:parent_id] unless params[:parent_type] == "Order"
-
-    ### parent_id = (params[:parent_type] == "Order") ? nil : params[:parent_id]
-    ### Alternatively:
-
-    ### parent_id = if (params[:parent_type] == "Order")
-    ###     nil
-    ### else
-    ###     params[:parent_id]
-    ### end
-
-    ### @going, @not_going = invite.accepted ? ['selected', ''] : ['', 'selected']
-    ### w, x = y, z is the same as w, x = [y, z], so this works just fine and there is no repetition.
-
-    ##### I like this!
-    ### if cond; foo else bar end
-    ### if cond then foo else bar end
-
-
     def render(context)
 
-      ### All vars are REFERENCES
-      ### DUDE ^^^^^^^^^^^^^^^^^^
-
-      # Gather settings
+      # Gather picture settings
       site = context.registers[:site]
       settings = site.config['picture']
       site_path = site.source
@@ -75,12 +51,18 @@ module Jekyll
       asset_path = settings['asset_path'] || ''
       gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
-      # Create sources object and settings
-      # Deep copy preset for manipulation. Is there a better way?
+      # Create sources object and gather sources settings
+
+      if settings['presets'][@preset].nil?
+        raise SyntaxError.new("You've specified a picture preset that doesn't exist.")
+      end
+
+      # Deep copy preset for manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
       html_attr = if sources['attr'] then sources.delete('attr').merge!(@html_attr) else @html_attr end
       ppi = if sources['ppi'] then sources.delete('ppi').sort.reverse else nil end
-      source_keys = sources.keys
+      ppi_sources = {}
+      source_keys = sources.keys ### rename source_order?
 
       # Process attributes
       if markup == 'picturefill'
@@ -98,44 +80,37 @@ module Jekyll
       }
 
       # Process sources
-
-      ### check if sources don't exist in preset, raise error
       if (@source_src.keys - source_keys).any?
         raise SyntaxError.new("You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources.")
       end
 
-      # Add image path for each source
+      # Add image paths for each source
       sources.each { |key, value|
         sources[key][:src] = @source_src[key] || @image_src
+
+        # Create ppi sources
+        if ppi
+          ppi.each { |p|
+            if p != 1
+              ppi_key = "#{key}-x#{p}"
+
+              ppi_sources[ppi_key] = {
+                # Don't need to check existance -- if they're not set will return nil
+                'width' => if value['width'] then (value['width'].to_f * p).round else nil end,
+                'height' => if value['height'] then (value['height'].to_f * p).round else nil end,
+                # MQ Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
+                'media' => "#{value['media']} and (min-resolution: #{p}dppx), #{value['media']} and (min-resolution: #{(p * 96)}dpi)",
+                :src => value[:src]
+              }
+
+              key_index = if p > 1 then source_keys.index(key) else source_keys.index(key) + 1 end
+              source_keys.insert(key_index, ppi_key)
+            end
+          }
+        end
       }
 
-
-      # Process PPIs
-
-      # Add resolution based sources
-
-      ### Not sure what the most elegant way to do this is.
-      ### Here's the pieces though, with some suggestions.
-
-      ### if ppi
-
-      ### sources.each { |key, source|
-      ### ppi.each { |p|
-
-      ### if p != 1
-      ### new_key = key + "_" + (p * 1000)
-      ### new_width = source['width'] * p
-      ### new_height = source['height'] * p
-      ### new_media = source['media'] + " and (min-resolution: " + p + "dppx), " +
-      ###             source['media'] + " and (min-resolution: " + (p * 96) + "dpi)"
-      ### use existing src
-      ### MQ Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
-
-      ### create new hash
-      ### append new hash onto end of sources hash
-
-      ### if p > 1, insert new_key before key in source_keys
-      ### if p < 1, insert new_key after key in source_keys
+      sources.merge!(ppi_sources)
 
       # Generate sized images
       sources.each { |key, source|
@@ -176,8 +151,6 @@ module Jekyll
 
     def generate_image(source, site_path, asset_path, gen_path)
 
-      ### We should hash the images to, for cache busting.
-
       if source['width'].nil? && source['height'].nil?
         raise SyntaxError.new("Source keys must have at least one of width and height in the _config.yml.")
       end
@@ -185,37 +158,29 @@ module Jekyll
       src_dir = File.dirname(source[:src])
       ext = File.extname(source[:src])
       src_name = File.basename(source[:src], ext)
-
-      # file open
-      # hash
-      # add to minim read
-
       src_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
       src_ratio = src_image[:width].to_f / src_image[:height].to_f
-
-      #### Hash orig file
-      #### grab 4 digets
-      #### add to dist file name to check
-
-      # digest = Digest::MD5.hexdigest()
-      # puts digest
+      src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
 
 
       ### Need to round calcs, or does minimaj take care of that?
       ### Clean up all the to_i/f in here
-
       gen_width = source['width'] ? source['width'].to_i : (src_ratio * source['height'].to_f).to_i
       gen_height = source['height'] ? source['height'].to_i : (source['width'].to_f / src_ratio).to_i
       gen_ratio = gen_width.to_f/gen_height.to_f
 
-      gen_name = "#{src_name}-#{gen_width}-#{gen_height}"
+      #### RWRW Add hash to name
+      #### Cleanup needs to be manual...
+      gen_name = "#{src_name}-#{gen_width}x#{gen_height}-#{src_digest}"
       gen_absolute_path = File.join(site_path, gen_path, src_dir, gen_name + ext)
       gen_return_path = File.join(gen_path, src_dir, gen_name + ext)
 
       if not File.exists?(gen_absolute_path)
 
         ### create the directory if it doesnt exist
-        FileUtils.mkdir_p(File.join(site_path, gen_path)) unless File.exist?(File.join(site_path, gen_path))
+        if not File.exist?(File.join(site_path, gen_path))
+          FileUtils.mkdir_p(File.join(site_path, gen_path))
+        end
 
         src_image.combine_options do |i|
           i.resize "#{gen_width}x#{gen_height}^"
@@ -226,7 +191,8 @@ module Jekyll
         src_image.write gen_absolute_path
       end
 
-      gen_return_path
+      # Return path with superfluous dots removed
+      Pathname.new(gen_return_path).cleanpath
     end
 
   end
