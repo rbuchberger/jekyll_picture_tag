@@ -96,7 +96,7 @@ gallery:
 
 To make it easier to add images, you can specify an asset path that will be prepended to any image source in the picture tag...
 
-The directory to look for source images in, relative to Jekyll's source directory.  
+The directory to look for source images in, relative to Jekyll's [edit] the site root directory.  
 
 #### generated_path
 

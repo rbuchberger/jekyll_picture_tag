@@ -48,6 +48,7 @@ module Jekyll
       settings = site.config['picture']
       site_path = site.source
       markup = settings['markup'] || 'picturefill'
+      xhtml = settings['xhtml'] || false
       asset_path = settings['asset_path'] || ''
       gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
@@ -64,25 +65,12 @@ module Jekyll
       ppi_sources = {}
       source_keys = sources.keys ### rename source_order?
 
-      # Process attributes
-      if markup == 'picturefill'
-        html_attr['data-picture'] = nil
-        html_attr['data-alt'] = html_attr.delete('alt')
-      end
-
-      html_attr_string = ''
-      html_attr.each {|key, value|
-        if value
-          html_attr_string += "#{key}=\"#{value}\" "
-        else
-          html_attr_string += "#{key} "
-        end
-      }
-
       # Process sources
       if (@source_src.keys - source_keys).any?
         raise SyntaxError.new("You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources.")
       end
+
+      warn "Shit is real, son!"
 
       # Add image paths for each source
       sources.each { |key, value|
@@ -99,7 +87,7 @@ module Jekyll
                 'width' => if value['width'] then (value['width'].to_f * p).round else nil end,
                 'height' => if value['height'] then (value['height'].to_f * p).round else nil end,
                 # MQ Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
-                'media' => "#{value['media']} and (min-resolution: #{p}dppx), #{value['media']} and (min-resolution: #{(p * 96)}dpi)",
+                'media' => if value['media'] then "#{value['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{value['media']} and (min-resolution: #{(p * 96).round}dpi)" else "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)" end,
                 :src => value[:src]
               }
 
@@ -119,34 +107,79 @@ module Jekyll
 
       # Construct and return tag
 
-      "<pre>Hey dog!</pre>"
+      ## Could do the array, join with \n
 
-      # if settings['markup'] == 'picturefill'
+      #### Maruku/xml problems: closes empty spans, chokes on attributes without values.
+      #### Add xml handling for drop in
+      #### RM handling for sub 1dppx mqs
 
-      # ### Not updated for new variables
-      # # <span tag[:attributes]>
-      # #   each source_key in @tag[:sources]
-      # #     if !source_key['source'], source_key['source'] = @image_src
-      # #   <span data-src="source_key[img_path]" (if media) data-media="source_key[media]"></span>
-      # #   endeach
-      # #
-      # #   <noscript>
-      # #     <img src="@tag[:sources][source_default][img_path]" alt="@tag[:alt]">
-      # #   </noscript>
-      # # </span>
 
-      # elsif settings['markup'] == 'picture'
+### Multi line interpolation
+# conn.exec %Q{select attr1, attr2, attr3, attr4, attr5, attr6, attr7
+#       from #{table_names},
+#       where etc etc etc etc etc etc etc etc etc etc etc etc etc}
 
-      # ### Not updated for new variables
-      # # <picture @tag[:attributes]>
-      # #   each source_key in @tag[:sources]
-      # #   <source src="source_key[img_path]"
-      # #           (if media) media="source_key[media]">
-      # #    <img src="small.jpg" alt="">
-      # #    <p>@tag[:alt]</p>
-      # # </picture>
+      # Process attributes
+      if markup == 'picturefill'
+        html_attr['data-picture'] = nil
+        html_attr['data-alt'] = html_attr.delete('alt')
+      end
 
-      # end
+      html_attr_string = ''
+      html_attr.each {|key, value|
+        if not xhtml and not value
+          html_attr_string += "#{key} "
+        else
+          html_attr_string += "#{key}=\"#{value}\" "
+        end
+      }
+
+      # xHTML markdown parsers can turn empty tags into self closing tags.
+      # BUT then would you be using an xhtml doctype?
+      rexmlfix = if xhtml then ' ' else '' end
+
+      if settings['markup'] == 'picturefill'
+
+        # picture_html =
+        ## Not updated for new variables
+        picture_html += "<span #{html_attr_string}>\n"
+        ## ///////////////////////////////////////////////////////////
+        source_keys.each { |source|
+
+          picture_html += "  <span data-src=\"#{sources[source][:generated_src]}\" "
+
+          if sources[source]['media']
+            picture_html += "data-media=\"#{sources[source]['media']}\" "
+          end
+
+          picture_html += ">#{rexmlfix}</span>\n"
+
+        }
+        ## ///////////////////////////////////////////////////////////
+        picture_html += "  <noscript>\n"
+        picture_html += "    <img src=\"#{sources['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"
+        picture_html += "  </noscript>\n"
+        picture_html += "</span>\n"
+
+      elsif settings['markup'] == 'picture'
+
+        ### If no alt, add one?
+
+        picture_html += "<picture #{html_attr_string}>\n"
+        source_keys.each { |source|
+          picture_html += "  <source src=\"#{sources[source][:generated_src]}\" "
+          if sources[source]['media']
+            picture_html += "media=\"#{sources[source]['media']}\" "
+          end
+          picture_html += ">\n"
+        }
+        picture_html += "  <p>#{html_attr['alt']}></p>\n"
+        picture_html += "</picture>\n"
+
+      end
+
+        # Return it
+        picture_html
     end
 
     def generate_image(source, site_path, asset_path, gen_path)
@@ -162,6 +195,7 @@ module Jekyll
       src_ratio = src_image[:width].to_f / src_image[:height].to_f
       src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
 
+      ### Add warning if picture isn't big enough to cover generated image size, but continue anyways.
 
       ### Need to round calcs, or does minimaj take care of that?
       ### Clean up all the to_i/f in here
@@ -173,7 +207,9 @@ module Jekyll
       #### Cleanup needs to be manual...
       gen_name = "#{src_name}-#{gen_width}x#{gen_height}-#{src_digest}"
       gen_absolute_path = File.join(site_path, gen_path, src_dir, gen_name + ext)
-      gen_return_path = File.join(gen_path, src_dir, gen_name + ext)
+
+      #### RWRW must be abs path from site root
+      gen_return_path = File.join('/', gen_path, src_dir, gen_name + ext)
 
       if not File.exists?(gen_absolute_path)
 
