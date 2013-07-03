@@ -20,42 +20,40 @@ module Jekyll
 
     def initialize(tag_name, markup, tokens)
 
-      if tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
+      tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
 
-        @preset = tag[:preset] || 'default'
-        @image_src = tag[:image_src]
-        @source_src = {}
-        if tag[:source_src]
-          @source_src = Hash[ *tag[:source_src].gsub(/:/, '').split ]
-        end
-        @html_attr = {}
-        if tag[:html_attr]
-          tag[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).each do |html_attr|
-            @html_attr.merge! Hash[*html_attr]
-          end
-        end
+      raise "A picture tag is formatted incorrectly. "\
+      "Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
 
+      @preset = tag[:preset] || 'default'
+      @image_src = tag[:image_src]
+      @source_src = if tag[:source_src]
+        Hash[ *tag[:source_src].gsub(/:/, '').split ]
       else
-        raise SyntaxError.new("A picture tag is formatted incorrectly. Try {% picture [preset_name] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute=\"value\"] %}.")
+        {}
       end
+      @html_attr = if tag[:html_attr]
+        Hash[ *tag[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten ]
+      else
+        {}
+      end
+
       super
     end
 
     def render(context)
 
-      # Gather picture settings
+      # Gather picture settings, assign defaults
       site = context.registers[:site]
       settings = site.config['picture']
       site_path = site.source
       markup = settings['markup'] || 'picturefill'
-      asset_path = settings['asset_path'] || ''
+      asset_path = settings['asset_path'] || '.'
       gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
       # Create sources object and gather sources settings
 
-      if settings['presets'][@preset].nil?
-        raise SyntaxError.new("You've specified a picture preset that doesn't exist.")
-      end
+      raise "You've specified a picture preset that doesn't exist." unless settings['presets'][@preset]
 
       # Deep copy preset for manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
@@ -119,12 +117,14 @@ module Jekyll
       # Construct and return tag
 
       ## Could do the array, join with \n
-
+#  a ||= 'a' trick
 
 ### Multi line interpolation
 # conn.exec %Q{select attr1, attr2, attr3, attr4, attr5, attr6, attr7
 #       from #{table_names},
 #       where etc etc etc etc etc etc etc etc etc etc etc etc etc}
+
+
 
 
       if settings['markup'] == 'picturefill'
@@ -178,6 +178,8 @@ module Jekyll
 
       #### Add warning for too small imgs
       # warn 'shit is real son'.yellow
+      # Let people know their images are being generated
+      # puts "Thumbnailing #{source} to #{dest} (#{dimensions})"
 
 
       ### Need to round calcs, or does minimaj take care of that?
