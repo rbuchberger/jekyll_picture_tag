@@ -4,6 +4,7 @@
 #          Welch Canavan   : @xiwcx
 #
 # Description:
+#
 # Download: https://github.com/robwierzbowski/jekyll-picture-tag
 # Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
 #
@@ -13,9 +14,9 @@
 #
 
 require 'fileutils'
-require 'mini_magick'
-require 'digest/md5'
 require 'pathname'
+require 'digest/md5'
+require 'mini_magick'
 
 module Jekyll
 
@@ -182,7 +183,7 @@ module Jekyll
 
       # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
       if src_image[:width] < gen_width || src_image[:height] < gen_height
-        size_warn = true
+        undersized = true
         gen_width = if gen_ratio < src_ratio then src_height * gen_ratio else src_width end
         gen_height = if gen_ratio > src_ratio then src_width/gen_ratio else src_height end
       end
@@ -194,9 +195,9 @@ module Jekyll
       # If the file doesn't exist, generate it
       if not File.exists?(gen_absolute_path)
 
-        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not size_warn
+        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not undersized
 
-        # Create destination diretory if it doesn't exist
+        #  If the directory doesn't exist, create it
         if not File.exist?(File.join(site_path, gen_path))
           FileUtils.mkdir_p(File.join(site_path, gen_path))
         end
