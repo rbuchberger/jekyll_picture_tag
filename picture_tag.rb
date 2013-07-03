@@ -3,15 +3,18 @@
 #          Justin Reese    : @justinxreese
 #          Welch Canavan   : @xiwcx
 #
-# Description: Responsive images for Jekyll
+# Description: Easy responsive images for Jekyll.
 #
 # Download: https://github.com/robwierzbowski/jekyll-picture-tag
 # Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
+# Issues: https://github.com/robwierzbowski/jekyll-picture-tag/issues
 #
 # Syntax:  {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}
-# Example: {% picture tree.jpg alt="Banyan tree" %}
-#          {% picture gallery tree.jpg source_small: tree_portrait.jpg alt="Banyan tree" class="gal-img" data-selected %}
+# Example: {% picture poster.jpg alt="The strange case of responsive images" %}
+#          {% picture gallery poster.jpg source_small: poster_closeup.jpg
+#             alt="The strange case of responsive images" class="gal-img" data-selected %}
 #
+# See the documentation for full configuration and usage instructions.
 
 require 'fileutils'
 require 'pathname'

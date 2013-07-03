@@ -2,7 +2,7 @@
 
 **Tagline**
 
-Jekyll Picture Tag adds a responsive image tag to the [Jekyll](http://jekyllrb.com) static site generator. It's fully configurable, generates multiple images for you, and covers all use cases — including art direction and resolution switching — with a simple template tag.
+Jekyll Picture Tag adds a responsive image tag to the [Jekyll](http://jekyllrb.com) static site generator. It's fully configurable, generates multiple images, and covers all use cases — including art direction and resolution switching — with a simple template tag.
 
 ```
 {% picture gallery archive/poster.jpg class="poster-photo" alt="The strange case of responsive images" %}
