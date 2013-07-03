@@ -1,9 +1,9 @@
-# Title: Jekyll Picture
+# Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski : @robwierzbowski
 #          Justin Reese    : @justinxreese
 #          Welch Canavan   : @xiwcx
 #
-# Description:
+# Description: Responsive images for Jekyll
 #
 # Download: https://github.com/robwierzbowski/jekyll-picture-tag
 # Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
