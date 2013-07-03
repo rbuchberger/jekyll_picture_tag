@@ -135,7 +135,7 @@ module Jekyll
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<span #{html_attr_string}>\n"\
-                      "#{source_tags}\n"\
+                      "#{source_tags}"\
                       "<noscript>\n"\
                       "<img src=\"#{sources['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
                       "</noscript>\n"\
@@ -151,7 +151,7 @@ module Jekyll
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<picture #{html_attr_string}>\n"\
-                      "#{source_tags}\n"\
+                      "#{source_tags}"\
                       "<p>#{html_attr['alt']}></p>\n"\
                       "</picture>\n"
       end
