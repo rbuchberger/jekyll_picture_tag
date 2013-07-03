@@ -162,57 +162,61 @@ module Jekyll
 
     def generate_image(source, site_path, asset_path, gen_path)
 
-      if source['width'].nil? && source['height'].nil?
-        raise SyntaxError.new("Source keys must have at least one of width and height in the _config.yml.")
-      end
+      raise "Source keys must have at least one of width and height in the _config.yml." unless source['width'] || source['height']
 
+      src_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
+      src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
+      src_width = src_image[:width].to_f
+      src_height = src_image[:height].to_f
+      src_ratio = src_width/src_height
       src_dir = File.dirname(source[:src])
       ext = File.extname(source[:src])
       src_name = File.basename(source[:src], ext)
-      src_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
-      src_ratio = src_image[:width].to_f / src_image[:height].to_f
-      src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
 
-      #### Add warning for too small imgs
-      # warn 'shit is real son'.yellow
-      # Let people know their images are being generated
-      # puts "Thumbnailing #{source} to #{dest} (#{dimensions})"
+      gen_width = if source['width'] then source['width'].to_f else src_ratio * source['height'].to_f end
+      gen_height = if source['height'] then source['height'].to_f else source['width'].to_f / src_ratio end
+      gen_ratio = gen_width/gen_height
 
+      # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
+      if src_image[:width] < gen_width || src_image[:height] < gen_height
 
-      ### Need to round calcs, or does minimaj take care of that?
-      ### Clean up all the to_i/f in here
-      gen_width = source['width'] ? source['width'].to_i : (src_ratio * source['height'].to_f).to_i
-      gen_height = source['height'] ? source['height'].to_i : (source['width'].to_f / src_ratio).to_i
-      gen_ratio = gen_width.to_f/gen_height.to_f
+        warn "Warning: #{File.join(asset_path, source[:src])} is smaller than the requested resize. \nOutputting as large as possible without upscaling.".yellow
 
-      #### RWRW Add hash to name
-      #### Cleanup needs to be manual...
+        gen_width = if gen_ratio < src_ratio then src_height * gen_ratio else src_width end
+        gen_height = if gen_ratio > src_ratio then src_width/gen_ratio else src_height end
+      end
+
+      # Get whole pixel values for naming and Minimagick transformation
+      gen_width = gen_width.round
+      gen_height = gen_height.round
+
       gen_name = "#{src_name}-#{gen_width}x#{gen_height}-#{src_digest}"
       gen_absolute_path = File.join(site_path, gen_path, src_dir, gen_name + ext)
+      gen_return_path = Pathname.new(File.join('/', gen_path, src_dir, gen_name + ext)).cleanpath
 
-      #### RWRW must be abs path from site root
-      gen_return_path = File.join('/', gen_path, src_dir, gen_name + ext)
-
+      # If the file doesn't exist, generate it
       if not File.exists?(gen_absolute_path)
 
-        ### create the directory if it doesnt exist
+        # Create destination diretory if it doesn't exist
         if not File.exist?(File.join(site_path, gen_path))
           FileUtils.mkdir_p(File.join(site_path, gen_path))
         end
 
+        # Let people know their images are being generated
+        puts "Generating #{gen_return_path}"
+
+        # Scale and crop
         src_image.combine_options do |i|
           i.resize "#{gen_width}x#{gen_height}^"
           i.gravity "center"
           i.crop "#{gen_width}x#{gen_height}+0+0"
         end
-
         src_image.write gen_absolute_path
       end
 
-      # Return path with superfluous dots removed
-      Pathname.new(gen_return_path).cleanpath
+      # Return path for html
+      gen_return_path
     end
-
   end
 end
 

@@ -25,6 +25,8 @@ There are three parts to Jekyll Picture Tag: the polyfill, the tag, and the sett
 [edit] html5 only. if you need an xml we'll make it
 if jekyll crashes you're probably using maruku. switch to redcarpet
 [edit] won't upscale -- add section on image generation
+  note Cleanup needs to be manual...
+
 
 ### Picturefill
 
