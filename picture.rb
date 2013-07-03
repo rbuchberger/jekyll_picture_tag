@@ -116,7 +116,7 @@ module Jekyll
             end
           }
         }
-        sources.merge!(ppi_sources)
+      sources.merge!(ppi_sources)
       end
 
       # Generate resized images
@@ -179,23 +179,19 @@ module Jekyll
 
       # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
       if src_image[:width] < gen_width || src_image[:height] < gen_height
-
-        warn "Warning: #{File.join(asset_path, source[:src])} is smaller than the requested resize. \nOutputting as large as possible without upscaling.".yellow
-
+        size_warn = true
         gen_width = if gen_ratio < src_ratio then src_height * gen_ratio else src_width end
         gen_height = if gen_ratio > src_ratio then src_width/gen_ratio else src_height end
       end
 
-      # Get whole pixel values for naming and Minimagick transformation
-      gen_width = gen_width.round
-      gen_height = gen_height.round
-
-      gen_name = "#{src_name}-#{gen_width}x#{gen_height}-#{src_digest}"
+      gen_name = "#{src_name}-#{gen_width.round}x#{gen_height.round}-#{src_digest}"
       gen_absolute_path = File.join(site_path, gen_path, src_dir, gen_name + ext)
       gen_return_path = Pathname.new(File.join('/', gen_path, src_dir, gen_name + ext)).cleanpath
 
       # If the file doesn't exist, generate it
       if not File.exists?(gen_absolute_path)
+
+        warn "Warning:".yellow + " #{File.join(asset_path, source[:src])} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not size_warn
 
         # Create destination diretory if it doesn't exist
         if not File.exist?(File.join(site_path, gen_path))
@@ -207,9 +203,9 @@ module Jekyll
 
         # Scale and crop
         src_image.combine_options do |i|
-          i.resize "#{gen_width}x#{gen_height}^"
+          i.resize "#{gen_width.round}x#{gen_height.round}^"
           i.gravity "center"
-          i.crop "#{gen_width}x#{gen_height}+0+0"
+          i.crop "#{gen_width.round}x#{gen_height.round}+0+0"
         end
         src_image.write gen_absolute_path
       end
