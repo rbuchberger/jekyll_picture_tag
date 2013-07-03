@@ -1,13 +1,16 @@
 # Title: Jekyll Picture
-# Authors:
-# Download:
-# Documentation:
+# Authors: Rob Wierzbowski : @robwierzbowski
+#          Justin Reese    : @justinxreese
+#          Welch Canavan   : @xiwcx
 #
-# Syntax:
-# Example:
-# Output:
-
-### ruby 1.9+
+# Description:
+# Download: https://github.com/robwierzbowski/jekyll-picture-tag
+# Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
+#
+# Syntax:  {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}
+# Example: {% picture tree.jpg alt="Banyan tree" %}
+#          {% picture gallery tree.jpg source_small: tree_portrait.jpg alt="Banyan tree" class="gal-img" data-selected %}
+#
 
 require 'fileutils'
 require 'mini_magick'
