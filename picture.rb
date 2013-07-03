@@ -22,8 +22,7 @@ module Jekyll
 
       tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
 
-      raise "A picture tag is formatted incorrectly. "\
-      "Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
+      raise "A picture tag is formatted incorrectly. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
 
       @preset = tag[:preset] || 'default'
       @image_src = tag[:image_src]
@@ -43,7 +42,7 @@ module Jekyll
 
     def render(context)
 
-      # Gather picture settings, assign defaults
+      # Gather settings
       site = context.registers[:site]
       settings = site.config['picture']
       site_path = site.source
@@ -51,25 +50,23 @@ module Jekyll
       asset_path = settings['asset_path'] || '.'
       gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
-      # Create sources object and gather sources settings
-
-      raise "You've specified a picture preset that doesn't exist." unless settings['presets'][@preset]
-
-      # Deep copy preset for manipulation
+      # Deep copy preset to sources for single instance manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
-      html_attr = if sources['attr'] then sources.delete('attr').merge!(@html_attr) else @html_attr end
-      ppi = if sources['ppi'] then sources.delete('ppi').sort.reverse else nil end
-      ppi_sources = {}
-      source_keys = sources.keys ### rename source_order?
 
-      # Process attributes
+      # Process html attributes
+      html_attr = if  sources['attr']
+        sources.delete('attr').merge!(@html_attr)
+      else
+        @html_attr
+      end
+
       if markup == 'picturefill'
         html_attr['data-picture'] = nil
         html_attr['data-alt'] = html_attr.delete('alt')
       end
 
       html_attr_string = ''
-      html_attr.each {|key, value|
+      html_attr.each { |key, value|
         if value
           html_attr_string += "#{key}=\"#{value}\" "
         else
@@ -77,56 +74,57 @@ module Jekyll
         end
       }
 
+      # Prepare ppi variables
+      ppi = if sources['ppi'] then sources.delete('ppi').sort.reverse else nil end
+      ppi_sources = {}
+
+      # Store source keys in an array for ordering the sources object
+      source_keys = sources.keys
+
+      # Raise some exceptions before we start expensive processing
+      raise "You've specified a preset that doesn't exist." unless settings['presets'][@preset]
+      raise "You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources." unless (@source_src.keys - source_keys).empty?
+
       # Process sources
-      if (@source_src.keys - source_keys).any?
-        raise SyntaxError.new("You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources.")
-      end
-
       # Add image paths for each source
-      sources.each { |key, value|
+      sources.each_key { |key|
         sources[key][:src] = @source_src[key] || @image_src
+      }
 
-        # Create ppi sources
-        if ppi
+      # Construct ppi sources
+      # Generates -webkit-device-ratio and resolution: dpi media value for cross browser support
+      # http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
+      if ppi
+        sources.each { |key, value|
           ppi.each { |p|
             if p != 1
               ppi_key = "#{key}-x#{p}"
 
               ppi_sources[ppi_key] = {
-                # Don't need to check existance -- if they're not set will return nil
                 'width' => if value['width'] then (value['width'].to_f * p).round else nil end,
                 'height' => if value['height'] then (value['height'].to_f * p).round else nil end,
-                # MQ Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
-                'media' => if value['media'] then "#{value['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{value['media']} and (min-resolution: #{(p * 96).round}dpi)" else "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)" end,
+                'media' => if value['media']
+                  "#{value['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{value['media']} and (min-resolution: #{(p * 96).round}dpi)"
+                else
+                  "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)"
+                end,
                 :src => value[:src]
               }
 
+              # Add ppi_key to the source keys order
               source_keys.insert(source_keys.index(key), ppi_key)
             end
           }
-        end
-      }
+        }
+        sources.merge!(ppi_sources)
+      end
 
-      sources.merge!(ppi_sources)
-
-      # Generate sized images
+      # Generate resized images
       sources.each { |key, source|
         sources[key][:generated_src] = generate_image(source, site_path, asset_path, gen_path)
       }
 
       # Construct and return tag
-
-      ## Could do the array, join with \n
-#  a ||= 'a' trick
-
-### Multi line interpolation
-# conn.exec %Q{select attr1, attr2, attr3, attr4, attr5, attr6, attr7
-#       from #{table_names},
-#       where etc etc etc etc etc etc etc etc etc etc etc etc etc}
-
-
-
-
       if settings['markup'] == 'picturefill'
 
         source_tags = ''
@@ -135,7 +133,7 @@ module Jekyll
           source_tags += "<span data-src=\"#{sources[source][:generated_src]}\"#{media}></span>\n"
         }
 
-        # Note: we can't indent here because markdown parsers will turn 4 spaces into code blocks
+        # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<span #{html_attr_string}>\n"\
                       "#{source_tags}\n"\
                       "<noscript>\n"\
@@ -151,15 +149,14 @@ module Jekyll
           source_tags += "<source src=\"#{sources[source][:generated_src]}\"#{media}>\n"
         }
 
-        # Note: we can't indent here because markdown parsers will turn 4 spaces into code blocks
+        # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<picture #{html_attr_string}>\n"\
                       "#{source_tags}\n"\
                       "<p>#{html_attr['alt']}></p>\n"\
                       "</picture>\n"
-
       end
 
-        # Return it
+        # Return the markup!
         picture_tag
     end
 
