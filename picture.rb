@@ -22,7 +22,7 @@ module Jekyll
 
       tag = /^(?:(?<preset>[^\s.:]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s:]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
 
-      raise "A picture tag is formatted incorrectly. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
+      raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
 
       @preset = tag[:preset] || 'default'
       @image_src = tag[:image_src]
@@ -82,8 +82,8 @@ module Jekyll
       source_keys = sources.keys
 
       # Raise some exceptions before we start expensive processing
-      raise "You've specified a preset that doesn't exist." unless settings['presets'][@preset]
-      raise "You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources." unless (@source_src.keys - source_keys).empty?
+      raise "Picture Tag can't find this preset. Check picture: presets: #{@preset} in _config.yml for a list of presets." unless settings['presets'][@preset]
+      raise "Picture Tag can't find this preset source. Check picture: presets: #{@preset} in _config.yml for a list of sources." unless (@source_src.keys - source_keys).empty?
 
       # Process sources
       # Add image paths for each source
@@ -162,7 +162,7 @@ module Jekyll
 
     def generate_image(source, site_path, asset_path, gen_path)
 
-      raise "Source keys must have at least one of width and height in the _config.yml." unless source['width'] || source['height']
+      raise "Sources must have at least one of width and height in the _config.yml." unless source['width'] || source['height']
 
       src_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
       src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
@@ -191,7 +191,7 @@ module Jekyll
       # If the file doesn't exist, generate it
       if not File.exists?(gen_absolute_path)
 
-        warn "Warning:".yellow + " #{File.join(asset_path, source[:src])} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not size_warn
+        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not size_warn
 
         # Create destination diretory if it doesn't exist
         if not File.exist?(File.join(site_path, gen_path))
