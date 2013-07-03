@@ -22,6 +22,9 @@ or download the binary from http://www.imagemagick.org/script/binary-releases.ph
 
 There are three parts to Jekyll Picture Tag: the polyfill, the tag, and the settings.
 
+[edit] html5 only. if you need an xml we'll make it
+if jekyll crashes you're probably using maruku. switch to redcarpet
+
 ### Picturefill
 
 The tag requires [Picturefill](https://github.com/scottjehl/picturefill) to polyfill the proposed picture element. Download the library and add it to your site.

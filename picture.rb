@@ -48,7 +48,6 @@ module Jekyll
       settings = site.config['picture']
       site_path = site.source
       markup = settings['markup'] || 'picturefill'
-      xhtml = settings['xhtml'] || false
       asset_path = settings['asset_path'] || ''
       gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
 
@@ -65,12 +64,25 @@ module Jekyll
       ppi_sources = {}
       source_keys = sources.keys ### rename source_order?
 
+      # Process attributes
+      if markup == 'picturefill'
+        html_attr['data-picture'] = nil
+        html_attr['data-alt'] = html_attr.delete('alt')
+      end
+
+      html_attr_string = ''
+      html_attr.each {|key, value|
+        if value
+          html_attr_string += "#{key}=\"#{value}\" "
+        else
+          html_attr_string += "#{key} "
+        end
+      }
+
       # Process sources
       if (@source_src.keys - source_keys).any?
         raise SyntaxError.new("You're trying to specify an image for a source that doesn't exist. Please check picture: presets: #{@preset} in your _config.yml for the list of available sources.")
       end
-
-      warn "Shit is real, son!"
 
       # Add image paths for each source
       sources.each { |key, value|
@@ -91,8 +103,7 @@ module Jekyll
                 :src => value[:src]
               }
 
-              key_index = if p > 1 then source_keys.index(key) else source_keys.index(key) + 1 end
-              source_keys.insert(key_index, ppi_key)
+              source_keys.insert(source_keys.index(key), ppi_key)
             end
           }
         end
@@ -109,77 +120,47 @@ module Jekyll
 
       ## Could do the array, join with \n
 
-      #### Maruku/xml problems: closes empty spans, chokes on attributes without values.
-      #### Add xml handling for drop in
-      #### RM handling for sub 1dppx mqs
-
 
 ### Multi line interpolation
 # conn.exec %Q{select attr1, attr2, attr3, attr4, attr5, attr6, attr7
 #       from #{table_names},
 #       where etc etc etc etc etc etc etc etc etc etc etc etc etc}
 
-      # Process attributes
-      if markup == 'picturefill'
-        html_attr['data-picture'] = nil
-        html_attr['data-alt'] = html_attr.delete('alt')
-      end
-
-      html_attr_string = ''
-      html_attr.each {|key, value|
-        if not xhtml and not value
-          html_attr_string += "#{key} "
-        else
-          html_attr_string += "#{key}=\"#{value}\" "
-        end
-      }
-
-      # xHTML markdown parsers can turn empty tags into self closing tags.
-      # BUT then would you be using an xhtml doctype?
-      rexmlfix = if xhtml then ' ' else '' end
 
       if settings['markup'] == 'picturefill'
 
-        # picture_html =
-        ## Not updated for new variables
-        picture_html += "<span #{html_attr_string}>\n"
-        ## ///////////////////////////////////////////////////////////
+        source_tags = ''
         source_keys.each { |source|
-
-          picture_html += "  <span data-src=\"#{sources[source][:generated_src]}\" "
-
-          if sources[source]['media']
-            picture_html += "data-media=\"#{sources[source]['media']}\" "
-          end
-
-          picture_html += ">#{rexmlfix}</span>\n"
-
+          media = if sources[source]['media'] then " data-media=\"#{sources[source]['media']}\"" end
+          source_tags += "<span data-src=\"#{sources[source][:generated_src]}\"#{media}></span>\n"
         }
-        ## ///////////////////////////////////////////////////////////
-        picture_html += "  <noscript>\n"
-        picture_html += "    <img src=\"#{sources['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"
-        picture_html += "  </noscript>\n"
-        picture_html += "</span>\n"
+
+        # Note: we can't indent here because markdown parsers will turn 4 spaces into code blocks
+        picture_tag = "<span #{html_attr_string}>\n"\
+                      "#{source_tags}\n"\
+                      "<noscript>\n"\
+                      "<img src=\"#{sources['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
+                      "</noscript>\n"\
+                      "</span>\n"
 
       elsif settings['markup'] == 'picture'
 
-        ### If no alt, add one?
-
-        picture_html += "<picture #{html_attr_string}>\n"
+        source_tags = ''
         source_keys.each { |source|
-          picture_html += "  <source src=\"#{sources[source][:generated_src]}\" "
-          if sources[source]['media']
-            picture_html += "media=\"#{sources[source]['media']}\" "
-          end
-          picture_html += ">\n"
+          media = if sources[source]['media'] then " media=\"#{sources[source]['media']}\"" end
+          source_tags += "<source src=\"#{sources[source][:generated_src]}\"#{media}>\n"
         }
-        picture_html += "  <p>#{html_attr['alt']}></p>\n"
-        picture_html += "</picture>\n"
+
+        # Note: we can't indent here because markdown parsers will turn 4 spaces into code blocks
+        picture_tag = "<picture #{html_attr_string}>\n"\
+                      "#{source_tags}\n"\
+                      "<p>#{html_attr['alt']}></p>\n"\
+                      "</picture>\n"
 
       end
 
         # Return it
-        picture_html
+        picture_tag
     end
 
     def generate_image(source, site_path, asset_path, gen_path)
@@ -195,7 +176,9 @@ module Jekyll
       src_ratio = src_image[:width].to_f / src_image[:height].to_f
       src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
 
-      ### Add warning if picture isn't big enough to cover generated image size, but continue anyways.
+      #### Add warning for too small imgs
+      # warn 'shit is real son'.yellow
+
 
       ### Need to round calcs, or does minimaj take care of that?
       ### Clean up all the to_i/f in here
