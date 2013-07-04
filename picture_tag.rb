@@ -100,7 +100,7 @@ module Jekyll
 
       # Construct ppi sources
       # Generates -webkit-device-ratio and resolution: dpi media value for cross browser support
-      # http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
+      # Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
       if ppi
         sources.each { |key, value|
           ppi.each { |p|
@@ -135,6 +135,8 @@ module Jekyll
       if settings['markup'] == 'picturefill'
 
         source_tags = ''
+        # Picturefill uses reverse source order
+        # Reference: https://github.com/scottjehl/picturefill/issues/79
         source_keys.reverse.each { |source|
           media = if sources[source]['media'] then " data-media=\"#{sources[source]['media']}\"" end
           source_tags += "<span data-src=\"#{sources[source][:generated_src]}\"#{media}></span>\n"
