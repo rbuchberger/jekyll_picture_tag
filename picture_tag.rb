@@ -138,7 +138,7 @@ module Jekyll
         # Picturefill uses reverse source order
         # Reference: https://github.com/scottjehl/picturefill/issues/79
         source_keys.reverse.each { |source|
-          media = if not source == 'source_default' then " data-media=\"#{sources[source]['media']}\"" end
+          media = " data-media=\"#{sources[source]['media']}\"" unless source == 'source_default'
           source_tags += "<span data-src=\"#{sources[source][:generated_src]}\"#{media}></span>\n"
         }
 
@@ -154,7 +154,7 @@ module Jekyll
 
         source_tags = ''
         source_keys.each { |source|
-          media = if not source == 'source_default' then " media=\"#{sources[source]['media']}\"" end
+          media = " media=\"#{sources[source]['media']}\"" unless source == 'source_default'
           source_tags += "<source src=\"#{sources[source][:generated_src]}\"#{media}>\n"
         }
 
