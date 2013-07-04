@@ -135,7 +135,7 @@ module Jekyll
       if settings['markup'] == 'picturefill'
 
         source_tags = ''
-        source_keys.each { |source|
+        source_keys.reverse.each { |source|
           media = if sources[source]['media'] then " data-media=\"#{sources[source]['media']}\"" end
           source_tags += "<span data-src=\"#{sources[source][:generated_src]}\"#{media}></span>\n"
         }
