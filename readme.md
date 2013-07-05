@@ -10,14 +10,14 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 **Proof:** The picture element covers more responsive image use cases than any other proposed solution. As a result the markup is more verbose. This plugin shows that in practice picture can be easy for website authors to use and maintain.
 
-**Need more convincing?** For an introduction to the picture element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000).
+**Need more convincing?** For an introduction to the picture element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000). For why we need them, see [Tim Kaldek's](https://twitter.com/tkadlec) article [Why We Need Responsive Images](http://timkadlec.com/2013/06/why-we-need-responsive-images/).
 
 ## Installation
 
 Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, and [Imagemagick](http://www.imagemagick.org/script/index.php).  
 Once those are installed, copy picture_tag.rb into your Jekyll _plugins folder.
 
-Jekyll Picture Tag outputs HTML5, and requires an HTML5 markdown parser. If it's not already set, add `markdown: redcarpet` or any other HTML5 markdown parser to your _config.yml.
+Jekyll Picture Tag outputs HTML5, and requires an HTML5 markdown parser. If you haven't already, add `markdown: redcarpet` or any other HTML5 markdown parser to your _config.yml.
 
 ## Usage
 
@@ -111,7 +111,7 @@ Defaults to `{compiled_site}/{source_path}/generated`.
 
 #### `markup`
 
-Choose `picturefill` to output markup for the Picturefill polyfill ([example]()) or `picture` to output markup for the proposed picture element ([example]()). When browsers implement picture just flip this setting and you're good to go.
+Choose `picturefill` to output markup for the Picturefill polyfill ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/rob-development/examples/output.html#L3-L13)) or `picture` to output markup for the proposed picture element ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/rob-development/examples/output.html#L3-L13)). When browsers implement picture just flip this setting and you're good to go.
 
 Defaults to `picturefill`.
 
