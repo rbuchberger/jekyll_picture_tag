@@ -73,7 +73,7 @@ module Jekyll
 
       html_attr_string = ''
       html_attr.each { |key, value|
-        if value
+        if value && value != 'nil'
           html_attr_string += "#{key}=\"#{value}\" "
         else
           html_attr_string += "#{key} "
