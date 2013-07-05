@@ -55,6 +55,7 @@ module Jekyll
       markup = settings['markup'] || 'picturefill'
       image_source = settings['source_path'] || '.'
       image_dest = settings['output_path'] || File.join(image_source, 'generated')
+      site.config['keep_files'] << image_dest
 
       # Prevent Jekyll from erasing our copied files
       site.config['keep_files'] << image_dest unless site.config['keep_files'].include?(image_dest)
