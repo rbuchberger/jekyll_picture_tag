@@ -55,7 +55,6 @@ module Jekyll
       markup = settings['markup'] || 'picturefill'
       image_source = settings['source_path'] || '.'
       image_dest = settings['output_path'] || File.join(image_source, 'generated')
-      image_cache = settings['cache_path'] || '.image_cache'
 
       # Deep copy preset to sources for single instance manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
@@ -128,7 +127,7 @@ module Jekyll
 
       # Generate resized images
       sources.each { |key, source|
-        sources[key][:generated_src] = generate_image(source, site.source, site.dest, image_source, image_dest, image_cache)
+        sources[key][:generated_src] = generate_image(source, site.source, site.dest, image_source, image_dest)
       }
 
       # Construct and return tag
@@ -169,7 +168,7 @@ module Jekyll
         picture_tag
     end
 
-    def generate_image(source, site_source, site_dest, image_source, image_dest, image_cache)
+    def generate_image(source, site_source, site_dest, image_source, image_dest)
 
       raise "Sources must have at least one of width and height in the _config.yml." unless source['width'] || source['height']
 
@@ -194,17 +193,16 @@ module Jekyll
       end
 
       gen_name = "#{src_name}-#{gen_width.round}x#{gen_height.round}-#{src_digest}" + ext
-      gen_cache_path = File.join(site_source, image_cache)
       gen_dest_path = File.join(site_dest, image_dest, src_dir)
       gen_jekyll_path = Pathname.new(File.join('/', image_dest, src_dir, gen_name)).cleanpath
 
-      # Generate cache file
-      unless File.exists?(File.join(gen_cache_path, gen_name))
+      # Generate resized files
+      unless File.exists?(File.join(gen_dest_path, gen_name))
 
-        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not undersized
+        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested output file. It will be resized without upscaling." unless not undersized
 
-        #  If the cache directory doesn't exist, create it
-        FileUtils.mkdir_p(gen_cache_path) unless File.exist?(gen_cache_path)
+        #  If the destination directory doesn't exist, create it
+        FileUtils.mkdir_p(gen_dest_path) unless File.exist?(gen_dest_path)
 
         # Let people know their images are being generated
         puts "Generating #{gen_name}"
@@ -215,24 +213,18 @@ module Jekyll
           i.gravity "center"
           i.crop "#{gen_width.round}x#{gen_height.round}+0+0"
         end
-        src_image.write File.join(gen_cache_path, gen_name)
+        src_image.write File.join(gen_dest_path, gen_name)
       end
-
-      # Copy file from cache location
-      FileUtils.mkdir_p(gen_dest_path) unless File.exist?(gen_dest_path)
-      FileUtils.cp(File.join(gen_cache_path, gen_name), File.join(gen_dest_path, gen_name))
 
       # Return path for html
       gen_jekyll_path
     end
   end
 
-  # Liquid filters run before the Jekyll destination directory is cleaned.
-  # Prevent Jekyll from erasing our copied files (there's probably a less ugly way to do this)
+  # Patch to prevent Jekyll from erasing our copied files (there's probably a less ugly way to do this)
   class Configuration < Hash
-    DEFAULTS['keep_files'] = if Jekyll.configuration({})['picture']
-      DEFAULTS['keep_files'].push(Jekyll.configuration({})['picture']['output_path'] || 'generated')
-    end
+    picture =  Jekyll.configuration({})['picture']
+    DEFAULTS['keep_files'] = DEFAULTS['keep_files'].push(picture['output_path'] || 'generated') unless picture.nil?
   end
 end
 
