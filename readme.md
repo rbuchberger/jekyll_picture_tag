@@ -2,15 +2,15 @@
 
 **Easy responsive images for Jekyll.**
 
-Jekyll Picture Tag lets you use responsive images on your [Jekyll](http://jekyllrb.com) static site. It follows the proposed `<picture>` element pattern, and polyfills the functionality in current browsers with [Picturefill](https://github.com/scottjehl/picturefill). Jekyll Picture Tag is fully configurable, automatically creates resized source images, and covers all use cases — including art direction and resolution switching — with a little YAML configuration and a simple template tag.
+Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com) static site. It follows the proposed [picture element](http://picture.responsiveimages.org/) pattern, and polyfills current browsers with [Picturefill](https://github.com/scottjehl/picturefill). Jekyll Picture Tag automatically creates resized source images, is fully configurable, and covers all use cases — including art direction and resolution switching — with a little YAML configuration and a simple template tag.
 
-## Rationale
+## Why use Jekyll Picture Tag?
 
-**Performance:** Static sites can be can be blazingly fast. We shouldn't throw those performance gains away serving kb of pixels a user will never see. 
+**Performance:** Static sites can be can be blazingly fast. We shouldn't throw these performance gains away by serving kilobytes of pixels a user will never see. 
 
-**Proof:** The `<picture>` element covers more responsive image use cases than any other proposed solution. As a result the markup is a bit more verbose. This plugin shows that in practice `<picture>` can be easily used and maintained by website authors.
+**Proof:** The picture element covers more responsive image use cases than any other proposed solution. As a result the markup is more verbose. This plugin shows that in practice picture can be easy for website authors to use and maintain.
 
-For an introduction to the `<picture>` element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000).
+**Need more convincing?** For an introduction to the picture element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000).
 
 ## Installation
 
@@ -21,21 +21,21 @@ Once those are installed, copy picture_tag.rb into your Jekyll _plugins folder.
 
 There are three parts to Jekyll Picture Tag: 
 
-- [Polyfill](#polyfill)  
-- [Tag ](#tag)  
-- [Configuration](#configuration)  
+- [Polyfill](#polyfill)
+- [Liquid Tag](#liquid-tag)
+- [Configuration](#configuration)
 
 ### Polyfill
 
-The default `picturefill` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill). Download the library and add it to your site.
+The default `picturefill` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill). Download the library (and optionally matchMedia to support it) and add the scripts to your site. 
 
-### Tag
+### Liquid Tag
 
 ```
 {% picture [preset] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute="value"] %}
 ```
 
-The tag takes a mix of user input and pointers to configuration settings.
+The tag takes a mix of user input and pointers to configuration settings. 
 
 #### `picture`
 
@@ -43,19 +43,19 @@ Tells Liquid this is a Jekyll Picture Tag.
 
 #### `preset`
 
-[Presets are part of the _config.yml](#presets). Optionally specify a picture preset to use, or leave blank for the `default` preset.
+Optionally specify a picture [preset](#presets) to use, or leave blank for the `default` preset.
 
 #### `path/to/img.jpg` 
 
-Choose a base image to use for the picture. All source images will be resized from this one, so make sure it is large enough.  
+Choose a base image for the picture. This image will be resized for all of your responsive picture sources.
 
 #### `source_key: path/to/alt/img.jpg`
 
-[Sources are part of the _config.yml](#sources). Optionally specify an alternate base image for a picture source. Enjoy your art direction!
+Optionally specify an alternate base image for a specific picture source. This is one of of picture's strongest features, often reffered to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction). 
 
 #### `attribute="value"`
 
-Optionally specify any number of HTML attributes. These will be merged with any attributes you've [set in the _config.yml](#attr). You can set any attribute except for `data-picture`, `data-alt`, `data-src`, and `data-media`.
+Optionally specify any number of HTML attributes. These will be merged with any [attributes you've set in the _config.yml](#attr). You can set any attribute except for `data-picture`, `data-alt`, `data-src`, and `data-media`.
 
 ### Configuration
 
@@ -65,8 +65,8 @@ Jekyll Picture Tag stores configuration in your site's _config.yml under the `pi
 
 ```yml
 picture:
-  asset_path: "assets/images"
-  generated_path: "assets/images/generated"
+  source_path: "assets/images/_picture"
+  output_path: "assets/images/picture"
   markup: "picturefill"
   presets:
     default:
@@ -83,74 +83,77 @@ picture:
 gallery:
   ppi: [1, 1.5]
   attr:
-    class: "galery-pict"
+    class: "gallery-pict"
     itemprop: "image"
   source_medium:
     media: "(min-width: 40em)"
     width: "600"
     height: "300"
-  source_default:
+  source_default: 
     width: "300"
-    height: "150"
 ```
 
-#### `asset_path`
+#### `source_path`
 
-To make it easier to write tags, you can specify a base directory for your assets. All image paths will be relative to this directory. 
+To make it easier to write tags, you can specify a source directory for your assets. All base image paths will be relative to this directory. 
 
-For example if you set `asset_path: assets/images`, the `{% picture posters/dr_jekyll.jpg %}` tag will look for a file at `assets/images/posters/dr_jekyll.jpg`.
+For example, if you set `source_path: assets/_picture`, the `{% picture posters/dr_jekyll.jpg %}` tag will look for a file at `assets/_picture/posters/dr_jekyll.jpg`.
 
-Defaults to the Jekyll root directory.
+Defaults to the Jekyll source directory.
 
-#### `generated_path`
+#### `output_path`
 
-Jekyll Picture Tag automatically generates images based on your settings when you build the site. These are output to the `generated_path` directory. Defaults 
+Jekyll Picture Tag automatically generates resized source images when you build the site. These are output to the `output_path` in your compiled site directory. The organization of your source directory is maintained in the output directory.
 
-Defaults to `{asset_path}/generated`.
+Defaults to `{compiled_site}/{source_path}/generated`.
 
 #### `markup`
 
-The markup to output. `picturefill` outputs markup for the Picturefill polyfill. `picture` outputs the proposed `<picture>` element markup.  
+Choose `picturefill` to output markup for the Picturefill polyfill ([example]()) or `picture` to output markup for the proposed picture element ([example]()). When browsers implement picture just flip this setting and you're good to go.
 
 Defaults to `picturefill`.
 
 #### `presets`
 
-Presets are reusable picture tag styles that are referenced in the liquid tag. The `default` preset is required. A preset name can't contain the `.` or `:` characters.
+Presets are reusable picture styles that are referenced in the liquid tag. The `default` preset is required. A preset name can't contain the `.`, `:`, or `/` characters.
 
 #### `attr`
 
-Each preset can have an optional list of HTML attributes associated with it. These attributes will be automatically inserted into the tag when the preset is used. 
+Each preset can have an optional list of HTML attributes associated with it. These attributes will be automatically inserted when the preset is used. 
 
-Any attribute also set in a tag will override an attribute set in `attr`. For standalone attributes set the value to `nil`. You can set any attribute except for `data-picture`, `data-alt`, `data-src`, and `data-media`.
+Setting an attribute in a tag will override the same attribute set in `attr`. Set the value of standalone attributes to `nil`. You can set any attribute except for `data-picture`, `data-alt`, `data-src`, and `data-media`.
 
 #### `ppi`
 
-The `ppi` array automatically generates resolution versions of your sources and images. The setting `[1, 1.5]` will create sources that switch to 1.5x sized images on devices with a minimum resolution of 1.5dppx. For finer grained control omit `ppi` and write resolution sources by hand.
+The `ppi` array automatically generates hi-ppi versions of your sources and images with a cross browser media atrribute. The setting `[1, 1.5, 2]` will create sources that switch to 1.5x sized images on devices with a minimum resolution of 1.5dppx, and 2x images on devices with a minimum resolution of 2dppx. For finer grained control omit `ppi` and write resolution sources by hand.
 
 #### `sources`
 
-The `<picture>` tag uses multiple source elements with individual `src` and `media` attributes. The first source with a matching `media` attribute will be used. Each `source_*` becomes a source in html.
+The picture tag uses multiple source elements with individual `src` and `media` attributes. The first source with a matching `media` attribute will be used. Each `source_*` becomes a source element in HTML.
 
-Source keys are named with the pattern `source_` plus a descriptive string. They can't contain the `.` or `:` characters.
+Sources are named with the pattern `source_` plus a descriptive string. A `source_default` is required. Source names can't contain the `.`, `:`, or `/` characters.
+
+Remember to arrange your sources from most restrictive `media` to the least restrictive. `source_default` does not accept a `media` key, and should always be last.
 
 #### `width` and `height`
 
-Jekyll Picture Tag uses Minimagick Ruby library to automatically generate resized images for your picture sources. Set a single value to scale the image proportionately. Set both to scale and crop. Units are pixels.
+Jekyll Picture Tag uses Minimagick to automatically generate resized images for your picture sources. Set a single value to scale the image proportionately. Set both to scale and crop. Units are pixels.
 
 #### `media`
 
 `media` takes a CSS media query that sets the conditions under which the source will be displayed. Any CSS media query is allowed. 
 
-You should arrange your sources from most restrictive `media` to the least restrictive. `source_default` does not accept a `media` key, and should always be last.
-
 ## Managing Generated Images
 
-Jekyll Picture Tag generates source images for you every time you build your site. It uses a smart caching system to make sure it doesn't generate the same image twice, and will re-use images as much as possible.
+Jekyll Picture Tag  generates resized source images every time you build your site. It uses a smart caching system to speed up site compilation, and will re-use images as much as possible.
 
 Try to use a base image that is larger than the largest source image you'll need. Jekyll Picture Tag will warn you if a base image is too small, and won't upscale your images.
 
-You should only store generated images in the `generated_path` directory. The plugin never deletes images, so every once in a while you may want to manually clean the directory and re-generate.
+By specifying a source path that is not compiled by Jekyll you can prevent your huge base images from being copied to the compiled site. For example, `source_path: assets/_picture-source` and `output_path: assets/picture` will result in a picture directory in the compiled site that only contains your resized images.  
+
+The `output_path` is never deleted on site compilation. You should only store generated images in the `output_path` directory. Before you commit a version of your site you may want to manually clean the directory and re-generate.
+
+You should always use a build process to optomize your site assets, including images. If you're a cool kid you should take a look at [Yeoman](http://yeoman.io/) and [generator-jekyllrb](https://github.com/robwierzbowski/generator-jekyllrb).
 
 ## Contribute
 
@@ -158,7 +161,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.1.0, July 3, 2013: Initial release.
+0.1.0, July 5, 2013: Initial release.
 
 ## License
 
