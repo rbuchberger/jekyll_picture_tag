@@ -55,6 +55,7 @@ module Jekyll
       markup = settings['markup'] || 'picturefill'
       image_source = settings['source_path'] || '.'
       image_dest = settings['output_path'] || File.join(image_source, 'generated')
+      site.config['keep_files'] << image_dest
 
       # Deep copy preset to sources for single instance manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
@@ -219,12 +220,6 @@ module Jekyll
       # Return path for html
       gen_jekyll_path
     end
-  end
-
-  # Patch to prevent Jekyll from erasing our copied files (there's probably a less ugly way to do this)
-  class Configuration < Hash
-    picture =  Jekyll.configuration({})['picture']
-    DEFAULTS['keep_files'] = DEFAULTS['keep_files'].push(picture['output_path'] || 'generated') unless picture.nil?
   end
 end
 
