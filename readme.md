@@ -14,10 +14,11 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 ## Installation
 
-Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, and [Imagemagick](http://www.imagemagick.org/script/index.php).  
-Once those are installed, copy picture_tag.rb into your Jekyll _plugins folder.
+Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, and [Imagemagick](http://www.imagemagick.org/script/index.php). 
 
-Jekyll Picture Tag outputs HTML5, and requires an HTML5 markdown parser. If you haven't already, add `markdown: redcarpet` or any other HTML5 markdown parser to your _config.yml.
+It also requires an HTML5 Markdown parser. If you're not using one already, install [Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
+
+Then copy picture_tag.rb into your Jekyll _plugins folder.
 
 ## Usage
 
@@ -163,7 +164,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
-0.1.1, July 5, 2013: Quick round of code improvements.
+0.1.1, July 5, 2013: Quick round of code improvements.  
 0.1.0, July 5, 2013: Initial release.
 
 ## License
