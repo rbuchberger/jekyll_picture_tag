@@ -10,7 +10,7 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 **Proof:** The picture element covers more responsive image use cases than any other proposed solution. As a result the markup is more verbose. This plugin shows that in practice picture can be easy for website authors to use and maintain.
 
-**Need more convincing?** For an introduction to the picture element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000). For why we need them, see [Tim Kaldek's](https://twitter.com/tkadlec) article [Why We Need Responsive Images](http://timkadlec.com/2013/06/why-we-need-responsive-images/).
+**Need more convincing?** Read [Tim Kadlec's](https://twitter.com/tkadlec) article [Why We Need Responsive Images](http://timkadlec.com/2013/06/why-we-need-responsive-images/). For an introduction to the picture element and responsive images in general see [Mo’ Pixels Mo’ Problems](http://alistapart.com/article/mo-pixels-mo-problems) and the follow up article [Ughck. Images](http://daverupert.com/2013/06/ughck-images/) by [Dave Rupert](https://twitter.com/davatron5000).
 
 ## Installation
 
@@ -127,7 +127,7 @@ Setting an attribute in a tag will override the same attribute set in `attr`. Se
 
 #### `ppi`
 
-The `ppi` array automatically generates hi-ppi versions of your sources and images with a cross browser media atrribute. The setting `[1, 1.5, 2]` will create sources that switch to 1.5x sized images on devices with a minimum resolution of 1.5dppx, and 2x images on devices with a minimum resolution of 2dppx. For finer grained control omit `ppi` and write resolution sources by hand.
+The `ppi` array automatically generates hi-ppi versions of your images and matched sources with a cross-browser media attribute. The setting `[1, 1.5, 2]` will create sources that switch to 1.5x sized images on devices with a minimum resolution of 1.5dppx, and 2x images on devices with a minimum resolution of 2dppx. For finer grained control omit `ppi` and write resolution sources by hand.
 
 #### `sources`
 
@@ -155,7 +155,7 @@ By specifying a source path that is not compiled by Jekyll you can prevent your 
 
 The `output_path` is never deleted on site compilation. You should only store generated images in the `output_path` directory. Before you commit a version of your site you may want to manually clean the directory and re-generate.
 
-You should always use a build process to optomize your site assets, including images. If you're a cool kid you should take a look at [Yeoman](http://yeoman.io/) and [generator-jekyllrb](https://github.com/robwierzbowski/generator-jekyllrb).
+You should always use a build process to optimize your site assets, including images. If you're a cool kid you should take a look at [Yeoman](http://yeoman.io/) and [generator-jekyllrb](https://github.com/robwierzbowski/generator-jekyllrb).
 
 ## Contribute
 
