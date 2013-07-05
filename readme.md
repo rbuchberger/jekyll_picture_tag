@@ -111,7 +111,7 @@ Defaults to `{compiled_site}/{source_path}/generated`.
 
 #### `markup`
 
-Choose `picturefill` to output markup for the Picturefill polyfill ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/rob-development/examples/output.html#L3-L13)) or `picture` to output markup for the proposed picture element ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/rob-development/examples/output.html#L3-L13)). When browsers implement picture just flip this setting and you're good to go.
+Choose `picturefill` to output markup for the Picturefill polyfill ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L3-L13)) or `picture` to output markup for the proposed picture element ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L17-L25)). When browsers implement picture just flip this setting and you're good to go.
 
 Defaults to `picturefill`.
 
