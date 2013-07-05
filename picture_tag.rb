@@ -52,16 +52,16 @@ module Jekyll
       # Gather settings
       site = context.registers[:site]
       settings = site.config['picture']
-      site_path = site.source
       markup = settings['markup'] || 'picturefill'
-      asset_path = settings['asset_path'] || '.'
-      gen_path = settings['generated_path'] || File.join(asset_path, 'generated')
+      image_source = settings['source_path'] || '.'
+      image_dest = settings['output_path'] || File.join(image_source, 'generated')
+      image_cache = settings['cache_path'] || '.image_cache'
 
       # Deep copy preset to sources for single instance manipulation
       sources = Marshal.load(Marshal.dump(settings['presets'][@preset]))
 
       # Process html attributes
-      html_attr = if  sources['attr']
+      html_attr = if sources['attr']
         sources.delete('attr').merge!(@html_attr)
       else
         @html_attr
@@ -128,7 +128,7 @@ module Jekyll
 
       # Generate resized images
       sources.each { |key, source|
-        sources[key][:generated_src] = generate_image(source, site_path, asset_path, gen_path)
+        sources[key][:generated_src] = generate_image(source, site.source, site.dest, image_source, image_dest, image_cache)
       }
 
       # Construct and return tag
@@ -169,11 +169,11 @@ module Jekyll
         picture_tag
     end
 
-    def generate_image(source, site_path, asset_path, gen_path)
+    def generate_image(source, site_source, site_dest, image_source, image_dest, image_cache)
 
       raise "Sources must have at least one of width and height in the _config.yml." unless source['width'] || source['height']
 
-      src_image = MiniMagick::Image.open(File.join(site_path, asset_path, source[:src]))
+      src_image = MiniMagick::Image.open(File.join(site_source, image_source, source[:src]))
       src_digest = Digest::MD5.hexdigest(src_image.to_blob).slice!(0..5)
       src_width = src_image[:width].to_f
       src_height = src_image[:height].to_f
@@ -193,22 +193,21 @@ module Jekyll
         gen_height = if gen_ratio > src_ratio then src_width/gen_ratio else src_height end
       end
 
-      gen_name = "#{src_name}-#{gen_width.round}x#{gen_height.round}-#{src_digest}"
-      gen_absolute_path = File.join(site_path, gen_path, src_dir, gen_name + ext)
-      gen_return_path = Pathname.new(File.join('/', gen_path, src_dir, gen_name + ext)).cleanpath
+      gen_name = "#{src_name}-#{gen_width.round}x#{gen_height.round}-#{src_digest}" + ext
+      gen_cache_path = File.join(site_source, image_cache)
+      gen_dest_path = File.join(site_dest, image_dest, src_dir)
+      gen_jekyll_path = Pathname.new(File.join('/', image_dest, src_dir, gen_name)).cleanpath
 
-      # If the file doesn't exist, generate it
-      if not File.exists?(gen_absolute_path)
+      # Generate cache file
+      unless File.exists?(File.join(gen_cache_path, gen_name))
 
         warn "Warning:".yellow + " #{source[:src]} is smaller than the requested resize. It will be output as large as possible without upscaling." unless not undersized
 
-        #  If the directory doesn't exist, create it
-        if not File.exist?(File.join(site_path, gen_path))
-          FileUtils.mkdir_p(File.join(site_path, gen_path))
-        end
+        #  If the cache directory doesn't exist, create it
+        FileUtils.mkdir_p(gen_cache_path) unless File.exist?(gen_cache_path)
 
         # Let people know their images are being generated
-        puts "Generating #{gen_return_path}"
+        puts "Generating #{gen_name}"
 
         # Scale and crop
         src_image.combine_options do |i|
@@ -216,11 +215,23 @@ module Jekyll
           i.gravity "center"
           i.crop "#{gen_width.round}x#{gen_height.round}+0+0"
         end
-        src_image.write gen_absolute_path
+        src_image.write File.join(gen_cache_path, gen_name)
       end
 
+      # Copy file from cache location
+      FileUtils.mkdir_p(gen_dest_path) unless File.exist?(gen_dest_path)
+      FileUtils.cp(File.join(gen_cache_path, gen_name), File.join(gen_dest_path, gen_name))
+
       # Return path for html
-      gen_return_path
+      gen_jekyll_path
+    end
+  end
+
+  # Liquid filters run before the Jekyll destination directory is cleaned.
+  # Prevent Jekyll from erasing our copied files (there's probably a less ugly way to do this)
+  class Configuration < Hash
+    DEFAULTS['keep_files'] = if Jekyll.configuration({})['picture']
+      DEFAULTS['keep_files'].push(Jekyll.configuration({})['picture']['output_path'] || 'generated')
     end
   end
 end
