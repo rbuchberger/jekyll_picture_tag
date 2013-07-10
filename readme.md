@@ -68,8 +68,8 @@ Jekyll Picture Tag stores configuration in your site's _config.yml under the `pi
 
 ```yml
 picture:
-  source_path: "assets/images/_picture"
-  output_path: "assets/images/picture"
+  source_path: "assets/images/_fullsize"
+  output_path: "assets/images/generated"
   markup: "picturefill"
   presets:
     default:
@@ -98,9 +98,9 @@ gallery:
 
 #### `source_path`
 
-To make it easier to write tags, you can specify a source directory for your assets. All base image paths will be relative to this directory. 
+To make it easier to write tags you can specify a source directory for your assets. All base image paths will be relative to this directory. 
 
-For example, if you set `source_path: assets/_picture`, the `{% picture posters/dr_jekyll.jpg %}` tag will look for a file at `assets/_picture/posters/dr_jekyll.jpg`.
+For example, if you set `source_path: assets/images/_fullsize`, the `{% picture posters/dr_jekyll.jpg %}` tag will look for a file at `assets/images/_fullsize/posters/dr_jekyll.jpg`.
 
 Defaults to the Jekyll source directory.
 
@@ -108,7 +108,7 @@ Defaults to the Jekyll source directory.
 
 Jekyll Picture Tag automatically generates resized source images when you build the site. These are output to the `output_path` in your compiled site directory. The organization of your source directory is maintained in the output directory.
 
-Defaults to `{compiled_site}/{source_path}/generated`.
+Defaults to `{source_path}/generated` in your compiled site directory.
 
 #### `markup`
 
@@ -152,9 +152,9 @@ Jekyll Picture Tag  generates resized source images every time you build your si
 
 Try to use a base image that is larger than the largest source image you'll need. Jekyll Picture Tag will warn you if a base image is too small, and won't upscale your images.
 
-By specifying a source path that is not compiled by Jekyll you can prevent your huge base images from being copied to the compiled site. For example, `source_path: assets/_picture-source` and `output_path: assets/picture` will result in a picture directory in the compiled site that only contains your resized images.  
+By specifying a source path that is not compiled by Jekyll (e.g., `source_path: assets/images/_fullsize` and `output_path: assets/images/generated`) you can prevent your full size base images from being copied to the compiled site.
 
-The `output_path` is never deleted on site compilation. You should only store generated images in the `output_path` directory. Before you commit a version of your site you may want to manually clean the directory and re-generate.
+You should only store generated images in the `output_path` directory because, unlike the other files in your compiled site, the `output_path` is never deleted by Jekyll. Before you commit a version of your site you may want to manually clean the directory and re-generate.
 
 You should always use a build process to optimize your site assets, including images. If you're a cool kid you should take a look at [Yeoman](http://yeoman.io/) and [generator-jekyllrb](https://github.com/robwierzbowski/generator-jekyllrb).
 

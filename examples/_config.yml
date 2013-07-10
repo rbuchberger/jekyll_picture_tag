@@ -5,8 +5,8 @@ pygments: true
 markdown: redcarpet
 
 picture:
-  source_path: "assets/images/_picture"
-  output_path: "assets/images/picture"
+  source_path: "assets/images/_fullsize"
+  output_path: "assets/images/generated"
   markup: "picturefill"
   presets:
     # Full width pictures
