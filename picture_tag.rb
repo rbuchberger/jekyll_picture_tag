@@ -9,7 +9,7 @@
 # Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
 # Issues: https://github.com/robwierzbowski/jekyll-picture-tag/issues
 #
-# Syntax:  {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}
+# Syntax:  {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr="value"] %}
 # Example: {% picture poster.jpg alt="The strange case of responsive images" %}
 #          {% picture gallery poster.jpg source_small: poster_closeup.jpg
 #             alt="The strange case of responsive images" class="gal-img" data-selected %}
@@ -91,7 +91,7 @@ module Jekyll
       source_keys = sources.keys
 
       # Raise some exceptions before we start expensive processing
-      raise "Picture Tag can't find this preset. Check picture: presets: #{@preset} in _config.yml for a list of presets." unless settings['presets'][@preset]
+      raise "Picture Tag can't find this preset. Check picture: presets in _config.yml for a list of presets." unless settings['presets'][@preset]
       raise "Picture Tag can't find this preset source. Check picture: presets: #{@preset} in _config.yml for a list of sources." unless (@source_src.keys - source_keys).empty?
 
       # Process sources
@@ -202,7 +202,7 @@ module Jekyll
       # Generate resized files
       unless File.exists?(File.join(gen_dest_path, gen_name))
 
-        warn "Warning:".yellow + " #{source[:src]} is smaller than the requested output file. It will be resized without upscaling." unless not undersized
+        if undersized then warn "Warning:".yellow + " #{source[:src]} is smaller than the requested output file. It will be resized without upscaling." end
 
         #  If the destination directory doesn't exist, create it
         FileUtils.mkdir_p(gen_dest_path) unless File.exist?(gen_dest_path)

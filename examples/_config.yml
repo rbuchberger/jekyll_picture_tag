@@ -5,25 +5,25 @@ pygments: true
 markdown: redcarpet
 
 picture:
-  source_path: "assets/images/_fullsize"
-  output_path: "assets/images/generated"
-  markup: "picturefill"
+  source_path: assets/images/_fullsize
+  output_path: assets/images/generated
+  markup: picturefill
   presets:
     # Full width pictures
     default:
       ppi: [1, 1.5]
       attr:
-        class: "blog-full"
-        itemprop: "image"
+        class: blog-full
+        itemprop: image
       source_lrg:
         media: "(min-width: 40em)"
-        width: "700"
+        width: 700
       source_med:
         media: "(min-width: 30em)"
-        width: "450"
+        width: 450
       source_default:
-        width: "350"
-        height: "200"
+        width: 350
+        height: 200
     # Half width pictures
     half:
       ppi: [1, 1.5]
@@ -32,22 +32,22 @@ picture:
         data-active: nil
       source_lrg:
         media: "(min-width: 40em)"
-        width: "400"
+        width: 400
       source_med:
         media: "(min-width: 30em)"
-        width: "250"
+        width: 250
       source_default:
-        width: "350"
+        width: 350
     # Self-set resolution sources. Useful if you don't want 1:1 image size:dppx.
     gallery:
       source_wide_hi:
         media: "(min-width: 40em) and (min-resolution: 1.5dppx)"
-        width: "900"
-        height: "600"
+        width: 900
+        height: 600
       source_wide:
         media: "(min-width: 40em)"
-        width: "600"
-        height: "400"
+        width: 600
+        height: 400
       source_default:
-        width: "250"
-        height: "250"
+        width: 250
+        height: 250

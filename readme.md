@@ -110,6 +110,8 @@ Jekyll Picture Tag automatically generates resized source images when you build 
 
 Defaults to `{source_path}/generated` in your compiled site directory.
 
+See [Managing Generated Images](#managing-generated-images) for important notes on `output_path`.
+
 #### `markup`
 
 Choose `picturefill` to output markup for the Picturefill polyfill ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L3-L13)) or `picture` to output markup for the proposed picture element ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L17-L25)). When browsers implement picture just flip this setting and you're good to go.
@@ -144,7 +146,7 @@ Jekyll Picture Tag uses Minimagick to automatically generate resized images for 
 
 #### `media`
 
-`media` takes a CSS media query that sets the conditions under which the source will be displayed. Any CSS media query is allowed. 
+`media` takes a CSS media query that sets the conditions under which the source will be displayed. Media queries must be quoted. Any CSS media query is allowed. 
 
 ## Managing Generated Images
 
@@ -154,7 +156,9 @@ Try to use a base image that is larger than the largest source image you'll need
 
 By specifying a source path that is not compiled by Jekyll (e.g., `source_path: assets/images/_fullsize` and `output_path: assets/images/generated`) you can prevent your full size base images from being copied to the compiled site.
 
-You should only store generated images in the `output_path` directory because, unlike the other files in your compiled site, the `output_path` is never deleted by Jekyll. Before you commit a version of your site you may want to manually clean the directory and re-generate.
+You should only store generated images in the `output_path` directory because, unlike the other files in your compiled site, the `output_path` isn't deleted every time the site is compiled. Before you commit a version of your site you may want to manually clean the directory and re-generate.
+
+**The `output_path` must be in a directory that contains other Jekyll assets.** In the above example. if `assets` or `assets/images` is empty, `assets/images/generated` will be erased. This is a [known bug](https://github.com/mojombo/jekyll/issues/1297) in Jekyll, and is being adressed.
 
 You should always use a build process to optimize your site assets, including images. If you're a cool kid you should take a look at [Yeoman](http://yeoman.io/) and [generator-jekyllrb](https://github.com/robwierzbowski/generator-jekyllrb).
 
