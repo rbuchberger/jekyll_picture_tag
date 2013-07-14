@@ -163,15 +163,18 @@ module Jekyll
 
         source_tags = ''
         source_keys.each { |source|
-          media = " media=\"#{preset[source]['media']}\"" unless source == 'source_default'
-          source_tags += "<source src=\"#{preset[source][:generated_src]}\"#{media}>\n"
+          if source == 'source_default'
+            source_tags += "<img src=\"#{preset[source][:generated_src]}\" alt=\"#{html_attr['alt']}\">\n"
+          else
+            source_tags += "<source src=\"#{preset[source][:generated_src]}\" media=\"#{preset[source]['media']}\">\n"
+          end
         }
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<picture #{html_attr_string}>\n"\
                       "#{source_tags}"\
                       "<p>#{html_attr['alt']}</p>\n"\
-                      "</picture>\n"
+                      "</picture>"
       end
 
         # Return the markup!
