@@ -182,32 +182,30 @@ module Jekyll
         picture_tag
     end
 
-    def generate_image(preset, site_source, site_dest, image_source, image_dest)
+    def generate_image(instance, site_source, site_dest, image_source, image_dest)
 
-      raise "Sources must have at least one of width and height in the _config.yml." unless preset[:width] || preset[:height]
-
-      image = MiniMagick::Image.open(File.join(site_source, image_source, preset[:src]))
+      image = MiniMagick::Image.open(File.join(site_source, image_source, instance[:src]))
       digest = Digest::MD5.hexdigest(image.to_blob).slice!(0..5)
 
-      image_dir = File.dirname(preset[:src])
-      ext = File.extname(preset[:src])
-      basename = File.basename(preset[:src], ext)
+      image_dir = File.dirname(instance[:src])
+      ext = File.extname(instance[:src])
+      basename = File.basename(instance[:src], ext)
 
       orig_width = image[:width].to_f
       orig_height = image[:height].to_f
       orig_ratio = orig_width/orig_height
 
-      gen_width = if preset[:width]
-        preset[:width].to_f
-      elsif preset[:height]
-        orig_ratio * preset[:height].to_f
+      gen_width = if instance[:width]
+        instance[:width].to_f
+      elsif instance[:height]
+        orig_ratio * instance[:height].to_f
       else
         orig_width
       end
-      gen_height = if preset[:height]
-        preset[:height].to_f
-      elsif preset[:width]
-        orig_ratio * preset[:width].to_f
+      gen_height = if instance[:height]
+        instance[:height].to_f
+      elsif instance[:width]
+        instance[:width].to_f / orig_ratio
       else
         orig_height
       end
@@ -227,7 +225,7 @@ module Jekyll
       # Generate resized files
       unless File.exists?(gen_dest_file)
 
-        warn "Warning:".yellow + " #{preset[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
+        warn "Warning:".yellow + " #{instance[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
 
         #  If the destination directory doesn't exist, create it
         FileUtils.mkdir_p(gen_dest_dir) unless File.exist?(gen_dest_dir)
