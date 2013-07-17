@@ -192,6 +192,7 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 
 ## Release History
 
+0.2.1, July 17, 2013: Refactor again, add Liquid parsing.  
 0.2.0, July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.  
 0.1.1, July 5, 2013: Quick round of code improvements.  
 0.1.0, July 5, 2013: Initial release.
