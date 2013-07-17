@@ -26,34 +26,24 @@ module Jekyll
   class Picture < Liquid::Tag
 
     def initialize(tag_name, markup, tokens)
-
-      tag = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(markup)
-
-      raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless tag
-
-      @preset = tag[:preset] || 'default'
-      @image_src = tag[:image_src]
-      @source_src = if tag[:source_src]
-        Hash[ *tag[:source_src].gsub(/:/, '').split ]
-      else
-        {}
-      end
-      @html_attr = if tag[:html_attr]
-        Hash[ *tag[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten ]
-      else
-        {}
-      end
-
+      @markup = markup
       super
     end
 
     def render(context)
 
+      # Render any liquid variables in tag arguments and unescape template code
+      @markup = Liquid::Template.parse(@markup).render(context).gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
+
       # Gather settings
       site = context.registers[:site]
       settings = site.config['picture']
+      markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(@markup)
+      preset = settings['presets'][ markup[:preset] ] || settings['presets']['default']
 
-      # Assign defaults if values are nil/false
+      raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless markup
+
+      # Assign defaults
       settings['source'] ||= '.'
       settings['output'] ||= 'generated'
       settings['markup'] ||= 'picturefill'
@@ -62,13 +52,24 @@ module Jekyll
       site.config['keep_files'] << settings['output'] unless site.config['keep_files'].include?(settings['output'])
 
       # Deep copy preset for single instance manipulation
-      preset = Marshal.load(Marshal.dump(settings['presets'][@preset]))
+      instance = Marshal.load(Marshal.dump(preset))
+
+      # Process alternate source images
+      source_src = if markup[:source_src]
+        Hash[ *markup[:source_src].gsub(/:/, '').split ]
+      else
+        {}
+      end
 
       # Process html attributes
-      html_attr = if preset['attr']
-        preset.delete('attr').merge(@html_attr)
+      html_attr = if markup[:html_attr]
+        Hash[ *markup[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten ]
       else
-        @html_attr
+        {}
+      end
+
+      if instance['attr']
+        html_attr = instance.delete('attr').merge(html_attr)
       end
 
       if settings['markup'] == 'picturefill'
@@ -85,33 +86,33 @@ module Jekyll
       }
 
       # Prepare ppi variables
-      ppi = if preset['ppi'] then preset.delete('ppi').sort.reverse else nil end
+      ppi = if instance['ppi'] then instance.delete('ppi').sort.reverse else nil end
       ppi_sources = {}
 
       # Switch width and height keys to the symbols that generate_image() expects
-      preset.each { |key, source|
-        if source['width'] then preset[key][:width] = preset[key].delete('width') end
-        if source['height'] then preset[key][:height] = preset[key].delete('height') end
+      instance.each { |key, source|
+        if source['width'] then instance[key][:width] = instance[key].delete('width') end
+        if source['height'] then instance[key][:height] = instance[key].delete('height') end
       }
 
-      # Store keys in an array for ordering the preset sources
-      source_keys = preset.keys
+      # Store keys in an array for ordering the instance sources
+      source_keys = instance.keys
 
       # Raise some exceptions before we start expensive processing
-      raise "Picture Tag can't find this preset. Check picture: presets in _config.yml for a list of presets." unless settings['presets'][@preset]
-      raise "Picture Tag can't find this preset source. Check picture: presets: #{@preset} in _config.yml for a list of sources." unless (@source_src.keys - source_keys).empty?
+      raise "Picture Tag can't find the \"#{markup[:preset]}\" preset. Check picture: presets in _config.yml for a list of presets." unless preset
+      raise "Picture Tag can't find this preset source. Check picture: presets: #{markup[:preset]} in _config.yml for a list of sources." unless (source_src.keys - source_keys).empty?
 
-      # Process sources
+      # Process instance
       # Add image paths for each source
-      preset.each_key { |key|
-        preset[key][:src] = @source_src[key] || @image_src
+      instance.each_key { |key|
+        instance[key][:src] = source_src[key] || markup[:image_src]
       }
 
       # Construct ppi sources
       # Generates -webkit-device-ratio and resolution: dpi media value for cross browser support
       # Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
       if ppi
-        preset.each { |key, source|
+        instance.each { |key, source|
           ppi.each { |p|
             if p != 1
               ppi_key = "#{key}-x#{p}"
@@ -132,13 +133,13 @@ module Jekyll
             end
           }
         }
-      preset.merge!(ppi_sources)
+      instance.merge!(ppi_sources)
       end
 
-     # Generate resized images
-     preset.each { |key, source|
-       preset[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'])
-     }
+      # Generate resized images
+      instance.each { |key, source|
+        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'])
+      }
 
       # Construct and return tag
       if settings['markup'] == 'picturefill'
@@ -147,15 +148,15 @@ module Jekyll
         # Picturefill uses reverse source order
         # Reference: https://github.com/scottjehl/picturefill/issues/79
         source_keys.reverse.each { |source|
-          media = " data-media=\"#{preset[source]['media']}\"" unless source == 'source_default'
-          source_tags += "<span data-src=\"#{preset[source][:generated_src]}\"#{media}></span>\n"
+          media = " data-media=\"#{instance[source]['media']}\"" unless source == 'source_default'
+          source_tags += "<span data-src=\"#{instance[source][:generated_src]}\"#{media}></span>\n"
         }
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<span #{html_attr_string}>\n"\
                       "#{source_tags}"\
                       "<noscript>\n"\
-                      "<img src=\"#{preset['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
+                      "<img src=\"#{instance['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
                       "</noscript>\n"\
                       "</span>\n"
 
@@ -164,9 +165,9 @@ module Jekyll
         source_tags = ''
         source_keys.each { |source|
           if source == 'source_default'
-            source_tags += "<img src=\"#{preset[source][:generated_src]}\" alt=\"#{html_attr['alt']}\">\n"
+            source_tags += "<img src=\"#{instance[source][:generated_src]}\" alt=\"#{html_attr['alt']}\">\n"
           else
-            source_tags += "<source src=\"#{preset[source][:generated_src]}\" media=\"#{preset[source]['media']}\">\n"
+            source_tags += "<source src=\"#{instance[source][:generated_src]}\" media=\"#{instance[source]['media']}\">\n"
           end
         }
 
