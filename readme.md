@@ -160,6 +160,20 @@ Specify a CSS media query in quotes. Each source except for `source_default` req
 
 Set a pixel width and height to resize each source's image appropriately. A single value will scale proportionately; setting both will scale and crop.
 
+## Using Liquid variables and JavaScript templating
+
+You can use liquid variables in a picture tag:
+
+```html
+{% picture {{ post.featured_image }} alt="our project" %}
+```
+
+If you're using a JavaScript templating library such as Handlebars.js, the templating expression's opening braces must be escaped with backslashes like `\{\{` or `\{\%`. They'll be output as normal `{{ }}` expressions in HTML:
+
+```
+{% picture {{ post.featured_image }} alt="\{\{ user_name }}" %}.
+```
+
 ## Managing Generated Images
 
 Jekyll Picture Tag creates resized versions of your images when you build the site. It uses a smart caching system to speed up site compilation, and re-uses images as much as possible.
