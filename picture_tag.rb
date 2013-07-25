@@ -193,7 +193,13 @@ module Jekyll
 
       orig_width = image[:width].to_f
       orig_height = image[:height].to_f
-      orig_ratio = orig_width/orig_height
+
+      # Checks for portrait or landscape and generates accordingly.
+      if orig_width > orig_height
+        orig_ratio = orig_height/orig_width
+      else
+        orig_ratio = orig_width/orig_height
+      end
 
       gen_width = if instance[:width]
         instance[:width].to_f
