@@ -32,7 +32,7 @@ There are three parts to Jekyll Picture Tag:
 
 ### Polyfill
 
-The default `picturefill` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill). Download the library (and optionally matchMedia to support it) and add the scripts to your site. 
+The default `picturefill` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill) polyfill. Download the library (and optionally matchMedia to support it) and add the scripts to your site.
 
 ### Liquid Tag
 
