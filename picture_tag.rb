@@ -87,6 +87,7 @@ module Jekyll
 
       # Prepare ppi variables
       ppi = if instance['ppi'] then instance.delete('ppi').sort.reverse else nil end
+      # this might work??? ppi = instance.delete('ppi'){ |ppi|  [nil] }.sort.reverse
       ppi_sources = {}
 
       # Switch width and height keys to the symbols that generate_image() expects
