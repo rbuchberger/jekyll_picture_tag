@@ -92,8 +92,9 @@ module Jekyll
 
       # Switch width and height keys to the symbols that generate_image() expects
       instance.each { |key, source|
-        if source['width'] then instance[key][:width] = instance[key].delete('width') end
-        if source['height'] then instance[key][:height] = instance[key].delete('height') end
+        raise "Preset #{key} is missing a width or a height" if !source['width'] and !source['height']
+        instance[key][:width] = instance[key].delete('width') if source['width']
+        instance[key][:height] = instance[key].delete('height') if source['height']
       }
 
       # Store keys in an array for ordering the instance sources
