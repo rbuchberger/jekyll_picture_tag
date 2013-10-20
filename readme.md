@@ -72,8 +72,8 @@ Jekyll Picture Tag stores settings in an `picture` key in your _config.yml. It t
 
 ```yml
 picture:
-  source: assets/images/_fullsize
-  output: generated
+  source: "assets/images/_fullsize"
+  output: "generated"
   markup: "picturefill"
   presets:
     default:
