@@ -201,3 +201,5 @@ Report bugs and feature proposals in the [Github issue tracker](https://github.c
 ## License
 
 [BSD-NEW](http://en.wikipedia.org/wiki/BSD_License)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/robwierzbowski/jekyll-picture-tag/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
