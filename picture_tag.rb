@@ -155,14 +155,12 @@ module Jekyll
         }
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
-        picture_tag = "{::nomarkdown}\n"\
-                      "<span #{html_attr_string}>\n"\
+        picture_tag = "<span #{html_attr_string}>\n"\
                       "#{source_tags}"\
                       "<noscript>\n"\
                       "<img src=\"#{instance['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
                       "</noscript>\n"\
-                      "</span>\n"\
-                      "{:/}\n"
+                      "</span>\n" 
 
       elsif settings['markup'] == 'picture'
 
