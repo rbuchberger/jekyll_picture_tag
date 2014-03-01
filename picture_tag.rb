@@ -99,6 +99,8 @@ module Jekyll
 
       # Store keys in an array for ordering the instance sources
       source_keys = instance.keys
+      # used to escape markdown parsing rendering below
+      markdown_escape = "\ "
 
       # Raise some exceptions before we start expensive processing
       raise "Picture Tag can't find the \"#{markup[:preset]}\" preset. Check picture: presets in _config.yml for a list of presets." unless preset
@@ -151,35 +153,34 @@ module Jekyll
         # Reference: https://github.com/scottjehl/picturefill/issues/79
         source_keys.reverse.each { |source|
           media = " data-media=\"#{instance[source]['media']}\"" unless source == 'source_default'
-          source_tags += "<span data-src=\"#{instance[source][:generated_src]}\"#{media}></span>\n"
+          source_tags += "#{markdown_escape * 4}<span data-src=\"#{instance[source][:generated_src]}\"#{media}></span>\n"
         }
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
-        picture_tag = "{::nomarkdown}\n"\
-                      "<span #{html_attr_string}>\n"\
+        # Note: Added backslash+space escapes to bypass markdown parsing of indented code below -WD
+        picture_tag = "<span #{html_attr_string}>\n"\
                       "#{source_tags}"\
-                      "<noscript>\n"\
-                      "<img src=\"#{instance['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
-                      "</noscript>\n"\
-                      "</span>\n"\
-                      "{:/}\n"
+                      "#{markdown_escape * 4}<noscript>\n"\
+                      "#{markdown_escape * 6}<img src=\"#{instance['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
+                      "#{markdown_escape * 4}</noscript>\n"\
+                      "#{markdown_escape * 2}</span>\n"
 
       elsif settings['markup'] == 'picture'
-
+      
         source_tags = ''
         source_keys.each { |source|
           if source == 'source_default'
-            source_tags += "<img src=\"#{instance[source][:generated_src]}\" alt=\"#{html_attr['alt']}\">\n"
+            source_tags +=  "#{markdown_escape * 4}<img src=\"#{instance[source][:generated_src]}\" alt=\"#{html_attr['alt']}\">\n"
           else
-            source_tags += "<source src=\"#{instance[source][:generated_src]}\" media=\"#{instance[source]['media']}\">\n"
+            source_tags += "#{markdown_escape * 4}<source src=\"#{instance[source][:generated_src]}\" media=\"#{instance[source]['media']}\">\n"
           end
         }
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         picture_tag = "<picture #{html_attr_string}>\n"\
                       "#{source_tags}"\
-                      "<p>#{html_attr['alt']}</p>\n"\
-                      "</picture>"
+                      "#{markdown_escape * 4}<p>#{html_attr['alt']}</p>\n"\
+                      "#{markdown_escape * 2}</picture>"
       end
 
         # Return the markup!
