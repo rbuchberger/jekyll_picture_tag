@@ -142,7 +142,7 @@ module Jekyll
 
       # Generate resized images
       instance.each { |key, source|
-        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'])
+        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config["baseurl"])
       }
 
       # Construct and return tag
@@ -187,8 +187,7 @@ module Jekyll
         picture_tag
     end
 
-    def generate_image(instance, site_source, site_dest, image_source, image_dest)
-
+    def generate_image(instance, site_source, site_dest, image_source, image_dest, baseurl)
       image = MiniMagick::Image.open(File.join(site_source, image_source, instance[:src]))
       digest = Digest::MD5.hexdigest(image.to_blob).slice!(0..5)
 
@@ -223,7 +222,7 @@ module Jekyll
         gen_height = if orig_ratio > gen_ratio then orig_height else orig_width/gen_ratio end
       end
 
-      gen_name = "#{basename}-#{gen_width.round}*#{gen_height.round}-#{digest}#{ext}"
+      gen_name = "#{basename}-#{gen_width.round}by#{gen_height.round}-#{digest}#{ext}"
       gen_dest_dir = File.join(site_dest, image_dest, image_dir)
       gen_dest_file = File.join(gen_dest_dir, gen_name)
 
@@ -249,7 +248,7 @@ module Jekyll
       end
 
       # Return path relative to the site root for html
-      Pathname.new(File.join('/', image_dest, image_dir, gen_name)).cleanpath
+      Pathname.new(File.join(baseurl, image_dest, image_dir, gen_name)).cleanpath
     end
   end
 end
