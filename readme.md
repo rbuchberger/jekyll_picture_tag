@@ -2,7 +2,7 @@
 
 **Easy responsive images for Jekyll.**
 
-Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com) static site. It follows the proposed [picture element](http://picture.responsiveimages.org/) pattern, and polyfills current browsers with [Picturefill](https://github.com/scottjehl/picturefill). Jekyll Picture Tag automatically creates resized source images, is fully configurable, and covers all use cases — including art direction and resolution switching — with a little YAML configuration and a simple template tag.
+Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com) static site. It follows the [picture element](http://picture.responsiveimages.org/) pattern, and polyfills older browsers with [Picturefill](https://github.com/scottjehl/picturefill). Jekyll Picture Tag automatically creates resized source images, is fully configurable, and covers all use cases — including art direction and resolution switching — with a little YAML configuration and a simple template tag.
 
 For non-responsive images in Jekyll, take a look at [Jekyll Img Tag](https://github.com/robwierzbowski/jekyll-img-tag).
 
@@ -32,7 +32,9 @@ There are three parts to Jekyll Picture Tag:
 
 ### Polyfill
 
-The default `picturefill` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill) polyfill. Download the library (and optionally matchMedia to support it) and add the scripts to your site.
+For full browser support, the `picture` markup requires Scott Jehl's [Picturefill](https://github.com/scottjehl/picturefill) polyfill. Download the library and add the script to your site.
+
+The Jekyll Picture Tag requires Picturefill 2.0 and above. If you want to use Picturefill 1.x, you must use [Jekyll Picture Tag 0.2.2](https://github.com/robwierzbowski/jekyll-picture-tag/tree/0.2.2)
 
 ### Liquid Tag
 
@@ -74,7 +76,7 @@ Jekyll Picture Tag stores settings in an `picture` key in your _config.yml. It t
 picture:
   source: "assets/images/_fullsize"
   output: "generated"
-  markup: "picturefill"
+  markup: "picture"
   presets:
     default:
       ...
@@ -118,9 +120,7 @@ Defaults to `{compiled Jekyll site}/generated`.
 
 #### markup
 
-Choose `picturefill` to output markup for the Picturefill polyfill ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L3-L13)) or `picture` to output markup for the proposed picture element ([example](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/output.html#L17-L25)). When browsers implement picture just flip this setting and you're good to go.
-
-Defaults to `picturefill`.
+Choose `picture` to output markup based on the `<picture>` element. Future options may include `srcset` but have not yet been implemented.
 
 #### presets
 
