@@ -7,7 +7,7 @@ markdown: redcarpet
 picture:
   source: assets/images/_fullsize
   output: generated
-  markup: picturefill
+  markup: picture
   presets:
     # Full width pictures
     default:

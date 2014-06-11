@@ -1,6 +1,6 @@
 ---
 layout: post
-title: title: Tag examples
+title: Tag examples
 ---
 
 {% picture portrait.jpg alt="An unsual picture" %}
@@ -13,4 +13,4 @@ With a preset specified:
 {% picture gallery portrait.jpg alt="An unsual picture" data-downloadable="true" %}
 
 With an alternate source images:  
-{% picture gallery portrait.jpg source_lrg: dream-fullpage.jpg source_med: dream-midrange.jpg alt="An unsual picture" data-downloadable="true" %}
+{% picture half portrait.jpg source_lrg: dream-fullpage.jpg source_med: dream-midrange.jpg alt="An unsual picture" data-downloadable="true" %}
