@@ -1,25 +1,11 @@
-<!-- Example picturefill output, {% picture portrait.jpg alt="An example of picturefill markup" %} -->
+<!-- Example picture output, {% picture portrait.jpg alt="An example of picturefill markup" %} -->
 
-<span class="picturefill" itemprop="image" data-picture data-alt="An example of picturefill markup" >
-<span data-src="/generated/portrait-350x200-28f3ea.jpg"></span>
-<span data-src="/generated/portrait-525x300-28f3ea.jpg" data-media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)"></span>
-<span data-src="/generated/portrait-450x304-28f3ea.jpg" data-media="(min-width: 30em)"></span>
-<span data-src="/generated/portrait-675x456-28f3ea.jpg" data-media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)"></span>
-<span data-src="/generated/portrait-700x473-28f3ea.jpg" data-media="(min-width: 40em)"></span>
-<span data-src="/generated/portrait-1050x709-28f3ea.jpg" data-media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)"></span>
-<noscript>
-<img src="/generated/portrait-350x200-28f3ea.jpg" alt="An example of picturefill markup">
-</noscript>
-</span>
-
-<!-- Example picture output, {% picture portrait.jpg alt="An example of picture markup" %} -->
-
-<picture class="picture" itemprop="image" alt="An example of picture markup" >
-<source src="/generated/portrait-1050x709-28f3ea.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)">
-<source src="/generated/portrait-700x473-28f3ea.jpg" media="(min-width: 40em)">
-<source src="/generated/portrait-675x456-28f3ea.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)">
-<source src="/generated/portrait-450x304-28f3ea.jpg" media="(min-width: 30em)">
-<source src="/generated/portrait-525x300-28f3ea.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)">
-<img src="/generated/portrait-350x200-28f3ea.jpg" alt="An example of picture markup">
-<p>An example of picture markup</p>
+<picture>
+  <source srcset="/generated/portrait-1050by1050-092483.jpg" media="(min-width: 40em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 40em) and (min-resolution: 144dpi)">
+  <source srcset="/generated/portrait-700by700-092483.jpg" media="(min-width: 40em)">
+  <source srcset="/generated/portrait-675by675-092483.jpg" media="(min-width: 30em) and (-webkit-min-device-pixel-ratio: 1.5), (min-width: 30em) and (min-resolution: 144dpi)">
+  <source srcset="/generated/portrait-450by450-092483.jpg" media="(min-width: 30em)">
+  <source srcset="/generated/portrait-525by300-092483.jpg" media="(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)">
+  <source srcset="/generated/portrait-350by200-092483.jpg">
+  <img srcset="/generated/portrait-350by200-092483.jpg" alt="">
 </picture>
