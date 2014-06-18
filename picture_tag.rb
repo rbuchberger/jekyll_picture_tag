@@ -156,7 +156,7 @@ module Jekyll
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         # Note: Added backslash+space escapes to bypass markdown parsing of indented code below -WD
-        picture_tag = "<picture>\n"\
+        picture_tag = "<picture #{html_attr_string}>\n"\
                       "#{source_tags}"\
                       "#{markdown_escape * 4}<img srcset=\"#{instance['source_default'][:generated_src]}\" alt=\"#{html_attr['data-alt']}\">\n"\
                       "#{markdown_escape * 2}</picture>\n"
