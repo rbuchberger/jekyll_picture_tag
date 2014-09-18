@@ -158,7 +158,7 @@ module Jekyll
         # Note: Added backslash+space escapes to bypass markdown parsing of indented code below -WD
         picture_tag = "<picture>\n"\
                       "#{source_tags}"\
-                      "#{markdown_escape * 4}<img srcset=\"#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
+                      "#{markdown_escape * 4}<img src=\"#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
                       "#{markdown_escape * 2}</picture>\n"
 
       elsif settings['markup'] == 'img'
