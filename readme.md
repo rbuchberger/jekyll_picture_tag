@@ -6,6 +6,10 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 For non-responsive images in Jekyll, take a look at [Jekyll Img Tag](https://github.com/robwierzbowski/jekyll-img-tag).
 
+## Semi-deprecated
+
+I'm not working on many jekyll projects anymore, so have no reason to use this code. If you find this code useful feel free to ping me and I'll hand the repo over to you.
+
 ## Why use Jekyll Picture Tag?
 
 **Performance:** Static sites can be can be blazingly fast. If we're not using responsive images we're throwing those performance gains away by serving kilobytes of pixels a user will never see.
