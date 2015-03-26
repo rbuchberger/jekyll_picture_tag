@@ -20,7 +20,7 @@ I'm not working on many jekyll projects anymore, so have no reason to use this c
 
 ## Installation
 
-Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, and [Imagemagick](http://www.imagemagick.org/script/index.php). 
+Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, [FastImage](https://github.com/sdsykes/fastimage) `>=1.6.4` and [Imagemagick](http://www.imagemagick.org/script/index.php).
 
 It also requires an HTML5 Markdown parser. If you're not using one already, install [Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
 

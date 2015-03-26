@@ -20,6 +20,7 @@ require 'fileutils'
 require 'pathname'
 require 'digest/md5'
 require 'mini_magick'
+require 'fastimage'
 
 module Jekyll
 
@@ -170,16 +171,16 @@ module Jekyll
     end
 
     def generate_image(instance, site_source, site_dest, image_source, image_dest, baseurl)
-      image = MiniMagick::Image.open(File.join(site_source, image_source, instance[:src]))
-      digest = Digest::MD5.hexdigest(image.to_blob).slice!(0..5)
+      digest = Digest::MD5.hexdigest(File.read(File.join(site_source, image_source, instance[:src]))).slice!(0..5)
 
       image_dir = File.dirname(instance[:src])
       ext = File.extname(instance[:src])
       basename = File.basename(instance[:src], ext)
 
-      orig_width = image[:width].to_f
-      orig_height = image[:height].to_f
-      orig_ratio = orig_width/orig_height
+      size = FastImage.size(File.join(site_source, image_source, instance[:src]))
+      orig_width = size[0]
+      orig_height = size[1]
+      orig_ratio = orig_width*1.0/orig_height
 
       gen_width = if instance[:width]
         instance[:width].to_f
@@ -219,6 +220,7 @@ module Jekyll
         # Let people know their images are being generated
         puts "Generating #{gen_name}"
 
+        image = MiniMagick::Image.open(File.join(site_source, image_source, instance[:src]))
         # Scale and crop
         image.combine_options do |i|
           i.resize "#{gen_width}x#{gen_height}^"
