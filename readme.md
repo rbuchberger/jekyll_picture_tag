@@ -6,10 +6,6 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 For non-responsive images in Jekyll, take a look at [Jekyll Img Tag](https://github.com/robwierzbowski/jekyll-img-tag).
 
-## Semi-deprecated
-
-I'm not working on many jekyll projects anymore, so have no reason to use this code. If you find this code useful feel free to ping me and I'll hand the repo over to you.
-
 ## Why use Jekyll Picture Tag?
 
 **Performance:** Static sites can be can be blazingly fast. If we're not using responsive images we're throwing those performance gains away by serving kilobytes of pixels a user will never see.
@@ -20,7 +16,13 @@ I'm not working on many jekyll projects anymore, so have no reason to use this c
 
 ## Installation
 
-Jekyll Picture Tag requires [Jekyll](http://jekyllrb.com) `>=1.0`, [Minimagick](https://github.com/minimagick/minimagick) `>=3.6`, [FastImage](https://github.com/sdsykes/fastimage) `>=1.6.4` and [Imagemagick](http://www.imagemagick.org/script/index.php).
+Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group. For example:
+
+```ruby
+group :jekyll_plugins do
+  gem 'jekyll-picture-tag', '~> 0.2.3'
+end
+```
 
 It also requires an HTML5 Markdown parser. If you're not using one already, install [Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
 
