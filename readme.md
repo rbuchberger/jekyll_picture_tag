@@ -81,6 +81,7 @@ Jekyll Picture Tag stores settings in an `picture` key in your _config.yml. It t
 ```yml
 picture:
   source: "assets/images/_fullsize"
+  posts_folders: true
   output: "generated"
   markup: "picture"
   presets:
@@ -115,6 +116,18 @@ To make writing tags easier you can specify a source directory for your assets. 
 For example, if `source` is set to `assets/images/_fullsize`, the tag `{% picture enishte/portrait.jpg alt="An unsual picture" %}` will look for a file at `assets/images/_fullsize/enishte/portrait.jpg`.
 
 Defaults to the site source directory.
+
+#### posts_folders
+
+To automate matching between posts slugs and base images folders, avoiding a mess in your base images folder, set this to `true`.
+
+For example, if a post is located at `_posts/2015/2015-04-20-picture-tag-enhanced.md`, and the base image is `assets/images/_fullsize/2015/2015-04-20-picture-tag-enhanced/look-at-this.png`.
+
+With `posts_folders` set to `false` (or not set), you'll have to write `{% picture 2015/2015-04-20-picture-tag-enhanced/look-at-this.png %}`.
+
+With `posts_folders` set to `true`, you only have to write `{% picture look-at-this.png %}`. You don't need to write the full path in the Liquid tag anymore.
+
+Defaults to false.
 
 #### output
 

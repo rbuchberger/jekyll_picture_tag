@@ -46,8 +46,12 @@ module Jekyll
 
       # Assign defaults
       settings['source'] ||= '.'
+      settings['posts_folders'] ||= false
       settings['output'] ||= 'generated'
       settings['markup'] ||= 'picturefill'
+
+      # Add folder named after the post slug to the source path
+      post_image_folder = if settings['posts_folders'] then context['page']['path'].gsub(/.*\/([0-9]{4})([^\/]+)\.md/, '\\1/\\1\\2/') else '' end
 
       # Prevent Jekyll from erasing our generated files
       site.config['keep_files'] << settings['output'] unless site.config['keep_files'].include?(settings['output'])
@@ -110,7 +114,7 @@ module Jekyll
       # Process instance
       # Add image paths for each source
       instance.each_key { |key|
-        instance[key][:src] = source_src[key] || markup[:image_src]
+        instance[key][:src] = source_src[key] || "#{post_image_folder}#{markup[:image_src]}"
       }
 
       # Construct ppi sources
