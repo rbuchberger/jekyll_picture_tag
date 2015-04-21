@@ -41,17 +41,25 @@ module Jekyll
       settings = site.config['picture']
       markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
       preset = settings['presets'][ markup[:preset] ] || settings['presets']['default']
+      post_slug = File.basename(context['page']['path'], File.extname(context['page']['path']))
+      post = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})-(?<slug>.*)$/.match(post_slug)
 
       raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless markup
 
       # Assign defaults
       settings['source'] ||= '.'
-      settings['posts_folders'] ||= false
+      settings['posts_folders'] ||= 'none'
       settings['output'] ||= 'generated'
       settings['markup'] ||= 'picturefill'
 
-      # Add folder named after the post slug to the source path
-      post_image_folder = if settings['posts_folders'] then context['page']['path'].gsub(/.*\/([0-9]{4})([^\/]+)\.md/, '\\1/\\1\\2/') else '' end
+      # Add a folder named after the post year/slug/ or year/[month[/day]] to the source path
+      post_image_folder = ''
+      if settings['posts_folders'] != 'none'
+        post_image_folder = settings['posts_folders'].gsub(/:year/, post[:year])
+        post_image_folder = post_image_folder.gsub(/:month/, post[:month])
+        post_image_folder = post_image_folder.gsub(/:day/, post[:day])
+        post_image_folder = post_image_folder.gsub(/:slug/, post[:slug])
+      end
 
       # Prevent Jekyll from erasing our generated files
       site.config['keep_files'] << settings['output'] unless site.config['keep_files'].include?(settings['output'])
