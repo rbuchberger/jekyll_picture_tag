@@ -121,7 +121,7 @@ Defaults to the site source directory.
 
 To automate matching between posts slugs and base images folders, avoiding a mess in your base images folder, set this to your base images folders hierarchy.
 
-For example, if a post is located at `_posts/2015/2015-04-20-picture-tag-enhanced.md`, and the base image is `assets/images/_fullsize/2015/04/picture-tag-enhanced/look-at-this.png`.
+For example, if a post is located at `_posts/2015/2015-04-20-picture-tag-enhanced.md`, and the base image is `_assets/images/_fullsize/2015/04/picture-tag-enhanced/look-at-this.png`.
 
 With `posts_folders` set to `"none"` (or not set), you'll have to write `{% picture 2015/04/picture-tag-enhanced/look-at-this.png %}`.
 
