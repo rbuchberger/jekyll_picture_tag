@@ -162,6 +162,15 @@ module Jekyll
                       "#{source_tags}"\
                       "#{markdown_escape * 4}<img srcset=\"#{url}#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
                       "#{markdown_escape * 2}</picture>\n"
+      elsif settings['markup'] == 'interchange'
+
+        interchange_data = Array.new
+        source_keys.reverse.each do |source|
+          interchange_data << "[#{site.config['baseurl']}#{instance[source][:generated_src]}, #{source == 'source_default' ? '(default)' : instance[source]['media']}]"
+        end
+
+        picture_tag = %Q{<img data-interchange="#{interchange_data.join ', '}" #{html_attr_string} />\n}
+        picture_tag += %Q{<noscript><img src="#{site.config['baseurl']}#{instance['source_default'][:generated_src]}" #{html_attr_string} /></noscript>}
 
       elsif settings['markup'] == 'img'
         # TODO implement <img srcset/sizes>
