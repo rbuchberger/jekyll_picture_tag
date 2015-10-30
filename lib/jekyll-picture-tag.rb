@@ -39,6 +39,7 @@ module Jekyll
       # Gather settings
       site = context.registers[:site]
       settings = site.config['picture']
+      url = site.config['url']
       markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
       preset = settings['presets'][ markup[:preset] ] || settings['presets']['default']
 
@@ -150,16 +151,16 @@ module Jekyll
       if settings['markup'] == 'picture'
 
         source_tags = ''
-        source_keys.each { |source|
+        source_keys.each do |source|
           media = " media=\"#{instance[source]['media']}\"" unless source == 'source_default'
-          source_tags += "#{markdown_escape * 4}<source srcset=\"#{instance[source][:generated_src]}\"#{media}>\n"
-        }
+          source_tags += "#{markdown_escape * 4}<source srcset=\"#{url}#{instance[source][:generated_src]}\"#{media}>\n"
+        end
 
         # Note: we can't indent html output because markdown parsers will turn 4 spaces into code blocks
         # Note: Added backslash+space escapes to bypass markdown parsing of indented code below -WD
         picture_tag = "<picture>\n"\
                       "#{source_tags}"\
-                      "#{markdown_escape * 4}<img srcset=\"#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
+                      "#{markdown_escape * 4}<img srcset=\"#{url}#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
                       "#{markdown_escape * 2}</picture>\n"
 
       elsif settings['markup'] == 'img'
