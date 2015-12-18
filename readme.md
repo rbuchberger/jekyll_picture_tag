@@ -20,7 +20,7 @@ Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group. For exa
 
 ```ruby
 group :jekyll_plugins do
-  gem 'jekyll-picture-tag', '~> 0.2.3'
+  gem 'jekyll-picture-tag'
 end
 ```
 
