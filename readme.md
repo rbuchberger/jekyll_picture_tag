@@ -141,6 +141,9 @@ Defaults to `{compiled Jekyll site}/generated`.
 
 Choose `picture` to output markup based on the `<picture>` element. Future options may include `srcset` but have not yet been implemented.
 
+Choose `interchange` to use markup compatible with
+[ZURB Foundation's Interchange](http://foundation.zurb.com/docs/components/interchange.html).
+
 #### presets
 
 Presets contain reusable settings for a Jekyll Picture Tag. Each is made up of a list of sources, and an optional attributes list and ppi array.

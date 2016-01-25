@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-picture-tag"
-  spec.version       = '0.2.3'
+  spec.version       = '0.3.0'
   spec.authors       = ['Robert Wierzbowski', "Brendan Tobolaski"]
   spec.email         = ['hello@robwierzbowski.com', "brendan@tobolaski.com"]
 
@@ -28,5 +28,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'mini_magick', '~> 3.8.0'
   spec.add_dependency 'fastimage', '~> 1.6.4'
-  spec.add_runtime_dependency 'jekyll', '< 3'
+  spec.add_runtime_dependency 'jekyll', '< 4'
 end
