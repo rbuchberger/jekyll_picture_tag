@@ -30,7 +30,7 @@ Once you have the requirements installed, copy picture_tag.rb into your Jekyll _
 
 ## Usage
 
-There are three parts to Jekyll Picture Tag: 
+There are three parts to Jekyll Picture Tag:
 
 - [Polyfill](#polyfill)
 - [Liquid Tag](#liquid-tag)
@@ -48,7 +48,7 @@ The Jekyll Picture Tag requires Picturefill 2.0 and above. If you want to use Pi
 {% picture [preset] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute="value"] %}
 ```
 
-The tag takes a mix of user input and pointers to configuration settings. 
+The tag takes a mix of user input and pointers to configuration settings.
 
 #### picture
 
@@ -64,7 +64,7 @@ The base image that will be resized for your picture sources. Can be a jpeg, png
 
 #### source_key: path/to/alt/img.jpg
 
-Optionally specify an alternate base image for a specific picture source. This is one of of picture's strongest features, often reffered to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction). 
+Optionally specify an alternate base image for a specific picture source. This is one of of picture's strongest features, often reffered to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction).
 
 #### attribute="value"
 
@@ -81,6 +81,7 @@ Jekyll Picture Tag stores settings in an `picture` key in your _config.yml. It t
 ```yml
 picture:
   source: "assets/images/_fullsize"
+  posts_folders: ":year/:month/:slug/"
   output: "generated"
   markup: "picture"
   presets:
@@ -104,21 +105,33 @@ gallery:
     media: "(min-width: 40em)"
     width: "600"
     height: "300"
-  source_default: 
+  source_default:
     width: "300"
 ```
 
 #### source
 
-To make writing tags easier you can specify a source directory for your assets. Base images in the tag will be relative to the `source` directory. 
+To make writing tags easier you can specify a source directory for your assets. Base images in the tag will be relative to the `source` directory.
 
 For example, if `source` is set to `assets/images/_fullsize`, the tag `{% picture enishte/portrait.jpg alt="An unsual picture" %}` will look for a file at `assets/images/_fullsize/enishte/portrait.jpg`.
 
 Defaults to the site source directory.
 
+#### posts_folders
+
+To automate matching between posts slugs and base images folders, avoiding a mess in your base images folder, set this to your base images folders hierarchy.
+
+For example, if a post is located at `_posts/2015/2015-04-20-picture-tag-enhanced.md`, and the base image is `_assets/images/_fullsize/2015/04/picture-tag-enhanced/look-at-this.png`.
+
+With `posts_folders` set to `"none"` (or not set), you'll have to write `{% picture 2015/04/picture-tag-enhanced/look-at-this.png %}`.
+
+With `posts_folders` set to `":year/:month/:slug/"`, you only have to write `{% picture look-at-this.png %}`. You don't need to write the full path in the Liquid tag anymore.
+
+Defaults to "none".
+
 #### output
 
-Jekyll Picture Tag generates resized images to the `output` directory in your compiled site. The organization of your `source` directory is maintained in the output directory. 
+Jekyll Picture Tag generates resized images to the `output` directory in your compiled site. The organization of your `source` directory is maintained in the output directory.
 
 Defaults to `{compiled Jekyll site}/generated`.
 
@@ -197,14 +210,14 @@ Responsive images are a good first step to improve performance, but you should s
 
 ## Contribute
 
-Report bugs and feature proposals in the [Github issue tracker](https://github.com/robwierzbowski/jekyll-picture-tag/issues). In lieu of a formal styleguide, take care to maintain the existing coding style. 
+Report bugs and feature proposals in the [Github issue tracker](https://github.com/robwierzbowski/jekyll-picture-tag/issues). In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
-0.2.2, Aug 2, 2013: Bugfixes.  
-0.2.1, July 17, 2013: Refactor again, add Liquid parsing.  
-0.2.0, July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.  
-0.1.1, July 5, 2013: Quick round of code improvements.  
+0.2.2, Aug 2, 2013: Bugfixes.
+0.2.1, July 17, 2013: Refactor again, add Liquid parsing.
+0.2.0, July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.
+0.1.1, July 5, 2013: Quick round of code improvements.
 0.1.0, July 5, 2013: Initial release.
 
 ## License
