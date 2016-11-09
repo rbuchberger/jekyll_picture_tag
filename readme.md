@@ -6,6 +6,37 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](
 
 For non-responsive images in Jekyll, take a look at [Jekyll Img Tag](https://github.com/robwierzbowski/jekyll-img-tag).
 
+## Changes to original
+
+Allow setting a `cdnurl` config value which will be prepended to all generated image paths. Using the `cdnurl` is off by default unless you specify `enable_cdnurl: true`. The plugin checks for this config key & value to decide if `cdnurl` should be used.
+
+### Usage
+
+Set the following in your site's `_config.yml`:
+
+```
+cdnurl:           https://mycool.cdn.com
+enable_cdnurl:    true
+```
+
+If you don't want to use the `cdnurl` in your local development you can leave out `enable_cdnurl: true`, put it into a custom config file (e.g. `_config-live.yml`) and specify it as a flag upon Jekyll site generation:
+
+```
+jekyll --config=_config.yml,_config-live.yml
+```
+
+Or just inject it as `raw` option when using [grunt-jekyll](https://github.com/dannygarcia/grunt-jekyll):
+
+```
+jekyll: {
+    production: {
+        options: {
+            raw: 'enable_cdnurl: true\n'
+        }
+    }
+}
+```
+
 ## Why use Jekyll Picture Tag?
 
 **Performance:** Static sites can be can be blazingly fast. If we're not using responsive images we're throwing those performance gains away by serving kilobytes of pixels a user will never see.

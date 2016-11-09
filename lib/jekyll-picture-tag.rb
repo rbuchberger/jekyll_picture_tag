@@ -21,6 +21,7 @@ require 'pathname'
 require 'digest/md5'
 require 'mini_magick'
 require 'fastimage'
+require 'uri'
 
 module Jekyll
 
@@ -40,7 +41,7 @@ module Jekyll
       site = context.registers[:site]
       settings = site.config['picture']
       url = site.config['url']
-      markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
+      markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?"(?<image_src>.+\.[a-zA-Z0-9]{3,4})"\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
       preset = settings['presets'][ markup[:preset] ] || settings['presets']['default']
 
       raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless markup
@@ -144,7 +145,7 @@ module Jekyll
 
       # Generate resized images
       instance.each { |key, source|
-        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config["baseurl"])
+        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config['cdnurl'], site.config["baseurl"], site.config['enable_cdnurl'])
       }
 
       # Construct and return tag
@@ -180,7 +181,7 @@ module Jekyll
       picture_tag
     end
 
-    def generate_image(instance, site_source, site_dest, image_source, image_dest, baseurl)
+    def generate_image(instance, site_source, site_dest, image_source, image_dest, cdnurl, baseurl, enable_cdnurl)
       begin
         digest = Digest::MD5.hexdigest(File.read(File.join(site_source, image_source, instance[:src]))).slice!(0..5)
       rescue Errno::ENOENT
@@ -247,7 +248,11 @@ module Jekyll
       end
 
       # Return path relative to the site root for html
-      Pathname.new(File.join(baseurl, image_dest, image_dir, gen_name)).cleanpath
+      if enable_cdnurl == true
+        Pathname.new(URI.escape(File.join(cdnurl, baseurl, image_dest, image_dir, gen_name))).cleanpath
+      else
+        Pathname.new(URI.escape(File.join(baseurl, image_dest, image_dir, gen_name))).cleanpath
+      end
     end
   end
 end
