@@ -26,7 +26,7 @@ end
 
 It also requires an HTML5 Markdown parser. If you're not using one already, install [Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
 
-Once you have the requirements installed, copy picture_tag.rb into your Jekyll _plugins folder.
+Once you have the requirements installed, copy lib/jekyll-picture-tag.rb into your Jekyll _plugins folder.
 
 ## Usage
 
