@@ -181,6 +181,7 @@ module Jekyll
     end
 
     def generate_image(instance, site_source, site_dest, image_source, image_dest, baseurl)
+      if !baseurl then baseurl = "" end
       begin
         digest = Digest::MD5.hexdigest(File.read(File.join(site_source, image_source, instance[:src]))).slice!(0..5)
       rescue Errno::ENOENT
