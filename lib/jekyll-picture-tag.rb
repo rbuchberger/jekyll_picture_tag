@@ -24,16 +24,13 @@ require 'fastimage'
 require 'objective_elements'
 
 module Jekyll
-
   class Picture < Liquid::Tag
-
     def initialize(tag_name, markup, tokens)
       @markup = markup
       super
     end
 
     def render(context)
-
       # Render any liquid variables in tag arguments and unescape template code
       render_markup = Liquid::Template.parse(@markup).render(context).gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
 
@@ -59,46 +56,45 @@ module Jekyll
 
       # Process alternate source images
       source_src = if markup[:source_src]
-                     Hash[ *markup[:source_src].gsub(/:/, '').split ]
+                     Hash[*markup[:source_src].delete(':').split]
                    else
                      {}
                    end
 
       # Process html attributes
       html_attr = if markup[:html_attr]
-                    Hash[ *markup[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten ]
+                    Hash[*markup[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten]
                   else
                     {}
                   end
 
-      if instance['attr']
-        html_attr = instance.delete('attr').merge(html_attr)
-      end
+      html_attr = instance.delete('attr').merge(html_attr) if instance['attr']
 
       if settings['markup'] == 'picturefill'
         html_attr['data-picture'] = nil
         html_attr['data-alt'] = html_attr.delete('alt')
       end
 
-      html_attr_string = html_attr.inject('') { |string, attrs|
-        if attrs[1]
-          string << "#{attrs[0]}=\"#{attrs[1]}\" "
-        else
-          string << "#{attrs[0]} "
-        end
-      }
+      html_attr_string = html_attr.inject('') do |string, attrs|
+        string << if attrs[1]
+                    "#{attrs[0]}=\"#{attrs[1]}\" "
+                  else
+                    "#{attrs[0]} "
+                  end
+      end
 
       # Prepare ppi variables
-      ppi = if instance['ppi'] then instance.delete('ppi').sort.reverse else nil end
+      ppi = instance['ppi'] ? instance.delete('ppi').sort.reverse : nil
       # this might work??? ppi = instance.delete('ppi'){ |ppi|  [nil] }.sort.reverse
       ppi_sources = {}
 
       # Switch width and height keys to the symbols that generate_image() expects
-      instance.each { |key, source|
-        raise "Preset #{key} is missing a width or a height" if !source['width'] and !source['height']
+      instance.each do |key, source|
+        raise "Preset #{key} is missing a width or a height" if !source['width'] && !source['height']
+
         instance[key][:width] = instance[key].delete('width') if source['width']
         instance[key][:height] = instance[key].delete('height') if source['height']
-      }
+      end
 
       # Store keys in an array for ordering the instance sources
       source_keys = instance.keys
@@ -111,42 +107,42 @@ module Jekyll
 
       # Process instance
       # Add image paths for each source
-      instance.each_key { |key|
+      instance.each_key do |key|
         instance[key][:src] = source_src[key] || markup[:image_src]
-      }
+      end
 
       # Construct ppi sources
       # Generates -webkit-device-ratio and resolution: dpi media value for cross browser support
       # Reference: http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
       if ppi
-        instance.each { |key, source|
-          ppi.each { |p|
-            if p != 1
-              ppi_key = "#{key}-x#{p}"
+        instance.each do |key, source|
+          ppi.each do |p|
+            next unless p != 1
 
-              ppi_sources[ppi_key] = {
-                  :width => if source[:width] then (source[:width].to_f * p).round else nil end,
-                  :height => if source[:height] then (source[:height].to_f * p).round else nil end,
-                  'media' => if source['media']
-                               "#{source['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{source['media']} and (min-resolution: #{(p * 96).round}dpi)"
-                             else
-                               "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)"
-                             end,
-                  :src => source[:src]
-              }
+            ppi_key = "#{key}-x#{p}"
 
-              # Add ppi_key to the source keys order
-              source_keys.insert(source_keys.index(key), ppi_key)
-            end
-          }
-        }
+            ppi_sources[ppi_key] = {
+              :width => source[:width] ? (source[:width].to_f * p).round : nil,
+              :height => source[:height] ? (source[:height].to_f * p).round : nil,
+              'media' => if source['media']
+                           "#{source['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{source['media']} and (min-resolution: #{(p * 96).round}dpi)"
+                         else
+                           "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)"
+                           end,
+              :src => source[:src]
+            }
+
+            # Add ppi_key to the source keys order
+            source_keys.insert(source_keys.index(key), ppi_key)
+          end
+        end
         instance.merge!(ppi_sources)
       end
 
       # Generate resized images
-      instance.each { |key, source|
+      instance.each do |key, source|
         instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config['baseurl'] || '')
-      }
+      end
 
       # Construct and return tag
       if settings['markup'] == 'picture'
@@ -164,13 +160,13 @@ module Jekyll
                       "#{markdown_escape * 2}</picture>\n"
       elsif settings['markup'] == 'interchange'
 
-        interchange_data = Array.new
-        source_keys.reverse.each do |source|
+        interchange_data = []
+        source_keys.reverse_each do |source|
           interchange_data << "[#{url}#{instance[source][:generated_src]}, #{source == 'source_default' ? '(default)' : instance[source]['media']}]"
         end
 
-        picture_tag = %Q{<img data-interchange="#{interchange_data.join ', '}" #{html_attr_string} />\n}
-        picture_tag += %Q{<noscript><img src="#{url}#{instance['source_default'][:generated_src]}" #{html_attr_string} /></noscript>}
+        picture_tag = %(<img data-interchange="#{interchange_data.join ', '}" #{html_attr_string} />\n)
+        picture_tag += %(<noscript><img src="#{url}#{instance['source_default'][:generated_src]}" #{html_attr_string} /></noscript>)
 
       elsif settings['markup'] == 'img'
         # TODO: Implement sizes attribute
@@ -181,7 +177,7 @@ module Jekyll
           picture_tag.add_attributes srcset: val
           # Note the last value will have a comma hanging off the end of it.
         end
-        picture_tag.add_attributes src: "#{url}#{instance['source_default'][:generated_src]}" 
+        picture_tag.add_attributes src: "#{url}#{instance['source_default'][:generated_src]}"
         picture_tag.add_attributes html_attr_string
       end
 
@@ -193,8 +189,8 @@ module Jekyll
       begin
         digest = Digest::MD5.hexdigest(File.read(File.join(site_source, image_source, instance[:src]))).slice!(0..5)
       rescue Errno::ENOENT
-        warn "Warning:".yellow + " source image #{instance[:src]} is missing."
-        return ""
+        warn 'Warning:'.yellow + " source image #{instance[:src]} is missing."
+        return ''
       end
 
       image_dir = File.dirname(instance[:src])
@@ -204,7 +200,7 @@ module Jekyll
       size = FastImage.size(File.join(site_source, image_source, instance[:src]))
       orig_width = size[0]
       orig_height = size[1]
-      orig_ratio = orig_width*1.0/orig_height
+      orig_ratio = orig_width * 1.0 / orig_height
 
       gen_width = if instance[:width]
                     instance[:width].to_f
@@ -220,13 +216,13 @@ module Jekyll
                    else
                      orig_height
                    end
-      gen_ratio = gen_width/gen_height
+      gen_ratio = gen_width / gen_height
 
       # Don't allow upscaling. If the image is smaller than the requested dimensions, recalculate.
       if orig_width < gen_width || orig_height < gen_height
         undersize = true
-        gen_width = if orig_ratio < gen_ratio then orig_width else orig_height * gen_ratio end
-        gen_height = if orig_ratio > gen_ratio then orig_height else orig_width/gen_ratio end
+        gen_width = orig_ratio < gen_ratio ? orig_width : orig_height * gen_ratio
+        gen_height = orig_ratio > gen_ratio ? orig_height : orig_width / gen_ratio
       end
 
       gen_name = "#{basename}-#{gen_width.round}by#{gen_height.round}-#{digest}#{ext}"
@@ -234,9 +230,9 @@ module Jekyll
       gen_dest_file = File.join(gen_dest_dir, gen_name)
 
       # Generate resized files
-      unless File.exists?(gen_dest_file)
+      unless File.exist?(gen_dest_file)
 
-        warn "Warning:".yellow + " #{instance[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
+        warn 'Warning:'.yellow + " #{instance[:src]} is smaller than the requested output file. It will be resized without upscaling." if undersize
 
         #  If the destination directory doesn't exist, create it
         FileUtils.mkdir_p(gen_dest_dir) unless File.exist?(gen_dest_dir)
@@ -248,7 +244,7 @@ module Jekyll
         # Scale and crop
         image.combine_options do |i|
           i.resize "#{gen_width}x#{gen_height}^"
-          i.gravity "center"
+          i.gravity 'center'
           i.crop "#{gen_width}x#{gen_height}+0+0"
           i.strip
         end
