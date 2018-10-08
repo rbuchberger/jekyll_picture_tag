@@ -144,7 +144,7 @@ module Jekyll
 
       # Generate resized images
       instance.each { |key, source|
-        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config["baseurl"])
+        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], site.config['baseurl'] || '')
       }
 
       # Construct and return tag
