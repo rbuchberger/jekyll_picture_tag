@@ -21,6 +21,7 @@ require 'pathname'
 require 'digest/md5'
 require 'mini_magick'
 require 'fastimage'
+require 'objective_elements'
 
 module Jekyll
 
@@ -149,7 +150,6 @@ module Jekyll
 
       # Construct and return tag
       if settings['markup'] == 'picture'
-
         source_tags = ''
         source_keys.each do |source|
           media = " media=\"#{instance[source]['media']}\"" unless source == 'source_default'
@@ -173,11 +173,20 @@ module Jekyll
         picture_tag += %Q{<noscript><img src="#{url}#{instance['source_default'][:generated_src]}" #{html_attr_string} /></noscript>}
 
       elsif settings['markup'] == 'img'
-        # TODO implement <img srcset/sizes>
+        # TODO: Implement sizes attribute
+        picture_tag = SingleTag.new 'img'
+
+        source_keys.each do |source|
+          val = "#{url}#{instance[source][:generated_src]} #{instance[source][:width]}w,"
+          picture_tag.add_attributes srcset: val
+          # Note the last value will have a comma hanging off the end of it.
+        end
+        picture_tag.add_attributes src: "#{url}#{instance['source_default'][:generated_src]}" 
+        picture_tag.add_attributes html_attr_string
       end
 
       # Return the markup!
-      picture_tag
+      picture_tag.to_s
     end
 
     def generate_image(instance, site_source, site_dest, image_source, image_dest, baseurl)
