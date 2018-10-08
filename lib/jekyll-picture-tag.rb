@@ -30,15 +30,32 @@ module Jekyll
       super
     end
 
-    def render(context)
+    def render_markup
       # Render any liquid variables in tag arguments and unescape template code
-      render_markup = Liquid::Template.parse(@markup).render(context).gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
+      Liquid::Template.parse(@markup)
+                      .render(context)
+                      .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
+    end
 
+    def site
+      context.registers[:site]
+    end
+
+    def settings
+      site.config['picture']
+    end
+
+    def url
+      site.config['url']
+    end
+
+    def markup
+      /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
+    end
+
+    def render(context)
+      @context = context
       # Gather settings
-      site = context.registers[:site]
-      settings = site.config['picture']
-      url = site.config['url']
-      markup = /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
       preset = settings['presets'][ markup[:preset] ] || settings['presets']['default']
 
       raise "Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr=\"value\"] %}." unless markup
