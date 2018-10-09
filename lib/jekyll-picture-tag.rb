@@ -36,11 +36,6 @@ module Jekyll
       context.registers[:site]
     end
 
-    def config_settings
-      # picture config from _config.yml
-      site.config['picture']
-    end
-
     def url
       # site url
       site.config['url'] || ''
@@ -66,19 +61,40 @@ module Jekyll
 
     def build_instructions
       # Set defaults
-      @instructions = set_defaults
+      @instructions = defaults
+
       # Add config
+      site.config['picture'].each_pair do |key, val|
+        # Include everything but the presets
+        @instructions[key.to_sym] = val.dup unless key == 'presets'
+      end
+
       # Add params
+      tag_params.each_pair do |key, val|
+        @instructions[key.to_sym] = val.dup
+      end
+
+      # Lookup preset
+      @instructions[:preset] = config_settings[@instructions[:preset_name]]
+    end
+
+    def defaults
+      {
+        source: '.',
+        output: 'generated',
+        markup: 'picturefill',
+        preset_name: 'default'
+      }
     end
 
     def preset
       # Which batch of image sizes to put together
-      config_settings['presets'][ tag_params[:preset] ] || config_settings['presets']['default']
+      @instructions[:preset]
     end
 
     def instance
-      # instance is a deep copy of the preset.
-      Marshal.load(Marshal.dump(preset))
+      # instance is a deep copy of the preset. Shouldn't be necessary anymore
+      preset
     end
 
     def source_src
@@ -87,12 +103,6 @@ module Jekyll
       else
         {}
       end
-    end
-
-    def assign_defaults
-      config_settings['source'] ||= '.'
-      config_settings['output'] ||= 'generated'
-      config_settings['markup'] ||= 'picturefill'
     end
 
     def render(context)
