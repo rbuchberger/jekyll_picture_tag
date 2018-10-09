@@ -50,7 +50,8 @@ module Jekyll
         source: '.',
         output: 'generated',
         markup: 'picturefill',
-        preset_name: 'default'
+        preset_name: 'default',
+        source_src: {},
       }
     end
 
@@ -60,17 +61,17 @@ module Jekyll
 
       # Add config
       site.config['picture'].each_pair do |key, val|
-        # Include everything but the presets
         @instructions[key.to_sym] = val.dup
       end
+
+      @instructions[:ppi].sort!.reverse! if @instructions[:ppi]
 
       # Add params
-      tag_params.each_pair do |key, val|
-        @instructions[key.to_sym] = val.dup
-      end
+      parse_tag_params
 
       # Lookup preset
-      @instructions[:preset] = config_settings[@instructions[:preset_name]]
+      @instructions[:preset] =
+        @instructions[:presets][@instructions[:preset_name]]
     end
 
     def parse_tag_params
@@ -91,14 +92,12 @@ module Jekyll
 
       # If there is a source_key, add it as a hash
       if source_key
-        params.shift # throw away the first param
-        @instructions[:source_src] = {
-          source_key => params.shift
-        }
+        params.shift # throw away the source_ param, we already have the key
+        @instructions[:source_src] = { source_key => params.shift }
       end
 
       # Anything left will be html attributes
-      @instructions[:html_attr] = params.shift.join ' ' if params.any?
+      @instructions[:html_attr] = params.shift.join ' '
     end
 
     def liquid_lookup
@@ -118,61 +117,39 @@ module Jekyll
       preset
     end
 
-    def source_src
-      if tag_params[:source_src]
-        Hash[*tag_params[:source_src].delete(':').split]
-      else
-        {}
-      end
-    end
-
     def render(context)
       @context = context
       # Gather settings
 
-      unless tag_params
+      initialize_instructions
+
+      unless instructions[:image_src] =~ /\s+.\w{1,5}/
         raise <<-HEREDOC
         Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
         path/to/alt-img.jpg] [attr=\"value\"] %}.
         HEREDOC
       end
 
-      assign_defaults
-
-      # Prevent Jekyll from erasing our generated files
-      unless site.config['keep_files'].include?(config_settings['output'])
-        site.config['keep_files'] << config_settings['output']
+      # Prevent Jekyll from erasing our generated files.  This should possibly
+      # be an installation instruction, I'm not a huge fan of modifying site
+      # settings at runtime.
+      unless site.config['keep_files'].include?(@instructions[:output])
+        site.config['keep_files'] << @instructions[:output]
       end
 
       # Process html attributes
-      html_attr = if tag_params[:html_attr]
-                    Hash[*tag_params[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten]
-                  else
-                    {}
-                  end
 
-      html_attr = instance.delete('attr').merge(html_attr) if instance['attr']
-
-      if config_settings['markup'] == 'picturefill'
-        html_attr['data-picture'] = nil
-        html_attr['data-alt'] = html_attr.delete('alt')
+      if @instructions[:markup] == 'picturefill'
+        # These won't work anymore.
+        # html_attr['data-picture'] = nil
+        # html_attr['data-alt'] = html_attr.delete('alt')
       end
 
-      html_attr_string = html_attr.inject('') do |string, attrs|
-        string << if attrs[1]
-                    "#{attrs[0]}=\"#{attrs[1]}\" "
-                  else
-                    "#{attrs[0]} "
-                  end
-      end
-
-      # Prepare ppi variables
-      ppi = instance['ppi'] ? instance.delete('ppi').sort.reverse : nil
       ppi_sources = {}
 
       # Switch width and height keys to the symbols that generate_image()
       # expects
-      instance.each do |key, source|
+      @instructions[:preset].each do |key, source|
         if !source['width'] && !source['height']
           raise "Preset #{key} is missing a width or a height"
         end
@@ -182,12 +159,10 @@ module Jekyll
       end
 
       # Store keys in an array for ordering the instance sources
-      source_keys = instance.keys
-      # used to escape markdown parsing rendering below
-      markdown_escape = "\ "
+      source_keys = @instructions[:preset].keys
 
       # Raise some exceptions before we start expensive processing
-      unless preset
+      unless @instructions[:preset]
         raise <<-HEREDOC
           Picture Tag can't find the "#{tag_params[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
         HEREDOC
@@ -201,7 +176,7 @@ module Jekyll
 
       # Process instance
       # Add image paths for each source
-      instance.each_key do |key|
+      @instructions[:preset].each_key do |key|
         instance[key][:src] = source_src[key] || tag_params[:image_src]
       end
 
