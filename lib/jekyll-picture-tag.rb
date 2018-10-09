@@ -45,28 +45,23 @@ module Jekyll
       site.config['baseurl'] || ''
     end
 
-    def tag_params
-      # Regex is hard. tag_params is the argument passed to the tag.
-      # Raw argument example example:
-      # [preset] img.jpg [source_key: alt-img.jpg] [attr=\"value\"]
-      /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(liquid_lookup)
+    def defaults
+      {
+        source: '.',
+        output: 'generated',
+        markup: 'picturefill',
+        preset_name: 'default'
+      }
     end
 
-    def liquid_lookup
-      # Render any liquid variables in tag arguments and unescape template code
-      Liquid::Template.parse(@raw_params)
-                      .render(context)
-                      .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
-    end
-
-    def build_instructions
+    def initialize_instructions
       # Set defaults
       @instructions = defaults
 
       # Add config
       site.config['picture'].each_pair do |key, val|
         # Include everything but the presets
-        @instructions[key.to_sym] = val.dup unless key == 'presets'
+        @instructions[key.to_sym] = val.dup
       end
 
       # Add params
@@ -78,13 +73,39 @@ module Jekyll
       @instructions[:preset] = config_settings[@instructions[:preset_name]]
     end
 
-    def defaults
-      {
-        source: '.',
-        output: 'generated',
-        markup: 'picturefill',
-        preset_name: 'default'
-      }
+    def parse_tag_params
+      # Raw argument example example:
+      # [preset] img.jpg [source_key: alt-img.jpg] [attr=\"value\"]
+
+      params = liquid_lookup.split
+
+      # The preset is the first parameter, unless it's a filename.
+      @instructions[:preset] = params.shift unless params.first.include? '.'
+
+      # The next parameter will be the image source
+      @instructions[:image_src] = params.shift
+
+      # Check if the next param is a source key, and if so assign it to the
+      # local variable source_key
+      params.first =~ /source_(?<source_key>\w+):/
+
+      # If there is a source_key, add it as a hash
+      if source_key
+        params.shift # throw away the first param
+        @instructions[:source_src] = {
+          source_key => params.shift
+        }
+      end
+
+      # Anything left will be html attributes
+      @instructions[:html_attr] = params.shift.join ' ' if params.any?
+    end
+
+    def liquid_lookup
+      # Render any liquid variables in tag arguments and unescape template code
+      Liquid::Template.parse(@raw_params)
+                      .render(context)
+                      .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
     end
 
     def preset
@@ -93,7 +114,7 @@ module Jekyll
     end
 
     def instance
-      # instance is a deep copy of the preset. Shouldn't be necessary anymore
+      # instance is a deep copy of the preset. Shouldn't be necessary anymore.
       preset
     end
 
