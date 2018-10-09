@@ -1,0 +1,46 @@
+As part of the refactor, I'm keeping notes here. Currently the code is very
+monolithic and interwoven, and I need an external reference to keep track of
+things.
+
+TODO: delete this file before merging to master.
+
+Input Sources:
+
+- tag params
+- config.yml
+- defaults
+
+Tag params take priority, then config, then defaults.
+
+Required Information:
+- Source image location
+  - Comes from tag only
+- markup type (picturefill, img, etc). What sort of tag to output
+  - Comes from config, or defaults
+- preset - which sizes and ppi values to create images for
+  - Set by tag, or defaults
+- html attributes to apply
+  - Set by tag, or config
+
+Variable names:
+@raw_params - raw argument passed into the tag
+@context - site settings and such
+
+Methods:
+render_markup - Substitues liquid variable names with their values, using one
+whopper of a regex
+
+site - global site data
+
+settings - plugin specific settings from _config.yml
+  - includes 'preset'
+
+url - site configured url
+
+baseurl - site configured baseurl, or empty string if not defined
+
+Outputs: 
+  - HTML markup
+  - imagemagick instructions
+  - write out generated files, keep track of their filenames
+  - jekyll settings (keep generated files)
