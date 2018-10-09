@@ -6,38 +6,70 @@ TODO: delete this file before merging to master.
 
 Input Sources:
 
-- tag params
-- config.yml
-- defaults
+  - tag params
+    Looks like this:
+    [preset] image.jpg [source_key: alt_image.jpg] [attribute="value"]
 
-Tag params take priority, then config, then defaults.
+  - config.yml
+    Nested hashes, with string keys
+
+  - defaults
+
+  Tag params take priority, then config, then defaults.
 
 Required Information:
-- Source image location
-  - Comes from tag only
-- markup type (picturefill, img, etc). What sort of tag to output
-  - Comes from config, or defaults
-- preset - which sizes and ppi values to create images for
-  - Set by tag, or defaults
-- html attributes to apply
-  - Set by tag, or config
+
+  - Source image location
+    - Comes from tag only
+
+  - markup type (picturefill, img, etc). What sort of tag to output
+    - Comes from config, or defaults.
+
+  - preset - which sizes and ppi values to create images for
+    - Set by tag, or defaults
+
+  - html attributes to apply
+    - Set by tag, or config
 
 Variable names:
-@raw_params - raw argument passed into the tag
-@context - site settings and such
+
+  @raw_params - raw argument passed into the tag
+  @context - site settings and such
+
+  @instructions - Hash, with symbolic keys, processed plan of attack for this
+  particular tag. 
 
 Methods:
-render_markup - Substitues liquid variable names with their values, using one
-whopper of a regex
 
-site - global site data
+  render_markup - Substitues liquid variable names with their values, using one
+  whopper of a regex
 
-settings - plugin specific settings from _config.yml
-  - includes 'preset'
+  site - global site data
 
-url - site configured url
+  settings: # plugin specific settings from _config.yml
+    source: default image location
+    output: where to keep generatead files
+    markup: which HTML type to use
+    presets: 
+      (preset name):
+        ppi: (array of values, optional)
+        attr: # HTML attributes to include
+          (attribute name): (attribute value)
+          (...)
+        source_(name):
+          media: (css media query)
+          width: (width in pixels) # Must have either width or height.
+          height: (width in pixels)
 
-baseurl - site configured baseurl, or empty string if not defined
+  tag_params - processed parameters from the tag
+
+  preset - which config-defined preset to use for this particular tag
+
+  instance - deep copy of preset
+
+  url - site configured url, or empty string if not defined
+
+  baseurl - site configured baseurl, or empty string if not defined
 
 Outputs: 
   - HTML markup

@@ -25,17 +25,10 @@ require 'objective_elements'
 
 module Jekyll
   class Picture < Liquid::Tag
-    attr_reader :context
+    attr_reader :context, :instructions
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
       super
-    end
-
-    def render_markup
-      # Render any liquid variables in tag arguments and unescape template code
-      Liquid::Template.parse(@raw_params)
-                      .render(context)
-                      .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
     end
 
     def site
@@ -43,7 +36,7 @@ module Jekyll
       context.registers[:site]
     end
 
-    def settings
+    def config_settings
       # picture config from _config.yml
       site.config['picture']
     end
@@ -57,16 +50,30 @@ module Jekyll
       site.config['baseurl'] || ''
     end
 
-    def markup
-      # Regex is hard. Markup is the argument passed to the tag.
+    def tag_params
+      # Regex is hard. tag_params is the argument passed to the tag.
       # Raw argument example example:
       # [preset] img.jpg [source_key: alt-img.jpg] [attr=\"value\"]
-      /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(render_markup)
+      /^(?:(?<preset>[^\s.:\/]+)\s+)?(?<image_src>[^\s]+\.[a-zA-Z0-9]{3,4})\s*(?<source_src>(?:(source_[^\s.:\/]+:\s+[^\s]+\.[a-zA-Z0-9]{3,4})\s*)+)?(?<html_attr>[\s\S]+)?$/.match(liquid_lookup)
+    end
+
+    def liquid_lookup
+      # Render any liquid variables in tag arguments and unescape template code
+      Liquid::Template.parse(@raw_params)
+                      .render(context)
+                      .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
+    end
+
+    def build_instructions
+      # Set defaults
+      @instructions = set_defaults
+      # Add config
+      # Add params
     end
 
     def preset
       # Which batch of image sizes to put together
-      settings['presets'][ markup[:preset] ] || settings['presets']['default']
+      config_settings['presets'][ tag_params[:preset] ] || config_settings['presets']['default']
     end
 
     def instance
@@ -75,24 +82,24 @@ module Jekyll
     end
 
     def source_src
-      if markup[:source_src]
-        Hash[*markup[:source_src].delete(':').split]
+      if tag_params[:source_src]
+        Hash[*tag_params[:source_src].delete(':').split]
       else
         {}
       end
     end
 
     def assign_defaults
-      settings['source'] ||= '.'
-      settings['output'] ||= 'generated'
-      settings['markup'] ||= 'picturefill'
+      config_settings['source'] ||= '.'
+      config_settings['output'] ||= 'generated'
+      config_settings['markup'] ||= 'picturefill'
     end
 
     def render(context)
       @context = context
       # Gather settings
 
-      unless markup
+      unless tag_params
         raise <<-HEREDOC
         Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
         path/to/alt-img.jpg] [attr=\"value\"] %}.
@@ -102,20 +109,20 @@ module Jekyll
       assign_defaults
 
       # Prevent Jekyll from erasing our generated files
-      unless site.config['keep_files'].include?(settings['output'])
-        site.config['keep_files'] << settings['output']
+      unless site.config['keep_files'].include?(config_settings['output'])
+        site.config['keep_files'] << config_settings['output']
       end
 
       # Process html attributes
-      html_attr = if markup[:html_attr]
-                    Hash[*markup[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten]
+      html_attr = if tag_params[:html_attr]
+                    Hash[*tag_params[:html_attr].scan(/(?<attr>[^\s="]+)(?:="(?<value>[^"]+)")?\s?/).flatten]
                   else
                     {}
                   end
 
       html_attr = instance.delete('attr').merge(html_attr) if instance['attr']
 
-      if settings['markup'] == 'picturefill'
+      if config_settings['markup'] == 'picturefill'
         html_attr['data-picture'] = nil
         html_attr['data-alt'] = html_attr.delete('alt')
       end
@@ -151,20 +158,20 @@ module Jekyll
       # Raise some exceptions before we start expensive processing
       unless preset
         raise <<-HEREDOC
-          Picture Tag can't find the "#{markup[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
+          Picture Tag can't find the "#{tag_params[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
         HEREDOC
       end
 
       unless (source_src.keys - source_keys).empty?
         raise <<-HEREDOC
-          Picture Tag can't find this preset source. Check picture: presets: #{markup[:preset]} in _config.yml for a list of sources.
+          Picture Tag can't find this preset source. Check picture: presets: #{tag_params[:preset]} in _config.yml for a list of sources.
         HEREDOC
       end
 
       # Process instance
       # Add image paths for each source
       instance.each_key do |key|
-        instance[key][:src] = source_src[key] || markup[:image_src]
+        instance[key][:src] = source_src[key] || tag_params[:image_src]
       end
 
       # Construct ppi sources Generates -webkit-device-ratio and resolution: dpi
@@ -197,11 +204,11 @@ module Jekyll
 
       # Generate resized images
       instance.each do |key, source|
-        instance[key][:generated_src] = generate_image(source, site.source, site.dest, settings['source'], settings['output'], baseurl)
+        instance[key][:generated_src] = generate_image(source, site.source, site.dest, config_settings['source'], config_settings['output'], baseurl)
       end
 
       # Construct and return tag
-      if settings['markup'] == 'picture'
+      if config_settings['markup'] == 'picture'
         source_tags = ''
         source_keys.each do |source|
           media = " media=\"#{instance[source]['media']}\"" unless source == 'source_default'
@@ -214,7 +221,7 @@ module Jekyll
                       "#{source_tags}"\
                       "#{markdown_escape * 4}<img src=\"#{url}#{instance['source_default'][:generated_src]}\" #{html_attr_string}>\n"\
                       "#{markdown_escape * 2}</picture>\n"
-      elsif settings['markup'] == 'interchange'
+      elsif config_settings['markup'] == 'interchange'
 
         interchange_data = []
         source_keys.reverse_each do |source|
@@ -224,7 +231,7 @@ module Jekyll
         picture_tag = %(<img data-interchange="#{interchange_data.join ', '}" #{html_attr_string} />\n)
         picture_tag += %(<noscript><img src="#{url}#{instance['source_default'][:generated_src]}" #{html_attr_string} /></noscript>)
 
-      elsif settings['markup'] == 'img'
+      elsif config_settings['markup'] == 'img'
         # TODO: Implement sizes attribute
         picture_tag = SingleTag.new 'img'
 
