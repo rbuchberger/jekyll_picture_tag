@@ -1,0 +1,52 @@
+# Example picture presets:
+
+# Full width pictures
+default:
+  markup: picture
+  webp: true
+  ppi: [1, 1.5]
+  attributes:
+    class: blog-full
+    itemprop: image
+  sources: 
+    lrg:
+      media: "(min-width: 40em)"
+      width: 700
+    med:
+      media: "(min-width: 30em)"
+      width: 450
+    default:
+      width: 350
+      height: 200
+
+# Half width pictures
+half:
+  markup: image
+  ppi: [1, 1.5]
+  attributes:
+    data-location: "{{location}}"
+    data-active: nil
+  sources:
+    lrg:
+      media: "(min-width: 40em)"
+      width: 400
+    med:
+      media: "(min-width: 30em)"
+      width: 250
+    default:
+      width: 350
+
+# Self-set resolution sources. Useful if you don't want a 1:1 image size to dppx ratio.
+gallery:
+  sources:
+    wide_hi:
+      media: "(min-width: 40em) and (min-resolution: 1.5dppx)"
+      width: 900
+      height: 600
+    wide:
+      media: "(min-width: 40em)"
+      width: 600
+      height: 400
+    default:
+      width: 250
+      height: 250
