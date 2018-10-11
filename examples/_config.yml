@@ -1,5 +1,5 @@
 # Sample Jekyll Picture Tag settings
 picture:
-  source_images: assets/images/_fullsize
-  generated_images: generated
-  default_markup: picture
+  source_image_dir: assets/images/_fullsize
+  generated_image_dir: generated/
+  markup: picture

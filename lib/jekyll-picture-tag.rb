@@ -36,26 +36,41 @@ module Jekyll
       context.registers[:site]
     end
 
+    def presets
+      # Read presets from _data/picture.yml
+      site.data['picture']
+    end
+
+    def preset
+      # Which preset we're using for this tag
+      presets[@instructions[:preset_name]]
+    end
+
     def url
-      # site url
+      # site url, example.com/
       site.config['url'] || ''
     end
 
     def baseurl
+      # example.com/baseurl/
       site.config['baseurl'] || ''
     end
 
     def defaults
       {
-        source: '.',
-        output: 'generated',
-        markup: 'picturefill',
+        source_dir: '.',
+        output_dir: 'generated',
+        markup: 'picture',
         preset_name: 'default',
-        source_src: {},
+        alt_source_images: {}
       }
     end
 
     def initialize_instructions
+      # This represents a complete combination of all decision making
+      # information. It combines our defaults, site configuration, and tag
+      # parameters into a plan of execution.
+
       # Set defaults
       @instructions = defaults
 
@@ -64,14 +79,9 @@ module Jekyll
         @instructions[key.to_sym] = val.dup
       end
 
-      @instructions[:ppi].sort!.reverse! if @instructions[:ppi]
-
       # Add params
       parse_tag_params
 
-      # Lookup preset
-      @instructions[:preset] =
-        @instructions[:presets][@instructions[:preset_name]]
     end
 
     def parse_tag_params
@@ -81,23 +91,24 @@ module Jekyll
       params = liquid_lookup.split
 
       # The preset is the first parameter, unless it's a filename.
-      @instructions[:preset] = params.shift unless params.first.include? '.'
+      # This regex is really easy to fool. Will improve later.
+      unless params.first =~ /[^\s.]+.\w+/
+        @instructions[:preset_name] = params.shift
+      end
 
-      # The next parameter will be the image source
-      @instructions[:image_src] = params.shift
+      # The next parameter will be the image source.
+      @instructions[:source_image] = params.shift
 
       # Check if the next param is a source key, and if so assign it to the
-      # local variable source_key
-      params.first =~ /source_(?<source_key>\w+):/
-
-      # If there is a source_key, add it as a hash
-      if source_key
-        params.shift # throw away the source_ param, we already have the key
-        @instructions[:source_src] = { source_key => params.shift }
+      # local variable source_key.
+      while params.first =~ /(?<source_key>\w+):/
+        # If there is a source_key, add it as a hash
+        params.shift # throw away the param, we already have the key
+        @instructions[:alt_source_images] << { source_key => params.shift }
       end
 
       # Anything left will be html attributes
-      @instructions[:html_attr] = params.shift.join ' '
+      @instructions[:html_attributes] = params.shift.join ' '
     end
 
     def liquid_lookup
@@ -107,14 +118,11 @@ module Jekyll
                       .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
     end
 
-    def preset
-      # Which batch of image sizes to put together
-      @instructions[:preset]
-    end
+    def build_source_set
+      @source_set = []
+      preset['ppi'] ||= [1]
+      sources = preset['sources']
 
-    def instance
-      # instance is a deep copy of the preset. Shouldn't be necessary anymore.
-      preset
     end
 
     def render(context)
@@ -123,7 +131,7 @@ module Jekyll
 
       initialize_instructions
 
-      unless instructions[:image_src] =~ /\s+.\w{1,5}/
+      unless instructions[:source_image] =~ /\s+.\w{1,5}/
         raise <<-HEREDOC
         Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
         path/to/alt-img.jpg] [attr=\"value\"] %}.
@@ -133,50 +141,30 @@ module Jekyll
       # Prevent Jekyll from erasing our generated files.  This should possibly
       # be an installation instruction, I'm not a huge fan of modifying site
       # settings at runtime.
-      unless site.config['keep_files'].include?(@instructions[:output])
-        site.config['keep_files'] << @instructions[:output]
+      unless site.config['keep_files'].include?(@instructions[:source_dir])
+        site.config['keep_files'] << @instructions[:source_dir]
       end
 
       # Process html attributes
-
-      if @instructions[:markup] == 'picturefill'
-        # These won't work anymore.
-        # html_attr['data-picture'] = nil
-        # html_attr['data-alt'] = html_attr.delete('alt')
-      end
 
       ppi_sources = {}
 
       # Switch width and height keys to the symbols that generate_image()
       # expects
-      @instructions[:preset].each do |key, source|
-        if !source['width'] && !source['height']
-          raise "Preset #{key} is missing a width or a height"
-        end
-
-        instance[key][:width] = instance[key].delete('width') if source['width']
-        instance[key][:height] = instance[key].delete('height') if source['height']
-      end
 
       # Store keys in an array for ordering the instance sources
-      source_keys = @instructions[:preset].keys
+      source_keys = preset['sources'].keys
 
       # Raise some exceptions before we start expensive processing
-      unless @instructions[:preset]
+      unless preset
         raise <<-HEREDOC
-          Picture Tag can't find the "#{tag_params[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
-        HEREDOC
-      end
-
-      unless (source_src.keys - source_keys).empty?
-        raise <<-HEREDOC
-          Picture Tag can't find this preset source. Check picture: presets: #{tag_params[:preset]} in _config.yml for a list of sources.
+          Picture Tag can't find the "#{@instructions[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
         HEREDOC
       end
 
       # Process instance
       # Add image paths for each source
-      @instructions[:preset].each_key do |key|
+      preset['sources'].each_key do |key|
         instance[key][:src] = source_src[key] || tag_params[:image_src]
       end
 
