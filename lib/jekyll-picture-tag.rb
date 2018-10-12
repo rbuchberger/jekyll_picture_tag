@@ -71,14 +71,42 @@ module PictureTag
       end
 
       # Add params
-      parse_tag_params
+      @instructions.merge! parse_tag_params(@raw_params, context)
     end
 
-    def build_source_set
-      @source_set = []
-      preset['ppi'] ||= [1]
-      sources = preset['sources']
+    def filename(source_filename, source_name, ppi, format)
+      name = "#{source_filename}_#{source_name}"
+      name << "#{ppi}x" unless ppi == 1
+      name << ".#{format}"
+    end
 
+    def build_srcset_entry(filename, ppi)
+      if ppi == 1
+        filename
+      else
+        "#{filename} {ppi}x, "
+      end
+    end
+
+    def build_source_tag(name, attributes)
+      tag = SingleTag.new 'source'
+      tag.add_attributes media: attributes['media']
+      tag.add_attributes attributes['source_attributes']
+      preset['ppi'].each do |ppi|
+        file = filename(
+          @instructions[:source_images][name], name, ppi, attributes['format']
+        )
+        tag.add_attributes srcset: "#{file} #{ppi}x, "
+      end
+      tag.attributes[:srcset].last.delete! ', ' # Remove last space & comma
+      tag
+    end
+
+    def source_tags
+      tags = []
+      preset['sources'].each_pair do |name, attributes|
+        tags << build_source_tag(name, attributes)
+      end
     end
 
     def render(context)
@@ -114,6 +142,8 @@ module PictureTag
       # Raise some exceptions before we start expensive processing
       unless preset
         raise <<-HEREDOC
+
+
           Picture Tag can't find the "#{@instructions[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
         HEREDOC
       end
