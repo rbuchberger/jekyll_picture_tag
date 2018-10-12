@@ -37,29 +37,10 @@ Variable names:
   @context - site settings and such
 
   @instructions - Hash, with symbolic keys, processed plan of attack for this
-  particular tag. 
-
-Methods:
-
-  render_markup - Substitues liquid variable names with their values, using one
-  whopper of a regex
+  particular tag. Global instructions, not specific instructions for a given source.
 
   site - global site data
 
-  settings: # plugin specific settings from _config.yml
-    source: default image location
-    output: where to keep generatead files
-    markup: which HTML type to use
-    presets: 
-      (preset name):
-        ppi: (array of values, optional)
-        attr: # HTML attributes to include
-          (attribute name): (attribute value)
-          (...)
-        source_(name):
-          media: (css media query)
-          width: (width in pixels) # Must have either width or height.
-          height: (width in pixels)
 
   tag_params - processed parameters from the tag
 
@@ -76,3 +57,70 @@ Outputs:
   - imagemagick instructions
   - write out generated files, keep track of their filenames
   - jekyll settings (keep generated files)
+
+  Desired markup (initially, will add more options later):
+
+  <picture [picture attributes]>
+    <source srcset="[filename, ppi value] (...)" type=[type] media=[media query] [attributes?]>
+    <source (...)>
+    <source (...)>
+    <source (...)>
+    <img src=[default] alt=[alt text] [img attributes]>
+  </picture>
+
+  Required bits of information:
+    - picture, source, and img attributes: from tag markup, or from preset
+    - ppi values and media queries: from preset
+    - source file name and alt file names: tag markup
+    - generated file names: auto-generated from some naming system that makes sense.
+    - default (fallback) img file: from preset
+    - formats: config option from preset
+    - alt text: tag markup. Special syntax for convenience?
+
+_config.yml
+  source_dir: default image location
+  output_dir: where to keep generatead files
+  markup: which HTML type to use
+
+_data/picture.yml
+
+  (preset name):
+  markup: (markup type, overrides default)
+  picture_attributes: # HTML attributes to include
+    (attribute name): (attribute value)
+    (...)
+  source_attributes: 
+    (attribute name): (attribute value)
+    (...)
+  img_attributes:
+    (attribute name): (attribute value)
+    (...)
+  ppi: (array of values, optional)
+  sources:
+    (source_name): 
+      format: [filetype, original if not included]
+      media: (css media query)
+      width: (width in pixels) # Must have either width or height.
+      height: (width in pixels)
+
+
+Data structure:
+  - defaults: 
+    - common sense values. Should be complete enough that plugin can be used without configuration.
+
+  - @instructions:
+    - Source dir
+    - source images (hash, with base source set as default value)
+    - destination dir
+    - preset name
+
+  - preset:
+    - reads the selected preset from data file
+
+  - html_attributes
+    - read from preset, overridden by tag params
+    - hash of anything objective_elements can accept, keys are tag names (source, img, etc)
+
+  - @source_set
+    - array of SingleTags
+
