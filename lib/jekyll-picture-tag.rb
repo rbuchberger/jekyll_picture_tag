@@ -22,7 +22,9 @@ require 'mini_magick'
 require 'fastimage'
 require 'objective_elements'
 require_relative 'jekyll-picture-tag/defaults'
-require_relative 'tag_params_parser'
+require_relative 'jekyll-picture-tag/tag_params_parser'
+require_relative 'jekyll-picture-tag/markup_generator'
+require_relative 'jekyll-picture-tag/image_generator'
 
 module PictureTag
   class Picture < Liquid::Tag
@@ -57,6 +59,14 @@ module PictureTag
       site.config['baseurl'] || ''
     end
 
+    def ppi_list
+      if preset['ppi']
+        preset['ppi'].map(&:to_i)
+      else
+        [1]
+      end
+    end
+
     def initialize_instructions
       # This represents a complete combination of all decision making
       # information. It combines our defaults, site configuration, and tag
@@ -80,33 +90,17 @@ module PictureTag
       name << ".#{format}"
     end
 
-    def build_srcset_entry(filename, ppi)
-      if ppi == 1
-        filename
-      else
-        "#{filename} {ppi}x, "
-      end
-    end
+    def sources
+      # Keys are source names, values are properties
+      source_hash = {}
 
-    def build_source_tag(name, attributes)
-      tag = SingleTag.new 'source'
-      tag.add_attributes media: attributes['media']
-      tag.add_attributes attributes['source_attributes']
-      preset['ppi'].each do |ppi|
-        file = filename(
-          @instructions[:source_images][name], name, ppi, attributes['format']
-        )
-        tag.add_attributes srcset: "#{file} #{ppi}x, "
+      preset['sources'].each_pair do |source, properties|
+        source_hash[source] = {
+          source_file: @instructions[:source_images]['source']
+        }.merge(properties.transform_keys(&:to_sym))
       end
-      tag.attributes[:srcset].last.delete! ', ' # Remove last space & comma
-      tag
-    end
 
-    def source_tags
-      tags = []
-      preset['sources'].each_pair do |name, attributes|
-        tags << build_source_tag(name, attributes)
-      end
+      source_hash
     end
 
     def render(context)
@@ -117,6 +111,10 @@ module PictureTag
 
       unless instructions[:source_image] =~ /\s+.\w{1,5}/
         raise <<-HEREDOC
+
+
+
+
         Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
         path/to/alt-img.jpg] [attr=\"value\"] %}.
         HEREDOC
@@ -127,59 +125,6 @@ module PictureTag
       # settings at runtime.
       unless site.config['keep_files'].include?(@instructions[:source_dir])
         site.config['keep_files'] << @instructions[:source_dir]
-      end
-
-      # Process html attributes
-
-      ppi_sources = {}
-
-      # Switch width and height keys to the symbols that generate_image()
-      # expects
-
-      # Store keys in an array for ordering the instance sources
-      source_keys = preset['sources'].keys
-
-      # Raise some exceptions before we start expensive processing
-      unless preset
-        raise <<-HEREDOC
-
-
-          Picture Tag can't find the "#{@instructions[:preset]}" preset. Check picture: presets in _config.yml for a list of presets.
-        HEREDOC
-      end
-
-      # Process instance
-      # Add image paths for each source
-      preset['sources'].each_key do |key|
-        instance[key][:src] = source_src[key] || tag_params[:image_src]
-      end
-
-      # Construct ppi sources Generates -webkit-device-ratio and resolution: dpi
-      # media value for cross browser support Reference:
-      # http://www.brettjankord.com/2012/11/28/cross-browser-retinahigh-resolution-media-queries/
-      if ppi
-        instance.each do |key, source|
-          ppi.each do |p|
-            next unless p != 1
-
-            ppi_key = "#{key}-x#{p}"
-
-            ppi_sources[ppi_key] = {
-              :width => source[:width] ? (source[:width].to_f * p).round : nil,
-              :height => source[:height] ? (source[:height].to_f * p).round : nil,
-              'media' => if source['media']
-                           "#{source['media']} and (-webkit-min-device-pixel-ratio: #{p}), #{source['media']} and (min-resolution: #{(p * 96).round}dpi)"
-                         else
-                           "(-webkit-min-device-pixel-ratio: #{p}), (min-resolution: #{(p * 96).to_i}dpi)"
-                           end,
-              :src => source[:src]
-            }
-
-            # Add ppi_key to the source keys order
-            source_keys.insert(source_keys.index(key), ppi_key)
-          end
-        end
-        instance.merge!(ppi_sources)
       end
 
       # Generate resized images

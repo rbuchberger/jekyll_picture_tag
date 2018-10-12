@@ -124,3 +124,6 @@ Data structure:
   - @source_set
     - array of SingleTags
 
+File name format:
+
+[original filename][source name][ppi value]x.[format]
