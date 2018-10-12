@@ -85,23 +85,23 @@ _config.yml
 _data/picture.yml
 
   (preset name):
-  markup: (markup type, overrides default)
-  picture_attributes: # HTML attributes to include
-    (attribute name): (attribute value)
-    (...)
-  source_attributes: 
-    (attribute name): (attribute value)
-    (...)
-  img_attributes:
-    (attribute name): (attribute value)
-    (...)
-  ppi: (array of values, optional)
-  sources:
-    (source_name): 
-      format: [filetype, original if not included]
-      media: (css media query)
-      width: (width in pixels) # Must have either width or height.
-      height: (width in pixels)
+    markup: (markup type, overrides default)
+    picture_attributes: # HTML attributes to include
+      (attribute name): (attribute value)
+      (...)
+    source_attributes: 
+      (attribute name): (attribute value)
+      (...)
+    img_attributes:
+      (attribute name): (attribute value)
+      (...)
+    pixel_ratios: (array of values, optional)
+    sources:
+      (source_name): 
+        format: [filetype, original if not included]
+        media: (css media query)
+        width: (width in pixels) # Must have either width or height.
+        height: (width in pixels)
 
 
 Data structure:
