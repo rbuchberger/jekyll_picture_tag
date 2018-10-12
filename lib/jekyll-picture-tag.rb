@@ -84,12 +84,6 @@ module PictureTag
       @instructions.merge! parse_tag_params(@raw_params, context)
     end
 
-    def filename(source_filename, source_name, ppi, format)
-      name = "#{source_filename}_#{source_name}"
-      name << "#{ppi}x" unless ppi == 1
-      name << ".#{format}"
-    end
-
     def sources
       # Keys are source names, values are properties
       source_hash = {}
@@ -111,10 +105,6 @@ module PictureTag
 
       unless instructions[:source_image] =~ /\s+.\w{1,5}/
         raise <<-HEREDOC
-
-
-
-
         Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
         path/to/alt-img.jpg] [attr=\"value\"] %}.
         HEREDOC
