@@ -4,8 +4,7 @@ module PictureTag
       source_dir: '.',
       output_dir: 'generated',
       markup: 'picture',
-      preset_name: 'default',
-      alt_source_images: {}
+      preset_name: 'default'
     }
   end
 end
