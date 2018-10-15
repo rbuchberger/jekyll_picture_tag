@@ -11,7 +11,10 @@ Input Sources:
     [preset] image.jpg [source_key: alt_image.jpg] [attribute="value"]
 
   - config.yml
-    Nested hashes, with string keys
+    global settings
+
+  - _data/picture.yml
+    preset configs
 
   - defaults
 
@@ -41,12 +44,11 @@ Variable names:
 
   site - global site data
 
-
   tag_params - processed parameters from the tag
 
-  preset - which config-defined preset to use for this particular tag
+  preset_name - which config-defined preset to use for this particular tag
 
-  instance - deep copy of preset
+  preset - selected preset values (for convenience)
 
   url - site configured url, or empty string if not defined
 
@@ -80,7 +82,6 @@ Outputs:
 _config.yml
   source_dir: default image location
   output_dir: where to keep generatead files
-  markup: which HTML type to use
 
 _data/picture.yml
 
