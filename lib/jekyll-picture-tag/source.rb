@@ -1,3 +1,4 @@
+# Source
 module PictureTag
   require 'objective_elements'
   # Generates a string value to serve as the srcset attribute for a given
@@ -5,12 +6,17 @@ module PictureTag
   class Source < SingleTag
     attr_reader :files, :preset, :source_filename, :source_name
 
-    def initialize(source_filename, destination_dir, preset, source_name)
-      @files = build_files
+    def initialize(
+      source_filename:,
+      destination_dir:,
+      preset:,
+      source_name:
+    )
       @preset = preset
       @source_filename = source_filename
       @source_name = source_name # Which source within the preset. Needs better name
       @destination_dir = destination_dir
+      @files = build_files
 
       super 'source'
     end
