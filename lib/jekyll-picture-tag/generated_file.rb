@@ -1,5 +1,10 @@
 # Generated Image
 module PictureTag
+  require 'fileutils'
+  require 'pathname'
+  require 'digest/md5'
+  require 'mini_magick'
+  require 'fastimage'
   # Represents a generated source file, to point a srcset at.
   # Properties:
   # source filename, destination filename, size (width or height, accounting

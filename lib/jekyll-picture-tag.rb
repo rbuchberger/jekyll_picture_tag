@@ -15,11 +15,6 @@
 #             alt="The strange case of responsive images" class="gal-img" data-selected %}
 #
 # See the documentation for full configuration and usage instructions.
-require 'fileutils'
-require 'pathname'
-require 'digest/md5'
-require 'mini_magick'
-require 'fastimage'
 require_relative 'jekyll-picture-tag/defaults'
 require_relative 'jekyll-picture-tag/tag_params_parser'
 require_relative 'jekyll-picture-tag/picture'
