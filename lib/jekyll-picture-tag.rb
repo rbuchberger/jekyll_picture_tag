@@ -20,11 +20,9 @@ require 'pathname'
 require 'digest/md5'
 require 'mini_magick'
 require 'fastimage'
-require 'objective_elements'
 require_relative 'jekyll-picture-tag/defaults'
 require_relative 'jekyll-picture-tag/tag_params_parser'
-require_relative 'jekyll-picture-tag/markup_generator'
-require_relative 'jekyll-picture-tag/image_generator'
+require_relative 'jekyll-picture-tag/picture'
 
 module PictureTag
   class Picture < Liquid::Tag
@@ -59,14 +57,6 @@ module PictureTag
       site.config['baseurl'] || ''
     end
 
-    def ppi_list
-      if preset['ppi']
-        preset['ppi'].map(&:to_i)
-      else
-        [1]
-      end
-    end
-
     def initialize_instructions
       # This represents a complete combination of all decision making
       # information. It combines our defaults, site configuration, and tag
@@ -84,31 +74,11 @@ module PictureTag
       @instructions.merge! parse_tag_params(@raw_params, context)
     end
 
-    def sources
-      # Keys are source names, values are properties
-      source_hash = {}
-
-      preset['sources'].each_pair do |source, properties|
-        source_hash[source] = {
-          source_file: @instructions[:source_images]['source']
-        }.merge(properties.transform_keys(&:to_sym))
-      end
-
-      source_hash
-    end
-
     def render(context)
       @context = context
       # Gather settings
 
       initialize_instructions
-
-      unless instructions[:source_image] =~ /\s+.\w{1,5}/
-        raise <<-HEREDOC
-        Picture Tag can't read this tag. Try {% picture [preset] path/to/img.jpg [source_key:
-        path/to/alt-img.jpg] [attr=\"value\"] %}.
-        HEREDOC
-      end
 
       # Prevent Jekyll from erasing our generated files.  This should possibly
       # be an installation instruction, I'm not a huge fan of modifying site
