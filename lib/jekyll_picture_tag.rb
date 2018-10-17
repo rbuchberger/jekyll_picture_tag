@@ -17,10 +17,10 @@ module PictureTag
   #
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
-    require_relative 'jekyll-picture-tag/generated_file'
-    require_relative 'jekyll-picture-tag/instruction_set'
-    require_relative 'jekyll-picture-tag/picture_element'
-    require_relative 'jekyll-picture-tag/source'
+    require_relative 'jekyll_picture_tag/generated_file'
+    require_relative 'jekyll_picture_tag/instruction_set'
+    require_relative 'jekyll_picture_tag/picture_element'
+    require_relative 'jekyll_picture_tag/source'
     attr_reader :context, :instructions
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
