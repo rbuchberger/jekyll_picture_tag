@@ -21,7 +21,6 @@ module PictureTag
     require_relative 'jekyll_picture_tag/instruction_set'
     require_relative 'jekyll_picture_tag/picture_element'
     require_relative 'jekyll_picture_tag/source'
-    attr_reader :context, :instructions
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
       super
@@ -29,7 +28,7 @@ module PictureTag
 
     def render(context)
       # Gather settings
-      @instructions = InstructionSet.new(raw_params, context)
+      @instructions = InstructionSet.new(@raw_params, context)
 
       # Prevent Jekyll from erasing our generated files.  This should possibly
       # be an installation instruction, I'm not a huge fan of modifying site
