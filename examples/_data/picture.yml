@@ -3,12 +3,15 @@
 # Full width pictures
 default:
   markup: picture
-  webp: true
-  ppi: [1, 1.5]
+  ppi: [1, 1.5, 2]
   attributes:
-    class: blog-full
-    itemprop: image
+    picture: class="awesome" data-volume="11"
+    img: class="some-other-class"
   sources: 
+    lrg-webp:
+      media: "(min-width: 40em)"
+      width: 700
+      format: webp
     lrg:
       media: "(min-width: 40em)"
       width: 700
@@ -24,8 +27,7 @@ half:
   markup: image
   ppi: [1, 1.5]
   attributes:
-    data-location: "{{location}}"
-    data-active: nil
+    picture: class="awesome" data-volume="11"
   sources:
     lrg:
       media: "(min-width: 40em)"

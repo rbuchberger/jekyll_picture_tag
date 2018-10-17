@@ -1,6 +1,6 @@
 # High level set of instructions. This class does all the decision making.
 class InstructionSet
-  attr_reader :context, :source_images
+  attr_reader :context, :source_images, :html_attributes
   def initialize(raw_tag_params, context)
     @context = context
 
@@ -12,7 +12,7 @@ class InstructionSet
 
   def parse_tag_params(raw_params)
     # Raw argument example example:
-    # [preset] img.jpg [source_key: alt-img.jpg] [attr=\"value\"]
+    # [preset] img.jpg [source_key: alt.jpg] [--(element || alt) attr=\"value\"]
 
     # First, swap out liquid variables and split it on spaces into an array:
     params = liquid_lookup(raw_params, @context).split
@@ -33,7 +33,7 @@ class InstructionSet
     end
 
     # Anything left will be html attributes
-    parse_html_attributes params
+    build_html_attributes params.join(' ')
   end
 
   def liquid_lookup(params, context)
@@ -43,8 +43,15 @@ class InstructionSet
                     .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
   end
 
-  def parse_html_attributes(params)
-    # Dealing with custom attributes, as well as the alt text
+  def build_html_attributes(params)
+    @html_attributes = preset['attributes'].transform_keys(&:to_sym)
+    # Example input:
+    # --picture class="awesome" --alt stumpy --img data-attribute="value"
+    params.split(' --').map(&:strip).each do |param|
+      # ['picture class="awesome"', 'alt stumpy', 'img data-attribute="value"']
+      a = param.split # Splits on spaces, the first word will be our key.
+      @html_attributes[a.shift.to_sym] = a.join(' ')
+    end
   end
 
   # Convenience methods:
