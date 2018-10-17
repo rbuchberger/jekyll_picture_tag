@@ -5,13 +5,12 @@
 class PictureElement < DoubleTag
   require 'objective_elements'
   require_relative 'source'
-  attr_reader :instructions
   def initialize(instructions)
     @instructions = instructions
 
     super(
       element: 'picture',
-      attributes: instructions.attributes['picture'],
+      attributes: instructions.attributes[:picture],
       content: content
     )
   end
@@ -22,14 +21,14 @@ class PictureElement < DoubleTag
 
   def build_sources
     instructions.preset['sources'].collect do |source|
-      Source.new(instructions, source)
+      Source.new(@instructions, source)
     end
   end
 
   def build_fallback
-    SingleTag.new(
-      element: 'img',
-      attributes: instructions.attributes['img']
-    )
+    img = SingleTag.new 'img'
+    img.add_attributes @instructions.attributes[:img]
+    # Include the alt text here
+    img.add_attributes alt: @instructions.attributes[:alt]
   end
 end
