@@ -36,7 +36,11 @@ class Source < SingleTag
   end
 
   def source_image
-    @instructions.source_dir + @instructions.source_images[name]
+    source = File.join(@instructions.source_dir,
+                       @instructions.source_images[name])
+    return source if File.exist?(source)
+
+    raise "Could not find #{source}"
   end
 
   def pixel_ratios
