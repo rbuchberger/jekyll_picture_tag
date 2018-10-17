@@ -24,10 +24,6 @@ class GeneratedImage
     #  If the destination directory doesn't exist, create it
     FileUtils.mkdir_p(@output_dir) unless File.exist?(@output_dir)
 
-    unless size['width'] || size['height']
-      raise 'must provide either width or height'
-    end
-
     @output_size = build_size(size)
     generate_image unless File.exist? target_filename
   end

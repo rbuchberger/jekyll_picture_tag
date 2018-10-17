@@ -1,14 +1,14 @@
 # Generates a string value to serve as the srcset attribute for a given
 # <source> or <img> tag.
 class Source < SingleTag
-  attr_reader :instructions, :name
+  attr_reader :name
 
   def initialize(instructions, source_name)
     @instructions = instructions
     @name = source_name
     @files = build_files
 
-    super 'source'
+    super 'source', attributes: @instructions.attributes[:source]
   end
 
   def build_files
@@ -16,7 +16,7 @@ class Source < SingleTag
     pixel_ratios.each do |p|
       files << GeneratedImage.new(
         source_image: source_image,
-        output_dir: instructions.output_dir,
+        output_dir: @instructions.output_dir,
         size: size(p),
         format: source_preset['format']
       )
@@ -24,10 +24,15 @@ class Source < SingleTag
   end
 
   def source_preset
-    instructions.preset['sources'][name]
+    @instructions.preset['sources'][name]
   end
 
   def size(pixel_ratio)
+    unless source_preset['width'] || source_preset['height']
+      raise "#{@instructions.preset_name}:"\
+        " #{name} must include either a width or a height."
+    end
+
     {
       width: source_preset['width'],
       height: source_preset['height'],
@@ -44,8 +49,8 @@ class Source < SingleTag
   end
 
   def pixel_ratios
-    if instructions.preset['pixel_ratios']
-      instructions.preset['pixel_ratios'].map(&:to_i)
+    if @instructions.preset['pixel_ratios']
+      @instructions.preset['pixel_ratios'].map(&:to_i)
     else
       [1]
     end
