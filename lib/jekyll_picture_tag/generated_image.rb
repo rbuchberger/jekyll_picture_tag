@@ -22,7 +22,7 @@ class GeneratedImage
     @output_dir = output_dir
 
     #  If the destination directory doesn't exist, create it
-    FileUtils.mkdir_p(@output_dir) unless File.exist?(@output_dir)
+    FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
 
     @output_size = build_size(size)
     generate_image unless File.exist? target_filename
@@ -55,7 +55,7 @@ class GeneratedImage
     target_size(partial_size).merge(source_size) do |key, target, source|
       # Ensures we don't attempt to enlarge any images:
       if target < source
-        target
+        target.round
       else
         warn 'Warning:'.yellow +
              " #{@source_file} #{key} is smaller than the requested output." \
@@ -74,11 +74,9 @@ class GeneratedImage
 
   def name
     name = File.basename(@source_file, '.*')
-    name << '_' + source_name
-    name << "_#{@output_size[:pixel_ratio]}x"
+    name << '_' + "#{@output_size[:width]}by#{@output_size[:height]}"
     name << source_digest
     name << '.' + @format
-    name
   end
 
   def target_filename
