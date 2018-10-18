@@ -41,9 +41,9 @@ class Source < SingleTag
   end
 
   def source_image
-    filename = File.join(@instructions.source_dir,
-                         @instructions.source_images[name])
-    return filename if File.exist?(filename)
+    file_array = [@instructions.source_dir, @instructions.source_images[name]]
+    filename = File.join(*file_array)
+    return file_array if File.exist?(filename)
 
     raise "Could not find #{filename}"
   end

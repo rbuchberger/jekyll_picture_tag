@@ -11,15 +11,17 @@ class GeneratedImage
   require 'mini_magick'
   require 'fastimage'
 
-  def initialize(
-    source_image:,
-    output_dir:,
-    size:,
-    format:
-  )
-    @source_file = source_image
-    @format = format || File.extname(@source_file)
+  attr_reader :pixel_ratio
+
+  def initialize(source_dir:, source_file:, output_dir:, size:, format:)
+    @source_dir = source_dir
     @output_dir = output_dir
+    @source_file = File.join(source_dir, source_file)
+    @format = format || File.extname(@source_file)
+
+    # Base name will be prepended to generated filename.
+    # Includes path relative to default sorce folder, and the original filename.
+    @base_name = source_file.delete_suffix File.extname source_file
 
     #  If the destination directory doesn't exist, create it
     FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
@@ -42,12 +44,14 @@ class GeneratedImage
   end
 
   def target_size(partial_size)
+    @pixel_ratio = partial_size[:pixel_ratio]
+
     width = partial_size[:width] || partial_size[:height] * aspect_ratio
     height = partial_size[:height] || partial_size[:width] / aspect_ratio
 
     {
-      width: width * partial_size[:pixel_ratio],
-      height: height * partial_size[:pixel_ratio]
+      width: width * @pixel_ratio,
+      height: height * @pixel_ratio
     }
   end
 
