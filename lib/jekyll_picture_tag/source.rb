@@ -16,7 +16,7 @@ class Source < SingleTag
     pixel_ratios.each do |p|
       files << GeneratedImage.new(
         source_image: source_image,
-        output_dir: @instructions.output_dir,
+        output_dir: @instructions.dest_dir,
         size: size(p),
         format: source_preset['format']
       )
@@ -41,11 +41,11 @@ class Source < SingleTag
   end
 
   def source_image
-    source = File.join(@instructions.source_dir,
-                       @instructions.source_images[name])
-    return source if File.exist?(source)
+    filename = File.join(@instructions.source_dir,
+                         @instructions.source_images[name])
+    return filename if File.exist?(filename)
 
-    raise "Could not find #{source}"
+    raise "Could not find #{filename}"
   end
 
   def pixel_ratios
@@ -57,7 +57,13 @@ class Source < SingleTag
   end
 
   def srcset
-    files.collect { |f| "#{f.name} #{f.pixel_ratio}x" }.join ', '
+    set = files.collect do |f|
+      url = Pathname.join(@instructions.url_prefix, f.name)
+
+      "#{url} #{f.pixel_ratio}x"
+    end
+
+    set.join ', '
   end
 
   def to_s
