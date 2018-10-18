@@ -12,9 +12,10 @@ class Source < SingleTag
   end
 
   def build_files
-    files = []
+    files = {}
+    # Pixel ratios are keys, values are the generated files.
     pixel_ratios.each do |p|
-      files << GeneratedImage.new(
+      files[p] = GeneratedImage.new(
         source_image: source_image,
         output_dir: @instructions.dest_dir,
         size: size(p),
@@ -29,21 +30,23 @@ class Source < SingleTag
 
   def size(pixel_ratio)
     unless source_preset['width'] || source_preset['height']
-      raise "#{@instructions.preset_name}:"\
-        " #{name} must include either a width or a height."
+      raise "Preset #{@instructions.preset_name}:"\
+        " source #{name} must include either a width or a height."
     end
 
     {
-      width: source_preset['width'],
-      height: source_preset['height'],
-      pixel_ratio: pixel_ratio
+      width: source_preset['width'] * pixel_ratio,
+      height: source_preset['height'] * pixel_ratio
     }
   end
 
   def source_image
-    file_array = [@instructions.source_dir, @instructions.source_images[name]]
-    filename = File.join(*file_array)
-    return file_array if File.exist?(filename)
+    # Filename relative to source directory:
+    image = @instructions.source_images[name]
+    # Complete filename:
+    filename = File.join(@instructions.source_dir, image)
+    # Only return image if it exists:
+    return image if File.exist?(filename)
 
     raise "Could not find #{filename}"
   end
@@ -57,10 +60,10 @@ class Source < SingleTag
   end
 
   def srcset
-    set = files.collect do |f|
-      url = Pathname.join(@instructions.url_prefix, f.name)
+    set = files.each_pair do |pixel_ratio, file|
+      url = Pathname.join(@instructions.url_prefix, file.name)
 
-      "#{url} #{f.pixel_ratio}x"
+      "#{url} #{pixel_ratio}x"
     end
 
     set.join ', '

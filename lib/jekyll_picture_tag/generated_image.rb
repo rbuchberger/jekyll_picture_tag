@@ -11,8 +11,6 @@ class GeneratedImage
   require 'mini_magick'
   require 'fastimage'
 
-  attr_reader :pixel_ratio
-
   def initialize(source_dir:, source_file:, output_dir:, size:, format:)
     @source_dir = source_dir
     @output_dir = output_dir
@@ -35,25 +33,26 @@ class GeneratedImage
   end
 
   def source_size
-    width, height = FastImage.size(@source_image)
+    original_width, original_height = FastImage.size(@source_image)
 
     {
-      width: width,
-      height: height
+      width: original_width,
+      height: original_height
     }
   end
 
-  def target_size(partial_size)
-    @pixel_ratio = partial_size[:pixel_ratio]
-
-    width = partial_size[:width] || partial_size[:height] * aspect_ratio
-    height = partial_size[:height] || partial_size[:width] / aspect_ratio
-
-    {
-      width: width * @pixel_ratio,
-      height: height * @pixel_ratio
-    }
+  def name
+    name = File.basename(@source_file, '.*')
+    name << '_' + "#{@output_size[:width]}by#{@output_size[:height]}"
+    name << source_digest
+    name << '.' + @format
   end
+
+  def absolute_filename
+    File.join(@output_dir, name)
+  end
+
+  private
 
   def build_size(partial_size)
     target_size(partial_size).merge(source_size) do |key, target, source|
@@ -76,17 +75,6 @@ class GeneratedImage
     )[0..5]
   end
 
-  def name
-    name = File.basename(@source_file, '.*')
-    name << '_' + "#{@output_size[:width]}by#{@output_size[:height]}"
-    name << source_digest
-    name << '.' + @format
-  end
-
-  def target_filename
-    File.join(@output_dir, name)
-  end
-
   def generate_image
     image = MiniMagick::Image.open(@source_file)
     # Scale and crop
@@ -98,6 +86,16 @@ class GeneratedImage
       i.strip
     end
 
-    image.write target_filename
+    image.write absolute_filename
+  end
+
+  def target_size(partial_size)
+    width = partial_size[:width] || partial_size[:height] * aspect_ratio
+    height = partial_size[:height] || partial_size[:width] / aspect_ratio
+
+    {
+      width: width,
+      height: height
+    }
   end
 end
