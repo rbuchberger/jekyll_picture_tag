@@ -1,14 +1,44 @@
-# High level set of instructions. This class does all the decision making.
+# High level set of instructions for a given tag instance.
 class InstructionSet
-  attr_reader :context, :source_images, :html_attributes
+  attr_reader :source_images, :html_attributes
+
   def initialize(raw_tag_params, context)
     @context = context
 
     @settings = defaults.merge(
       site.config['picture'].transform_keys(&:to_sym)
     )
+
     parse_tag_params raw_tag_params
   end
+
+  def preset_name
+    @preset_name || 'default'
+  end
+
+  def preset
+    # Which preset we're using for this tag
+    site.data['picture'][preset_name]
+  end
+
+  def source_dir
+    # Site.source is the master jekyll source directory
+    # Source dir the jekyll-picture-tag source directory.
+    Pathname.join site.source, @settings[:source_dir]
+  end
+
+  def dest_dir
+    # site.dest is the master jekyll destination directory
+    # source_dest is the jekyll-picture-tag destination directory.
+    Pathname.join site.dest, @settings[:destination_dir]
+  end
+
+  def url_prefix
+    # Using pathname, because the URI library doesn't like relative urls.
+    Pathname.join site_url, site_path, @settings[:destination_dir]
+  end
+
+  private
 
   def parse_tag_params(raw_params)
     # Raw argument example example:
@@ -18,7 +48,7 @@ class InstructionSet
     params = liquid_lookup(raw_params, @context).split
 
     # The preset is the first parameter, unless it's a filename.
-    # This regex is really easy to fool; Will improve later.
+    # This regex is really easy to fool. TODO: improve it.
     @preset_name = params.shift unless params.first =~ /[^\s.]+.\w+/
 
     # The next parameter will be the image source. We set it as the default, so
@@ -36,11 +66,13 @@ class InstructionSet
     build_html_attributes params.join(' ')
   end
 
-  def liquid_lookup(params, context)
-    # Render any liquid variables in tag arguments and unescape template code
-    Liquid::Template.parse(params)
-                    .render(context)
-                    .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
+  def liquid_lookup(params)
+    Liquid::Template.parse(params).render(@context)
+
+    # I'm not entirely sure why this gsub is here. Apparently it will let you
+    # include un-parsed liquid variables by escaping them? I'm commenting it out
+    # for now, and will eventually remove unless someone has a use case for it.
+    # .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
   end
 
   def build_html_attributes(params)
@@ -49,55 +81,35 @@ class InstructionSet
     # --picture class="awesome" --alt stumpy --img data-attribute="value"
     params.split(' --').map(&:strip).each do |param|
       # ['picture class="awesome"', 'alt stumpy', 'img data-attribute="value"']
-      a = param.split # Splits on spaces, the first word will be our key.
+
+      # Splits on spaces, the first word will be our key.
+      a = param.split
+
+      # Supplied tag arguments will overwrite (not append) configured values
       @html_attributes[a.shift.to_sym] = a.join(' ')
     end
   end
 
-  # Convenience methods:
-
-  # Allows us to access things like source_dir by instructions.source_dir
-  def method_missing(method)
-    @settings[method] || super
-  end
-
-  def respond_to_missing?(method)
-    @settings.key?(method) || super
-  end
-
   def site
     # Global site data
-    context.registers[:site]
+    @context.registers[:site]
   end
 
-  def presets
-    # Read presets from _data/picture.yml
-    site.data['picture']
-  end
-
-  def preset
-    # Which preset we're using for this tag
-    presets[preset_name]
-  end
-
-  def url
-    # site url, example.com/
+  def site_host
+    # site url, example.com
     site.config['url'] || ''
   end
 
-  def baseurl
+  def site_path
     # example.com/baseurl/
+    #            ^^^^^^^^^
     site.config['baseurl'] || ''
-  end
-
-  def preset_name
-    @preset_name || 'default'
   end
 
   def defaults
     {
       source_dir: '.',
-      output_dir: 'generated',
+      destination_dir: 'generated',
       markup: 'picture'
     }
   end
