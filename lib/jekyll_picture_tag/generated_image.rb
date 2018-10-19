@@ -21,7 +21,7 @@ class GeneratedImage
     # Includes path relative to default sorce folder, and the original filename.
     @base_name = source_file.delete_suffix File.extname source_file
 
-    #  If the destination directory doesn't exist, create it
+    # If the destination directory doesn't exist, create it
     FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
 
     @output_size = build_size(size)

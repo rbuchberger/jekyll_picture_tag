@@ -28,7 +28,7 @@ class Source < SingleTag
     @instructions.preset['sources'][name]
   end
 
-  def size(pixel_ratio)
+  def size(pixel_ratio = 1)
     unless source_preset['width'] || source_preset['height']
       raise "Preset #{@instructions.preset_name}:"\
         " source #{name} must include either a width or a height."
