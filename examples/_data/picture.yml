@@ -1,54 +1,23 @@
 # Example picture presets:
+media-presets:
+  wide-desktop: min-width: 1801px;
+  desktop: max-width: 1800px;
+  wide-tablet: max-width: 1200px;
+  tablet: max-width: 900px;
+  mobile: max-width: 600px;
 
-# Full width pictures
-default:
-  markup: picture
-  ppi: [1, 1.5, 2]
-  attributes:
-    picture: class="awesome" data-volume="11"
-    img: class="some-other-class"
-  sources: 
-    lrg-webp:
-      media: "(min-width: 40em)"
-      width: 700
-      format: webp
-    lrg:
-      media: "(min-width: 40em)"
-      width: 700
-    med:
-      media: "(min-width: 30em)"
-      width: 450
-    default:
-      width: 350
-      height: 200
-
-# Half width pictures
-half:
-  markup: image
-  ppi: [1, 1.5]
-  attributes:
-    picture: class="awesome" data-volume="11"
-  sources:
-    lrg:
-      media: "(min-width: 40em)"
-      width: 400
-    med:
-      media: "(min-width: 30em)"
-      width: 250
-    default:
-      width: 350
-
-# Self-set resolution sources. Useful if you don't want a 1:1 image size to dppx ratio.
-gallery:
-  sources:
-    wide_hi:
-      media: "(min-width: 40em) and (min-resolution: 1.5dppx)"
-      width: 900
-      height: 600
-    wide:
-      media: "(min-width: 40em)"
-      width: 600
-      height: 400
-    default:
-      width: 250
-      height: 250
+# Full width pictures:
+markup-presets:
+  default:
+    format: [original, webp]
+    default-widths: [200, 400, 800, 1600]
+    default-size: 800px
+    media-widths:
+      mobile: [200, 400]
+      desktop: [400, 800, 1600]
+    media-sizes: 
+      mobile: 100vw
+      desktop: 80vw
+    attributes:
+      picture: class="awesome" data-volume="11"
+      img: class="some-other-class"
