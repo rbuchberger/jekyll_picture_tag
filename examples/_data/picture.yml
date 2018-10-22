@@ -1,4 +1,5 @@
 # Example picture presets:
+# TODO: change to EMs, because safari sucks.
 media-presets:
   wide-desktop: min-width: 1801px;
   desktop: max-width: 1800px;
@@ -21,3 +22,6 @@ markup-presets:
     attributes:
       picture: class="awesome" data-volume="11"
       img: class="some-other-class"
+    fallback:
+      width: 800
+      format: original
