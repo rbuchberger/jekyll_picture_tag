@@ -11,17 +11,37 @@ media-presets:
 markup-presets:
   default:
     format: [original, webp]
-    default-widths: [200, 400, 800, 1600]
-    default-size: 800px
-    media-widths:
+
+    # Specifies the width of an image when a given media query is true. Keys
+    # are media queries, values are arrays of image widths to generate for those
+    # images. Realize that these will only be taken into account when using art
+    # direction (alternate source images for some media conditions):
+    widths:
       mobile: [200, 400]
-      desktop: [400, 800, 1600]
-    media-sizes: 
+      desktop: [400, 800]
+
+    # Specifies widths for images with no associated media query (i.e. not using
+    # art direction):
+    default-widths: [200, 400, 800, 1600]
+
+    # For building the 'sizes' attribute on img and source tags. specifies how
+    # wide the image will be when a given media query is true.
+    sizes: 
       mobile: 100vw
-      desktop: 80vw
-    attributes:
-      picture: class="awesome" data-volume="11"
-      img: class="some-other-class"
+      desktop: 60vw
+
+    # Specifies the last size attribute given, which should not be conditional.
+    default-size: 800px
+
+    # Specifies the properties of the fallback image. These days the only
+    # browser which will use it is IE11, so you can assume a moderately sized
+    # laptop/desktop display on windows.
     fallback:
       width: 800
       format: original
+
+    # Attributes to be added to each HTML element, by type:
+    attributes:
+      picture: class="awesome" data-volume="11"
+      img: class="some-other-class"
+
