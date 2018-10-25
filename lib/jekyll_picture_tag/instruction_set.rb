@@ -25,6 +25,13 @@ class InstructionSet
     site.data['picture']['markup-presets'][preset_name]
   end
 
+  # Returns the set of widths to use for a given media query.
+  def widths(media)
+    width_hash = preset['widths']
+    width_hash.default = preset['width']
+    width_hash[media]
+  end
+
   def source_dir
     # Site.source is the master jekyll source directory
     # Source dir the jekyll-picture-tag source directory.
@@ -40,6 +47,23 @@ class InstructionSet
   def url_prefix
     # Using pathname, because the URI library doesn't like relative urls.
     Pathname.join site_url, site_path, @settings[:destination_dir]
+  end
+
+  # Allows us to use 'original' as a format name.
+  def process_format(format, filename)
+    if format.casecmp('original').zero?
+      File.extname(filename)[1..-1].downcase # Strip leading period
+    else
+      format.downcase
+    end
+  end
+
+  def fallback_format
+    process_format(preset['fallback']['format'], source_images[nil])
+  end
+
+  def fallback_width
+    preset['fallback']['width']
   end
 
   private

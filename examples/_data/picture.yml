@@ -1,16 +1,20 @@
 # Example picture presets:
 # TODO: change to EMs, because safari sucks.
-media-presets:
-  wide-desktop: min-width: 1801px;
+media_presets:
+  wide_desktop: min-width: 1801px;
   desktop: max-width: 1800px;
-  wide-tablet: max-width: 1200px;
+  wide_tablet: max-width: 1200px;
   tablet: max-width: 900px;
   mobile: max-width: 600px;
 
 # Full width pictures:
 markup-presets:
   default:
-    format: [original, webp]
+    formats: [original, webp]
+
+    # Specifies widths for images with no associated media query (i.e. not using
+    # art direction):
+    width: [200, 400, 800, 1600]
 
     # Specifies the width of an image when a given media query is true. Keys
     # are media queries, values are arrays of image widths to generate for those
@@ -20,18 +24,15 @@ markup-presets:
       mobile: [200, 400]
       desktop: [400, 800]
 
-    # Specifies widths for images with no associated media query (i.e. not using
-    # art direction):
-    default-widths: [200, 400, 800, 1600]
+    # Specifies the last size attribute given, which should not be conditional.
+    size: 800px
 
     # For building the 'sizes' attribute on img and source tags. specifies how
-    # wide the image will be when a given media query is true.
+    # wide the image will be when a given media query is true. Note that every
+    # srcset will have the same associated sizes attribute.
     sizes: 
       mobile: 100vw
       desktop: 60vw
-
-    # Specifies the last size attribute given, which should not be conditional.
-    default-size: 800px
 
     # Specifies the properties of the fallback image. These days the only
     # browser which will use it is IE11, so you can assume a moderately sized
