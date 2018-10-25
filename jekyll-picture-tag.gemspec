@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'fastimage', '~> 2.1'
   spec.add_dependency 'mini_magick', '~> 4.9'
-  spec.add_dependency 'objective_elements', '~> 0.2.0'
+  spec.add_dependency 'objective_elements', '~> 1.0.0'
 
   spec.add_runtime_dependency 'jekyll', '< 4'
 end
