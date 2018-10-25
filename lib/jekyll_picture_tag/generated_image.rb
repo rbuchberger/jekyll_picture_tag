@@ -11,7 +11,9 @@ class GeneratedImage
   require 'mini_magick'
   require 'fastimage'
 
-  def initialize(source_dir:, source_file:, output_dir:, size:, format:)
+  attr_reader :width, :height
+
+  def initialize(source_dir:, source_file:, output_dir:, width:, format:)
     @source_dir = source_dir
     @output_dir = output_dir
     @source_file = File.join(source_dir, source_file)
@@ -24,21 +26,9 @@ class GeneratedImage
     # If the destination directory doesn't exist, create it
     FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
 
-    @output_size = build_size(size)
+    build_size(width)
+
     generate_image unless File.exist? target_filename
-  end
-
-  def aspect_ratio
-    source_size[:width] / source_size[:height]
-  end
-
-  def source_size
-    original_width, original_height = FastImage.size(@source_image)
-
-    {
-      width: original_width,
-      height: original_height
-    }
   end
 
   def name
@@ -54,25 +44,34 @@ class GeneratedImage
 
   private
 
-  def build_size(partial_size)
-    target_size(partial_size).merge(source_size) do |key, target, source|
-      # Ensures we don't attempt to enlarge any images:
-      if target < source
-        target.round
-      else
-        warn 'Warning:'.yellow +
-             " #{@source_file} #{key} is smaller than the requested output." \
-             " Will use original #{key} instead."
-        source
-      end
-    end
+  def build_size(width)
+    @size = if width < source_size[:width]
+              {
+                width: width,
+                height: (width / aspect_ratio).round
+              }
+            else
+              warn 'Warning:'.yellow + " #{@source_file} is smaller than"\
+              ' requested output. Will use original size instead.'
+              source_size
+            end
+  end
+
+  def aspect_ratio
+    source_size[:width] / source_size[:height]
+  end
+
+  def source_size
+    width, height = FastImage.size(@source_image)
+
+    {
+      width: width,
+      height: height
+    }
   end
 
   def source_digest
-    # Returns the first few characters of an md5 checksum
-    Digest::MD5.hexdigest(
-      File.read(@source_file)
-    )[0..5]
+    Digest::MD5.hexdigest(File.read(@source_file))[0..5]
   end
 
   def generate_image
@@ -81,21 +80,9 @@ class GeneratedImage
     image.combine_options do |i|
       i.resize "#{@output_size[:width]}x#{@output_size[:height]}^"
       i.format @format
-      i.gravity 'center'
-      i.crop "#{@output_size[:width]}x#{@output_size[:height]}+0+0"
       i.strip
     end
 
     image.write absolute_filename
-  end
-
-  def target_size(partial_size)
-    width = partial_size[:width] || partial_size[:height] * aspect_ratio
-    height = partial_size[:height] || partial_size[:width] / aspect_ratio
-
-    {
-      width: width,
-      height: height
-    }
   end
 end
