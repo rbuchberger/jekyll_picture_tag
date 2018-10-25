@@ -1,11 +1,11 @@
 # Generates a string value to serve as the srcset attribute for a given
 # <source> or <img> tag.
 class Source < SingleTag
-  attr_reader :name
+  attr_reader :media_query
 
-  def initialize(instructions, source_name)
+  def initialize(instructions, media_query = nil, format = nil)
     @instructions = instructions
-    @name = source_name
+    @media_query = media_query
     @files = build_files
 
     super 'source', attributes: @instructions.attributes[:source]
@@ -25,13 +25,13 @@ class Source < SingleTag
   end
 
   def source_preset
-    @instructions.preset['sources'][name]
+    @instructions.preset['sources'][media_query]
   end
 
   def size(pixel_ratio = 1)
     unless source_preset['width'] || source_preset['height']
       raise "Preset #{@instructions.preset_name}:"\
-        " source #{name} must include either a width or a height."
+        " source #{media_query} must include either a width or a height."
     end
 
     {
@@ -42,7 +42,7 @@ class Source < SingleTag
 
   def source_image
     # Filename relative to source directory:
-    image = @instructions.source_images[name]
+    image = @instructions.source_images[media_query]
     # Complete filename:
     filename = File.join(@instructions.source_dir, image)
     # Only return image if it exists:
@@ -61,7 +61,7 @@ class Source < SingleTag
 
   def srcset
     set = files.each_pair do |pixel_ratio, file|
-      url = Pathname.join(@instructions.url_prefix, file.name)
+      url = Pathname.join(@instructions.url_prefix, file.media_query)
 
       "#{url} #{pixel_ratio}x"
     end

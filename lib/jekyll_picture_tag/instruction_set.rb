@@ -16,9 +16,13 @@ class InstructionSet
     @preset_name || 'default'
   end
 
+  def media_presets
+    site.data['picture']['media-presets']
+  end
+
   def preset
     # Which preset we're using for this tag
-    site.data['picture'][preset_name]
+    site.data['picture']['markup-presets'][preset_name]
   end
 
   def source_dir

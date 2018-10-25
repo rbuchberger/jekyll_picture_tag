@@ -1,26 +1,43 @@
 # This represents all of the HTML markup that will be returned. Given the high
 # level plan, it builds all its own sources (each of which generate their own
-# images). It in herits from a generic HTML Double Tag, because that's what it
-# is.
-class PictureElement < DoubleTag
+# images).
+class PictureElement
   def initialize(instructions)
     @instructions = instructions
+  end
 
-    super(
-      element: 'picture',
-      attributes: instructions.attributes[:picture],
-      content: content
-    )
+  def markup
+    if @instructions.preset['format'].length > 1 ||
+       @instructions.source_images.length > 1
+      build_picture_tag
+    else
+      build_image_tag
+    end
   end
 
   def content
     build_sources << build_fallback
+    instructions.preset['format'].length > 1
+  end
+
+  def build_picture_tag
+    DoubleTag.new(
+      element: 'picture',
+      attributes: instructions.attributes[:picture],
+      content: build_sources
+    )
   end
 
   def build_sources
-    instructions.preset['sources'].collect do |source|
-      Source.new(@instructions, source)
+    @instructions.source_images.each do 
+      @instructions.preset.format.each do
+
+      end
     end
+  end
+
+  def build_source(source_image, sizes, formats)
+
   end
 
   def build_fallback
