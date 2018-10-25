@@ -55,15 +55,16 @@ class InstructionSet
     # This regex is really easy to fool. TODO: improve it.
     @preset_name = params.shift unless params.first =~ /[^\s.]+.\w+/
 
-    # The next parameter will be the image source. We set it as the default, so
-    # when we lookup values that aren't specifically set it will be returned.
-    @source_images = Hash.new(params.shift)
+    # source_image keys are media queries, values are source images. The first
+    # param specified will be our base image, so it has no associated media
+    # query.
+    @source_images = { nil => params.shift }
 
     # Check if the next param is a source key, and if so assign it to the
     # local variable source_key.
-    while params.first =~ /(?<source_key>\w+):/
+    while params.first =~ /(?<media_query>\w+):/
       params.shift # throw away the param, we already have the key
-      @source_images[source_key] = params.shift
+      @source_images[media_query] = params.shift
     end
 
     # Anything left will be html attributes
