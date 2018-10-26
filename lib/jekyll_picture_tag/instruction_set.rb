@@ -17,6 +17,7 @@ class InstructionSet
   end
 
   def media_presets
+    # Media queries
     site.data['picture']['media-presets']
   end
 
@@ -47,6 +48,10 @@ class InstructionSet
   def url_prefix
     # Using pathname, because the URI library doesn't like relative urls.
     Pathname.join site_url, site_path, @settings[:destination_dir]
+  end
+
+  def build_url(filename)
+    Pathname.join(url_prefix, filename)
   end
 
   # Allows us to use 'original' as a format name.

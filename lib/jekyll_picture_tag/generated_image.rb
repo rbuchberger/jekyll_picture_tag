@@ -1,9 +1,5 @@
 # Generated Image
-# Represents a generated source file, to point a srcset at.
-# Properties:
-# source filename, destination filename, size (width or height, accounting
-# for PPI), image format, PPI, source name
-# value
+# Represents a generated source file.
 class GeneratedImage
   require 'fileutils'
   require 'pathname'
@@ -11,13 +7,11 @@ class GeneratedImage
   require 'mini_magick'
   require 'fastimage'
 
-  attr_reader :width, :height
-
   def initialize(source_dir:, source_file:, output_dir:, width:, format:)
     @source_dir = source_dir
     @output_dir = output_dir
     @source_file = File.join(source_dir, source_file)
-    @format = format || File.extname(@source_file)
+    @format = format
 
     # Base name will be prepended to generated filename.
     # Includes path relative to default sorce folder, and the original filename.
@@ -26,7 +20,7 @@ class GeneratedImage
     # If the destination directory doesn't exist, create it
     FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
 
-    build_size(width)
+    @size = build_size(width)
 
     generate_image unless File.exist? target_filename
   end
@@ -42,21 +36,6 @@ class GeneratedImage
     File.join(@output_dir, name)
   end
 
-  private
-
-  def build_size(width)
-    @size = if width < source_size[:width]
-              {
-                width: width,
-                height: (width / aspect_ratio).round
-              }
-            else
-              warn 'Warning:'.yellow + " #{@source_file} is smaller than"\
-              ' requested output. Will use original size instead.'
-              source_size
-            end
-  end
-
   def aspect_ratio
     source_size[:width] / source_size[:height]
   end
@@ -68,6 +47,22 @@ class GeneratedImage
       width: width,
       height: height
     }
+  end
+
+  private
+
+  def build_size(width)
+    if width <= source_size[:width]
+      {
+        width: width,
+        height: (width / aspect_ratio).round
+      }
+    else
+      warn 'Warning:'.yellow + " #{@source_file} is smaller than requested" \
+        ' output. Will use original size instead.'
+
+      source_size
+    end
   end
 
   def source_digest

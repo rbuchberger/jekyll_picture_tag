@@ -47,10 +47,6 @@ class PictureElement
     sizes.join ', '
   end
 
-  def build_url(filename)
-    Pathname.join(@instructions.url_prefix, filename)
-  end
-
   # Checks to ensure file exists.
   def source_image(media_query)
     # Filename relative to source directory:
@@ -76,7 +72,7 @@ class PictureElement
     DoubleTag.new(
       element: 'picture',
       attributes: instructions.attributes[:picture],
-      content: build_sources << build_base_img
+      content: build_sources << build_base_image
     )
   end
 
@@ -102,17 +98,23 @@ class PictureElement
   end
 
   # Used for both the fallback image, and for the complete markup.
-  def build_base_img
+  def build_base_img(srcset = nil, sizes = nil)
     img = SingleTag.new 'img'
-    img.attributes << @instructions.attributes[:img]
-    img.alt = @instructions.attributes[:alt]
-    img.src = build_url(build_fallback_image.name)
+    img.attributes << @instructions.attributes['img']
+
+    img.srcset = srcset if srcset
+    img.sizes = sizes if sizes
+
+    img.src = @instructions.build_url(build_fallback_image.name)
+    img.alt = @instructions.attributes['alt']
+
     img
   end
 
   # File, not HTML
   def build_fallback_image
     GeneratedImage.new(
+      source_dir: @instructions.source_dir,
       source_image: @instructions.source_images[:nil],
       format: @instructions.fallback_format,
       width: @instructions.fallback_width,
@@ -122,9 +124,6 @@ class PictureElement
 
   # Used when <picture> is unnecessary.
   def build_img(srcset)
-    img = build_base_img
-    img.srcset = srcset
-    img.sizes = build_sizes
-    img.to_s
+    build_base_img(srcset, build_sizes)
   end
 end

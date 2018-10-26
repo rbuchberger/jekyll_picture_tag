@@ -10,7 +10,12 @@ class SrcSet
 
     # Image filename, relative to jekyll_picture_tag default dir:
     @image = @instructions.source_images[@media]
+    # Array of sizes to construct images for.
     @widths = @instructions.widths[@media]
+  end
+
+  def to_a
+    @widths.collect { |w| build_srcset_entry(w) }
   end
 
   def to_s
@@ -23,22 +28,15 @@ class SrcSet
 
   private
 
-  def to_a
-    @widths.collect { |w| build_srcset_entry(w) }
-  end
-
-  def build_srcset_entry
+  def build_srcset_entry(width)
     file = generate_file(width)
 
-    "#{build_url(file.name)} #{width}w"
-  end
-
-  def build_url(filename)
-    Pathname.join(@instructions.url_prefix, filename)
+    "#{@instructions.build_url(file.name)} #{width}w"
   end
 
   def generate_file(width)
     GeneratedImage.new(
+      source_dir: @instructions.source_dir,
       source_image: @image,
       output_dir: @instructions.dest_dir,
       width: width,
