@@ -30,8 +30,12 @@ class SrcSet
 
   def build_srcset_entry(width)
     file = generate_file(width)
+    srcset_entry_text file
+  end
 
-    "#{@instructions.build_url(file.name)} #{width}w"
+  # Building block for a basic srcset entry. Don't include commas.
+  def srcset_entry_text(file)
+    "#{@instructions.build_url(file.name)} #{file.width}w"
   end
 
   def generate_file(width)
