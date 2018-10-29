@@ -26,6 +26,11 @@ class InstructionSet
     site.data['picture']['markup-presets'][preset_name]
   end
 
+  def output_format
+    # Which output format, such as <img> or <picture>
+    preset['output_format'] || 'auto'
+  end
+
   # Returns the set of widths to use for a given media query.
   def widths(media)
     width_hash = preset['widths']
@@ -41,7 +46,8 @@ class InstructionSet
 
   def dest_dir
     # site.dest is the master jekyll destination directory
-    # source_dest is the jekyll-picture-tag destination directory.
+    # source_dest is the jekyll-picture-tag destination directory. (generated
+    # file location setting.)
     Pathname.join site.dest, @settings[:destination_dir]
   end
 
@@ -103,9 +109,10 @@ class InstructionSet
   def liquid_lookup(params)
     Liquid::Template.parse(params).render(@context)
 
-    # I'm not entirely sure why this gsub is here. Apparently it will let you
-    # include un-parsed liquid variables by escaping them? I'm commenting it out
-    # for now, and will eventually remove unless someone has a use case for it.
+    # This gsub allows people to include template code for javascript libraries
+    # such as handlebar.js. It adds complication and I'm not sure it has much
+    # value now, so I'm commenting it out for now. If someone has a use case for
+    # it we can add it back in.
     # .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
   end
 
