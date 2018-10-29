@@ -17,13 +17,17 @@ module PictureTag
   #
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
-    require_relative 'jekyll_picture_tag/generated_file'
+    require_relative 'jekyll_picture_tag/generated_image'
     require_relative 'jekyll_picture_tag/instruction_set'
-    require_relative 'jekyll_picture_tag/picture_element'
-    require_relative 'jekyll_picture_tag/source'
+    require_relative 'jekyll_picture_tag/output_formats/basics'
+    require_relative 'jekyll_picture_tag/srcsets/basics'
+
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
       super
+    end
+
+    def build_markup
     end
 
     def render(context)
@@ -37,9 +41,15 @@ module PictureTag
         site.config['keep_files'] << @instructions.source_dir
       end
 
-      picture_tag = PictureElement.new(@instructions)
+      # This is the class name of whichever output format we are selecting:
+      output_class = 'OutputFormats::' + @instructions.output_format.capitalize
 
-      picture_tag.to_s
+      # Create a new instance of the class named in output_class. This syntax
+      # allows us to do it dynamically:
+      markup = Object.const_get(output_class).new(@instructions)
+
+      # Return a string:
+      markup.to_s
     end
   end
 end

@@ -1,4 +1,7 @@
+# Handles srcset generation, which also handles file generation.
 module Srcsets
+  require_relative 'pixel_ratio'
+  require_relative 'width'
   # Basic functionality for a srcset, which also handles file generation.
 
   # Classes including this module must implement the to_a method, which
