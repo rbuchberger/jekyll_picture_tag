@@ -27,19 +27,16 @@ module PictureTag
       super
     end
 
-    def build_markup
-    end
-
     def render(context)
       # Gather settings
       @instructions = InstructionSet.new(@raw_params, context)
 
-      # Prevent Jekyll from erasing our generated files.  This should possibly
-      # be an installation instruction, I'm not a huge fan of modifying site
-      # settings at runtime.
-      unless site.config['keep_files'].include?(@instructions.source_dir)
-        site.config['keep_files'] << @instructions.source_dir
-      end
+      # Prevent Jekyll from erasing our generated files. This should be an
+      # installation instruction, I'm not a huge fan of modifying site settings
+      # at runtime.
+      # unless site.config['keep_files'].include?(@instructions.source_dir)
+      #   site.config['keep_files'] << @instructions.source_dir
+      # end
 
       # This is the class name of whichever output format we are selecting:
       output_class = 'OutputFormats::' + @instructions.output_format.capitalize
