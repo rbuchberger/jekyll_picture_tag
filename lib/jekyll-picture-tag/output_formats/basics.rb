@@ -4,6 +4,7 @@ module PictureTag
   module OutputFormats
     # Generic functions common to all output formats.
     module Basics
+      include ObjectiveElements
       def initialize(instructions)
         @instructions = instructions
       end
@@ -52,10 +53,15 @@ module PictureTag
       # Used for both the fallback image, and for the complete markup.
       def build_base_img
         img = SingleTag.new 'img'
-        img.attributes << @instructions.attributes['img']
+
+        if @instructions.html_attributes['img']
+          img.attributes << @instructions.html_attributes['img']
+        end
 
         img.src = @instructions.build_url(build_fallback_image.name)
-        img.alt = @instructions.attributes['alt']
+        if @instructions.html_attributes['alt']
+          img.alt = @instructions.html_attributes['alt']
+        end
 
         img
       end
@@ -64,7 +70,7 @@ module PictureTag
       def build_fallback_image
         GeneratedImage.new(
           source_dir: @instructions.source_dir,
-          source_image: @instructions.source_images[:nil],
+          source_file: @instructions.source_images[nil],
           format: @instructions.fallback_format,
           width: @instructions.fallback_width,
           output_dir: @instructions.dest_dir

@@ -18,16 +18,16 @@ class GeneratedImage
     @base_name = source_file.delete_suffix File.extname source_file
 
     # If the destination directory doesn't exist, create it
-    FileUtils.mkdir_p(@output_dir) unless Pathname.exist?(@output_dir)
+    FileUtils.mkdir_p(@output_dir) unless Dir.exist?(@output_dir)
 
     @size = build_size(width)
 
-    generate_image unless File.exist? target_filename
+    generate_image unless File.exist? absolute_filename
   end
 
   def name
     name = File.basename(@source_file, '.*')
-    name << '_' + "#{@output_size[:width]}by#{@output_size[:height]}"
+    name << "_#{@size[:width]}by#{@size[:height]}_"
     name << source_digest
     name << '.' + @format
   end
@@ -41,12 +41,16 @@ class GeneratedImage
   end
 
   def source_size
-    width, height = FastImage.size(@source_image)
+    width, height = FastImage.size(@source_file)
 
     {
       width: width,
       height: height
     }
+  end
+
+  def width
+    @size[:width]
   end
 
   private
@@ -70,13 +74,15 @@ class GeneratedImage
   end
 
   def generate_image
+    puts 'Generating new image file: ' + name
     image = MiniMagick::Image.open(@source_file)
     # Scale and crop
     image.combine_options do |i|
-      i.resize "#{@output_size[:width]}x#{@output_size[:height]}^"
-      i.format @format
+      i.resize "#{@size[:width]}x#{@size[:height]}^"
       i.strip
     end
+
+    image.format @format
 
     image.write absolute_filename
   end

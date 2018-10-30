@@ -12,8 +12,8 @@ module PictureTag
 
       def initialize(media:, format:, instructions:)
         @media = media # Associated Media Query, can be nil
-        @format = @instructions.process_format(format) # Output format
         @instructions = instructions
+        @format = @instructions.process_format(format, media) # Output format
 
         # Image filename, relative to jekyll_picture_tag default dir:
         @image = @instructions.source_images[@media]
@@ -34,7 +34,7 @@ module PictureTag
       def generate_file(width)
         GeneratedImage.new(
           source_dir: @instructions.source_dir,
-          source_image: @image,
+          source_file: @image,
           output_dir: @instructions.dest_dir,
           width: width,
           format: @format

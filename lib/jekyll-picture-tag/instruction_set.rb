@@ -5,8 +5,10 @@ class InstructionSet
   def initialize(raw_tag_params, context)
     @context = context
 
+    site_config = site.config['picture'] || {}
+
     @settings = defaults.merge(
-      site.config['picture'].transform_keys(&:to_sym)
+      site_config.transform_keys(&:to_sym)
     )
 
     parse_tag_params raw_tag_params
@@ -33,7 +35,7 @@ class InstructionSet
 
   # Returns the set of widths to use for a given media query.
   def widths(media)
-    width_hash = preset['widths']
+    width_hash = preset['widths'] || {}
     width_hash.default = preset['width']
     width_hash[media]
   end
@@ -41,28 +43,29 @@ class InstructionSet
   def source_dir
     # Site.source is the master jekyll source directory
     # Source dir the jekyll-picture-tag source directory.
-    Pathname.join site.source, @settings[:source_dir]
+    File.join site.source, @settings[:source_dir]
   end
 
   def dest_dir
     # site.dest is the master jekyll destination directory
     # source_dest is the jekyll-picture-tag destination directory. (generated
     # file location setting.)
-    Pathname.join site.dest, @settings[:destination_dir]
+    File.join site.dest, @settings[:destination_dir]
   end
 
   def url_prefix
     # Using pathname, because the URI library doesn't like relative urls.
-    Pathname.join site_url, site_path, @settings[:destination_dir]
+    File.join site_url, site_path, @settings[:destination_dir]
   end
 
   def build_url(filename)
-    Pathname.join(url_prefix, filename)
+    File.join url_prefix, filename
   end
 
   # Allows us to use 'original' as a format name.
-  def process_format(format, filename)
+  def process_format(format, _media)
     if format.casecmp('original').zero?
+      filename = source_images[filename]
       File.extname(filename)[1..-1].downcase # Strip leading period
     else
       format.downcase
@@ -77,6 +80,12 @@ class InstructionSet
     preset['fallback']['width']
   end
 
+  def site
+    # Global site data
+    @context.registers[:site]
+  end
+
+
   private
 
   def parse_tag_params(raw_params)
@@ -84,7 +93,7 @@ class InstructionSet
     # [preset] img.jpg [source_key: alt.jpg] [--(element || alt) attr=\"value\"]
 
     # First, swap out liquid variables and split it on spaces into an array:
-    params = liquid_lookup(raw_params, @context).split
+    params = liquid_lookup(raw_params).split
 
     # The preset is the first parameter, unless it's a filename.
     # This regex is really easy to fool. TODO: improve it.
@@ -117,7 +126,8 @@ class InstructionSet
   end
 
   def build_html_attributes(params)
-    @html_attributes = preset['attributes'].transform_keys(&:to_sym)
+    preset_attributes = preset['attributes'] || {}
+    @html_attributes = preset_attributes.transform_keys(&:to_sym)
     # Example input:
     # --picture class="awesome" --alt stumpy --img data-attribute="value"
     params.split(' --').map(&:strip).each do |param|
@@ -131,12 +141,7 @@ class InstructionSet
     end
   end
 
-  def site
-    # Global site data
-    @context.registers[:site]
-  end
-
-  def site_host
+  def site_url
     # site url, example.com
     site.config['url'] || ''
   end
@@ -149,9 +154,9 @@ class InstructionSet
 
   def defaults
     {
-      source_dir: '.',
+      source_dir: '',
       destination_dir: 'generated',
-      markup: 'picture'
+      markup: 'auto'
     }
   end
 end

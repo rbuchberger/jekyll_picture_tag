@@ -13,7 +13,8 @@ module PictureTag
       end
 
       def to_s
-        img = build_base_img(srcset)
+        img = build_base_img
+        img.srcset = srcset.to_s
         img.sizes = srcset.sizes if srcset.sizes
 
         img.to_s

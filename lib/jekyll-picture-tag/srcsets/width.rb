@@ -24,7 +24,7 @@ module PictureTag
       private
 
       def widths
-        @instructions.widths[@media]
+        @instructions.widths(@media)
       end
 
       def build_srcset_entry(width)

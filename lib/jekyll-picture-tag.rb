@@ -1,3 +1,10 @@
+require 'objective_elements'
+require 'pry'
+
+require_relative 'jekyll-picture-tag/generated_image'
+require_relative 'jekyll-picture-tag/instruction_set'
+require_relative 'jekyll-picture-tag/output_formats'
+require_relative 'jekyll-picture-tag/srcsets'
 module PictureTag
   # Title: Jekyll Picture Tag
   # Authors: Rob Wierzbowski : @robwierzbowski
@@ -17,11 +24,6 @@ module PictureTag
   #
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
-    require_relative 'jekyll_picture_tag/generated_image'
-    require_relative 'jekyll_picture_tag/instruction_set'
-    require_relative 'jekyll_picture_tag/output_formats/basics'
-    require_relative 'jekyll_picture_tag/srcsets/basics'
-
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
       super
@@ -34,12 +36,13 @@ module PictureTag
       # Prevent Jekyll from erasing our generated files. This should be an
       # installation instruction, I'm not a huge fan of modifying site settings
       # at runtime.
-      # unless site.config['keep_files'].include?(@instructions.source_dir)
-      #   site.config['keep_files'] << @instructions.source_dir
-      # end
+      unless @instructions.site.config['keep_files'].include?(@instructions.dest_dir)
+        @instructions.site.config['keep_files'] << @instructions.dest_dir
+      end
 
       # This is the class name of whichever output format we are selecting:
-      output_class = 'OutputFormats::' + @instructions.output_format.capitalize
+      output_class = 'PictureTag::OutputFormats::' + @instructions.output_format.capitalize
+      
 
       # Create a new instance of the class named in output_class. This syntax
       # allows us to do it dynamically:
@@ -51,4 +54,4 @@ module PictureTag
   end
 end
 
-Liquid::Template.register_tag('picture', Jekyll::Picture)
+Liquid::Template.register_tag('picture', PictureTag::Picture)
