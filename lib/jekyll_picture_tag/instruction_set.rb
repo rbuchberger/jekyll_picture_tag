@@ -28,7 +28,7 @@ class InstructionSet
 
   def output_format
     # Which output format, such as <img> or <picture>
-    preset['output_format'] || 'auto'
+    preset['markup'] || 'auto'
   end
 
   # Returns the set of widths to use for a given media query.
@@ -111,7 +111,7 @@ class InstructionSet
 
     # This gsub allows people to include template code for javascript libraries
     # such as handlebar.js. It adds complication and I'm not sure it has much
-    # value now, so I'm commenting it out for now. If someone has a use case for
+    # value now, so I'm commenting it out. If someone has a use case for
     # it we can add it back in.
     # .gsub(/\\\{\\\{|\\\{\\%/, '\{\{' => '{{', '\{\%' => '{%')
   end

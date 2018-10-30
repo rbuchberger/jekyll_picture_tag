@@ -5,7 +5,7 @@ module OutputFormats
       formats = instructions.preset['formats'].length
       sources = instructions.source_images.length
 
-      @element = if formats < 1 || sources < 1
+      @element = if formats > 1 || sources > 1
                    Picture.new(instructions)
                  else
                    Img.new(instructions)

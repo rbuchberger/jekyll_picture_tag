@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'jekyll-picture-tag'
-  spec.version       = '0.3.0'
+  spec.version       = '1.0.0'
   spec.authors       = ['Robert Wierzbowski', 'Brendan Tobolaski']
   spec.email         = ['hello@robwierzbowski.com', 'brendan@tobolaski.com']
 

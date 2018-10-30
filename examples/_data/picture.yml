@@ -1,5 +1,10 @@
 # Example picture presets:
 # TODO: change to EMs, because safari sucks.
+
+# Media presets are used in several places:
+# - To specify alternate source images (for art direction)
+# - To build the 'sizes' attribute
+# - When given alternate source images, specify which sizes to generate.
 media_presets:
   wide_desktop: min-width: 1801px;
   desktop: max-width: 1800px;
@@ -7,36 +12,42 @@ media_presets:
   tablet: max-width: 900px;
   mobile: max-width: 600px;
 
-# Full width pictures:
+# Markup presets allow you to group settings together, and select one of them by name in your jekyll
+# tag. All settings are optional.
 markup-presets:
   default:
-    formats: [original, webp]
 
-    # Specifies widths for images with no associated media query (i.e. not using
-    # art direction):
+    # Optionally specify a markup type. Your current options are 'picture', 'img', or 'auto'
+    # (default).
+    markup: auto
+
+    # Must be an array, in order of decreasing preference. Defaults to just 'original'.
+    formats: [webp, original]
+
+    # Must be an array: which image sizes (width in pixels) to generate (unless directed otherwise
+    # below). If not specified, will use sensible default values.
     width: [200, 400, 800, 1600]
 
-    # Specifies the width of an image when a given media query is true. Keys
-    # are media queries, values are arrays of image widths to generate for those
-    # images. Realize that these will only be taken into account when using art
-    # direction (alternate source images for some media conditions):
-    widths:
-      mobile: [200, 400]
-      desktop: [400, 800]
+    # Alternate source images (for art direction) are associated with media query presets. Here, you
+    # can optionally specify a different set of sizes to generate for those alternate source images.
+    # Must be arrays.
+    widths: 
+      mobile: [200, 400, 600] 
+      tablet: [400, 600, 800]
 
-    # Specifies the last size attribute given, which should not be conditional.
+    # Specifies an optional, unconditional size attribute. Can be given alone, or if specified in
+    # combination with 'sizes' below, will be given last (when no media queries apply).
     size: 800px
 
-    # For building the 'sizes' attribute on img and source tags. specifies how
-    # wide the image will be when a given media query is true. Note that every
-    # srcset will have the same associated sizes attribute.
+    # For building the 'sizes' attribute on img and source tags. specifies how wide the image will
+    # be when a given media query is true. Note that every source in a given <picture> tag will have
+    # the same associated sizes attribute.
     sizes: 
       mobile: 100vw
       desktop: 60vw
 
-    # Specifies the properties of the fallback image. These days the only
-    # browser which will use it is IE11, so you can assume a moderately sized
-    # laptop/desktop display on windows.
+    # Specifies the properties of the fallback image. If not specified, will return a 1200 pixel
+    # wide image in the original format.
     fallback:
       width: 800
       format: original
@@ -46,3 +57,9 @@ markup-presets:
       picture: class="awesome" data-volume="11"
       img: class="some-other-class"
 
+  # This is an example of how you would create a 'multiplier' based srcset; useful when an image
+  # will always be the same size on all screens, but you'd like to supply higher resolution images
+  # to devices with higher pixel ratios.
+  icon:
+    base-width: 20
+    pixel_ratios: [1, 1.5, 2]
