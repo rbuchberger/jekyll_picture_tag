@@ -1,0 +1,7 @@
+# Default settings for _config.yml
+picture:
+  source_image_dir: ''
+  generated_image_dir: generated/
+
+url: ''
+baseurl: ''
