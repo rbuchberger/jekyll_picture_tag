@@ -5,17 +5,13 @@ module PictureTag
     class TagParser
       attr_reader :preset_name, :source_images, :html_attributes
       def initialize(raw_params, context)
-        @raw_params = raw_params
         @context = context
+        parse_tag_params(raw_params)
       end
 
       private
 
       def parse_tag_params(raw_params)
-        # Raw argument example example:
-        # [preset] img.jpg [source_key: alt.jpg] [--(element || alt) attr=\"value\"]
-
-        # First, swap out liquid variables and split it on spaces into an array:
         params = liquid_lookup(raw_params).split
 
         # The preset is the first parameter, unless it's a filename.
@@ -24,11 +20,11 @@ module PictureTag
 
         # This is the only hardcoded default value. I'm not making and loading a
         # yml file just for one value.
-        @preset_name ||= 'default' 
+        @preset_name ||= 'default'
 
-        # source_image keys are media queries, values are source images. The first
-        # param specified will be our base image, so it has no associated media
-        # query.
+        # source_image keys are media queries, values are source images. The
+        # first param specified will be our base image, so it has no associated
+        # media query.
         @source_images = { nil => params.shift }
 
         # Check if the next param is a source key, and if so assign it to the
@@ -53,13 +49,18 @@ module PictureTag
       end
 
       def build_html_attributes(params)
-        preset_attributes = preset['attributes'] || {}
-        @html_attributes = preset_attributes.transform_keys(&:to_sym)
-        # Example input:
-        # --picture class="awesome" --alt stumpy --img data-attribute="value"
-        params.split(' --').map(&:strip).each do |param|
-          # ['picture class="awesome"', 'alt stumpy', 'img data-attribute="value"']
+        @html_attributes = {}
 
+        params_array = params.split(' --').map(&:strip)
+
+        # This allows the old syntax to work. If params doesn't begin with a --,
+        # apply the first value as markup to be applied to whichever tag is the
+        # parent.
+        unless params.strip =~ /^--/
+          @html_attributes[:implicit_img] = params_array.shift
+        end
+
+        params_array.each do |param|
           # Splits on spaces, the first word will be our key.
           a = param.split
 
