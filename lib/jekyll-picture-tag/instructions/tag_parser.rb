@@ -3,10 +3,13 @@ module PictureTag
     # This class takes the string given to the jekyll tag, and extracts useful
     # information from it.
     class TagParser
+      attr_reader :preset_name, :source_images, :html_attributes
       def initialize(raw_params, context)
         @raw_params = raw_params
         @context = context
       end
+
+      private
 
       def parse_tag_params(raw_params)
         # Raw argument example example:
