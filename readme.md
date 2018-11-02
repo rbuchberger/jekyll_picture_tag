@@ -3,14 +3,10 @@
 **Easy responsive images for Jekyll.**
 
 Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
-static site. It follows the [picture element](http://picture.responsiveimages.org/) pattern, and
-polyfills older browsers with [Picturefill](https://github.com/scottjehl/picturefill). Jekyll
-Picture Tag automatically creates resized source images, is fully configurable, and covers all use
-cases — including art direction and resolution switching — with a little YAML configuration and a
-simple template tag.
-
-For non-responsive images in Jekyll, take a look at [Jekyll Img
-Tag](https://github.com/robwierzbowski/jekyll-img-tag).
+static site. It follows either the [picture element](http://picture.responsiveimages.org/) pattern,
+or it can create an img tag with a srcset. Jekyll Picture Tag automatically creates resized,
+reformatted source images, is fully configurable, and covers all use cases — including art direction
+and resolution switching — with a little YAML configuration and a simple template tag.
 
 ## Why use Jekyll Picture Tag?
 
@@ -32,32 +28,58 @@ Rupert](https://twitter.com/davatron5000).
 
 Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group. For example:
 
-```ruby group :jekyll_plugins do gem 'jekyll-picture-tag', '~> 0.2.3' end ```
+```ruby 
+group :jekyll_plugins do 
+gem 'jekyll-picture-tag', '~> 0.2.3'
+end 
+```
+
+Add `jekyll-picture-tag` to your `_config.yml` under `plugins:`
+```
+plugins:
+  - jekyll-picture-tag
+
+```
+
+Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
+for image conversions, so it must be installed on your system. If you want to build webp images, you
+will need to install a webp delegate for ImageMagick as well.
+
+Here's how you can check if it's already installed (good chance it is):
+```
+
+imagemagick --version
+
+```
+
+Here's the install process on ubuntu:
+
+```
+sudo apt install imagemagick
+sudo apt install webp
+
+```
+
+Chromebook with chromebrew:
+
+```
+crew install imagemagick
+
+```
+
+(I'd love help adding install instructions for other OSes. If you come across a guide that works
+well, please either submit an issue telling me about it, or add it to these instructions with a pull
+request!)
 
 It also requires an HTML5 Markdown parser. If you're not using one already, install
 [Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
 
-Once you have the requirements installed, copy lib/jekyll-picture-tag.rb into your Jekyll _plugins
-folder.
 
 ## Usage
 
-There are three parts to Jekyll Picture Tag: 
-
-- [Polyfill](#polyfill) [Liquid Tag](#liquid-tag) [Configuration](#configuration)
-
-### Polyfill
-
-For full browser support, the `picture` markup requires Scott Jehl's
-[Picturefill](https://github.com/scottjehl/picturefill) polyfill. Download the library and add the
-script to your site.
-
-The Jekyll Picture Tag requires Picturefill 2.0 and above. If you want to use Picturefill 1.x, you
-must use [Jekyll Picture Tag 0.2.2](https://github.com/robwierzbowski/jekyll-picture-tag/tree/0.2.2)
-
 ### Liquid Tag
 
-``` {% picture [preset] path/to/img.jpg [source_key: path/to/alt/img.jpg] [attribute="value"] %} ```
+``` {% picture [preset] img.jpg [media_query_preset: alt.jpg] [attributes] %} ```
 
 The tag takes a mix of user input and pointers to configuration settings. 
 
@@ -69,17 +91,17 @@ Tells Liquid this is a Jekyll Picture Tag.
 
 Optionally specify a picture [preset](#presets) to use, or leave blank for the `default` preset.
 
-#### path/to/img.jpg
+#### img.jpg
 
-The base image that will be resized for your picture sources. Can be a jpeg, png, or gif.
+The base image that will be resized for your picture sources. Can be a jpeg, png, webp, or gif.
 
-#### source_key: path/to/alt/img.jpg
+#### media_query_preset: alt.jpg
 
-Optionally specify an alternate base image for a specific picture source. This is one of of
-picture's strongest features, often reffered to as the [art direction use
+Optionally specify alternate base images for given media queries (specified in _data/picture.yml).
+This is one of of picture's strongest features, often reffered to as the [art direction use
 case](http://usecases.responsiveimages.org/#art-direction). 
 
-#### attribute="value"
+#### attributes
 
 Optionally specify any number of HTML attributes. These will be merged with any [attributes you've
 set in a preset](#attr). An attribute set in a tag will override the same attribute set in a preset.
@@ -88,26 +110,23 @@ You can set any attribute except for `data-picture`, `data-alt`, `data-src`, and
 
 ### Configuration
 
-Jekyll Picture Tag stores settings in an `picture` key in your _config.yml. It takes a minute to set
-up your presets, but after that generating complex markup with a liquid tag is easy.
+Jekyll Picture Tag stores global settings under the `picture` key in your _config.yml, and presets
+under _data/picture.yml (to avoid cluttering your config.yml)
 
-**Example settings**
+**Example settings under _config.yml**
 
-```yml picture: source: "assets/images/_fullsize" output: "generated" markup: "picture" presets:
-default: ...  main: ...  gallery: ...  ```
-
-**Example preset**
-
-```yml gallery: ppi: [1, 1.5] attr: class: "gallery-pict" itemprop: "image" source_medium: media:
-"(min-width: 40em)" width: "600" height: "300" source_default: width: "300" ```
-
+```yml 
+picture: 
+  source: "assets/images/_fullsize"
+  output: "generated" 
+```
 #### source
 
 To make writing tags easier you can specify a source directory for your assets. Base images in the
 tag will be relative to the `source` directory. 
 
-For example, if `source` is set to `assets/images/_fullsize`, the tag `{% picture
-enishte/portrait.jpg alt="An unsual picture" %}` will look for a file at
+For example, if `source` is set to `assets/images/_fullsize`, the tag 
+`{% picture enishte/portrait.jpg alt="An unsual picture" %}` will look for a file at
 `assets/images/_fullsize/enishte/portrait.jpg`.
 
 Defaults to the site source directory.
@@ -122,78 +141,103 @@ Defaults to `{compiled Jekyll site}/generated`.
 *__NOTE:__ `output` must be in a directory that contains other files or it will be erased. This is a
 [known bug](https://github.com/mojombo/jekyll/issues/1297) in Jekyll.*
 
+**Example _data/picture.yml**
+
+All settings are optional, moderately sensible defaults have been implemented. For an explanation of
+settings, look at the example data file in the examples directory.
+
+```
+
+media_presets:
+  wide_desktop: min-width: 1801px;
+  desktop: max-width: 1800px;
+  wide_tablet: max-width: 1200px;
+  tablet: max-width: 900px;
+  mobile: max-width: 600px;
+
+markup-presets:
+  default:
+    markup: auto
+    formats: [webp, original]
+    width: [200, 400, 800, 1600]
+    widths: 
+      mobile: [200, 400, 600] 
+      tablet: [400, 600, 800]
+    size: 800px
+    sizes: 
+      mobile: 100vw
+      desktop: 60vw
+    fallback:
+      width: 800
+      format: original
+    attributes:
+      picture: class="awesome" data-volume="11"
+      img: class="some-other-class"
+
+  icon:
+    base-width: 20
+    pixel_ratios: [1, 1.5, 2]
+```
+
+#### media_presets
+  Keys are names by which you can refer to the media queries supplied as their respective values.
+  These are used for specifying alternate source images in your liquid tag, and for building the
+  'sizes' attribute within your presets.
+
+#### markup-presets
+  These are the 'presets' from previous versions, with different structure. Each entry is a
+  pre-defined collection of settings to build a given chunk of HTML and its respective images.
+
+  The `default` preset will be used if no preset is specified in the liquid tag, and is required. A
+  preset name can't contain the `.`, `:`, or `/` characters.
+
 #### markup
 
-Choose `picture` to output markup based on the `<picture>` element. Future options may include
-`srcset` but have not yet been implemented.
+* `picture`: output markup based on the `<picture>` element. 
+* `img`: output a single `img` tag with a `srcset` entry.
+* `auto`: Supply an img tag when you have only one srcset, otherwise supply a picture tag.
 
-Choose `interchange` to use markup compatible with [ZURB Foundation's
-Interchange](http://foundation.zurb.com/docs/components/interchange.html).
+#### formats
+Array (yml sequence) of the image formats you'd like to generate, in decreasing order of preference.
+`original` does what you'd expect. To supply webp, you must install an imagemagick webp delegate.
 
-#### presets
+#### fallback
+  Properties of the fallback image; format and width. Default values are 800px and original.
 
-Presets contain reusable settings for a Jekyll Picture Tag. Each is made up of a list of sources,
-and an optional attributes list and ppi array.
+#### width
+  For use when you want a specified size-based srcset (example: `srcset="img.jpg 800w, img2.jpg
+  1600w"`). Array of image widths to generate, in pixels.
 
-For example, a `gallery` preset might configure the picture sources for all responsive gallery
-images on your site, and set a class and some required metadata attributes. If the design changes,
-you can edit the `gallery` preset and the new settings will apply to every tag that references it.
+#### widths
+  If you are using art direction, there is no sense in generating desktop-size files for your
+  mobile image. You can specify sets of widths to associate with given media queries.
 
-The `default` preset will be used if no preset is specified in the liquid tag, and is required. A
-preset name can't contain the `.`, `:`, or `/` characters.
+#### size
+Unconditional image width to give the browser (by way of the html sizes attribute), to be supplied
+either alone or after all conditional sizes.
 
-#### attr
+#### sizes
+Conditional sizes, telling the browser how wide your image will be when a given media query is true.
+
+#### base-width
+For use when you want a multiplier based srcset (example: `srcset="img.jpg 1x, img2.jpg 2x"`). This base-width sets how
+wide the 1x image should be.
+#### pixel_ratios
+Array of images to construct, given in multiples of the base width.
+
+#### attributes
 
 Optionally add a list of html attributes to add to the main picturefill span or picture element when
 the preset is used.
 
-Set the value of standalone attributes to `nil`. You can set any attribute except for
-`data-picture`, `data-alt`, `data-src`, and `data-media`.
-
 An attribute set in a tag will override the same attribute set in a preset.
 
-#### ppi
-
-Optionally add an array of resolutions to automatically generate high ppi images and sources.
-
-For example, the setting `[1, 1.5, 2]` will create sources that switch to 1.5x sized images on
-devices with a minimum resolution of 1.5dppx, and 2x images on devices with a minimum resolution of
-2dppx. For finer grained control omit `ppi` and write resolution sources by hand.
-
-#### sources
-
-The picture tag uses multiple source elements with individual `src` and `media` attributes. The
-first source with a matching `media` attribute will be used. Each `source_*` becomes a source
-element in HTML.
-
-All sources must be prefixed with `source_`. A `source_default` is required. Source names can't
-contain the `.`, `:`, or `/` characters.
-
-Remember to arrange your sources from most restrictive `media` to the least restrictive.
-`source_default` does not accept a `media` key, and should always be last.
-
-#### media
-
-Specify a CSS media query in quotes. Each source except for `source_default` requires a `media`
-attribute. The first source with a matching media attribute will be displayed. You can use any CSS
-media query.
-
-#### width and height
-
-Set a pixel width and height to resize each source's image appropriately. A single value will scale
-proportionately; setting both will scale and crop.
 
 ## Using Liquid variables and JavaScript templating
 
 You can use liquid variables in a picture tag:
 
 ```html {% picture {{ post.featured_image }} alt="our project" %} ```
-
-If you're using a JavaScript templating library such as Handlebars.js, the templating expression's
-opening braces must be escaped with backslashes like `\{\{` or `\{\%`. They'll be output as normal
-`{{ }}` expressions in HTML:
-
-``` {% picture {{ post.featured_image }} alt="\{\{ user_name }}" %}.  ```
 
 ## Managing Generated Images
 
