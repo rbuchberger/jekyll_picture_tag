@@ -48,15 +48,30 @@ will need to install a webp delegate for ImageMagick as well.
 Here's how you can check if it's already installed (good chance it is):
 ```
 
-imagemagick --version
+convert --version
 
 ```
+You should see something like this:
+
+```
+chronos@localhost ~ $ convert --version
+Version: ImageMagick 7.0.8-14 Q16 x86_64 2018-10-31 https://imagemagick.org
+Copyright: © 1999-2018 ImageMagick Studio LLC
+License: https://imagemagick.org/script/license.php
+Features: Cipher DPC HDRI OpenMP 
+Delegates (built-in): bzlib fontconfig freetype jng jp2 jpeg lcms lzma pangocairo png tiff webp xml zlib
+
+```
+
+Note webp under delegates. This is required if you want to generate webp files.
 
 Here's the install process on ubuntu:
 
 ```
 sudo apt install imagemagick
+(...)
 sudo apt install webp
+(...)
 
 ```
 
@@ -67,13 +82,7 @@ crew install imagemagick
 
 ```
 
-(I'd love help adding install instructions for other OSes. If you come across a guide that works
-well, please either submit an issue telling me about it, or add it to these instructions with a pull
-request!)
-
-It also requires an HTML5 Markdown parser. If you're not using one already, install
-[Redcarpet](https://github.com/vmg/redcarpet) and add `markdown: redcarpet` to your _config.yml.
-
+(Help with adding instructions for other OSes is greatly appreciated!)
 
 ## Usage
 
