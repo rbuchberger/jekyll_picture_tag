@@ -33,17 +33,21 @@ module PictureTag
       # Build Configuration
       PictureTag.init(@raw_params, context)
 
-      # This is the class name of whichever output format we are selecting:
-      output_class =
-        'PictureTag::OutputFormats::' +
-        PictureTag.config.output_format.capitalize
-
-      # Create a new instance of the class named in output_class. This syntax
-      # allows us to do it dynamically:
-      markup = Object.const_get(output_class).new
-
       # Return a string:
-      markup.to_s
+      build_markup.to_s
+    end
+
+    private
+
+    # This is the class name of whichever output format we are selecting:
+    def output_class
+      'PictureTag::OutputFormats::' + PictureTag.config.output_format.capitalize
+    end
+
+    # Create a new instance of the class named in output_class. This syntax
+    # allows us to do it dynamically:
+    def build_markup
+      Object.const_get(output_class).new
     end
   end
 end
