@@ -1,7 +1,7 @@
 require 'yaml'
 # High level set of instructions for a given tag instance.
 class InstructionSet
-  attr_reader :config, :preset
+  attr_reader :config, :preset, :params
 
   def initialize(raw_tag_params, context)
     @context = context
