@@ -4,12 +4,9 @@ module PictureTag
     # Used when <picture> is unnecessary.
     class Img
       include PictureTag::OutputFormats::Basics
-      def initialize(instructions)
-        super(instructions)
-      end
 
       def srcset
-        build_srcset(nil, @instructions.preset['formats'].first)
+        build_srcset(nil, PictureTag.config.preset['formats'].first)
       end
 
       def to_s
