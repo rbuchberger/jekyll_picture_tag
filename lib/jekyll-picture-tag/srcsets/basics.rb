@@ -10,13 +10,14 @@ module PictureTag
     module Basics
       attr_reader :media
 
-      def initialize(media:, format:, instructions:)
+      def initialize(media:, format:)
         @media = media # Associated Media Query, can be nil
-        @instructions = instructions
-        @format = @instructions.process_format(format, media) # Output format
+
+        # Output format:
+        @format = PictureTag.config.process_format(format, media)
 
         # Image filename, relative to jekyll_picture_tag default dir:
-        @image = @instructions.source_images[@media]
+        @image = PictureTag.config.source_images[@media]
       end
 
       def to_s
@@ -33,9 +34,7 @@ module PictureTag
 
       def generate_file(width)
         GeneratedImage.new(
-          source_dir: @instructions.source_dir,
           source_file: @image,
-          output_dir: @instructions.dest_dir,
           width: width,
           format: @format
         )

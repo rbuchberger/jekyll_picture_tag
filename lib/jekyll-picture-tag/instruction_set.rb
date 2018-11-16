@@ -23,7 +23,7 @@ class InstructionSet
 
   def build_preset
     if site.data['picture']
-      default_preset.merge site.data['picture'][preset_name]
+      default_preset.merge site.data['picture']['markup_presets'][preset_name]
     else
       default_preset
     end
@@ -62,9 +62,9 @@ class InstructionSet
   end
 
   # Allows us to use 'original' as a format name.
-  def process_format(format, _media)
+  def process_format(format, media)
     if format.casecmp('original').zero?
-      filename = source_images[filename]
+      filename = source_images[media]
       File.extname(filename)[1..-1].downcase # Strip leading period
     else
       format.downcase
@@ -72,7 +72,7 @@ class InstructionSet
   end
 
   def fallback_format
-    process_format(preset['fallback']['format'], source_images[nil])
+    process_format(preset['fallback']['format'], nil)
   end
 
   def fallback_width
@@ -82,6 +82,10 @@ class InstructionSet
   def site
     # Global site data
     @context.registers[:site]
+  end
+
+  def media_preset
+    site.data['picture']['media_presets']
   end
 
   private

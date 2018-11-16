@@ -14,7 +14,7 @@ media_presets:
 
 # Markup presets allow you to group settings together, and select one of them by name in your jekyll
 # tag. All settings are optional.
-markup-presets:
+markup_presets:
   default:
 
     # Optionally specify a markup type. Your current options are 'picture', 'img', or 'auto'

@@ -8,8 +8,11 @@ module PictureTag
     self.config = InstructionSet.new(raw_tag_params, context)
   end
 
-  def self.configure
-    self.configuration ||= InstructionSet.new
-    yield(configuration)
+  def self.preset
+    config.preset
+  end
+
+  def self.media_preset
+    config.media_preset
   end
 end
