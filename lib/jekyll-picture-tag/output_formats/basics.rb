@@ -1,18 +1,15 @@
-# Contains all possible HTML output format options. Auto is considered its
-# own option.
 module PictureTag
+  # Contains all possible HTML output format options. Auto is considered its
+  # own option.
   module OutputFormats
     # Generic functions common to all output formats.
     module Basics
       include ObjectiveElements
-      def initialize(instructions)
-        @instructions = instructions
-      end
 
       private
 
       def build_srcset(media, format)
-        if @instructions.preset['pixel_ratios']
+        if PictureTag.config.preset['pixel_ratios']
           build_pixel_ratio_srcset(media, format)
         else
           build_width_srcset(media, format)
@@ -32,9 +29,9 @@ module PictureTag
       # Checks to ensure file exists.
       def source_image(media_query)
         # Filename relative to source directory:
-        image = @instructions.source_images[media_query]
+        image = PictureTag.config.source_images[media_query]
         # Complete filename:
-        filename = File.join(@instructions.source_dir, image)
+        filename = File.join(PictureTag.config.source_dir, image)
         # Only return image if it exists:
         return image if File.exist?(filename)
 
@@ -44,7 +41,7 @@ module PictureTag
       def generate_file(image, format, width)
         GeneratedImage.new(
           source_image: image,
-          output_dir: @instructions.dest_dir,
+          output_dir: PictureTag.config.dest_dir,
           width: width,
           format: format
         )
@@ -53,15 +50,13 @@ module PictureTag
       # Used for both the fallback image, and for the complete markup.
       def build_base_img
         img = SingleTag.new 'img'
+        config = PictureTag.config
 
-        if @instructions.html_attributes['img']
-          img.attributes << @instructions.html_attributes['img']
-        end
+        img.attributes << config.html_attributes['img']
 
-        img.src = @instructions.build_url(build_fallback_image.name)
-        if @instructions.html_attributes['alt']
-          img.alt = @instructions.html_attributes['alt']
-        end
+        img.src = config.build_url(build_fallback_image.name)
+
+        img.alt = config.html_attributes['alt'] if config.html_attributes['alt']
 
         img
       end
@@ -69,11 +64,11 @@ module PictureTag
       # File, not HTML
       def build_fallback_image
         GeneratedImage.new(
-          source_dir: @instructions.source_dir,
-          source_file: @instructions.source_images[nil],
-          format: @instructions.fallback_format,
-          width: @instructions.fallback_width,
-          output_dir: @instructions.dest_dir
+          source_dir: PictureTag.config.source_dir,
+          source_file: PictureTag.config.source_images[nil],
+          format: PictureTag.config.fallback_format,
+          width: PictureTag.config.fallback_width,
+          output_dir: PictureTag.config.dest_dir
         )
       end
     end
