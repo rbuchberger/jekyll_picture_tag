@@ -13,6 +13,8 @@ class InstructionSet
     )
 
     parse_tag_params raw_tag_params
+
+    keep_files
   end
 
   def build_global_settings
@@ -87,5 +89,12 @@ class InstructionSet
 
   def default_preset
     Yaml.load File.read(__dir__ + '/defaults/preset.yml')
+  end
+
+  # Configure Jekyll to keep our generated files
+  def keep_files
+    return unless site.config['keep_files'].include?(dest_dir)
+
+    PictureTag.config.site.config['keep_files'] << PictureTag.config.dest_dir
   end
 end

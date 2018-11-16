@@ -30,23 +30,17 @@ module PictureTag
     end
 
     def render(context)
-      # Gather settings
-      @instructions = InstructionSet.new(@raw_params, context)
-
-      # Prevent Jekyll from erasing our generated files. This should be an
-      # installation instruction, I'm not a huge fan of modifying site settings
-      # at runtime.
-      unless @instructions.site.config['keep_files'].include?(@instructions.dest_dir)
-        @instructions.site.config['keep_files'] << @instructions.dest_dir
-      end
+      # Build Configuration
+      PictureTag.init(@raw_params, context)
 
       # This is the class name of whichever output format we are selecting:
-      output_class = 'PictureTag::OutputFormats::' + @instructions.output_format.capitalize
-      
+      output_class =
+        'PictureTag::OutputFormats::' +
+        PictureTag.config.output_format.capitalize
 
       # Create a new instance of the class named in output_class. This syntax
       # allows us to do it dynamically:
-      markup = Object.const_get(output_class).new(@instructions)
+      markup = Object.const_get(output_class).new
 
       # Return a string:
       markup.to_s
