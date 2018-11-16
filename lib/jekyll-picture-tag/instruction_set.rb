@@ -46,7 +46,10 @@ class InstructionSet
     # site.dest is the master jekyll destination directory
     # source_dest is the jekyll-picture-tag destination directory. (generated
     # file location setting.)
-    File.join site.dest, @settings[:destination_dir]
+    dir = File.join site.dest, @settings[:destination_dir]
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+
+    dir
   end
 
   def url_prefix
