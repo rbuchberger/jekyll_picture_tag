@@ -95,6 +95,6 @@ class InstructionSet
   def keep_files
     return unless site.config['keep_files'].include?(dest_dir)
 
-    PictureTag.config.site.config['keep_files'] << PictureTag.config.dest_dir
+    site.config['keep_files'] << dest_dir
   end
 end
