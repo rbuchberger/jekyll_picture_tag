@@ -7,9 +7,9 @@ module PictureTag
       def srcsets
         sets = []
 
-        @instructions.preset['formats'].each do |format|
+        PictureTag.config.preset['formats'].each do |format|
           # Source images are defined by their media queries:
-          @instructions.source_images.each_key do |media|
+          PictureTag.config.source_images.each_key do |media|
             sets << build_srcset(media, format)
           end
         end
@@ -22,7 +22,7 @@ module PictureTag
       def build_picture
         DoubleTag.new(
           'picture',
-          # attributes: @instructions.html_attributes['picture'],
+          # attributes: PictureTag.config.html_attributes['picture'],
           content: build_sources << build_base_img
         )
       end
@@ -33,7 +33,7 @@ module PictureTag
 
       def build_source(srcset)
         source = SingleTag.new('source')
-                               # attributes: @instructions.html_attributes['source'])
+        # attributes: PictureTag.config.html_attributes['source'])
 
         # Sizes will be the same for all sources. There's some redundant markup
         # here, but I don't think it's worth the effort to prevent.
