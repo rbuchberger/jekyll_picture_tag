@@ -1,11 +1,6 @@
-# Default settings for _data/picture.yml
-media-presets:
-
-markup-presets:
-  default:
-    markup: auto
-    formats: [original]
-    width: [300, 600, 900, 1200, 1800]
-    fallback:
-      width: 900
-      format: original
+markup: auto
+formats: [original]
+width: [300, 600, 900, 1200, 1800]
+fallback:
+  width: 900
+  format: original

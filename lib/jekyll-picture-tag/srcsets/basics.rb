@@ -14,10 +14,10 @@ module PictureTag
         @media = media # Associated Media Query, can be nil
 
         # Output format:
-        @format = PictureTag.config.process_format(format, media)
+        @format = Utils.process_format(format, media)
 
         # Image filename, relative to jekyll_picture_tag default dir:
-        @image = PictureTag.config.source_images[@media]
+        @image = PictureTag.source_images[@media]
       end
 
       def to_s

@@ -6,7 +6,7 @@ module PictureTag
       include Basics
 
       def to_a
-        PictureTag.config.preset['pixel_ratios'].collect do |p|
+        PictureTag.preset['pixel_ratios'].collect do |p|
           build_srcset_entry(p)
         end
       end
@@ -14,7 +14,7 @@ module PictureTag
       private
 
       def build_srcset_entry(pixel_ratio)
-        width = PictureTag.config.preset['base_width'] * pixel_ratio
+        width = PictureTag.preset['base_width'] * pixel_ratio
         file = generate_file(width)
 
         "#{PictureTag.config.build_url(file.name)} #{pixel_ratio}x"

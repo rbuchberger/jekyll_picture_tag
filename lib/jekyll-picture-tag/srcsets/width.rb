@@ -19,7 +19,7 @@ module PictureTag
           sizes << build_size_entry(media, size)
         end
 
-        sizes << PictureTag.preset[:size]
+        sizes << PictureTag.preset['size']
 
         sizes.join ', '
       end
@@ -27,17 +27,17 @@ module PictureTag
       private
 
       def widths
-        PictureTag.config.widths(@media)
+        PictureTag.widths(@media)
       end
 
       def build_srcset_entry(width)
         file = generate_file(width)
 
-        "#{PictureTag.config.build_url(file.name)} #{file.width}w"
+        "#{PictureTag.build_url(file.name)} #{file.width}w"
       end
 
       def build_size_entry(media, size)
-        "(#{PictureTag.media_preset[media]}) #{size}"
+        "(#{PictureTag.media_presets[media]}) #{size}"
       end
     end
   end

@@ -6,7 +6,7 @@ module PictureTag
       include PictureTag::OutputFormats::Basics
 
       def srcset
-        build_srcset(nil, PictureTag.config.preset['formats'].first)
+        build_srcset(nil, PictureTag.preset['formats'].first)
       end
 
       def to_s

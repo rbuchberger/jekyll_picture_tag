@@ -7,9 +7,9 @@ module PictureTag
       def srcsets
         sets = []
 
-        PictureTag.config.preset['formats'].each do |format|
+        PictureTag.preset['formats'].each do |format|
           # Source images are defined by their media queries:
-          PictureTag.config.source_images.each_key do |media|
+          PictureTag.source_images.each_key do |media|
             sets << build_srcset(media, format)
           end
         end
@@ -22,7 +22,7 @@ module PictureTag
       def build_picture
         DoubleTag.new(
           'picture',
-          # attributes: PictureTag.config.html_attributes['picture'],
+          attributes: PictureTag.html_attributes['picture'],
           content: build_sources << build_base_img
         )
       end

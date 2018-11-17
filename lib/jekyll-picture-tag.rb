@@ -2,10 +2,12 @@ require 'objective_elements'
 require 'pry'
 
 require_relative 'jekyll-picture-tag/generated_image'
-require_relative 'jekyll-picture-tag/instruction_set'
+require_relative 'jekyll-picture-tag/instructions'
 require_relative 'jekyll-picture-tag/output_formats'
 require_relative 'jekyll-picture-tag/srcsets'
+require_relative 'jekyll-picture-tag/utils'
 module PictureTag
+  ROOT_PATH = __dir__
   # Title: Jekyll Picture Tag
   # Authors: Rob Wierzbowski : @robwierzbowski
   #          Justin Reese    : @justinxreese
@@ -30,7 +32,7 @@ module PictureTag
     end
 
     def render(context)
-      # Build Configuration
+      # We can't initialize the tag until we have a context.
       PictureTag.init(@raw_params, context)
 
       # Return a string:
@@ -39,15 +41,15 @@ module PictureTag
 
     private
 
-    # This is the class name of whichever output format we are selecting:
-    def output_class
-      'PictureTag::OutputFormats::' + PictureTag.config.output_format.capitalize
-    end
-
-    # Create a new instance of the class named in output_class. This syntax
-    # allows us to do it dynamically:
+    # Super clever metaprogramming. It's the dynamic version of MyClass.new;
+    # instantiate the class defined in our config.
     def build_markup
       Object.const_get(output_class).new
+    end
+
+    # This is the class name of whichever output format we are selecting:
+    def output_class
+      'PictureTag::OutputFormats::' + PictureTag.preset['markup'].capitalize
     end
   end
 end
