@@ -57,8 +57,9 @@ class GeneratedImage
         height: (width / aspect_ratio).round
       }
     else
-      warn 'Warning:'.yellow + " #{@source_file} is smaller than requested" \
-        ' output. Will use original size instead.'
+      warn 'Warning:'.yellow + " #{@source_file} is #{source_size[:width]}px"\
+        " wide, smaller than requested output (#{width}px)."\
+        ' Will use original size instead.'
 
       source_size
     end

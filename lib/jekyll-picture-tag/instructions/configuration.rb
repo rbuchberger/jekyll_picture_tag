@@ -43,7 +43,12 @@ module PictureTag
         ).merge(
           # _config.yml defined settings
           PictureTag.site.config
-        )
+        ) do |_key, jpt_default, site_value|
+          # Use site configured value, unless it's nil. Without this setting,
+          # default site baseurl (empty string) gets overridden as nil and
+          # breaking things.
+          site_value.nil? ? jpt_default : site_value
+        end
       end
 
       # https://example.com/my-base-path/assets/generated-images/image.jpg
@@ -51,8 +56,8 @@ module PictureTag
       # |     site url     | site path  |    j-p-t dest dir     |
       def url_prefix
         File.join(
-          PictureTag.site.config['url'],
-          PictureTag.site.config['baseurl'],
+          PictureTag.config['url'],
+          PictureTag.config['baseurl'],
           self['picture']['destination_dir']
         )
       end

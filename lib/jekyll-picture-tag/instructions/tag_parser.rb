@@ -14,7 +14,7 @@ module PictureTag
         params = PictureTag::Utils.liquid_lookup(raw_params).split
 
         # First params is the preset name, unless it's a filename.
-        @preset_name = if params.first =~ /[^\s.]+.\w+/
+        @preset_name = if params.first =~ /[\w.\/]+\.\w+/
                          'default'
                        else
                          params.shift

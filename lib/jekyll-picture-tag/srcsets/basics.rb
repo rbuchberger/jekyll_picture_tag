@@ -30,6 +30,32 @@ module PictureTag
         mime_types[@format]
       end
 
+      # Some srcsets have them, for those that don't return nil.
+      def sizes
+        nil
+      end
+
+      # Check our source image size vs requested sizes
+      def check_widths(targets)
+        image_width = FastImage.size(@image).shift
+
+        if targets.any? { |t| t > image_width }
+          warn 'Warning:'.yellow + "#{@image} is #{image_width}px wide,"\
+          " smaller than at least one requested size in the set #{targets}."\
+          '  Will not enlarge.'
+
+          # Clear out the entries which are too big
+          small_targets = targets.delete_if { |t| t >= image_width }
+
+          # Add the largest image.
+          small_targets.push image_width
+
+          small_targets
+        else
+          targets
+        end
+      end
+
       private
 
       def generate_file(width)
