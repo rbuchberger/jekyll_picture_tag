@@ -44,6 +44,9 @@ module PictureTag
       if site.data['picture'] && site.data['picture']['media_presets']
         site.data['picture']['media_presets']
       else
+        warn 'Jekyll Picture Tag Warning:'.yellow +
+             ' You are trying to use media queries, but they are not defined.'\
+             ' Set them under the media_presets: key in  _data/picture.yml'
         {}
       end
     end

@@ -46,9 +46,12 @@ module PictureTag
         if PictureTag.site.data['picture'] &&
            PictureTag.site.data['picture']['markup_presets'] &&
            PictureTag.site.data['picture']['markup_presets'][@name]
+
+          PictureTag.site.data['picture']['markup_presets'][@name]
         else
-          warn "Preset #{@name} not found in _data/picture.yml under "\
-          'markup_presets key. Using default values.'
+          warn 'Jekyll Picture Tag Warning:'.yellow +
+               " Preset \"#{@name}\" not found in _data/picture.yml under "\
+               'markup_presets key. Using default values.'
           {}
         end
       end

@@ -40,9 +40,9 @@ module PictureTag
         image_width = FastImage.size(@image).shift
 
         if targets.any? { |t| t > image_width }
-          warn 'Warning:'.yellow + "#{@image} is #{image_width}px wide,"\
-          " smaller than at least one requested size in the set #{targets}."\
-          '  Will not enlarge.'
+          warn 'Jekyll Picture Tag Warning:'.yellow +
+               " #{@image} is #{image_width}px wide, smaller than at least one"\
+               " requested size in the set #{targets}. Will not enlarge."
 
           # Clear out the entries which are too big
           small_targets = targets.delete_if { |t| t >= image_width }

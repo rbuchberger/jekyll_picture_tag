@@ -8,7 +8,7 @@ class GeneratedImage
   require 'fastimage'
 
   def initialize(source_file:, width:, format:)
-    @source_file = File.join(PictureTag.config.source_dir, source_file)
+    @source_file = grab_source_file(source_file)
     @format = format
 
     # Base name will be prepended to generated filename.
@@ -50,6 +50,16 @@ class GeneratedImage
 
   private
 
+  def grab_source_file(source_file)
+    source_name = File.join(PictureTag.config.source_dir, source_file)
+
+    unless File.exist? source_name
+      raise "Jekyll Picture Tag could not find #{source_name}."
+    end
+
+    source_name
+  end
+
   def build_size(width)
     if width <= source_size[:width]
       {
@@ -57,9 +67,10 @@ class GeneratedImage
         height: (width / aspect_ratio).round
       }
     else
-      warn 'Warning:'.yellow + " #{@source_file} is #{source_size[:width]}px"\
-        " wide, smaller than requested output (#{width}px)."\
-        ' Will use original size instead.'
+      warn 'Jekyll Picture Tag Warning:'.yellow +
+           " #{@source_file} is #{source_size[:width]}px wide, "\
+           "smaller than requested output (#{width}px)."\
+           ' Will use original size instead.'
 
       source_size
     end
