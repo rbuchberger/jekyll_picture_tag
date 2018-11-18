@@ -56,6 +56,11 @@ module PictureTag
         end
       end
 
+      # Generates an HTML attribute
+      def media_attribute
+        "(#{PictureTag.media_presets[@media]})"
+      end
+
       private
 
       def generate_file(width)

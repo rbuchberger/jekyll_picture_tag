@@ -39,7 +39,7 @@ module PictureTag
         # Sizes will be the same for all sources. There's some redundant markup
         # here, but I don't think it's worth the effort to prevent.
         source.sizes = srcset.sizes if srcset.sizes
-        source.media = srcset.media if srcset.media
+        source.media = srcset.media_attribute if srcset.media
         source.type = srcset.mime_type
         source.srcset = srcset.to_s
 
@@ -47,11 +47,15 @@ module PictureTag
       end
 
       def to_s
-        DoubleTag.new(
+        picture = DoubleTag.new(
           'picture',
           attributes: PictureTag.html_attributes['picture'],
           content: build_sources << build_base_img
-        ).to_s
+        )
+
+        picture.attributes << PictureTag.html_attributes['implicit']
+
+        picture.to_s
       end
     end
   end
