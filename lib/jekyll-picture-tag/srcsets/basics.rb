@@ -40,17 +40,7 @@ module PictureTag
         image_width = FastImage.size(@image).shift
 
         if targets.any? { |t| t > image_width }
-          warn 'Jekyll Picture Tag Warning:'.yellow +
-               " #{@image} is #{image_width}px wide, smaller than at least one"\
-               " requested size in the set #{targets}. Will not enlarge."
-
-          # Clear out the entries which are too big
-          small_targets = targets.delete_if { |t| t >= image_width }
-
-          # Add the largest image.
-          small_targets.push image_width
-
-          small_targets
+          handle_small_source(targets, image_width)
         else
           targets
         end
@@ -62,6 +52,20 @@ module PictureTag
       end
 
       private
+
+      def handle_small_source(targets, image_width)
+        warn 'Jekyll Picture Tag Warning:'.yellow +
+             " #{@image} is #{image_width}px wide, smaller than at least one"\
+             " requested size in the set #{targets}. Will not enlarge."
+
+        # Clear out the entries which are too big
+        small_targets = targets.delete_if { |t| t >= image_width }
+
+        # Add the largest image.
+        small_targets.push image_width
+
+        small_targets
+      end
 
       def generate_file(width)
         GeneratedImage.new(

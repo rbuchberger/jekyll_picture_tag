@@ -9,9 +9,10 @@ require_relative 'jekyll-picture-tag/utils'
 module PictureTag
   ROOT_PATH = __dir__
   # Title: Jekyll Picture Tag
-  # Authors: Rob Wierzbowski : @robwierzbowski
-  #          Justin Reese    : @justinxreese
-  #          Welch Canavan   : @xiwcx
+  # Authors: Rob Wierzbowski   : @robwierzbowski
+  #          Justin Reese      : @justinxreese
+  #          Welch Canavan     : @xiwcx
+  #          Robert Buchberger : @celeritas_5k
   #
   # Description: Easy responsive images for Jekyll.
   #
@@ -19,10 +20,13 @@ module PictureTag
   # Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
   # Issues: https://github.com/robwierzbowski/jekyll-picture-tag/issues
   #
-  # Syntax:  {% picture [preset] path/to/img.jpg [source_key: path/to/alt-img.jpg] [attr="value"] %}
-  # Example: {% picture poster.jpg alt="The strange case of responsive images" %}
-  #          {% picture gallery poster.jpg source_small: poster_closeup.jpg
-  #             alt="The strange case of responsive images" class="gal-img" data-selected %}
+  # Syntax:
+  #   {% picture [preset] img.jpg [media_query: alt-img.jpg] [attr="value"] %}
+  #
+  # Example:
+  #   {% picture poster.jpg --alt The strange case of responsive images %}
+  #   {% picture gallery poster.jpg source_small: poster_closeup.jpg
+  #   alt="The strange case of responsive images" class="gal-img" %}
   #
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
@@ -49,7 +53,11 @@ module PictureTag
 
     # This is the class name of whichever output format we are selecting:
     def output_class
-      'PictureTag::OutputFormats::' + PictureTag.preset['markup'].capitalize
+      'PictureTag::OutputFormats::' + titleize(PictureTag.preset['markup'])
+    end
+
+    def titleize(input)
+      input.split('_').map(&:capitalize).join
     end
   end
 end

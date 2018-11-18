@@ -62,10 +62,7 @@ class GeneratedImage
 
   def build_size(width)
     if width <= source_size[:width]
-      {
-        width: width,
-        height: (width / aspect_ratio).round
-      }
+      { width: width, height: (width / aspect_ratio).round }
     else
       warn 'Jekyll Picture Tag Warning:'.yellow +
            " #{@source_file} is #{source_size[:width]}px wide, "\
