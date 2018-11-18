@@ -41,7 +41,11 @@ module PictureTag
     # Media query presets. There are no default values, so extracting it to its
     # own class is overkill.
     def media_presets
-      site.data['picture']['media_presets']
+      if site.data['picture'] && site.data['picture']['media_presets']
+        site.data['picture']['media_presets']
+      else
+        {}
+      end
     end
 
     # The rest of the application doesn't care where the instruction logic
