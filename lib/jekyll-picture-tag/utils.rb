@@ -4,7 +4,7 @@ module PictureTag
   module Utils
     # Configure Jekyll to keep our generated files
     def self.keep_files
-      dest_dir = PictureTag.config['picture']['destination_dir']
+      dest_dir = PictureTag.config['picture']['output']
 
       # Chop a slash off the end, if it's there. Doesn't work otherwise.
       dest_dir = dest_dir[0..-2] if dest_dir =~ %r{/\z}

@@ -22,7 +22,7 @@ class GeneratedImage
 
   def name
     name = File.basename(@source_file, '.*')
-    name << "_#{@size[:width]}by#{@size[:height]}_"
+    name << "-#{@size[:width]}by#{@size[:height]}-"
     name << source_digest
     name << '.' + @format
   end
@@ -32,7 +32,7 @@ class GeneratedImage
   end
 
   def aspect_ratio
-    source_size[:width] / source_size[:height]
+    source_size[:width].to_f / source_size[:height].to_f
   end
 
   def source_size

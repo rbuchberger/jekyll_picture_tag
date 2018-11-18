@@ -14,17 +14,17 @@ module PictureTag
 
       # Returns the set of widths to use for a given media query.
       def widths(media)
-        width_hash = self['widths'] || {}
-        width_hash.default = self['width']
+        width_hash = self['media_widths'] || {}
+        width_hash.default = self['widths']
         width_hash[media]
       end
 
       def fallback_format
-        PictureTag::Utils.process_format(@content['fallback']['format'], nil)
+        PictureTag::Utils.process_format(@content['fallback_format'], nil)
       end
 
       def fallback_width
-        @content['fallback']['width']
+        @content['fallback_width']
       end
 
       private

@@ -1,6 +1,5 @@
 markup: auto
 formats: [original]
-width: [300, 600, 900, 1200, 1800]
-fallback:
-  width: 900
-  format: original
+widths: [200, 400, 600, 800, 1000]
+fallback_width: 800
+fallback_format: original

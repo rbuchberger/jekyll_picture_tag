@@ -1,7 +1,7 @@
 # Default settings for _config.yml
 picture:
-  source_dir: ''
-  destination_dir: generated/
+  source: ''
+  output: generated
 
 url: ''
 baseurl: ''

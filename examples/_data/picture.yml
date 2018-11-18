@@ -26,12 +26,13 @@ markup_presets:
 
     # Must be an array: which image sizes (width in pixels) to generate (unless directed otherwise
     # below). If not specified, will use sensible default values.
-    width: [200, 400, 800, 1600]
+    widths: [200, 400, 800, 1600]
 
     # Alternate source images (for art direction) are associated with media query presets. Here, you
     # can optionally specify a different set of sizes to generate for those alternate source images.
+    # This is how you avoid generating a 1800 pixel wide image that's only shown on narrow screens.
     # Must be arrays.
-    widths: 
+    media_widths: 
       mobile: [200, 400, 600] 
       tablet: [400, 600, 800]
 
@@ -46,13 +47,12 @@ markup_presets:
       mobile: 100vw
       desktop: 60vw
 
-    # Specifies the properties of the fallback image. If not specified, will return a 1200 pixel
+    # Specify the properties of the fallback image. If not specified, will return a 900 pixel
     # wide image in the original format.
-    fallback:
-      width: 800
-      format: original
+    fallback_width: 800
+    fallback_format: original
 
-    # Attributes to be added to each HTML element, by type:
+    # Attributes can be added to each HTML element, by type:
     attributes:
       picture: class="awesome" data-volume="11"
       img: class="some-other-class"
@@ -63,3 +63,4 @@ markup_presets:
   icon:
     base-width: 20
     pixel_ratios: [1, 1.5, 2]
+    fallback-width: 20

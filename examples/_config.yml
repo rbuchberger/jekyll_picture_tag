@@ -1,4 +1,4 @@
 # Sample Jekyll Picture Tag settings
 picture:
-  source_image_dir: assets/images/_fullsize
-  generated_image_dir: generated/
+  source: assets/images/_fullsize
+  output: generated

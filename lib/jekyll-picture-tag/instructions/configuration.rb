@@ -14,14 +14,14 @@ module PictureTag
       # Site.source is the master jekyll source directory
       # Source dir is the jekyll-picture-tag source directory.
       def source_dir
-        File.join PictureTag.site.source, self['picture']['source_dir']
+        File.join PictureTag.site.source, self['picture']['source']
       end
 
       # site.dest is the master jekyll destination directory
       # source_dest is the jekyll-picture-tag destination directory. (generated
       # file location setting.)
       def dest_dir
-        dir = File.join PictureTag.site.dest, self['picture']['destination_dir']
+        dir = File.join PictureTag.site.dest, self['picture']['output']
         FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
         dir
@@ -46,7 +46,7 @@ module PictureTag
         ) do |_key, jpt_default, site_value|
           # Use site configured value, unless it's nil. Without this setting,
           # default site baseurl (empty string) gets overridden as nil and
-          # breaking things.
+          # breaks things.
           site_value.nil? ? jpt_default : site_value
         end
       end
@@ -58,7 +58,7 @@ module PictureTag
         File.join(
           PictureTag.config['url'],
           PictureTag.config['baseurl'],
-          self['picture']['destination_dir']
+          self['picture']['output']
         )
       end
     end
