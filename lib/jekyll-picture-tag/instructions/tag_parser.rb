@@ -27,8 +27,8 @@ module PictureTag
 
         # Check if the next param is a source key, and if so assign it to a
         # local variable.
-        while params.first =~ /(?<media_query>\w+):/
-          params.shift # throw away the param, we already have the key
+        while params.first =~ /[\w\-]+:/
+          media_query = params.shift[0..-2]
           @source_images[media_query] = params.shift
         end
 
