@@ -262,8 +262,8 @@ markup_presets:
     fallback_width: 800
     fallback_format: original
     attributes:
-      picture: class="awesome" data-volume="11"
-      img: class="some-other-class"
+    picture: 'class="awesome" data-volume="11"'
+    img: 'class="some-other-class"'
 
   icon:
     base-width: 20
@@ -300,7 +300,7 @@ webp, you must install an imagemagick webp delegate.
 Default: original
 
 #### fallback_width, fallback_format
-Properties of the fallback image; format and width. 
+Properties of the fallback image, format and width. 
 
 Default: 800px and original.
 
@@ -333,6 +333,10 @@ Array of images to construct, given in multiples of the base width.
 
 Additional HTML attributes you would like to add. An attribute set in a tag will override the same
 attribute set in a preset.
+
+The same arguments are available here as in the liquid tag; element names, `alt:`, and `parent:`.
+They follow the format of (element name): 'attribute="value" attribute2="value2"'. (Unescaped double
+quotes cause problems with yml, so surround the entire string with single quotes.)
 
 ## Liquid variables
 

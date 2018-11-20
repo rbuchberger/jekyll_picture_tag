@@ -54,13 +54,15 @@ markup_presets:
 
     # Attributes can be added to each HTML element, by type:
     attributes:
-      picture: class="awesome" data-volume="11"
-      img: class="some-other-class"
+      picture: 'class="awesome" data-volume="11"'
+      img: 'class="some-other-class"'
 
   # This is an example of how you would create a 'multiplier' based srcset; useful when an image
   # will always be the same size on all screens, but you'd like to supply higher resolution images
   # to devices with higher pixel ratios.
   icon:
-    base-width: 20
+    base_width: 20
     pixel_ratios: [1, 1.5, 2]
-    fallback-width: 20
+    fallback_width: 20
+    attributes:
+      img: 'class="icon"'
