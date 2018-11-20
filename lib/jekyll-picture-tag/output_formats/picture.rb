@@ -53,7 +53,7 @@ module PictureTag
           content: build_sources << build_base_img
         )
 
-        picture.attributes << PictureTag.html_attributes['implicit']
+        picture.attributes << PictureTag.html_attributes['parent']
 
         picture.to_s
       end

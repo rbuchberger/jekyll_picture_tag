@@ -181,12 +181,17 @@ that evaluates true.
 Optionally specify any number of HTML attributes. These will be merged with any [attributes you've
 set in a preset](#attr). An attribute set in a tag will override the same attribute set in a preset.
 
-`--picture class="killer" --alt Alternate Text --source data-volume="11" `
-
 `--(element)` will apply those attributes to the given element. Your options are picture, img, or
 source.
 
 `--alt` is a shortcut for `--img alt="..."`
+
+`--parent` will be applied to the outermost element; useful when using the
+`auto` output format.
+
+Example: 
+
+`--picture class="killer" --alt Alternate Text --source data-volume="11" `
 
 The old syntax is to just dump them at the end:
 

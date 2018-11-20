@@ -41,6 +41,7 @@ module PictureTag
         img = SingleTag.new 'img'
 
         img.attributes << PictureTag.html_attributes['img']
+        img.attributes << PictureTag.html_attributes['implicit']
 
         img.src = PictureTag.build_url(build_fallback_image.name)
 
