@@ -10,8 +10,8 @@ Most importantly, I want to thank Rob Wierzbowski and all the original contribut
 changes in this version are very extensive, its roots are still based in the purpose and approach of
 the original.
 
-Jekyll Picture Tag's last update was in October 2015. While the plugin was stale, its application
-certainly wasn't; doing responsive images correctly is still involved, tedious, and tricky, and
+Jekyll Picture Tag's last update was in October 2015. While the plugin grew stale, its application
+certainly didn't; doing responsive images correctly is still involved, tedious, and tricky, and
 there are still a few people out there building Jekyll sites.
 
 Browser adoption of `picture`, `source`, `srcset`, and `sizes` is far better when this plugin was
@@ -19,10 +19,10 @@ first written. Firefox gained support in May of 2015, Safari in October of 2015,
 of 2017. As of November 2018, all major, modern browsers have support and caniuse reports global
 compatibility at 88%. 
 
-PictureTag's previous versions supported a few javascript solutions, but they didn't support stock
-HTML (which, given browser suppport, was the most appropriate decision at the time). That situation
-has now changed; standard HTML should be considered its core functionality, while maintaining the
-ability to support javascript-based solutions.
+PictureTag's previous versions supported a few javascript solutions, but they didn't do a great job 
+supporting stock HTML (which, given browser suppport, was the most appropriate decision at the time).
+That situation has now changed; standard HTML should be considered its core functionality, while 
+maintaining the ability to support javascript-based solutions in the future.
 
 ## Goals
 
@@ -43,8 +43,8 @@ These were the objectives of the rewrite:
 
 -   In version 1.0.0, only bone-stock HTML markup formats are included. However, the plugin's new
     architecture should simplify the addition of new ones.
--   There are now 2 markup formats to choose from: <source> tags within a <picture>, and a single
-    <img> tag. If markup is set to 'auto', or if it is not set at all, the plugin will automatically
+-   There are now 2 markup formats to choose from: `<source>` tags within a `<picture>`, and a single
+    `<img>` tag. If markup is set to 'auto', or if it is not set at all, the plugin will automatically
     determine which is most appropriate.
 -   There are also 2 srcset formats: one which supplies image width, and another which supplies
     multiples (pixel ratios) of the base size.
@@ -91,7 +91,7 @@ working. If they don't, it's a bug. Please report it.
 The new configuration is described in the readme so I won't document it here, but I will show an old
 config alongside an equivalent new one.
 
-Example old configuration (taken from the old example):
+Example old configuration (taken from the old example config):
 
 ```yml
 # _config.yml
@@ -182,7 +182,8 @@ markup_presets:
     widths: [350, 450, 700]
     attributes:
       picture: 'class="blog-full" itemprop="image"'
-
+      
+  # Full width pictures, multiplier based srcset
   default-ppi:
     markup: picture
     base_width: 350
