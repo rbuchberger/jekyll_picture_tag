@@ -3,7 +3,7 @@
 **Easy responsive images for Jekyll.**
 
 Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
-static site. It generates both <picture> and <img> tags, along with their accompanying attributes
+static site. It generates both `<picture>` and `<img>` tags, along with their accompanying attributes
 and associated images. Jekyll Picture Tag automatically creates resized, reformatted source images,
 is fully configurable, implements sensible defaults, and covers all use cases — including art
 direction and resolution switching — with a little YAML configuration and a simple template tag.
@@ -52,33 +52,22 @@ You should be familiar with these concepts in order to understand how to configu
 
 ## Installation
 
-Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group. For example:
+Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
 
 ```ruby 
 group :jekyll_plugins do 
-gem 'jekyll-picture-tag', '~> 0.2.3'
+  gem 'jekyll-picture-tag', '~> 1.0.0'
 end 
 ```
-
-Add `jekyll-picture-tag` to your `_config.yml` under `plugins:`
-```
-plugins:
-  - jekyll-picture-tag
-
-```
-
-### ImageMagick
 
 Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
 for image conversions, so it must be installed on your system. If you want to build webp images, you
 will need to install a webp delegate for ImageMagick as well.
 
-#### Check if it's installed.
-Good chance it is:
+Verify that you have it by entering the following into a terminal:
 
 ```
-
-$ convert --version
+convert --version
 
 ```
 You should see something like this:
@@ -94,6 +83,9 @@ Delegates (built-in): bzlib fontconfig freetype jng jp2 jpeg lcms lzma pangocair
 ```
 
 Note webp under delegates. This is required if you want to generate webp files.
+
+
+If you get a 'command not found' error, you'll need to install it.
 
 #### Ubuntu installation:
 
@@ -131,7 +123,6 @@ Get this:
 <img 
   src="http://localhost:4000/generated/test-800by450-195f7d.jpg" 
   srcset="
-    http://localhost:4000/generated/test-200by113-195f7d.jpg 200w,
     http://localhost:4000/generated/test-400by225-195f7d.jpg 400w,
     http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
     http://localhost:4000/generated/test-800by450-195f7d.jpg 800w,
@@ -141,11 +132,11 @@ Get this:
 ```
 (Line breaks added for readability. The actual rendered markup will not have them.)
 
-Basically, an img tag, with a srcset consisting of images in the supplied format, resized to be 200,
-400, 600, 800, and 1000px wide, and a fallback src of 800px. Because there is no sizes attribute,
-the browser will assume the image is 100% of the width of the viewport. 
+Basically, an img tag, with a srcset consisting of images in the supplied format, resized to be 400,
+600, 800, and 1000px wide, and a fallback src of 800px. Because there is no sizes attribute, the
+browser will assume the image is 100% of the width of the viewport. 
 
-It's not perfect, but it's a really good start and far better than serving up desktop-size images to
+It's not perfect, but it's a good start and far better than serving up desktop-size images to
 mobile users.
 
 ### Normal Usage
@@ -160,7 +151,7 @@ Tells Liquid this is a Jekyll Picture Tag.
 
 #### preset
 
-Optionally specify a picture [preset](#presets) to use, or leave blank for the `default` preset.
+Optionally specify a markup [preset](#markup_presets) to use, or leave blank for the `default` preset.
 
 #### img.jpg
 
@@ -168,7 +159,7 @@ The base image that will be resized for your picture sources. Can be a jpeg, png
 
 #### media_query_preset: alt.jpg
 
-Optionally specify alternate base images for given media queries (specified in _data/picture.yml).
+Optionally specify alternate base images for given [media queries](media_presets) (specified in _data/picture.yml).
 This is one of of picture's strongest features, often referred to as the [art direction use
 case](http://usecases.responsiveimages.org/#art-direction). 
 
@@ -178,8 +169,8 @@ that evaluates true.
 
 #### attributes
 
-Optionally specify any number of HTML attributes. These will be merged with any [attributes you've
-set in a preset](#attr). An attribute set in a tag will override the same attribute set in a preset.
+Optionally specify any number of HTML attributes. These will be merged with any attributes you've
+set in a preset.
 
 `--(element)` will apply those attributes to the given element. Your options are picture, img, or
 source.
@@ -262,8 +253,8 @@ markup_presets:
     fallback_width: 800
     fallback_format: original
     attributes:
-    picture: 'class="awesome" data-volume="11"'
-    img: 'class="some-other-class"'
+      picture: 'class="awesome" data-volume="11"'
+      img: 'class="some-other-class"'
 
   icon:
     base-width: 20
@@ -308,7 +299,7 @@ Default: 800px and original.
 For use when you want a size-based srcset (example: `srcset="img.jpg 800w, img2.jpg
 1600w"`). Array of image widths to generate, in pixels. 
 
-Default: [200, 400, 600, 800, 1000]
+Default: [400, 600, 800, 1000]
 
 #### media_widths
 If you are using art direction, there is no sense in generating desktop-size files for your
