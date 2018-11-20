@@ -54,7 +54,8 @@ module PictureTag
       # File, not HTML
       def build_fallback_image
         GeneratedImage.new(
-          source_file: PictureTag.source_images[nil],
+          source_file:
+            PictureTag::Utils.grab_source_file(PictureTag.source_images[nil]),
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width
         )

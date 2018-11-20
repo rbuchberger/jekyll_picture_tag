@@ -35,5 +35,16 @@ module PictureTag
         format.downcase
       end
     end
+
+    # Turn a relative filename into an absolute one
+    def self.grab_source_file(source_file)
+      source_name = File.join(PictureTag.config.source_dir, source_file)
+
+      unless File.exist? source_name
+        raise "Jekyll Picture Tag could not find #{source_name}."
+      end
+
+      source_name
+    end
   end
 end

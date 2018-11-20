@@ -52,7 +52,9 @@ module PictureTag
 
       def parse_old_syntax(params)
         # Pull out alt text if it's there.
-        @content['alt'] = alt_text if params =~ /alt="(?<alt_text>\w+)"/
+        if /alt="(?<alt_text>\w+)"/ =~ params
+          @content['alt'] = alt_text
+        end
 
         # Everything else goes to the parent element.
         @content['implicit'] =

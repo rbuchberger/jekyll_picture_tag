@@ -8,6 +8,7 @@ module PictureTag
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
     module Basics
+      require 'fastimage'
       attr_reader :media
 
       def initialize(media:, format:)
@@ -17,7 +18,9 @@ module PictureTag
         @format = Utils.process_format(format, media)
 
         # Image filename, relative to jekyll_picture_tag default dir:
-        @image = PictureTag.source_images[@media]
+        @image = PictureTag::Utils.grab_source_file(
+          PictureTag.source_images[@media]
+        )
       end
 
       def to_s

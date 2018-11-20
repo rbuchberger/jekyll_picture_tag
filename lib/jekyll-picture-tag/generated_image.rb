@@ -1,14 +1,11 @@
 # Generated Image
 # Represents a generated source file.
 class GeneratedImage
-  require 'fileutils'
-  require 'pathname'
-  require 'digest/md5'
   require 'mini_magick'
   require 'fastimage'
 
   def initialize(source_file:, width:, format:)
-    @source_file = grab_source_file(source_file)
+    @source_file = source_file
     @format = format
 
     # Base name will be prepended to generated filename.
@@ -49,16 +46,6 @@ class GeneratedImage
   end
 
   private
-
-  def grab_source_file(source_file)
-    source_name = File.join(PictureTag.config.source_dir, source_file)
-
-    unless File.exist? source_name
-      raise "Jekyll Picture Tag could not find #{source_name}."
-    end
-
-    source_name
-  end
 
   def build_size(width)
     if width <= source_size[:width]

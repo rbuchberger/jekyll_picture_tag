@@ -1,5 +1,4 @@
 require 'objective_elements'
-require 'pry'
 
 require_relative 'jekyll-picture-tag/generated_image'
 require_relative 'jekyll-picture-tag/instructions'
