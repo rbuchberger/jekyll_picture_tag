@@ -10,107 +10,34 @@ direction and resolution switching — with a little YAML configuration and a si
 
 ## Why use Jekyll Picture Tag?
 
-**Performance:** Static sites can be can be blazingly fast. If we're not using responsive images
-we're throwing those performance gains away by serving kilobytes of pixels a user will never see.
+**Performance:** The fastest sites are static sites. If we're not using responsive images we're
+throwing those performance gains away by serving kilobytes of pixels a user will never see.
 
 Browsers start downloading images before they've parsed your CSS, or fired up your javascript. This
 means that, at least for images above the fold, you can't do it with javascript without hurting
 render time.
 
-**Convenience:** Ultimately, to serve responsive images correctly, we must (and without css or
-javascript): 
-* Generate required images (formats * resolutions, for each source image)
-* name those images
-* tell the browser an associated resolution, format, and possibly media query for each image
-* Inform the browser how large the space for that image on the page will be (which also probably has associated media
-queries).
+**Convenience:** Ultimately, to serve responsive images correctly, we must: 
+
+-   Generate, name, and organize the required images (formats \* resolutions, for each source image)
+-   Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
+    should be used.
+-   Inform the browser how large the space for that image on the page will be (which also probably has associated media
+    queries).
 
 It's a lot. It's tedious and complicated. Jekyll Picture Tag automates it.
 
-Write this:
-
-`{% picture test.jpg test2.jpg --alt Alternate Text %}`
-
-With a little configuration, get this (and a pile of images to go along):
-
-```html
-
-<picture class="my-configured-class">
-  <source sizes="(max-width: 1200px) 80vw, 800px" media="(max-width: 600px)" type="image/webp" srcset="http://localhost:4000/generated/test2-200by113-21bb6f.webp 200w, http://localhost:4000/generated/test2-400by225-21bb6f.webp 400w, http://localhost:4000/generated/test2-600by338-21bb6f.webp 600w, http://localhost:4000/generated/test2-800by450-21bb6f.webp 800w, http://localhost:4000/generated/test2-1000by563-21bb6f.webp 1000w">
-  <source sizes="(max-width: 1200px) 80vw, 800px" type="image/webp" srcset="http://localhost:4000/generated/test-200by113-195f7d.webp 200w, http://localhost:4000/generated/test-400by225-195f7d.webp 400w, http://localhost:4000/generated/test-600by338-195f7d.webp 600w, http://localhost:4000/generated/test-800by450-195f7d.webp 800w, http://localhost:4000/generated/test-1000by563-195f7d.webp 1000w">
-  <source sizes="(max-width: 1200px) 80vw, 800px" media="(max-width: 600px)" type="image/jpeg" srcset="http://localhost:4000/generated/test2-200by113-21bb6f.jpg 200w, http://localhost:4000/generated/test2-400by225-21bb6f.jpg 400w, http://localhost:4000/generated/test2-600by338-21bb6f.jpg 600w, http://localhost:4000/generated/test2-800by450-21bb6f.jpg 800w, http://localhost:4000/generated/test2-1000by563-21bb6f.jpg 1000w">
-  <source sizes="(max-width: 1200px) 80vw, 800px" type="image/jpeg" srcset="http://localhost:4000/generated/test-200by113-195f7d.jpg 200w, http://localhost:4000/generated/test-400by225-195f7d.jpg 400w, http://localhost:4000/generated/test-600by338-195f7d.jpg 600w, http://localhost:4000/generated/test-800by450-195f7d.jpg 800w, http://localhost:4000/generated/test-1000by563-195f7d.jpg 1000w">
-  <img src="http://localhost:4000/generated/test-800by450-195f7d.jpg" alt="Alternate Text">
-</picture>
-
-```
 ## Strongly Recommended Reading
 
 Jekyll Picture tag is basically a programmatic implementation of the 
 [MDN Responsive Images guide](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
 You should be familiar with these concepts in order to understand how to configure and use it.
 
-## Installation
+## Quick start / Demo
 
-Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
+All configuration is optional.
 
-```ruby 
-group :jekyll_plugins do 
-  gem 'jekyll-picture-tag', '~> 1.0.0'
-end 
-```
-
-Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
-for image conversions, so it must be installed on your system. If you want to build webp images, you
-will need to install a webp delegate for ImageMagick as well.
-
-Verify that you have it by entering the following into a terminal:
-
-```
-convert --version
-
-```
-You should see something like this:
-
-```
-chronos@localhost ~ $ convert --version
-Version: ImageMagick 7.0.8-14 Q16 x86_64 2018-10-31 https://imagemagick.org
-Copyright: © 1999-2018 ImageMagick Studio LLC
-License: https://imagemagick.org/script/license.php
-Features: Cipher DPC HDRI OpenMP 
-Delegates (built-in): bzlib fontconfig freetype jng jp2 jpeg lcms lzma pangocairo png tiff webp xml zlib
-
-```
-
-Note webp under delegates. This is required if you want to generate webp files.
-
-
-If you get a 'command not found' error, you'll need to install it.
-
-#### Ubuntu installation:
-
-```
-sudo apt install imagemagick
-(...)
-sudo apt install webp
-(...)
-
-```
-
-#### Chromebook installation via [chromebrew](https://github.com/skycocker/chromebrew)
-
-```
-crew install imagemagick
-
-```
-
-**Help with instructions for other OSes is greatly appreciated!**
-
-## Usage
-
-### Quick start
-
-All configuration is optional. Image filenames are relative to the site root directory.
+### Simplest possible use case:
 
 With no configuration, Write this:
 
@@ -119,7 +46,6 @@ With no configuration, Write this:
 Get this:
 
 ```html
-
 <img 
   src="http://localhost:4000/generated/test-800by450-195f7d.jpg" 
   srcset="
@@ -128,20 +54,132 @@ Get this:
     http://localhost:4000/generated/test-800by450-195f7d.jpg 800w,
     http://localhost:4000/generated/test-1000by563-195f7d.jpg 1000w"
 >
+```
+
+(Line breaks added for readability; the actual markup will not have them.)
+
+### More complete example:
+
+With this configuration:
+
+```yml
+
+# _data/picture.yml
+
+media_presets:
+  mobile: 'max-width: 600px'
+
+markup_presets:
+  default:
+    widths: [600, 900, 1200]
+    formats: [webp, original]
+    sizes: 
+      mobile: 80vw
+    size: 500px
 
 ```
-(Line breaks added for readability. The actual rendered markup will not have them.)
 
-Basically, an img tag, with a srcset consisting of images in the supplied format, resized to be 400,
-600, 800, and 1000px wide, and a fallback src of 800px. Because there is no sizes attribute, the
-browser will assume the image is 100% of the width of the viewport. 
+Write this:
 
-It's not perfect, but it's a good start and far better than serving up desktop-size images to
-mobile users.
+`{% picture test.jpg mobile: test2.jpg --alt Alternate Text %}`
 
-### Normal Usage
+Get this:
 
-``` {% picture [preset] img.jpg [media_query_preset: alt.jpg] [attributes] %} ```
+```html
+<!-- Actual output: -->
+<picture>
+  <source sizes="(max-width: 600px) 80vw, 500px" media="(max-width: 600px)" type="image/webp" srcset="http://localhost:4000/generated/test2-600by338-21bb6f.webp 600w, http://localhost:4000/generated/test2-900by506-21bb6f.webp 900w, http://localhost:4000/generated/test2-1200by675-21bb6f.webp 1200w">
+  <source sizes="(max-width: 600px) 80vw, 500px" type="image/webp" srcset="http://localhost:4000/generated/test-600by338-195f7d.webp 600w, http://localhost:4000/generated/test-900by506-195f7d.webp 900w, http://localhost:4000/generated/test-1200by675-195f7d.webp 1200w">
+  <source sizes="(max-width: 600px) 80vw, 500px" media="(max-width: 600px)" type="image/jpeg" srcset="http://localhost:4000/generated/test2-600by338-21bb6f.jpg 600w, http://localhost:4000/generated/test2-900by506-21bb6f.jpg 900w, http://localhost:4000/generated/test2-1200by675-21bb6f.jpg 1200w">
+  <source sizes="(max-width: 600px) 80vw, 500px" type="image/jpeg" srcset="http://localhost:4000/generated/test-600by338-195f7d.jpg 600w, http://localhost:4000/generated/test-900by506-195f7d.jpg 900w, http://localhost:4000/generated/test-1200by675-195f7d.jpg 1200w">
+  <img src="http://localhost:4000/generated/test-800by450-195f7d.jpg" alt="Alternate Text">
+</picture>
+
+<!-- Formatted for readability: -->
+<picture>
+  <source 
+    sizes="(max-width: 600px) 80vw, 500px"
+    media="(max-width: 600px)"
+    type="image/webp"
+    srcset="http://localhost:4000/generated/test2-600by338-21bb6f.webp 600w,
+    http://localhost:4000/generated/test2-900by506-21bb6f.webp 900w,
+    http://localhost:4000/generated/test2-1200by675-21bb6f.webp 1200w">
+
+  <source 
+    sizes="(max-width: 600px) 80vw, 500px"
+    type="image/webp"
+    srcset="http://localhost:4000/generated/test-600by338-195f7d.webp 600w,
+    http://localhost:4000/generated/test-900by506-195f7d.webp 900w,
+    http://localhost:4000/generated/test-1200by675-195f7d.webp 1200w">
+
+  <source 
+    sizes="(max-width: 600px) 80vw, 500px"
+    media="(max-width: 600px)"
+    type="image/jpeg"
+    srcset="http://localhost:4000/generated/test2-600by338-21bb6f.jpg 600w,
+    http://localhost:4000/generated/test2-900by506-21bb6f.jpg 900w,
+    http://localhost:4000/generated/test2-1200by675-21bb6f.jpg 1200w">
+
+  <source 
+    sizes="(max-width: 600px) 80vw, 500px"
+    type="image/jpeg"
+    srcset="http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
+    http://localhost:4000/generated/test-900by506-195f7d.jpg 900w,
+    http://localhost:4000/generated/test-1200by675-195f7d.jpg 1200w">
+
+  <img 
+    src="http://localhost:4000/generated/test-800by450-195f7d.jpg"
+    alt="Alternate Text">
+</picture>
+```
+
+## Installation
+
+Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
+
+```ruby
+group :jekyll_plugins do 
+  gem 'jekyll-picture-tag', '~> 1.0.0'
+end 
+```
+
+Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
+for image conversions, so it must be installed on your system. If you want to build webp images, you
+will need to install a webp delegate for it as well.
+
+Verify that you have it by entering the following into a terminal:
+
+    convert --version
+
+You should see something like this:
+
+    chronos@localhost ~ $ convert --version
+    Version: ImageMagick 7.0.8-14 Q16 x86_64 2018-10-31 https://imagemagick.org
+    Copyright: © 1999-2018 ImageMagick Studio LLC
+    License: https://imagemagick.org/script/license.php
+    Features: Cipher DPC HDRI OpenMP 
+    Delegates (built-in): bzlib fontconfig freetype jng jp2 jpeg lcms lzma pangocairo png tiff webp xml zlib
+
+Note webp under delegates. This is required if you want to generate webp files.
+
+If you get a 'command not found' error, you'll need to install it.
+
+#### Ubuntu installation:
+
+    sudo apt install imagemagick
+    (...)
+    sudo apt install webp
+    (...)
+
+#### Chromebook installation via [chromebrew](https://github.com/skycocker/chromebrew)
+
+    crew install imagemagick
+
+**Help with instructions for other OSes is greatly appreciated!**
+
+## Usage
+
+`{% picture [preset] img.jpg [media_query_preset: alt.jpg] [attributes] %}`
 
 The tag takes a mix of user input and pointers to configuration settings. 
 
@@ -159,7 +197,7 @@ The base image that will be resized for your picture sources. Can be a jpeg, png
 
 #### media_query_preset: alt.jpg
 
-Optionally specify alternate base images for given [media queries](media_presets) (specified in _data/picture.yml).
+Optionally specify alternate base images for given [media queries](media_presets) (specified in \_data/picture.yml).
 This is one of of picture's strongest features, often referred to as the [art direction use
 case](http://usecases.responsiveimages.org/#art-direction). 
 
@@ -182,27 +220,28 @@ source.
 
 Example: 
 
-`--picture class="killer" --alt Alternate Text --source data-volume="11" `
+`--picture class="killer" --alt Alternate Text --source data-volume="11"`
 
 The old syntax is to just dump them at the end:
 
-` alt="alt text" class="super-duper" `
+`{% picture example.jpg alt="alt text" class="super-duper" %}`
 
 This will continue to work. For backwards compatibility, behavior of previous versions is
 maintained: all attributes specified this way are applied to the img tag. 
 
 ### Configuration
 
-Jekyll Picture Tag stores global settings under the `picture` key in your _config.yml, and presets
-under _data/picture.yml (to avoid cluttering your config.yml)
+Jekyll Picture Tag stores global settings under the `picture` key in your \_config.yml, and presets
+under \_data/picture.yml (to avoid cluttering config.yml)
 
-**Example settings under _config.yml**
+**Example settings under \_config.yml**
 
-```yml 
+```yml
 picture: 
   source: "assets/images/_fullsize"
   output: "generated" 
 ```
+
 #### source
 
 To make writing tags easier you can specify a source directory for your assets. Base images in the
@@ -222,52 +261,51 @@ organization of your `source` directory is maintained in the output directory.
 Default: `{compiled Jekyll site}/generated`. `{compiled Jekyll site}` means `_site`, unless you've
 changed it.
 
-**Example _data/picture.yml**
+**Example \_data/picture.yml**
 
 All settings are optional, moderately sensible defaults have been implemented. A template can be
 found in the 
 [example data file](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/examples/_data/picture.yml)
 in the examples directory.
 
-```
+    media_presets:
+      wide_desktop: 'min-width: 1801px'
+      desktop: 'max-width: 1800px'
+      wide_tablet: 'max-width: 1200px'
+      tablet: 'max-width: 900px'
+      mobile: 'max-width: 600px'
 
-media_presets:
-  wide_desktop: 'min-width: 1801px'
-  desktop: 'max-width: 1800px'
-  wide_tablet: 'max-width: 1200px'
-  tablet: 'max-width: 900px'
-  mobile: 'max-width: 600px'
+    markup_presets:
+      default:
+        markup: auto
+        formats: [webp, original]
+        widths: [200, 400, 800, 1600]
+        media_widths: 
+          mobile: [200, 400, 600] 
+          tablet: [400, 600, 800]
+        size: 800px
+        sizes: 
+          mobile: 100vw
+          desktop: 60vw
+        fallback_width: 800
+        fallback_format: original
+        attributes:
+          picture: 'class="awesome" data-volume="11"'
+          img: 'class="some-other-class"'
 
-markup_presets:
-  default:
-    markup: auto
-    formats: [webp, original]
-    widths: [200, 400, 800, 1600]
-    media_widths: 
-      mobile: [200, 400, 600] 
-      tablet: [400, 600, 800]
-    size: 800px
-    sizes: 
-      mobile: 100vw
-      desktop: 60vw
-    fallback_width: 800
-    fallback_format: original
-    attributes:
-      picture: 'class="awesome" data-volume="11"'
-      img: 'class="some-other-class"'
-
-  icon:
-    base-width: 20
-    pixel_ratios: [1, 1.5, 2]
-```
+      icon:
+        base-width: 20
+        pixel_ratios: [1, 1.5, 2]
 
 #### media_presets
+
   Keys are names by which you can refer to the media queries supplied as their respective values.
   These are used for specifying alternate source images in your liquid tag, and for building the
   'sizes' attribute within your presets. Quotes are required around them, because yml gets confused
   by free colons.
 
 #### markup_presets
+
   These are the 'presets' from previous versions, with different structure. Each entry is a
   pre-defined collection of settings to build a given chunk of HTML and its respective images.
 
@@ -276,13 +314,14 @@ markup_presets:
 
 #### markup
 
-* `picture`: output markup based on the `<picture>` element. 
-* `img`: output a single `img` tag with a `srcset` entry.
-* `auto`: Supply an img tag when you have only one srcset, otherwise supply a picture tag.
+-   `picture`: output markup based on the `<picture>` element. 
+-   `img`: output a single `img` tag with a `srcset` entry.
+-   `auto`: Supply an img tag when you have only one srcset, otherwise supply a picture tag.
 
 Default: auto
 
-#### formats 
+#### formats
+
 Array (yml sequence) of the image formats you'd like to generate, in decreasing order
 of preference.  Browsers will render the first format they find and understand, so if you put jpg
 before webp, your webp images will never be used.  `original` does what you'd expect. To supply
@@ -291,33 +330,44 @@ webp, you must install an imagemagick webp delegate.
 Default: original
 
 #### fallback_width, fallback_format
+
 Properties of the fallback image, format and width. 
 
 Default: 800px and original.
 
 #### widths
+
 For use when you want a size-based srcset (example: `srcset="img.jpg 800w, img2.jpg
 1600w"`). Array of image widths to generate, in pixels. 
 
 Default: [400, 600, 800, 1000]
 
 #### media_widths
+
 If you are using art direction, there is no sense in generating desktop-size files for your
 mobile image. You can specify sets of widths to associate with given media queries.
 
 #### sizes
+
 Conditional sizes; these will be used to construct the `sizes=` HTML attribute telling the browser
 how wide your image will be when a given media query is true.
 
+The same sizes attribute is used for every source tag in a given picture tag. This causes some
+redundant markup, specifying sizes for situations when an image will never be rendered, but the
+simplicity of configuration is worth the few extra bytes it costs.
+
 #### size
+
 Unconditional image width to give the browser (by way of the html sizes attribute), to be supplied
 either alone or after all conditional sizes.
 
 #### base-width
+
 For use when you want a multiplier based srcset (example: `srcset="img.jpg 1x, img2.jpg 2x"`). This base-width sets how
 wide the 1x image should be.
 
 #### pixel_ratios
+
 Array of images to construct, given in multiples of the base width.
 
 #### attributes
@@ -333,15 +383,17 @@ quotes cause problems with yml, so surround the entire string with single quotes
 
 You can use liquid variables in a picture tag:
 
-```html {% picture {{ post.featured_image }} alt="our project" %} ```
+`html {% picture {{ post.featured_image }} --alt Our Project %}`
 
 ## Managing Generated Images
 
 Jekyll Picture Tag creates resized versions of your images when you build the site. It uses a smart
 caching system to speed up site compilation, and re-uses images as much as possible. Filenames
 take the following format:
-`(original filename minus extension)_(width)by(height)_(source hash).(format)`
-Source hash is the first 5 characters of the md5 checksum of the source image.
+
+`(original filename without extension)_(width)by(height)_(source hash).(format)`
+
+Source hash is the first 5 characters of an md5 checksum of the source image.
 
 Try to use a base image that is larger than the largest resized image you need. Jekyll Picture Tag
 will warn you if a base image is too small, and won't upscale images.
@@ -377,5 +429,4 @@ round of code improvements.  0.1.0, July 5, 2013: Initial release.
 [BSD-NEW](http://en.wikipedia.org/wiki/BSD_License)
 
 [![Bitdeli
-Badge](https://d2weczhvl823v0.cloudfront.net/robwierzbowski/jekyll-picture-tag/trend.png)](https://bitdeli.com/free
-"Bitdeli Badge")
+Badge](https://d2weczhvl823v0.cloudfront.net/robwierzbowski/jekyll-picture-tag/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
