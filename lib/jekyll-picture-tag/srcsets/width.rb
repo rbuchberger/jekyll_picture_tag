@@ -12,16 +12,17 @@ module PictureTag
       # Sizes html attribute. Since it's intimately related to srcset, we
       # generate it at the same time.
       def sizes
-        return nil unless PictureTag.preset['sizes']
+        preset_sizes = PictureTag.preset['sizes'] || {}
+        preset_size = PictureTag.preset['size']
+        size_set = []
 
-        sizes = []
-        PictureTag.preset['sizes'].each_pair do |media, size|
-          sizes << build_size_entry(media, size)
+        preset_sizes.each_pair do |media, size|
+          size_set << build_size_entry(media, size)
         end
 
-        sizes << PictureTag.preset['size']
+        size_set << preset_size if preset_size
 
-        sizes.join ', '
+        size_set.any? ? size_set.join(', ') : nil
       end
 
       private
