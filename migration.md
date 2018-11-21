@@ -41,22 +41,25 @@ These were the objectives of the rewrite:
 
 ## Changes
 
--   In version 1.0.0, only bone-stock HTML markup formats are included. However, the plugin's new
-    architecture should simplify the addition of new ones.
+-   Picturefill and interchange are gone. In version 1.0.0, only bone-stock HTML markup formats are
+    included. However, the plugin's new architecture should simplify the addition of new ones.
 -   There are now 2 markup formats to choose from: `<source>` tags within a `<picture>`, and a single
     `<img>` tag. If markup is set to 'auto', or if it is not set at all, the plugin will automatically
     determine which is most appropriate.
 -   There are also 2 srcset formats: one which supplies image width, and another which supplies
     multiples (pixel ratios) of the base size.
+-   Source Keys are replaced by media query presets, which can also be used to create the 'sizes'
+    attribute.
 -   Jekyll Picture Tag no longer accepts height arguments, and will no longer crop images for you.
     Aspect ratio will always be maintained.
+-   Multiple image widths are now supported, which will be used to create a corresponding srcset.
+-   Multiple image formats are now possible, including webp.
+-   PictureTag can now generate sizes attributes.
 -   Configuration takes a very different format. It should be simpler to write your config than the
     old version, and migrating to it should not be difficult. Instead of creating individual source
     keys, you supply an array of widths you'd like to construct. You can also supply an array (yaml
     sequence) of formats, including 'original'.
 -   Only global settings are placed in `_config.yml`. Presets are moved to `_data/picture.yml`.
--   Source Keys are replaced by media query presets, which can also be used to create the 'sizes'
-    attribute.
 
 ## Migration
 
@@ -76,22 +79,25 @@ though I'm not sure why you would want to.
 
 There is one instance I can think of where you will have to change your tags:
 
-* You use art direction with more than one different preset.
-* These presets have source keys of the same name.
-* These source keys have different associated media queries.
+-   You use art direction with more than one different preset.
+-   These presets have source keys of the same name.
+-   These source keys have different associated media queries.
 
 If all of the above are true, you will either have to pick one media query which works for both, or
 rename one of them and change it everywhere it's used.
 
-Outside of that situation, or if different markup breaks your CSS, existing tags should keep
-working. If they don't, it's a bug. Please report it.
+Another trouble spot will be CSS; your output markup may change, meaning your CSS selectors may stop
+working.
+
+Outside of those situations, and provided you have created media_presets to match your old source
+keys, your existing tags should keep working. If they don't, it's a bug. Please report it.
 
 ### Configuration
 
 The new configuration is described in the readme so I won't document it here, but I will show an old
 config alongside an equivalent new one.
 
-Example old configuration (taken from the old example config):
+Example old configuration:
 
 ```yml
 # _config.yml
@@ -143,23 +149,19 @@ picture:
       source_default:
         width: 250
         height: 250
-
 ```
 
 Equivalent new configuration:
 
 ```yml
-
 # _config.yml
 
 picture:
   source: assets/images/_fullsize
   output: generated
-
 ```
 
 ```yml
-
 # _data/picture.yml
 
 # Media presets are named media queries. To maintain compatibility with your tags, you need to
@@ -172,10 +174,7 @@ media_presets:
   source_wide: "(min-width: 40em)"
 
 markup_presets:
-  # Note that most of these examples don't include a 'sizes' attribute, which you probably want.
-  #
   # You can't specify both widths and pixel ratios anymore. Choose one.
-  #
   # Full width pictures, width-based srcset
   default:
     markup: picture
@@ -207,5 +206,4 @@ markup_presets:
     media_widths:
       source_wide_hi: [900]
       source_wide: [600]
-
 ```
