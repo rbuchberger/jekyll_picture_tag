@@ -3,10 +3,13 @@
 **Easy responsive images for Jekyll.**
 
 Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
-static site. It generates both `<picture>` and `<img>` tags, along with their accompanying attributes
+static site. It generates a few different output formats, along with their accompanying attributes
 and associated images. Jekyll Picture Tag automatically creates resized, reformatted source images,
 is fully configurable, implements sensible defaults, and covers all use cases — including art
-direction and resolution switching — with a little YAML configuration and a simple template tag.
+direction and resolution switching — with a little YAML configuration and a simple template tag.  It
+can be configured to work with lazy loading libraries (and others) such as
+[lazyload](https://github.com/verlok/lazyload). New markup formats are a breeze to add, if it
+doesn't do what you need!
 
 ## Why use Jekyll Picture Tag?
 
@@ -307,6 +310,13 @@ in the examples directory.
         base-width: 20
         pixel_ratios: [1, 1.5, 2]
 
+      lazy:
+        markup: data_auto
+        formats: [webp, original]
+        widths: [200, 400, 600, 800]
+        attributes: 
+          img: class="lazy"
+
 #### media_presets
 
   Keys are names by which you can refer to the media queries supplied as their respective values.
@@ -324,9 +334,15 @@ in the examples directory.
 
 #### markup
 
+This defines what format the generated HTML will take. 
+
 -   `picture`: output markup based on the `<picture>` element. 
 -   `img`: output a single `img` tag with a `srcset` entry.
 -   `auto`: Supply an img tag when you have only one srcset, otherwise supply a picture tag.
+-   `data_picture`, `data_img`, `data_auto`: Analogous to their counterparts,
+    but instead of `src`, `srcset`, and `sizes`, you get `data-src`, `data-srcset`, and
+    `data-sizes`. This allows you to use javascript for things like [lazy
+    loading](https://github.com/verlok/lazyload)
 
 Default: auto
 
@@ -394,6 +410,16 @@ quotes cause problems with yml, so surround the entire string with single quotes
 You can use liquid variables in a picture tag:
 
 `html {% picture {{ post.featured_image }} --alt Our Project %}`
+
+## Lazy Loading, and other javascript related tomfoolery
+
+Use one of the `data_` output formats and something like
+[LazyLoad](https://github.com/verlok/lazyload). The 'lazy' preset in the example config will work.
+
+## PictureFill
+
+Picturefill version 3 no longer requires special markup for anything newer than IE9. Standard
+outputs should be compatible.
 
 ## Managing Generated Images
 

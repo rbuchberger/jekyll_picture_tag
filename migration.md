@@ -41,11 +41,15 @@ These were the objectives of the rewrite:
 
 ## Changes
 
--   Picturefill and interchange are gone. In version 1.0.0, only bone-stock HTML markup formats are
-    included. However, the plugin's new architecture should simplify the addition of new ones.
--   There are now 2 markup formats to choose from: `<source>` tags within a `<picture>`, and a single
-    `<img>` tag. If markup is set to 'auto', or if it is not set at all, the plugin will automatically
-    determine which is most appropriate.
+-   The default output formats are bone-stock HTML. Picturefill, as of version 3, no longer requires
+    special markup, so it remains compatible. Other javascript image solutions are supported with
+    the `data_` selection of markup formats. Interchange support is removed, though adding it again
+    is not difficult if there is demand for it.
+-   There are now 2 basic markup formats to choose from: `<source>` tags within a `<picture>`, and a
+    single `<img>` tag. If markup is set to 'auto', or if it is not set at all, the plugin will
+    automatically determine which is most appropriate. These formats also have `data_` counterparts
+    (i.e.  `data_auto`), which accomplish the same thing except setting respective data-attributes
+    to allow for lazy loading and such.
 -   There are also 2 srcset formats: one which supplies image width, and another which supplies
     multiples (pixel ratios) of the base size.
 -   Source Keys are replaced by media query presets, which can also be used to create the 'sizes'

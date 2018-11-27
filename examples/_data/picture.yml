@@ -66,3 +66,13 @@ markup_presets:
     fallback_width: 20
     attributes:
       img: 'class="icon"'
+
+  # Here's an example of how you'd configure jekyll-picture-tag to work with something like
+  # lazyload:
+  # https://github.com/verlok/lazyload
+  lazy:
+    markup: data_auto
+    formats: [webp, original]
+    widths: [200, 400, 600, 800]
+    attributes: 
+      img: class="lazy"
