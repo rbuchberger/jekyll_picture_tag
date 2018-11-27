@@ -12,14 +12,15 @@ module PictureTag
         # source_image keys are media queries, values are source images. The
         # first param specified will be our base image, so it has no associated
         # media query. Yes, nil can be a hash key.
-        @source_images = { nil => @params.shift }
+        source_image_names = { nil => @params.shift }
 
-        # Check if the next param is a source key, and if so assign it to a
-        # local variable.
+        # Store source keys which fit a pattern in a hash.
         while @params.first =~ /[\w\-]+:/
           media_query = @params.shift[0..-2]
-          @source_images[media_query] = @params.shift
+          source_image_names[media_query] = @params.shift
         end
+
+        @source_images = build_sources(source_image_names)
 
         # Anything left will be html attributes
         @html_attributes_raw = @params.join(' ')
@@ -34,6 +35,13 @@ module PictureTag
         else
           @params.shift
         end
+      end
+
+      # Takes filenames relative to JPT source directory. SourceImage instances
+      # persist within a tag, allowing us to only perform some expensive File
+      # operations once.
+      def build_sources(names)
+        names.transform_values { |n| PictureTag::SourceImage.new n }
       end
     end
   end

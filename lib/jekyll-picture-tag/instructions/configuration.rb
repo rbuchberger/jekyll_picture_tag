@@ -21,10 +21,7 @@ module PictureTag
       # source_dest is the jekyll-picture-tag destination directory. (generated
       # file location setting.)
       def dest_dir
-        dir = File.join PictureTag.site.dest, self['picture']['output']
-        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
-
-        dir
+        File.join PictureTag.site.dest, self['picture']['output']
       end
 
       # Takes our config into account.

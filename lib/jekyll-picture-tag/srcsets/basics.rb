@@ -9,7 +9,7 @@ module PictureTag
     #   pixels.
     module Basics
       require 'fastimage'
-      attr_reader :media
+      attr_reader :media, :source_image
 
       def initialize(media:, format:)
         @media = media # Associated Media Query, can be nil
@@ -17,10 +17,7 @@ module PictureTag
         # Output format:
         @format = Utils.process_format(format, media)
 
-        # Image filename, relative to jekyll_picture_tag default dir:
-        @image = PictureTag::Utils.grab_source_file(
-          PictureTag.source_images[@media]
-        )
+        @source_image = PictureTag.source_images[@media]
       end
 
       def to_s
@@ -40,10 +37,8 @@ module PictureTag
 
       # Check our source image size vs requested sizes
       def check_widths(targets)
-        image_width = FastImage.size(@image).shift
-
-        if targets.any? { |t| t > image_width }
-          handle_small_source(targets, image_width)
+        if targets.any? { |t| t > @source_image.width }
+          handle_small_source(targets, @source_image.width)
         else
           targets
         end
@@ -58,13 +53,12 @@ module PictureTag
 
       def handle_small_source(targets, image_width)
         warn 'Jekyll Picture Tag Warning:'.yellow +
-             " #{@image} is #{image_width}px wide, smaller than at least one"\
-             " requested size in the set #{targets}. Will not enlarge."
+             " #{@source_image} is #{image_width}px wide, smaller than at" \
+             " least one requested size in the set #{targets}. Will not " \
+             'enlarge.'
 
-        # Clear out the entries which are too big
         small_targets = targets.delete_if { |t| t >= image_width }
 
-        # Add the largest image.
         small_targets.push image_width
 
         small_targets
@@ -72,7 +66,7 @@ module PictureTag
 
       def generate_file(width)
         GeneratedImage.new(
-          source_file: @image,
+          source_file: @source_image,
           width: width,
           format: @format
         )

@@ -29,22 +29,10 @@ module PictureTag
     # Allows us to use 'original' as a format name.
     def self.process_format(format, media)
       if format.casecmp('original').zero?
-        filename = PictureTag.source_images[media]
-        File.extname(filename)[1..-1].downcase # Strip leading period
+        PictureTag.source_images[media].ext
       else
         format.downcase
       end
-    end
-
-    # Turn a relative filename into an absolute one
-    def self.grab_source_file(source_file)
-      source_name = File.join(PictureTag.config.source_dir, source_file)
-
-      unless File.exist? source_name
-        raise "Jekyll Picture Tag could not find #{source_name}."
-      end
-
-      source_name
     end
   end
 end

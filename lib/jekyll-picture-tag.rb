@@ -1,6 +1,7 @@
 require 'objective_elements'
 
 require_relative 'jekyll-picture-tag/generated_image'
+require_relative 'jekyll-picture-tag/source_image'
 require_relative 'jekyll-picture-tag/instructions'
 require_relative 'jekyll-picture-tag/output_formats'
 require_relative 'jekyll-picture-tag/srcsets'

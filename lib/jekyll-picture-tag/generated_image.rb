@@ -5,12 +5,8 @@ class GeneratedImage
   require 'fastimage'
 
   def initialize(source_file:, width:, format:)
-    @source_file = source_file
+    @source = source_file
     @format = format
-
-    # Base name will be prepended to generated filename.
-    # Includes path relative to default sorce folder, and the original filename.
-    @base_name = source_file.delete_suffix File.extname source_file
 
     @size = build_size(width)
 
@@ -18,27 +14,14 @@ class GeneratedImage
   end
 
   def name
-    name = File.basename(@source_file, '.*')
+    name = @source.base_name
     name << "-#{@size[:width]}by#{@size[:height]}-"
-    name << source_digest
+    name << @source.digest
     name << '.' + @format
   end
 
   def absolute_filename
-    File.join(PictureTag.config.dest_dir, name)
-  end
-
-  def aspect_ratio
-    source_size[:width].to_f / source_size[:height].to_f
-  end
-
-  def source_size
-    width, height = FastImage.size(@source_file)
-
-    {
-      width: width,
-      height: height
-    }
+    @absolute_filename ||= File.join(PictureTag.config.dest_dir, name)
   end
 
   def width
@@ -48,25 +31,19 @@ class GeneratedImage
   private
 
   def build_size(width)
-    if width <= source_size[:width]
-      { width: width, height: (width / aspect_ratio).round }
+    if width < @source.width
+      {
+        width: width,
+        height: (width / @source.aspect_ratio).round
+      }
     else
-      warn 'Jekyll Picture Tag Warning:'.yellow +
-           " #{@source_file} is #{source_size[:width]}px wide, "\
-           "smaller than requested output (#{width}px)."\
-           ' Will use original size instead.'
-
-      source_size
+      @source.size
     end
-  end
-
-  def source_digest
-    Digest::MD5.hexdigest(File.read(@source_file))[0..5]
   end
 
   def generate_image
     puts 'Generating new image file: ' + name
-    image = MiniMagick::Image.open(@source_file)
+    image = MiniMagick::Image.open(@source.name)
     # Scale and crop
     image.combine_options do |i|
       i.resize "#{@size[:width]}x#{@size[:height]}^"
@@ -75,6 +52,14 @@ class GeneratedImage
 
     image.format @format
 
+    check_dest_dir
+
     image.write absolute_filename
+  end
+
+  # Make sure destination directory exists
+  def check_dest_dir
+    dir = File.dirname absolute_filename
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
   end
 end

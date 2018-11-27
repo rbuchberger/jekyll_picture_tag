@@ -24,30 +24,18 @@ module PictureTag
         Srcsets::Width.new(media: media, format: format)
       end
 
-      # Checks to ensure file exists.
-      def source_image(media_query)
-        # Filename relative to source directory:
-        image = PictureTag.source_images[media_query]
-        # Complete filename:
-        filename = File.join(PictureTag.source_dir, image)
-        # Only return image if it exists:
-        return image if File.exist?(filename)
-
-        warn "Could not find #{filename}."
-      end
-
       # Used for both the fallback image, and for the complete markup.
       def build_base_img
         img = SingleTag.new 'img'
+        attributes = PictureTag.html_attributes
 
-        img.attributes << PictureTag.html_attributes['img']
-        img.attributes << PictureTag.html_attributes['implicit']
+        img.attributes << attributes['img']
+        img.attributes << attributes['implicit']
 
-        img.src = PictureTag.build_url(build_fallback_image.name)
+        fallback = build_fallback_image
+        img.src = PictureTag.build_url fallback.name
 
-        if PictureTag.html_attributes['alt']
-          img.alt = PictureTag.html_attributes['alt']
-        end
+        img.alt = attributes['alt'] if attributes['alt']
 
         img
       end
@@ -55,8 +43,7 @@ module PictureTag
       # File, not HTML
       def build_fallback_image
         GeneratedImage.new(
-          source_file:
-            PictureTag::Utils.grab_source_file(PictureTag.source_images[nil]),
+          source_file: PictureTag.source_images[nil],
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width
         )
