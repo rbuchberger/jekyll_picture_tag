@@ -41,5 +41,13 @@ module PictureTag
         format.downcase
       end
     end
+
+    # Used for auto markup configuration and such
+    def self.count_srcsets
+      formats = PictureTag.preset['formats'].length
+      source_images = PictureTag.source_images.length
+
+      formats * source_images
+    end
   end
 end

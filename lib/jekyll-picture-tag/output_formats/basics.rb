@@ -33,11 +33,34 @@ module PictureTag
         img.attributes << attributes['implicit']
 
         fallback = build_fallback_image
-        img.src = PictureTag.build_url fallback.name
 
-        img.alt = attributes['alt'] if attributes['alt']
+        add_src(img, fallback.name)
+
+        add_alt(img, attributes['alt'])
 
         img
+      end
+
+      # Extracting these functions to their own methods for easy overriding.
+      # They are destructive.
+      def add_src(element, name)
+        element.src = PictureTag.build_url name
+      end
+
+      def add_srcset(element, srcset)
+        element.srcset = srcset.to_s
+      end
+
+      def add_sizes(element, srcset)
+        element.sizes = srcset.sizes if srcset.sizes
+      end
+
+      def add_alt(element, alt)
+        element.alt = alt if alt
+      end
+
+      def add_media(element, srcset)
+        element.media = srcset.media_attribute if srcset.media
       end
 
       # File, not HTML

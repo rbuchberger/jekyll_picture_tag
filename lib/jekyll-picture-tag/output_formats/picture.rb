@@ -38,10 +38,11 @@ module PictureTag
 
         # Sizes will be the same for all sources. There's some redundant markup
         # here, but I don't think it's worth the effort to prevent.
-        source.sizes = srcset.sizes if srcset.sizes
-        source.media = srcset.media_attribute if srcset.media
+        add_sizes(source, srcset)
+        add_media(source, srcset)
+        add_srcset(source, srcset)
+
         source.type = srcset.mime_type
-        source.srcset = srcset.to_s
 
         source
       end

@@ -11,8 +11,9 @@ module PictureTag
 
       def to_s
         img = build_base_img
-        img.srcset = srcset.to_s
-        img.sizes = srcset.sizes if srcset.sizes
+
+        add_srcset(img, srcset)
+        add_sizes(img, srcset)
 
         img.attributes << PictureTag.html_attributes['parent']
 
