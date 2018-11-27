@@ -240,6 +240,7 @@ under \_data/picture.yml (to avoid cluttering config.yml)
 picture: 
   source: "assets/images/_fullsize"
   output: "generated" 
+  suppress_warnings: false
 ```
 
 #### source
@@ -260,6 +261,15 @@ organization of your `source` directory is maintained in the output directory.
 
 Default: `{compiled Jekyll site}/generated`. `{compiled Jekyll site}` means `_site`, unless you've
 changed it.
+
+#### suppress_warnings
+
+Jekyll Picture Tag will warn you in a few different scenarios, such as when your
+base image is smaller than one of the sizes in your preset. (Note that Jekyll
+Picture Tag will never resize an image to be larger than its source). Set this
+value to `true`, and these warnings will not be shown.
+
+Default: `false`
 
 **Example \_data/picture.yml**
 

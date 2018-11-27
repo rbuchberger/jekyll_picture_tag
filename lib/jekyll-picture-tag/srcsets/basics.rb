@@ -52,10 +52,10 @@ module PictureTag
       private
 
       def handle_small_source(targets, image_width)
-        warn 'Jekyll Picture Tag Warning:'.yellow +
-             " #{@source_image} is #{image_width}px wide, smaller than at" \
-             " least one requested size in the set #{targets}. Will not " \
-             'enlarge.'
+        PictureTag::Utils.warning(
+          " #{@source_image.shortname} is #{image_width}px wide, smaller than" \
+          " at least one size in the set #{targets}. Will not enlarge."
+        )
 
         small_targets = targets.delete_if { |t| t >= image_width }
 

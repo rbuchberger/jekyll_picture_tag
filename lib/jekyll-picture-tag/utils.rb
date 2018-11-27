@@ -14,6 +14,13 @@ module PictureTag
       PictureTag.site.config['keep_files'] << dest_dir
     end
 
+    # Print a warning to the console
+    def self.warning(message)
+      return if PictureTag.config['picture']['suppress_warnings']
+
+      warn 'Jekyll Picture Tag Warning: '.yellow + message
+    end
+
     # Parse a liquid template; allows liquid variables to be included as tag
     # params.
     def self.liquid_lookup(params)

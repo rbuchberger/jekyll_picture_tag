@@ -2,6 +2,7 @@
 picture:
   source: ''
   output: generated
+  suppress_warnings: false
 
 url: ''
 baseurl: ''

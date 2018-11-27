@@ -49,9 +49,11 @@ module PictureTag
 
           PictureTag.site.data['picture']['markup_presets'][@name]
         else
-          warn 'Jekyll Picture Tag Warning:'.yellow +
-               " Preset \"#{@name}\" not found in _data/picture.yml under "\
-               'markup_presets key. Using default values.'
+          PictureTag::Utils.warning(
+            " Preset \"#{@name}\" not found in _data/picture.yml under "\
+            'markup_presets key. Using default values.'
+          )
+
           {}
         end
       end
