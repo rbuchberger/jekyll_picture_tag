@@ -9,22 +9,18 @@ Jekyll Picture Tag makes the latter nearly as simple as the former.
 It's a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
 static site. Jekyll Picture Tag automatically creates resized, reformatted source images,
 is fully configurable, implements sensible defaults, and covers all use cases — including art
-direction and resolution switching — with a little YAML configuration and a simple template tag.  It
-can be configured to work with lazy loading libraries (and others) such as
-[lazyload](https://github.com/verlok/lazyload). It can generate a few different markup formats, and 
-new ones are a breeze to add!
+direction and resolution switching — with a little YAML configuration and a simple template tag. It
+can be configured to work with JavaScript libraries such as [LazyLoad](https://github.com/verlok/lazyload).
 
 ## Why use Jekyll Picture Tag?
 
 **Performance:** The fastest sites are static sites. If we're not using responsive images we're
 throwing those performance gains away by serving kilobytes of pixels a user will never see.
 
-Image downloading starts before the browser has parsed your CSS and JavaScript (lazy-loading aside); this gets them on the
+Image downloading starts before the browser has parsed your CSS and JavaScript; this gets them on the
 page *fast*, but it leads to some ridiculously verbose markup.
 
-**Developer Sanity** 
-
-Ultimately, to serve responsive images correctly, we must: 
+**Developer Sanity:** Ultimately, to serve responsive images correctly, we must: 
 
 -   Generate, name, and organize the required images (formats \* resolutions, for each source image)
 -   Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
@@ -459,7 +455,7 @@ Pull requests are encouraged. With a few exceptions, this plugin is written to f
 default settings.
 
 ## Release History
-1.0.0, Nov 27, 2018: Rewrite from the ground up. See migration.md
+**1.0.0**, Nov 27, 2018: Rewrite from the ground up. See [migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/migration.md).
 
 0.2.2, Aug 2, 2013: Bugfixes.  0.2.1, July 17, 2013: Refactor again, add Liquid parsing.  0.2.0,
 July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.  0.1.1, July 5, 2013: Quick
