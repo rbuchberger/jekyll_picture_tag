@@ -41,10 +41,21 @@ module PictureTag
           # _config.yml defined settings
           PictureTag.site.config
         ) do |_key, jpt_default, site_value|
-          # Use site configured value, unless it's nil. Without this setting,
-          # default site baseurl (empty string) gets overridden as nil and
-          # breaks things.
-          site_value.nil? ? jpt_default : site_value
+          setting_merge(jpt_default, site_value)
+        end
+      end
+
+      def setting_merge(jpt_default, site_value)
+        if site_value.nil?
+          # Jekyll baseurl is nil if not configured, which breaks things.
+          # jpt_default is an empty string, which doesn't.
+          jpt_default
+        elsif site_value.is_a? Hash
+          # We'll merge hashes one level deep. If we need true deep merging,
+          # we'll import a gem or do something recursive.
+          jpt_default.merge site_value
+        else
+          site_value
         end
       end
 
