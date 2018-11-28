@@ -24,7 +24,7 @@ module PictureTag
       # Syntax this function processes:
       # class="old way" --picture class="new way" --alt Here's my alt text
       def parse_params(params)
-        params_array = params.split(' --').map(&:strip)
+        params_array = params.split(/\s+--/).map(&:strip)
 
         # This allows the old tag syntax to work.
         @content['implicit'] = params_array.shift unless params.strip =~ /^--/
