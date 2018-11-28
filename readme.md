@@ -47,6 +47,7 @@ Write this:
 Get this:
 
 ```html
+<!-- Line breaks added for readability, the actual markup will not have them. -->
 <img 
   src="http://localhost:4000/generated/test-800by450-195f7d.jpg" 
   srcset="
@@ -56,8 +57,6 @@ Get this:
     http://localhost:4000/generated/test-1000by563-195f7d.jpg 1000w"
 >
 ```
-
-(Line breaks added for readability; the actual markup will not have them.)
 
 **Here's a more complete example.**
 
@@ -87,16 +86,8 @@ Write this:
 Get this:
 
 ```html
-<!-- Actual output: -->
-<picture>
-  <source sizes="(max-width: 600px) 80vw, 500px" media="(max-width: 600px)" type="image/webp" srcset="http://localhost:4000/generated/test2-600by338-21bb6f.webp 600w, http://localhost:4000/generated/test2-900by506-21bb6f.webp 900w, http://localhost:4000/generated/test2-1200by675-21bb6f.webp 1200w">
-  <source sizes="(max-width: 600px) 80vw, 500px" type="image/webp" srcset="http://localhost:4000/generated/test-600by338-195f7d.webp 600w, http://localhost:4000/generated/test-900by506-195f7d.webp 900w, http://localhost:4000/generated/test-1200by675-195f7d.webp 1200w">
-  <source sizes="(max-width: 600px) 80vw, 500px" media="(max-width: 600px)" type="image/jpeg" srcset="http://localhost:4000/generated/test2-600by338-21bb6f.jpg 600w, http://localhost:4000/generated/test2-900by506-21bb6f.jpg 900w, http://localhost:4000/generated/test2-1200by675-21bb6f.jpg 1200w">
-  <source sizes="(max-width: 600px) 80vw, 500px" type="image/jpeg" srcset="http://localhost:4000/generated/test-600by338-195f7d.jpg 600w, http://localhost:4000/generated/test-900by506-195f7d.jpg 900w, http://localhost:4000/generated/test-1200by675-195f7d.jpg 1200w">
-  <img src="http://localhost:4000/generated/test-800by450-195f7d.jpg" alt="Alternate Text">
-</picture>
 
-<!-- Formatted for readability: -->
+<!-- Formatted for readability -->
 <picture>
   <source 
     sizes="(max-width: 600px) 80vw, 500px"
@@ -146,13 +137,15 @@ group :jekyll_plugins do
 end 
 ```
 
+### ImageMagick
+
 Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
 for image conversions, so it must be installed on your system. If you want to build webp images, you
 will need to install a webp delegate for it as well.
 
 Verify that you have it by entering the following into a terminal:
 
-    convert --version
+    $ convert --version
 
 You should see something like this:
 
@@ -190,12 +183,16 @@ breaks and spaces are interchangeable, the following is perfectly acceptable:
 ```
 {% 
   picture my-preset
-  img.jpg 
-  mobile: alt.jpg 
-  --alt Alt Text
-  --picture class="stumpy"
+    img.jpg 
+    mobile: alt.jpg 
+    --alt Alt Text
+    --picture class="stumpy"
 %}
 ```
+
+Note the tag parser looks for some whitespace followed by `'--'`. If you need to set HTML attribute
+values which begin with `'--'`, either set them first (`class="--my-class"`) or using `_data/picture.yml`
+settings. `class="some-class --some-other-class"` will break things.
 
 #### picture
 
@@ -355,7 +352,7 @@ This defines what format the generated HTML will take.
     `data-sizes`. This allows you to use javascript for things like [lazy
     loading](https://github.com/verlok/lazyload)
 
-Default: auto
+Default: `auto`
 
 #### formats
 
@@ -364,25 +361,26 @@ of preference.  Browsers will render the first format they find and understand, 
 before webp, your webp images will never be used.  `original` does what you'd expect. To supply
 webp, you must install an imagemagick webp delegate.
 
-Default: original
+Default: `original`
 
 #### fallback_width, fallback_format
 
 Properties of the fallback image, format and width. 
 
-Default: 800px and original.
+Default: `original` and `800`
 
 #### widths
 
 For use when you want a size-based srcset (example: `srcset="img.jpg 800w, img2.jpg
 1600w"`). Array of image widths to generate, in pixels. 
 
-Default: [400, 600, 800, 1000]
+Default: `[400, 600, 800, 1000]`
 
 #### media_widths
 
 If you are using art direction, there is no sense in generating desktop-size files for your
-mobile image. You can specify sets of widths to associate with given media queries.
+mobile image. You can specify sets of widths to associate with given media queries. If not
+specified, will use `widths` setting.
 
 #### sizes
 
@@ -391,17 +389,17 @@ how wide your image will be when a given media query is true.
 
 The same sizes attribute is used for every source tag in a given picture tag. This causes some
 redundant markup, specifying sizes for situations when an image will never be rendered, but the
-simplicity of configuration is worth the few extra bytes it costs.
+simplicity of configuration is worth a few extra bytes.
 
 #### size
 
 Unconditional image width to give the browser (by way of the html sizes attribute), to be supplied
 either alone or after all conditional sizes.
 
-#### base-width
+#### base_width
 
-For use when you want a multiplier based srcset (example: `srcset="img.jpg 1x, img2.jpg 2x"`). This base-width sets how
-wide the 1x image should be.
+For use when you want a multiplier based srcset (example: `srcset="img.jpg 1x, img2.jpg 2x"`). This
+base width sets how wide the 1x image should be.
 
 #### pixel_ratios
 
@@ -426,11 +424,13 @@ You can use liquid variables in a picture tag:
 
 Use one of the `data_` output formats and something like
 [LazyLoad](https://github.com/verlok/lazyload). The 'lazy' preset in the example config will work.
+New formats are simple to add, especially if all that changes are attribute names. Submit a feature
+request.
 
 ## PictureFill
 
-Picturefill version 3 no longer requires special markup for anything newer than IE9. Standard
-outputs should be compatible.
+[Picturefill](http://scottjehl.github.io/picturefill/) version 3 no longer requires special markup.
+Standard outputs should be compatible.
 
 ## Managing Generated Images
 
@@ -466,7 +466,8 @@ Pull requests are encouraged. With a few exceptions, this plugin is written to f
 default settings.
 
 ## Release History
-**1.0.0**, Nov 27, 2018: Rewrite from the ground up. See [migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/migration.md).
+**1.0.0**, Nov 27, 2018: Rewrite from the ground up. See 
+[migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/migration.md).
 
 0.2.2, Aug 2, 2013: Bugfixes.  0.2.1, July 17, 2013: Refactor again, add Liquid parsing.  0.2.0,
 July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.  0.1.1, July 5, 2013: Quick
