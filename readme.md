@@ -184,7 +184,18 @@ If you get a 'command not found' error, you'll need to install it.
 
 `{% picture [preset] img.jpg [media_query_preset: alt.jpg] [attributes] %}`
 
-The tag takes a mix of user input and pointers to configuration settings. 
+The tag takes a mix of user input and pointers to configuration settings. Line
+breaks and spaces are interchangeable, the following is perfectly acceptable:
+
+```
+{% 
+  picture my-preset
+  img.jpg 
+  mobile: alt.jpg 
+  --alt Alt Text
+  --picture class="stumpy"
+%}
+```
 
 #### picture
 
