@@ -4,42 +4,7 @@ This document details the changes from previous versions (Everything before 1.0)
 an existing site to the new version. For now it's a markdown document, once this branch is merged
 into master it'll be a wiki page.
 
-## Motivation
-
-Most importantly, I want to thank Rob Wierzbowski and all the original contributors.  While the
-changes in this version are very extensive, its roots are still based in the purpose and approach of
-the original.
-
-Jekyll Picture Tag's last update was in October 2015. While the plugin grew stale, its application
-certainly didn't; doing responsive images correctly is still involved, tedious, and tricky, and
-there are still a few people out there building Jekyll sites.
-
-Browser adoption of `picture`, `source`, `srcset`, and `sizes` is far better when this plugin was
-first written. Firefox gained support in May of 2015, Safari in October of 2015, and Edge in october
-of 2017. As of November 2018, all major, modern browsers have support and caniuse reports global
-compatibility at 88%. 
-
-PictureTag's previous versions supported a few javascript solutions, but they didn't do a great job 
-supporting stock HTML (which, given browser suppport, was the most appropriate decision at the time).
-That situation has now changed; standard HTML should be considered its core functionality, while 
-maintaining the ability to support javascript-based solutions in the future.
-
-## Goals
-
-These were the objectives of the rewrite:
-
--   Do not stray beyond the original objective of this plugin: **Automate the creation of responsive
-    image files and their associated markup.** In other words, do one thing well.
--   Maintain backwards compatibility with the old liquid tag syntax, to save website maintainers from
-    needing changes made across their entire website.
--   Streamline the configuration process, ideally make all configuration optional. In the absence of
-    explicit instruction, do something reasonable.
--   Enable multiple image formats (specifically webp). Generalize and modularize the code which
-    generates output markup formats, to simplify the addition of new ones.
--   Break up the original plugin, which consists of ~250 (very long) lines split across only 3
-    functions, into something more manageable.
-
-## Changes
+## Changes from previous versions:
 
 -   The default output formats are bone-stock HTML. Picturefill, as of version 3, no longer requires
     special markup, so it remains compatible. Other javascript image solutions are supported with
