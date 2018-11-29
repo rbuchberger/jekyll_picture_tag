@@ -467,7 +467,7 @@ default settings.
 
 ## Release History
 **1.0.0**, Nov 27, 2018: Rewrite from the ground up. See 
-[migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/migration.md).
+[migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/migration.md).
 
 0.2.2, Aug 2, 2013: Bugfixes.  0.2.1, July 17, 2013: Refactor again, add Liquid parsing.  0.2.0,
 July 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.  0.1.1, July 5, 2013: Quick
