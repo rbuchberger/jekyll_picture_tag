@@ -1,0 +1,78 @@
+# Example picture presets:
+# TODO: change to EMs, because safari sucks.
+
+# Media presets are used in several places:
+# - To specify alternate source images (for art direction)
+# - To build the 'sizes' attribute
+# - When given alternate source images, specify which sizes to generate.
+media_presets:
+  wide_desktop: 'min-width: 1801px'
+  desktop: 'max-width: 1800px'
+  wide_tablet: 'max-width: 1200px'
+  tablet: 'max-width: 900px'
+  mobile: 'max-width: 600px'
+
+# Markup presets allow you to group settings together, and select one of them by name in your jekyll
+# tag. All settings are optional.
+markup_presets:
+  default:
+
+    # Optionally specify a markup type. Your current options are 'picture', 'img', or 'auto'
+    # (default).
+    markup: auto
+
+    # Must be an array, in order of decreasing preference. Defaults to just 'original'.
+    formats: [webp, original]
+
+    # Must be an array: which image sizes (width in pixels) to generate (unless directed otherwise
+    # below). If not specified, will use sensible default values.
+    widths: [200, 400, 800, 1600]
+
+    # Alternate source images (for art direction) are associated with media query presets. Here, you
+    # can optionally specify a different set of sizes to generate for those alternate source images.
+    # This is how you avoid generating a 1800 pixel wide image that's only shown on narrow screens.
+    # Must be arrays.
+    media_widths: 
+      mobile: [200, 400, 600] 
+      tablet: [400, 600, 800]
+
+    # Specifies an optional, unconditional size attribute. Can be given alone, or if specified in
+    # combination with 'sizes' below, will be given last (when no media queries apply).
+    size: 800px
+
+    # For building the 'sizes' attribute on img and source tags. specifies how wide the image will
+    # be when a given media query is true. Note that every source in a given <picture> tag will have
+    # the same associated sizes attribute.
+    sizes: 
+      mobile: 100vw
+      desktop: 60vw
+
+    # Specify the properties of the fallback image. If not specified, will return a 900 pixel
+    # wide image in the original format.
+    fallback_width: 800
+    fallback_format: original
+
+    # Attributes can be added to each HTML element, by type:
+    attributes:
+      picture: 'class="awesome" data-volume="11"'
+      img: 'class="some-other-class"'
+
+  # This is an example of how you would create a 'multiplier' based srcset; useful when an image
+  # will always be the same size on all screens, but you'd like to supply higher resolution images
+  # to devices with higher pixel ratios.
+  icon:
+    base_width: 20
+    pixel_ratios: [1, 1.5, 2]
+    fallback_width: 20
+    attributes:
+      img: 'class="icon"'
+
+  # Here's an example of how you'd configure jekyll-picture-tag to work with something like
+  # lazyload:
+  # https://github.com/verlok/lazyload
+  lazy:
+    markup: data_auto
+    formats: [webp, original]
+    widths: [200, 400, 600, 800]
+    attributes: 
+      img: class="lazy"
