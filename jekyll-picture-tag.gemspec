@@ -3,9 +3,11 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = 'jekyll-picture-tag'
-  spec.version       = '1.0.0'
-  spec.authors       = ['Robert Wierzbowski', 'Brendan Tobolaski']
-  spec.email         = ['hello@robwierzbowski.com', 'brendan@tobolaski.com']
+  spec.version       = '1.0.1'
+  spec.authors       = ['Robert Wierzbowski', 'Brendan Tobolaski',
+                        'Robert Buchberger']
+  spec.email         = ['hello@robwierzbowski.com', 'brendan@tobolaski.com',
+                        'robert@buchberger.cc']
 
   spec.summary       = 'Easy responsive images for Jekyll.'
   spec.description   = <<-HEREDOC
@@ -21,6 +23,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
+
+  spec.required_ruby_version = '>= 2.5.3'
 
   spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'pry'
