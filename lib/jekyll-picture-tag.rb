@@ -6,6 +6,8 @@ require_relative 'jekyll-picture-tag/instructions'
 require_relative 'jekyll-picture-tag/output_formats'
 require_relative 'jekyll-picture-tag/srcsets'
 require_relative 'jekyll-picture-tag/utils'
+require_relative 'jekyll-picture-tag/version'
+
 module PictureTag
   ROOT_PATH = __dir__
   # Title: Jekyll Picture Tag
@@ -25,12 +27,14 @@ module PictureTag
   #
   # Example:
   #   {% picture poster.jpg --alt The strange case of responsive images %}
-  #   {% picture gallery poster.jpg source_small: poster_closeup.jpg
+  #   {% picture gallery poster.jpg source_small: poster_closeus.jpg
   #   alt="The strange case of responsive images" class="gal-img" %}
   #
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
     def initialize(tag_name, raw_params, tokens)
+      Utils.check_ruby_version
+
       @raw_params = raw_params
       super
     end
