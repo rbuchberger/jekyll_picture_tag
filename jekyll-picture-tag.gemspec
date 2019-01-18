@@ -25,15 +25,15 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
-  spec.required_ruby_version = PictureTag::REQUIRED_RUBY_VERSION
+  spec.required_ruby_version = '~> ' + PictureTag::REQUIRED_RUBY_VERSION
 
   spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 12.3'
 
-  spec.add_dependency 'fastimage', '~> 2.1'
-  spec.add_dependency 'mini_magick', '~> 4.9'
-  spec.add_dependency 'objective_elements', '~> 1.0.0'
+  spec.add_dependency 'fastimage', '~> 2'
+  spec.add_dependency 'mini_magick', '~> 4'
+  spec.add_dependency 'objective_elements', '~> 1'
 
   spec.add_runtime_dependency 'jekyll', '< 4'
 end
