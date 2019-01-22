@@ -76,3 +76,9 @@ markup_presets:
     widths: [200, 400, 600, 800]
     attributes: 
       img: class="lazy"
+
+  # This is an example of how you'd get generated image and a URL, and nothing else.
+  direct:
+    markup: direct_url
+    fallback_format: webp # Default original
+    fallback_width: 600 # Default 800
