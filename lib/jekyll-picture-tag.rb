@@ -33,8 +33,6 @@ module PictureTag
   # See the documentation for full configuration and usage instructions.
   class Picture < Liquid::Tag
     def initialize(tag_name, raw_params, tokens)
-      Utils.check_ruby_version
-
       @raw_params = raw_params
       super
     end
