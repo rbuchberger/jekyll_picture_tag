@@ -47,6 +47,7 @@ class GeneratedImage
     # Scale and crop
     image.combine_options do |i|
       i.resize "#{@size[:width]}x#{@size[:height]}^"
+      i.auto_orient
       i.strip
     end
 
