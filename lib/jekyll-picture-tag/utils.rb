@@ -49,18 +49,5 @@ module PictureTag
 
       formats * source_images
     end
-
-    def self.check_ruby_version
-      required_ruby = Gem::Version.new(REQUIRED_RUBY_VERSION)
-      current_ruby = Gem::Version.new(RUBY_VERSION)
-
-      return unless current_ruby < required_ruby
-
-      raise <<~HEREDOC
-        Jekyll Picture Tag is incompatible with your installed version of Ruby,
-        which is #{RUBY_VERSION}. Please update to #{REQUIRED_RUBY_VERSION} or
-        later.
-      HEREDOC
-    end
   end
 end

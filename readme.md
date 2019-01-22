@@ -3,24 +3,27 @@
 **Easy responsive images for Jekyll.**
 
 It's easy to throw an image on a webpage and call it a day. Doing justice to your users by serving it
-efficiently on all screen sizes is tedious and tricky. Tedious, tricky things should be automated; 
-Jekyll Picture Tag makes the latter nearly as simple as the former.
+efficiently on all screen sizes is tedious and tricky. Tedious, tricky things should be automated.
 
-It's a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
-static site. Jekyll Picture Tag automatically creates resized, reformatted source images,
-is fully configurable, implements sensible defaults, and covers all use cases — including art
-direction and resolution switching — with a little YAML configuration and a simple template tag. It
-can be configured to work with JavaScript libraries such as [LazyLoad](https://github.com/verlok/lazyload).
+Jekyll Picture Tag is a liquid tag that adds responsive images to your
+[Jekyll](http://jekyllrb.com) static site. It automatically creates resized,
+reformatted source images, is fully configurable, implements sensible defaults,
+and solves both the art direction and resolution switching problems, with a
+little YAML configuration and a simple template tag. It can be configured to
+work with JavaScript libraries such as 
+[LazyLoad](https://github.com/verlok/lazyload).
 
 ## Why use Jekyll Picture Tag?
 
 **Performance:** The fastest sites are static sites. If we're not using responsive images we're
 throwing those performance gains away by serving kilobytes of pixels a user will never see.
 
-Image downloading starts before the browser has parsed your CSS and JavaScript; this gets them on the
-page *fast*, but it leads to some ridiculously verbose markup.
+**Design:** Your desktop image may not work well on mobile, regardless of its resolution. We often
+want to do more than just resize images for different screen sizes.
 
-**Developer Sanity:** Ultimately, to serve responsive images correctly, we must: 
+**Developer Sanity:** Image downloading starts before the browser has parsed your CSS and
+JavaScript; this gets them on the page *fast*, but it leads to some ridiculously verbose markup.
+Ultimately, to serve responsive images correctly, we must: 
 
 -   Generate, name, and organize the required images (formats \* resolutions, for each source image)
 -   Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
@@ -30,11 +33,13 @@ page *fast*, but it leads to some ridiculously verbose markup.
 
 It's a lot. It's tedious and complicated. Jekyll Picture Tag automates it.
 
-## Strongly Recommended Reading
+## Required Knowledge
 
-Jekyll Picture tag is basically a programmatic implementation of the 
-[MDN Responsive Images guide](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
-You should be familiar with these concepts in order to understand how to configure and use it.
+Jekyll Picture tag is basically a programmatic implementation of the [MDN Responsive Images
+guide](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
+If you don't know the difference between resolution switching and art direction, stop now and read it
+in detail. Ideally, play around with a basic HTML file, a few test images, and a few different
+browser widths until you understand it.
 
 ## Quick start / Demo
 
@@ -162,16 +167,17 @@ If you get a 'command not found' error, you'll need to install it.
 
 #### Ubuntu installation:
 
-    sudo apt install imagemagick
-    (...)
-    sudo apt install webp
-    (...)
+    sudo apt install imagemagick webp
 
 #### Chromebook installation via [chromebrew](https://github.com/skycocker/chromebrew)
 
     crew install imagemagick
 
-**Help with instructions for other OSes is greatly appreciated!**
+#### Arch and Arch based distros (such as Manjaro): 
+
+    sudo pacman -S imagemagick libwebp 
+
+**Help with instructions for other operating systems is greatly appreciated!**
 
 ## Usage
 
@@ -286,7 +292,7 @@ Default: `false`
 
 All settings are optional, moderately sensible defaults have been implemented. A template can be
 found in the 
-[example data file](https://github.com/robwierzbowski/jekyll-picture-tag/blob/refactor/examples/_data/picture.yml)
+[example data file](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/examples/_data/picture.yml)
 in the examples directory.
 
     media_presets:
@@ -427,7 +433,7 @@ You can use liquid variables in a picture tag:
 Use one of the `data_` output formats and something like
 [LazyLoad](https://github.com/verlok/lazyload). The 'lazy' preset in the example config will work.
 New formats are simple to add, especially if all that changes are attribute names. Submit a feature
-request.
+request or a pull request.
 
 ## PictureFill
 
@@ -468,6 +474,9 @@ Pull requests are encouraged. With a few exceptions, this plugin is written to f
 default settings.
 
 ## Release History
+1.1: Add direct_url markup format, auto-orient images before stripping metadata.
+1.0.2: Fix ruby version specification
+1.0.1: Added ruby version checking for more helpful error messages when running old versions of ruby.
 **1.0.0**, Nov 27, 2018: Rewrite from the ground up. See 
 [migration.md](https://github.com/robwierzbowski/jekyll-picture-tag/blob/master/migration.md).
 
