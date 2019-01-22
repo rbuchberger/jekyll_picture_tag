@@ -351,6 +351,8 @@ This defines what format the generated HTML will take.
     but instead of `src`, `srcset`, and `sizes`, you get `data-src`, `data-srcset`, and
     `data-sizes`. This allows you to use javascript for things like [lazy
     loading](https://github.com/verlok/lazyload)
+*   `direct_url`: Generates an image and returns only its url. Uses `fallback_` properties (width
+    and format)
 
 Default: `auto`
 
