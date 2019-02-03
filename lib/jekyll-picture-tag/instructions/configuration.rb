@@ -63,11 +63,18 @@ module PictureTag
       # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       # |     site url     | site path  |    j-p-t dest dir     |
       def url_prefix
-        File.join(
-          PictureTag.config['url'],
-          PictureTag.config['baseurl'],
-          self['picture']['output']
-        )
+        if self['picture']['relative_url']
+          File.join(
+            PictureTag.config['baseurl'],
+            self['picture']['output']
+          )
+        else
+          File.join(
+            PictureTag.config['url'],
+            PictureTag.config['baseurl'],
+            self['picture']['output']
+          )
+        end
       end
     end
   end
