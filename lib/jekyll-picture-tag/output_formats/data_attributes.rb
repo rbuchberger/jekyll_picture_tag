@@ -1,7 +1,7 @@
 module PictureTag
   module OutputFormats
-    # Allows us to create JavaScript Library friendly markup, for things like
-    # LazyLoad
+    # This is not an output format, it's a module for use in others. It allows
+    # us to create JavaScript Library friendly markup, for things like LazyLoad
     module DataAttributes
       def to_s
         super + build_noscript
@@ -26,7 +26,7 @@ module PictureTag
 
         "\n" + DoubleTag.new(
           'noscript',
-          content: OutputFormats::Img.new
+          content: Img.new.build_base_img
         ).to_s
       end
     end
