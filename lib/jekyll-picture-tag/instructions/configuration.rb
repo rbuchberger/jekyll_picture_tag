@@ -64,7 +64,7 @@ module PictureTag
       # |     site url     | site path  |    j-p-t dest dir     |
       def url_prefix
         File.join(
-          PictureTag.config['url'],
+          self['picture']['relative_url'] ? '' : PictureTag.config['url'],
           PictureTag.config['baseurl'],
           self['picture']['output']
         )
