@@ -3,6 +3,10 @@ module PictureTag
     # Allows us to create JavaScript Library friendly markup, for things like
     # LazyLoad
     module DataAttributes
+      def to_s
+        super + build_noscript
+      end
+
       private
 
       def add_src(element, name)
@@ -15,6 +19,15 @@ module PictureTag
 
       def add_sizes(element, srcset)
         element.attributes << { 'data-sizes' => srcset.sizes } if srcset.sizes
+      end
+
+      def build_noscript
+        return '' unless PictureTag.preset['noscript']
+
+        "\n" + DoubleTag.new(
+          'noscript',
+          content: OutputFormats::Img.new
+        ).to_s
       end
     end
   end
