@@ -258,6 +258,7 @@ picture:
   source: "assets/images/_fullsize"
   output: "generated" 
   suppress_warnings: false
+  relative_url: true
 ```
 
 #### source
@@ -287,6 +288,14 @@ Picture Tag will never resize an image to be larger than its source). Set this
 value to `true`, and these warnings will not be shown.
 
 Default: `false`
+
+#### relative_url
+
+Whether to use relative (`/generated/test-250by141-195f7d.jpg`) or absolute
+(`http://localhost:4000/generated/test-250by141-195f7d.jpg`) urls in your src
+and srcset attributes.
+
+Default: `true`
 
 **Example \_data/picture.yml**
 
