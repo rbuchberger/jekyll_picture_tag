@@ -74,6 +74,7 @@ markup_presets:
     markup: data_auto
     formats: [webp, original]
     widths: [200, 400, 600, 800]
+    noscript: true # Default: false
     attributes: 
       img: class="lazy"
 

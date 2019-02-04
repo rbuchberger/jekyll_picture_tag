@@ -337,6 +337,7 @@ in the examples directory.
         markup: data_auto
         formats: [webp, original]
         widths: [200, 400, 600, 800]
+        noscript: true
         attributes: 
           img: class="lazy"
 
@@ -430,6 +431,14 @@ attribute set in a preset.
 The same arguments are available here as in the liquid tag; element names, `alt:`, and `parent:`.
 They follow the format of (element name): 'attribute="value" attribute2="value2"'. (Unescaped double
 quotes cause problems with yml, so surround the entire string with single quotes.)
+
+#### noscript
+
+
+For use with the `data_` output formats. Whether or not to include the `img` output format within a
+`<noscript>` tag after the standard html. Example:
+
+Boolean value, default: `false`
 
 ## Liquid variables
 
