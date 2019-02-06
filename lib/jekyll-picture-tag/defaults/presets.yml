@@ -3,3 +3,4 @@ formats: [original]
 widths: [400, 600, 800, 1000]
 fallback_width: 800
 fallback_format: original
+noscript: false

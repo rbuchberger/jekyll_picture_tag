@@ -6,6 +6,23 @@ module PictureTag
     module Basics
       include ObjectiveElements
 
+      # Used for both the fallback image, and for the complete markup.
+      def build_base_img
+        img = SingleTag.new 'img'
+        attributes = PictureTag.html_attributes
+
+        img.attributes << attributes['img']
+        img.attributes << attributes['implicit']
+
+        fallback = build_fallback_image
+
+        add_src(img, fallback.name)
+
+        add_alt(img, attributes['alt'])
+
+        img
+      end
+
       private
 
       def build_srcset(media, format)
@@ -22,23 +39,6 @@ module PictureTag
 
       def build_width_srcset(media, format)
         Srcsets::Width.new(media: media, format: format)
-      end
-
-      # Used for both the fallback image, and for the complete markup.
-      def build_base_img
-        img = SingleTag.new 'img'
-        attributes = PictureTag.html_attributes
-
-        img.attributes << attributes['img']
-        img.attributes << attributes['implicit']
-
-        fallback = build_fallback_image
-
-        add_src(img, fallback.name)
-
-        add_alt(img, attributes['alt'])
-
-        img
       end
 
       # Extracting these functions to their own methods for easy overriding.
