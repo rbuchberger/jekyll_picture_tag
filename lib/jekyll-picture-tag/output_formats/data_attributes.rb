@@ -24,7 +24,7 @@ module PictureTag
       def build_noscript
         return '' unless PictureTag.preset['noscript']
 
-        "\n" + DoubleTag.new(
+        DoubleTag.new(
           'noscript',
           content: Img.new.build_base_img
         ).to_s
