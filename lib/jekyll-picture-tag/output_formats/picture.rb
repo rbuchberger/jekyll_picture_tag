@@ -47,16 +47,19 @@ module PictureTag
         source
       end
 
-      def to_s
+      def base_markup
         picture = DoubleTag.new(
           'picture',
           attributes: PictureTag.html_attributes['picture'],
-          content: build_sources << build_base_img
+          content: build_sources << build_base_img,
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
         )
 
         picture.attributes << PictureTag.html_attributes['parent']
 
-        picture.to_s
+        picture
       end
     end
   end

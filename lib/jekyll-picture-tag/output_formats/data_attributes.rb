@@ -3,8 +3,8 @@ module PictureTag
     # This is not an output format, it's a module for use in others. It allows
     # us to create JavaScript Library friendly markup, for things like LazyLoad
     module DataAttributes
-      def to_s
-        super + build_noscript
+      def base_markup
+        build_noscript(super)
       end
 
       private
@@ -21,13 +21,23 @@ module PictureTag
         element.attributes << { 'data-sizes' => srcset.sizes } if srcset.sizes
       end
 
-      def build_noscript
-        return '' unless PictureTag.preset['noscript']
+      def build_noscript(base_content)
+        return base_content unless PictureTag.preset['noscript']
 
-        DoubleTag.new(
+        noscript = DoubleTag.new(
           'noscript',
-          content: Img.new.build_base_img
+          content: Img.new.build_base_img,
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
         ).to_s
+
+        ShelfTag.new(
+          content: [base_content, noscript],
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
+        )
       end
     end
   end

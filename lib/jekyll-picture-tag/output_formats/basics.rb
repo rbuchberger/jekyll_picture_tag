@@ -23,7 +23,18 @@ module PictureTag
         img
       end
 
+      def to_s
+        wrap(base_markup).to_s
+      end
+
       private
+
+      # Handles various wrappers around basic markup
+      def wrap(markup)
+        markup = nomarkdown_wrapper(markup.to_s) if PictureTag.nomarkdown?
+
+        markup
+      end
 
       def build_srcset(media, format)
         if PictureTag.preset['pixel_ratios']
@@ -70,6 +81,15 @@ module PictureTag
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width
         )
+      end
+
+      # Stops kramdown from molesting our output
+      # Must be given a string.
+      #
+      # Kramdown is super picky about the {::nomarkdown} extension-- we have to
+      # strip line breaks or nothing works.
+      def nomarkdown_wrapper(content)
+        "{::nomarkdown}#{content.delete("\n")}{:/nomarkdown}"
       end
     end
   end
