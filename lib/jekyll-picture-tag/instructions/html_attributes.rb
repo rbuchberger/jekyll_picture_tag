@@ -9,6 +9,7 @@ module PictureTag
         @content = load_preset
 
         parse_params(params) if params
+        handle_url
       end
 
       def [](key)
@@ -39,6 +40,19 @@ module PictureTag
           # Supplied tag arguments will overwrite (not append) configured values
           @content[a.shift] = a.join(' ')
         end
+      end
+      # Handles anchor tag destination. Can come from 2 places in 2 formats:
+      # Can come from defaults, preset, or tag
+      # Default is false. Preset can specify either true or false
+      # Tag params can be a URL
+
+      # picture test.jpg --url http://example.com
+      def handle_url
+        return unless PictureTag.preset['link_source'] && !self['link']
+
+        @content['link'] = PictureTag.build_source_url(
+          Utils.biggest_source.shortname
+        )
       end
     end
   end
