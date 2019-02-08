@@ -51,7 +51,7 @@ module PictureTag
     end
 
     # Returns whether or not the current page is a markdown file.
-    def markdown_page?
+    def self.markdown_page?
       ext = File.extname(PictureTag.page['name'])
 
       ext.casecmp('.md').zero? || ext.casecmp('.markdown').zero?
