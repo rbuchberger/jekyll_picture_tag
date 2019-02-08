@@ -72,6 +72,10 @@ module PictureTag
       @config.build_url(filename)
     end
 
+    def build_source_url(filename)
+      @config.build_source_url(filename)
+    end
+
     def nomarkdown?
       @config.nomarkdown?
     end
