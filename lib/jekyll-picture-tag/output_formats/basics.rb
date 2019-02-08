@@ -71,6 +71,11 @@ module PictureTag
           width: PictureTag.fallback_width
         )
       end
+
+      # Stops kramdown from molesting our output
+      def nomarkdown_wrapper(content)
+        "{::nomarkdown}#{content}{:/}"
+      end
     end
   end
 end
