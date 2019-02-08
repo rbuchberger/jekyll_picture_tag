@@ -51,7 +51,10 @@ module PictureTag
         picture = DoubleTag.new(
           'picture',
           attributes: PictureTag.html_attributes['picture'],
-          content: build_sources << build_base_img
+          content: build_sources << build_base_img,
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
         )
 
         picture.attributes << PictureTag.html_attributes['parent']

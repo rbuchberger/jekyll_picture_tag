@@ -26,11 +26,17 @@ module PictureTag
 
         noscript = DoubleTag.new(
           'noscript',
-          content: Img.new.build_base_img
+          content: Img.new.build_base_img,
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
         ).to_s
 
         ShelfTag.new(
-          content: [base_content, noscript]
+          content: [base_content, noscript],
+
+          # Markdown fix requires removal of line breaks:
+          oneline: PictureTag.nomarkdown?
         )
       end
     end
