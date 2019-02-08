@@ -43,8 +43,8 @@ module PictureTag
       @context.registers[:page]
     end
 
-    # Media query presets. There are no default values, so extracting it to its
-    # own class is overkill.
+    # Media query presets. It's really just a hash, and there are no default
+    # values, so extracting it to its own class is overkill.
     def media_presets
       site.data.dig('picture', 'media_presets') || {}
     end
@@ -70,6 +70,10 @@ module PictureTag
 
     def build_url(filename)
       @config.build_url(filename)
+    end
+
+    def nomarkdown?
+      @config.nomarkdown?
     end
 
     # Preset forwarding
