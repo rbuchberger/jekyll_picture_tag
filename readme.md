@@ -259,6 +259,7 @@ picture:
   output: "generated" 
   suppress_warnings: false
   relative_url: true
+  nomarkdown: true
 ```
 
 #### source
@@ -282,18 +283,33 @@ changed it.
 
 #### suppress_warnings
 
-Jekyll Picture Tag will warn you in a few different scenarios, such as when your
-base image is smaller than one of the sizes in your preset. (Note that Jekyll
-Picture Tag will never resize an image to be larger than its source). Set this
-value to `true`, and these warnings will not be shown.
+Jekyll Picture Tag will warn you in a few different scenarios, such as when your base image is
+smaller than one of the sizes in your preset. (Note that Jekyll Picture Tag will never resize an
+image to be larger than its source). Set this value to `true`, and these warnings will not be shown.
 
 Default: `false`
 
 #### relative_url
 
 Whether to use relative (`/generated/test-250by141-195f7d.jpg`) or absolute
-(`http://localhost:4000/generated/test-250by141-195f7d.jpg`) urls in your src
-and srcset attributes.
+(`http://localhost:4000/generated/test-250by141-195f7d.jpg`) urls in your src and srcset attributes.
+
+Default: `true`
+
+#### nomarkdown
+
+Whether or not to surround j-p-t's output with a `{::nomarkdown}..{:/nomarkdown}` block when called
+from within a markdown file. This one requires some explanation:
+
+Under certain circumstances, Kramdown (Jekyll's default markdown parser) will get confused by HTML
+and will subsequently butcher it. One instance is when you wrap a block level element (such as a
+`<picture>`) within a span level element (such as an anchor tag). This flag will fix that issue.
+
+Kramdown is finicky about when it will or won't listen to the `nomarkdown` option, depending on the
+line breaks before, after, and within the block. The most general solution I've found is to remove
+all line breaks from j-p-t's output, giving the whole shebang on one line. It makes for ugly markup,
+but it's pretty much only ever seen by the browser anyway. If you know a better way to accomplish
+this, I'm all ears!
 
 Default: `true`
 
