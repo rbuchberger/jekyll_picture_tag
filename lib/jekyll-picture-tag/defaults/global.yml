@@ -4,6 +4,7 @@ picture:
   output: generated
   suppress_warnings: false
   relative_url: true
+  nomarkdown: true
 
 url: ''
 baseurl: ''
