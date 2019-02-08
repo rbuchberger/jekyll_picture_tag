@@ -29,6 +29,10 @@ module PictureTag
         File.join url_prefix, filename
       end
 
+      def nomarkdown?
+        Utils.markdown_page? && self['picture']['nomarkdown']
+      end
+
       private
 
       def build_config
