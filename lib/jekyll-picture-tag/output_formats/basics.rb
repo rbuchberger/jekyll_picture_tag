@@ -23,6 +23,10 @@ module PictureTag
         img
       end
 
+      def to_s
+        build_markup.to_s
+      end
+
       private
 
       def build_srcset(media, format)

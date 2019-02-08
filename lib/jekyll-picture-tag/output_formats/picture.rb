@@ -47,7 +47,7 @@ module PictureTag
         source
       end
 
-      def to_s
+      def build_markup
         picture = DoubleTag.new(
           'picture',
           attributes: PictureTag.html_attributes['picture'],
@@ -56,7 +56,7 @@ module PictureTag
 
         picture.attributes << PictureTag.html_attributes['parent']
 
-        picture.to_s
+        picture
       end
     end
   end
