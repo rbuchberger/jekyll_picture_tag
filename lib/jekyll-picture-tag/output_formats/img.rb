@@ -9,7 +9,7 @@ module PictureTag
         build_srcset(nil, PictureTag.preset['formats'].first)
       end
 
-      def build_markup
+      def base_markup
         img = build_base_img
 
         add_srcset(img, srcset)
