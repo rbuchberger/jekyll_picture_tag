@@ -38,17 +38,15 @@ module PictureTag
       @context.registers[:site]
     end
 
+    # Page which tag is called from
+    def page
+      @context.registers[:page]
+    end
+
     # Media query presets. There are no default values, so extracting it to its
     # own class is overkill.
     def media_presets
-      if site.data['picture'] && site.data['picture']['media_presets']
-        site.data['picture']['media_presets']
-      else
-        warn 'Jekyll Picture Tag Warning:'.yellow +
-             ' You are trying to use media queries, but they are not defined.'\
-             ' Set them under the media_presets: key in  _data/picture.yml'
-        {}
-      end
+      site.data.dig('picture', 'media_presets') || {}
     end
 
     # The rest of the application doesn't care where the instruction logic
