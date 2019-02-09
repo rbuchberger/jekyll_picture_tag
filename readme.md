@@ -37,31 +37,18 @@ It's a lot. It's tedious and complicated. Jekyll Picture Tag automates it.
 
 * Automatic generation of resized, converted image files
 * Automatic generation of complex markup in one of several different formats.
-* Auto-select between `<picture>` or just an `<img>` as necessary
 * No configuration required, extensive configuration available
+* Auto-select between `<picture>` or lone `<img>` as necessary
 * Support for both width based and pixel ratio based srcsets
 * Webp conversion
 * `sizes` attribute assistance
-* named media queries so you don't have to remember them.
+* named media queries so you don't have to remember them
 * Optional `<noscript>` tag with a basic fallback image, so you can lazy load without excluding your
     javascript-impaired users.
 * Optionally, automatically link to the source image. Or manually link to anywhere else, with just a
     tag parameter!
 
-## Table of Contents
-
-* [Quick Start](#quick-start)
-* [Installation](#installation)
-* [Usage](#usage)
-* [Configuration](#configuration)
-    * [Global](#config.yml)
-    * [Presets](#picture.yml)
-* [Other notes](#miscellaneous-tidbits)
-* [Contribute](#contribute)
-* [Release History](#release-history)
-* [License](#license)
-
-## Required Knowledge
+# Required Knowledge
 
 Jekyll Picture tag is basically a programmatic implementation of the [MDN Responsive Images
 guide](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images).
@@ -69,7 +56,19 @@ If you don't know the difference between resolution switching and art direction,
 in detail. Ideally, play around with a basic HTML file, a few test images, and a few different
 browser widths until you understand it.
 
-## Quick start / Demo
+# Table of Contents
+
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+    * [Global](#global-configuration)
+    * [Presets](#preset-configuration)
+* [Other notes](#miscellaneous-tidbits)
+* [Contribute](#contribute)
+* [Release History](#release-history)
+* [License](#license)
+
+# Quick start / Demo
 
 **All configuration is optional.** Here's the simplest possible use case:
 
@@ -166,7 +165,7 @@ Get this:
 </picture>
 ```
 
-## Installation
+# Installation
 
 Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
 For now, I don't have push access to RubyGems, meaning you have to point your gemfile at this git repo. 
@@ -178,7 +177,7 @@ group :jekyll_plugins do
 end 
 ```
 
-#### ImageMagick
+### ImageMagick
 
 Jekyll Picture Tag ultimately relies on [ImageMagick](https://www.imagemagick.org/script/index.php)
 for image conversions, so it must be installed on your system. There's a very good chance you
@@ -203,49 +202,51 @@ Note webp under delegates. This is required if you want to generate webp files.
 If you get a 'command not found' error, you'll need to install it. Most Linux package managers
 include it, otherwise it can be downloaded [here](https://imagemagick.org/script/download.php)
 
-## Usage
+# Usage
 
 The tag takes a mix of user input and pointers to configuration settings:
+
 `{% picture [preset] (source image) [alternate images] [attributes] %}`
 
-Note the tag parser looks for some whitespace followed by `'--'`. If you need to set HTML attribute
-values which begin with `'--'`, either set them first (`class="--my-class"`) or using `_data/picture.yml`
-settings. `class="some-class --some-other-class"` will break things.
+Note the tag parser separates arguments by looking for some whitespace followed by `'--'`. If you
+need to set HTML attribute values which begin with `'--'`, either set them first
+(`class="--my-class"`) or using `_data/picture.yml` settings. `class="some-class
+--some-other-class"` will break things.  
 
-* Preset
+* **Preset**
 
-  *Format:* (name of a markup preset described in `_data/picture.yml`)
+  *Format:* `(name of a markup preset described in _data/picture.yml)`
 
   *Default:* `default`
 
-Optionally specify a markup [preset](#markup_presets) to use, or leave blank for the `default` preset.
+Optionally specify a markup [preset](#markup-presets) to use, or leave blank for the `default` preset.
 
-* Source Image (**Required**)
+* **Source Image** (Required)
 
-  *Format:* `(Image filename, relative to `source` setting in `_config.yml`)`
+  *Format:* `(Image filename, relative to source setting in _config.yml)`
 
   The base image that will be resized for your picture sources. Can be a jpeg, png, webp, or gif.
 
-* Alternate images
+* **Alternate images**
 
     *Format:* `(media query preset): (image filename, relative to source directory)`
 
     *Example:* `tablet: img_cropped.jpg mobile: img_cropped_more.jpg`
 
-  Optionally specify any number of alternate base images for given [media queries](media_presets)
-  (specified in `_data/picture.yml`). This is one of of picture's strongest features, often
-  referred to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction). 
+  Optionally specify any number of alternate base images for given [media queries](#media-presets)
+  (specified in `_data/picture.yml`). This is one of of picture's strongest features, often referred
+  to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction). 
 
   Give your images in order of ascending specificity (The first image is the most general). They will
   be provided to the browser in reverse order, and it will select the first one with a media query
   that evaluates true.
 
-* attributes
+* **Attributes**
 
   Optionally specify any number of HTML attributes. These will be added to any attributes you've
   set in a preset. They can take a few different formats:
 
-  * `--link`
+  ##### `--link`
 
   *Format:* `--link (some url)`
 
@@ -257,7 +258,7 @@ Optionally specify a markup [preset](#markup_presets) to use, or leave blank for
     **Note**: Don't disable the `nomarkdown` global setting if you would like do this within markdown
     files and you are using Kramdown (Jekyll's default markdown parser.)
 
-  * `--(element)` 
+  ##### `--(element)` 
 
   *Format:* `--(picture|img|source|a|parent|alt) (Whatever HTML attributes you want)`
 
@@ -265,12 +266,12 @@ Optionally specify a markup [preset](#markup_presets) to use, or leave blank for
 
   Apply attributes to a given HTML element. Your options are:
 
-    * `picture`
-    * `img`
-    * `source`
-    * `a` (anchor tag)
-    * `parent`
-    * `alt`
+  * `picture`
+  * `img`
+  * `source`
+  * `a` (anchor tag)
+  * `parent`
+  * `alt`
 
   `--parent` will be applied to the `<picture>` if present, otherwise the `<img>`; useful when using
     the `auto` output format.
@@ -278,16 +279,16 @@ Optionally specify a markup [preset](#markup_presets) to use, or leave blank for
   `--alt` is a shortcut for `--img alt="..."`
     *Example:* `--alt Here is my alt text!`
 
-  * Old syntax
+  ##### Old syntax
 
-    The old syntax is to just dump all attributes at the end:
+  The old syntax is to just dump all attributes at the end:
 
-    `{% picture example.jpg alt="alt text" class="super-duper" %}`
+  `{% picture example.jpg alt="alt text" class="super-duper" %}`
 
-    This will continue to work. For backwards compatibility, behavior of previous versions is
-    maintained: all attributes specified this way are applied to the img tag. 
+  This will continue to work. For backwards compatibility, behavior of previous versions is
+  maintained: all attributes specified this way are applied to the img tag. 
 
-### Line breaks
+#### Line breaks
 Line breaks and spaces are interchangeable, the following is perfectly acceptable:
 
 ```
@@ -299,37 +300,36 @@ Line breaks and spaces are interchangeable, the following is perfectly acceptabl
     --picture class="stumpy"
 %}
 ```
-### Liquid variables
+#### Liquid variables
 
 You can use liquid variables in a picture tag:
 
 `html {% picture {{ post.featured_image }} --alt Our Project %}`
 
-## Configuration
+# Configuration
 
 **All configuration is optional**. If you are happy with the defaults, you don't have to touch a
 single yaml file. 
 
-### config.yml
+## Global Configuration
 
 Global settings are stored under the `picture:` key in `/_config.yml`.
 
 **Example config:**
-```yml
-# /_config.yml
 
+```yml
 picture: 
   source: "assets/images/fullsize"
   output: "assets/images/generated"
 ```
 
-* Source Image Directory
+* **Source Image Directory**
 
-    *Format:* `source: (directory)`
+  *Format:* `source: (directory)`
 
-    *Example:* `source: images/`
+  *Example:* `source: images/`
 
-    *Default:* Jekyll site root.
+  *Default:* Jekyll site root.
 
   To make writing tags easier you can specify a source directory for your assets. Base images in the
   tag will be relative to the `source` directory, which is relative to the Jekyll site root. 
@@ -338,8 +338,7 @@ picture:
   `{% picture enishte/portrait.jpg --alt An unsual picture %}` will look for a file at
   `assets/images/_fullsize/enishte/portrait.jpg`.
 
-
-* Destination Image Directory
+* **Destination Image Directory**
 
     *Format:* `output: (directory)`
 
@@ -352,7 +351,7 @@ picture:
 
   This setting is relative to your compiled site, which means `_site` unless you've changed it.
 
-* Suppress Warnings
+* **Suppress Warnings**
 
     *Format:* `suppress_warnings: (true|false)`
 
@@ -364,7 +363,7 @@ picture:
   smaller than one of the sizes in your preset. (Note that Jekyll Picture Tag will never resize an
   image to be larger than its source). Set this value to `true`, and these warnings will not be shown.
 
-* Use Relative Urls
+* **Use Relative Urls**
 
     *Format:* `relative_url: (true|false)`
 
@@ -375,7 +374,7 @@ picture:
   Whether to use relative (`/generated/test(...).jpg`) or absolute
   (`https://example.com/generated/test(...).jpg`) urls in your src and srcset attributes.
 
-* Kramdown `nomarkdown` fix
+* **Kramdown nomarkdown fix**
 
   *Format:* `nomarkdown: (true|false)`
 
@@ -404,13 +403,14 @@ picture:
   but it's pretty much only ever seen by the browser anyway. If you know a better way to accomplish
   this, I'm all ears!
 
-### picture.yml
+## Preset Configuration
 
 Presets are stored in `_data/picture.yml`, to avoid cluttering `_config.yml`. You will have to
-create this file.
+create this file, and probably the `_data/` directory as well.
 
 All settings are optional, moderately sensible defaults have been implemented. A template can be
 found in the [example data file](examples/_data/picture.yml) in the examples directory.
+
 **Example settings:** 
 
 ```yml
@@ -470,7 +470,7 @@ media_presets:
 
 ```yml
 media_presets:
-desktop: 'min-width: 1200px'
+  desktop: 'min-width: 1200px'
 ```
 
 These are named media queries for use in a few different places.
@@ -500,7 +500,7 @@ markup_presets:
 
 *Example:*
 
-```
+```yml
 markup_presets:
   default:
     formats: [webp, original]
@@ -522,7 +522,7 @@ can select one as the first argument given to the tag:
 The `default` preset will be used if none is specified. A preset name can't contain the `.`, `:`,
 or `/` characters.
 
-* Markup format
+* **Markup format**
 
   *Format:* `markup: (setting)`
 
@@ -540,7 +540,7 @@ or `/` characters.
   * `direct_url`: Generates an image and returns only its url. Uses `fallback_` properties (width
     and format)
 
-* Image Formats
+* **Image Formats**
 
   *Format:* `format: [format1, format2, (...)]`  
 
@@ -553,7 +553,7 @@ or `/` characters.
   before webp, your webp images will never be used. `original` does what you'd expect. To supply
   webp, you must have an imagemagick webp delegate installed, described [here](#imagemagick).
 
-* widths
+* **widths**
 
   **Recommended for most cases**
 
@@ -566,18 +566,18 @@ or `/` characters.
   Array of image widths to generate, in pixels. For use when you want a size-based srcset
   (`srcset="img.jpg 800w, img2.jpg 1600w"`). 
 
-* media_widths
+* **media_widths**
 
     *Format:* 
 
-    ```
+    ```yml
     media_widths:
       (media preset name): [integer, integer, (...)]
     ```
 
     *Example:* 
 
-    ```
+    ```yml
     media_widths:
       mobile: [400, 600, 800]
     ```
@@ -588,7 +588,7 @@ or `/` characters.
   image. You can specify sets of widths to associate with given media queries. If not specified,
   will use `widths` setting.
 
-* Fallback Image
+* **Fallback Image**
 
     *Format:* `fallback_width: (integer)`
               `fallback_format: (format)`
@@ -600,10 +600,10 @@ or `/` characters.
 
   Properties of the fallback image, format and width. 
 
-* Sizes
+* **Sizes**
 
     *Format:* 
-    ```
+    ```yml
     sizes:
       (media query): (CSS dimension)
       (media query): (CSS dimension)
@@ -612,7 +612,7 @@ or `/` characters.
     ```
 
     *Example:*
-    ```
+    ```yml
     sizes:
       mobile: 80vw
       tablet: 60vw
@@ -623,11 +623,14 @@ or `/` characters.
   image will be (on the screen) when a given media query is true. CSS dimensions can be given in
   `px`, `em`, or `vw`.
 
+  You don't have to provide a sizes attribute at all. If you don't, the browser will assume the
+  image is 100% the width of the viewport.
+
   The same sizes attribute is used for every source tag in a given picture tag. This causes some
   redundant markup, specifying sizes for situations when an image will never be rendered, but it
   simplifies configuration greatly.
 
-* Size
+* **Size**
 
   *Format:* `size: (CSS Dimension)`
 
@@ -636,7 +639,7 @@ or `/` characters.
   Unconditional image width to give the browser (by way of the html sizes attribute), to be supplied
   either alone or after all conditional sizes.
 
-* Pixel Ratios
+* **Pixel Ratios**
 
   *Format:* `pixel_ratios: [integer, integer, integer (...)]` 
 
@@ -650,7 +653,7 @@ or `/` characters.
   **Use case:** Generally, when the image will always be the same size, on all screen sizes, and
   the only thing which changes between devices is dpi/pixel ratio. Icons are a good example.
 
-* Base Width
+* **Base Width**
 
   *Format:* `base_width: integer`
 
@@ -658,11 +661,11 @@ or `/` characters.
 
   When using pixel ratios, you must supply a base width. This sets how wide the 1x image should be.
 
-* HTML Attributes
+* **HTML Attributes**
 
   *Format:* 
 
-  ```
+  ```yml
   attributes: 
     (element): '(attributes)'
     (element): '(attributes)'
@@ -672,7 +675,7 @@ or `/` characters.
 
   *Example:*
 
-  ```
+  ```yml
   attributes:
     img: 'class="soopercool" data-awesomeness="11"'
     picture: 'class="even-cooler"'
@@ -682,7 +685,7 @@ or `/` characters.
   tag; element names, `alt:`, `url:`, and `parent:`. Unescaped double quotes cause problems with
   yml, so it's recommended to surround them with single quotes.
 
-* Noscript
+* **Noscript**
 
     *Format:* `noscript: (true|false)`
 
@@ -694,7 +697,7 @@ or `/` characters.
   `<noscript>` tag after the standard html. This allows you to use lazy loading or other javascript
   image tools, without breaking all of your images for non-javascript-enabled users.
 
-* Source Image Linking
+* **Source Image Linking**
 
     *Format:* `link_source: (true|false)`
 
@@ -706,7 +709,7 @@ or `/` characters.
   be published as part of the compiled site. The same caveats apply as the `--url` flag: don't
   disable `nomarkdown` if you'll be using this from within a kramdown parsed markdown file.
 
-## Miscellaneous Tidbits
+# Miscellaneous Tidbits
 
 ### Lazy Loading, and other javascript related tomfoolery
 
@@ -740,15 +743,19 @@ aren't public!)
 The `output` directory is never deleted by Jekyll. You may want to manually clean it every once in a
 while to remove unused images.
 
-## Contribute
+# Contribute
 
 Report bugs and feature proposals in the 
 [Github issue tracker](https://github.com/robwierzbowski/jekyll-picture-tag/issues).
 
 Pull requests are encouraged. With a few exceptions, this plugin is written to follow the Rubocop
-default settings.
+default settings (except the frozen string literal comment).
 
-## Release History
+If you add a new setting, it is helpful to add a default value (look under `lib/defaults/`) and
+relevant documentation to the readme. Don't let that stop you from submitting a pull request,
+though!
+
+# Release History
 
 * 1.2.0 Feb  9, 2019: Add nomarkdown fix, noscript option, relative url option, anchor tag wrappers
 * 1.1.0 Jan 22, 2019: Add direct_url markup format, auto-orient images before stripping metadata.
@@ -761,6 +768,6 @@ default settings.
 * 0.1.1 Jul  5, 2013: Quick round of code improvements.
 * 0.1.0 Jul  5, 2013: Initial release.
 
-## License
+# License
 
 [BSD-NEW](http://en.wikipedia.org/wiki/BSD_License)
