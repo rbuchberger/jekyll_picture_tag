@@ -31,6 +31,7 @@ module PictureTag
 
       # Handles various wrappers around basic markup
       def wrap(markup)
+        markup = anchor_tag(markup) if PictureTag.html_attributes['link']
         markup = nomarkdown_wrapper(markup.to_s) if PictureTag.nomarkdown?
 
         markup
@@ -90,6 +91,14 @@ module PictureTag
       # strip line breaks or nothing works.
       def nomarkdown_wrapper(content)
         "{::nomarkdown}#{content.delete("\n")}{:/nomarkdown}"
+      end
+
+      def anchor_tag(content)
+        anchor = DoubleTag.new 'a'
+        anchor.attributes << PictureTag.html_attributes['a']
+        anchor.href = PictureTag.html_attributes['link']
+
+        content.add_parent anchor
       end
     end
   end

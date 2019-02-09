@@ -43,19 +43,18 @@ module PictureTag
       end
 
       def grab_data_file
-        if PictureTag.site.data['picture'] &&
-           PictureTag.site.data['picture']['markup_presets'] &&
-           PictureTag.site.data['picture']['markup_presets'][@name]
+        PictureTag.site
+                  .data
+                  .dig('picture', 'markup_presets', @name) || no_preset
+      end
 
-          PictureTag.site.data['picture']['markup_presets'][@name]
-        else
-          PictureTag::Utils.warning(
-            " Preset \"#{@name}\" not found in _data/picture.yml under "\
-            'markup_presets key. Using default values.'
-          )
+      def no_preset
+        Utils.warning(
+          " Preset \"#{@name}\" not found in _data/picture.yml under "\
+          'markup_presets key. Using default values.'
+        )
 
-          {}
-        end
+        {}
       end
     end
   end

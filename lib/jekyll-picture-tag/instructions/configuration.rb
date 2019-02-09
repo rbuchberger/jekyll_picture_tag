@@ -24,9 +24,14 @@ module PictureTag
         File.join PictureTag.site.dest, self['picture']['output']
       end
 
-      # Takes our config into account.
+      # Takes our config into account. Generated images, not source
       def build_url(filename)
-        File.join url_prefix, filename
+        File.join url_prefix, self['picture']['output'], filename
+      end
+
+      # For linking source images
+      def build_source_url(filename)
+        File.join url_prefix, self['picture']['source'], filename
       end
 
       def nomarkdown?
@@ -70,7 +75,6 @@ module PictureTag
         File.join(
           self['picture']['relative_url'] ? '' : PictureTag.config['url'],
           PictureTag.config['baseurl'],
-          self['picture']['output']
         )
       end
     end

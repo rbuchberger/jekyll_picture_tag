@@ -56,5 +56,10 @@ module PictureTag
 
       ext.casecmp('.md').zero? || ext.casecmp('.markdown').zero?
     end
+
+    # Returns the widest source image
+    def self.biggest_source
+      PictureTag.source_images.values.max_by(&:width)
+    end
   end
 end
