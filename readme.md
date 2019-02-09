@@ -35,14 +35,14 @@ It's a lot. It's tedious and complicated. Jekyll Picture Tag automates it.
 
 ## Features
 
-* Automatic generation of resized, converted image files
+* Automatic generation of resized, converted image files.
 * Automatic generation of complex markup in one of several different formats.
-* No configuration required, extensive configuration available
-* Auto-select between `<picture>` or lone `<img>` as necessary
-* Support for both width based and pixel ratio based srcsets
-* Webp conversion
-* `sizes` attribute assistance
-* named media queries so you don't have to remember them
+* No configuration required, extensive configuration available.
+* Auto-select between `<picture>` or lone `<img>` as necessary.
+* Support for both width based and pixel ratio based srcsets.
+* Webp conversion.
+* `sizes` attribute assistance.
+* named media queries so you don't have to remember them.
 * Optional `<noscript>` tag with a basic fallback image, so you can lazy load without excluding your
     javascript-impaired users.
 * Optionally, automatically link to the source image. Or manually link to anywhere else, with just a
@@ -168,8 +168,8 @@ Get this:
 # Installation
 
 Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
-For now, I don't have push access to RubyGems, meaning you have to point your gemfile at this git repo. 
-If you don't, you'll get an old, incompatible version.
+For now I don't have push access to RubyGems, meaning you have to point your gemfile at this git repo. 
+If you don't you'll get an old, incompatible version.
 
 ```ruby
 group :jekyll_plugins do 
@@ -219,7 +219,7 @@ need to set HTML attribute values which begin with `'--'`, either set them first
 
   *Default:* `default`
 
-Optionally specify a markup [preset](#markup-presets) to use, or leave blank for the `default` preset.
+  Optionally specify a markup [preset](#markup-presets) to use, or leave blank for the `default` preset.
 
 * **Source Image** (Required)
 
@@ -522,6 +522,25 @@ can select one as the first argument given to the tag:
 The `default` preset will be used if none is specified. A preset name can't contain the `.`, `:`,
 or `/` characters.
 
+#### A Note on srcsets, for the bad kids who didn't do the required reading.
+
+There are 2 srcset formats, one based on providing widths, the other based on providing multipliers.
+
+Width based srcsets look like this: `srcset="img.jpg 600w, img2.jpg 800w, img3.jpg 1000w"`. The
+`(number)w` tells the browser how wide that image file is. Browsers are smart, they know their
+device's pixel ratio, so in combination with the sizes attribute (if given, otherwise it assumes the
+image will be 100vw) they can select the best-fitting image for the space it will fill on the screen.
+
+Multiplier based srcsets look like this: `srcset="img.jpg 1x, img2.jpg 1.5x, img3.jpg 3x"`. The 
+browser is less smart here; it looks at its own device's pixel ratio, compares it to the given
+multiplier, and picks the closest one. It doesn't consider anything else at all. Multiplier based
+srcsets are best used when the image will always be the same size, on all screen sizes.
+
+To use a width based srcset in a preset, specify a `widths` setting (or don't, for the default), and
+optionally the `sizes` and `size` settings. 
+
+To use a multiplier based srcset, set `pixel_ratios` and `base_width`. 
+
 * **Markup format**
 
   *Format:* `markup: (setting)`
@@ -544,7 +563,7 @@ or `/` characters.
 
   *Format:* `format: [format1, format2, (...)]`  
 
-  *Example:* `format: [original, webp]`
+  *Example:* `format: [webp, original]`
 
   *Default*: `original`
 
@@ -554,8 +573,6 @@ or `/` characters.
   webp, you must have an imagemagick webp delegate installed, described [here](#imagemagick).
 
 * **widths**
-
-  **Recommended for most cases**
 
   *Format:* `widths: [integer, integer, (...)]`
 
@@ -621,7 +638,7 @@ or `/` characters.
 
   Conditional sizes, used to construct the `sizes=` HTML attribute telling the browser how wide your
   image will be (on the screen) when a given media query is true. CSS dimensions can be given in
-  `px`, `em`, or `vw`.
+  `px`, `em`, or `vw`. To be used along with a width based srcset.
 
   You don't have to provide a sizes attribute at all. If you don't, the browser will assume the
   image is 100% the width of the viewport.
@@ -641,7 +658,7 @@ or `/` characters.
 
 * **Pixel Ratios**
 
-  *Format:* `pixel_ratios: [integer, integer, integer (...)]` 
+  *Format:* `pixel_ratios: [number, number, number (...)]` 
 
   *Example:* `pixel_ratios: [1, 1.5, 2]`
 
@@ -649,9 +666,6 @@ or `/` characters.
   give a `base_width`.
 
   Set this when you want a multiplier based srcset (example: `srcset="img.jpg 1x, img2.jpg 2x"`).
-
-  **Use case:** Generally, when the image will always be the same size, on all screen sizes, and
-  the only thing which changes between devices is dpi/pixel ratio. Icons are a good example.
 
 * **Base Width**
 
@@ -693,7 +707,7 @@ or `/` characters.
 
     *Default:* `false`
 
-  For use with the `data_` output formats. When true, will include a basic `img` within a
+  For use with the `data_` output formats. When true, will include a basic `img` fallback within a
   `<noscript>` tag after the standard html. This allows you to use lazy loading or other javascript
   image tools, without breaking all of your images for non-javascript-enabled users.
 
@@ -753,7 +767,7 @@ default settings (except the frozen string literal comment).
 
 If you add a new setting, it is helpful to add a default value (look under `lib/defaults/`) and
 relevant documentation to the readme. Don't let that stop you from submitting a pull request,
-though!
+though! Just allow modifications and I'll take care of it.
 
 # Release History
 
