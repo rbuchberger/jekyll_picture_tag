@@ -14,7 +14,7 @@ module PictureTag
         img.attributes << attributes['img']
         img.attributes << attributes['implicit']
 
-        fallback = build_fallback_image
+        fallback = build_fallback_image(PictureTag.fallback_width)
 
         add_src(img, fallback.name)
 
@@ -76,11 +76,11 @@ module PictureTag
       end
 
       # File, not HTML
-      def build_fallback_image
+      def build_fallback_image(width)
         GeneratedImage.new(
           source_file: PictureTag.source_images[nil],
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width
+          width: width
         )
       end
 
