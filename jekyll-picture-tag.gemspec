@@ -1,6 +1,6 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'jekyll-picture-tag/version'
+require 'jekyll_picture_tag/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'jekyll-picture-tag'

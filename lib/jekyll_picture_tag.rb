@@ -1,12 +1,12 @@
 require 'objective_elements'
 
-require_relative 'jekyll-picture-tag/generated_image'
-require_relative 'jekyll-picture-tag/source_image'
-require_relative 'jekyll-picture-tag/instructions'
-require_relative 'jekyll-picture-tag/output_formats'
-require_relative 'jekyll-picture-tag/srcsets'
-require_relative 'jekyll-picture-tag/utils'
-require_relative 'jekyll-picture-tag/version'
+require_relative 'jekyll_picture_tag/generated_image'
+require_relative 'jekyll_picture_tag/source_image'
+require_relative 'jekyll_picture_tag/instructions'
+require_relative 'jekyll_picture_tag/output_formats'
+require_relative 'jekyll_picture_tag/srcsets'
+require_relative 'jekyll_picture_tag/utils'
+require_relative 'jekyll_picture_tag/version'
 
 module PictureTag
   ROOT_PATH = __dir__
