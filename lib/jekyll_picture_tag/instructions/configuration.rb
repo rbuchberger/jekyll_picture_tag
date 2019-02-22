@@ -44,7 +44,7 @@ module PictureTag
         YAML.safe_load(
           # Jekyll Picture Tag Default settings
           File.read(
-            File.join(ROOT_PATH, 'jekyll-picture-tag/defaults/global.yml')
+            File.join(ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml')
           )
         ).merge(
           # _config.yml defined settings
