@@ -57,7 +57,7 @@ module PictureTag
           " at least one size in the set #{targets}. Will not enlarge."
         )
 
-        small_targets = targets.delete_if { |t| t >= image_width }
+        small_targets = targets.dup.delete_if { |t| t >= image_width }
 
         small_targets.push image_width
 
