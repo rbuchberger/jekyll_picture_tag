@@ -9,6 +9,7 @@ module PictureTag
     #   pixels.
     module Basics
       require 'fastimage'
+      require 'mime-types'
       attr_reader :media, :source_image
 
       def initialize(media:, format:)
@@ -27,7 +28,7 @@ module PictureTag
       # Allows us to add a type attribute to whichever element contains this
       # srcset.
       def mime_type
-        mime_types[@format]
+        MIME::Types.type_for(@format).first.to_s
       end
 
       # Some srcsets have them, for those that don't return nil.
@@ -72,17 +73,6 @@ module PictureTag
         )
       end
 
-      # Hardcoding these isn't ideal, but I'm not pulling in a new dependency
-      # for 9 lines of easy code.
-      def mime_types
-        {
-          'gif'  => 'image/gif',
-          'jpg'  => 'image/jpeg',
-          'jpeg' => 'image/jpeg',
-          'png'  => 'image/png',
-          'webp' => 'image/webp'
-        }
-      end
     end
   end
 end
