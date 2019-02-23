@@ -567,6 +567,15 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
 
   *Default*: `original`
 
+  *Supported formats are anything which imagemagick supports, including the
+  following:*
+  * jpg/jpeg
+  * png
+  * gif
+  * webp
+  * jxr
+  * jp2
+
   Array (yml sequence) of the image formats you'd like to generate, in decreasing order
   of preference. Browsers will render the first format they find and understand, so if you put jpg
   before webp, your webp images will never be used. `original` does what you'd expect. To supply
