@@ -6,16 +6,15 @@ class GeneratedImage
 
   def initialize(source_file:, width:, format:)
     @source = source_file
+    @width  = width
     @format = format
-
-    @size = build_size(width)
 
     generate_image unless File.exist? absolute_filename
   end
 
   def name
     name = @source.base_name
-    name << "-#{@size[:width]}by#{@size[:height]}-"
+    name << "-#{@width}-"
     name << @source.digest
     name << '.' + @format
   end
@@ -25,28 +24,17 @@ class GeneratedImage
   end
 
   def width
-    @size[:width]
+    @width
   end
 
   private
-
-  def build_size(width)
-    if width < @source.width
-      {
-        width: width,
-        height: (width / @source.aspect_ratio).round
-      }
-    else
-      @source.size
-    end
-  end
 
   def generate_image
     puts 'Generating new image file: ' + name
     image = MiniMagick::Image.open(@source.name)
     # Scale and crop
     image.combine_options do |i|
-      i.resize "#{@size[:width]}x#{@size[:height]}^"
+      i.resize "#{@width}x"
       i.auto_orient
       i.strip
     end
