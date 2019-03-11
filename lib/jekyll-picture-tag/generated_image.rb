@@ -56,6 +56,8 @@ class GeneratedImage
     check_dest_dir
 
     image.write absolute_filename
+
+    FileUtils.chmod(0644, absolute_filename)
   end
 
   # Make sure destination directory exists
