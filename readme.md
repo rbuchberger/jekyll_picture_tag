@@ -10,7 +10,7 @@ Jekyll Picture Tag is a liquid tag that adds responsive images to your
 reformatted source images, is fully configurable, implements sensible defaults,
 and solves both the art direction and resolution switching problems, with a
 little YAML configuration and a simple template tag. It can be configured to
-work with JavaScript libraries such as 
+work with JavaScript libraries such as
 [LazyLoad](https://github.com/verlok/lazyload).
 
 ## Why use Jekyll Picture Tag?
@@ -23,7 +23,7 @@ want to do more than just resize images for different screen sizes.
 
 **Developer Sanity:** Image downloading starts before the browser has parsed your CSS and
 JavaScript; this gets them on the page *fast*, but it leads to some ridiculously verbose markup.
-Ultimately, to serve responsive images correctly, we must: 
+Ultimately, to serve responsive images correctly, we must:
 
 -   Generate, name, and organize the required images (formats \* resolutions, for each source image)
 -   Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
@@ -75,9 +75,9 @@ browser widths until you understand it.
 Add j-p-t to your gemfile:
 
 ```ruby
-group :jekyll_plugins do 
+group :jekyll_plugins do
   gem 'jekyll-picture-tag', git: 'https://github.com/robwierzbowski/jekyll-picture-tag/'
-end 
+end
 ```
 
 Write this:
@@ -88,8 +88,8 @@ Get this:
 
 ```html
 <!-- Line breaks added for readability, the actual markup will not have them. -->
-<img 
-  src="http://localhost:4000/generated/test-800by450-195f7d.jpg" 
+<img
+  src="http://localhost:4000/generated/test-800by450-195f7d.jpg"
   srcset="
     http://localhost:4000/generated/test-400by225-195f7d.jpg 400w,
     http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
@@ -113,7 +113,7 @@ markup_presets:
   default:
     widths: [600, 900, 1200]
     formats: [webp, original]
-    sizes: 
+    sizes:
       mobile: 80vw
     size: 500px
 
@@ -129,7 +129,7 @@ Get this:
 
 <!-- Formatted for readability -->
 <picture>
-  <source 
+  <source
     sizes="(max-width: 600px) 80vw, 500px"
     media="(max-width: 600px)"
     type="image/webp"
@@ -137,14 +137,14 @@ Get this:
     http://localhost:4000/generated/test2-900by506-21bb6f.webp 900w,
     http://localhost:4000/generated/test2-1200by675-21bb6f.webp 1200w">
 
-  <source 
+  <source
     sizes="(max-width: 600px) 80vw, 500px"
     type="image/webp"
     srcset="http://localhost:4000/generated/test-600by338-195f7d.webp 600w,
     http://localhost:4000/generated/test-900by506-195f7d.webp 900w,
     http://localhost:4000/generated/test-1200by675-195f7d.webp 1200w">
 
-  <source 
+  <source
     sizes="(max-width: 600px) 80vw, 500px"
     media="(max-width: 600px)"
     type="image/jpeg"
@@ -152,14 +152,14 @@ Get this:
     http://localhost:4000/generated/test2-900by506-21bb6f.jpg 900w,
     http://localhost:4000/generated/test2-1200by675-21bb6f.jpg 1200w">
 
-  <source 
+  <source
     sizes="(max-width: 600px) 80vw, 500px"
     type="image/jpeg"
     srcset="http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
     http://localhost:4000/generated/test-900by506-195f7d.jpg 900w,
     http://localhost:4000/generated/test-1200by675-195f7d.jpg 1200w">
 
-  <img 
+  <img
     src="http://localhost:4000/generated/test-800by450-195f7d.jpg"
     alt="Alternate Text">
 </picture>
@@ -168,13 +168,13 @@ Get this:
 # Installation
 
 Add `jekyll-picture-tag` to your Gemfile in the `:jekyll_plugins` group.
-For now I don't have push access to RubyGems, meaning you have to point your gemfile at this git repo. 
+For now I don't have push access to RubyGems, meaning you have to point your gemfile at this git repo.
 If you don't you'll get an old, incompatible version.
 
 ```ruby
-group :jekyll_plugins do 
+group :jekyll_plugins do
   gem 'jekyll-picture-tag', git: 'https://github.com/robwierzbowski/jekyll-picture-tag/'
-end 
+end
 ```
 
 ### ImageMagick
@@ -194,7 +194,7 @@ You should see something like this:
     Version: ImageMagick 7.0.8-14 Q16 x86_64 2018-10-31 https://imagemagick.org
     Copyright: © 1999-2018 ImageMagick Studio LLC
     License: https://imagemagick.org/script/license.php
-    Features: Cipher DPC HDRI OpenMP 
+    Features: Cipher DPC HDRI OpenMP
     Delegates (built-in): bzlib fontconfig freetype jng jp2 jpeg lcms lzma pangocairo png tiff webp xml zlib
 
 Note webp under delegates. This is required if you want to generate webp files.
@@ -235,7 +235,7 @@ need to set HTML attribute values which begin with `'--'`, either set them first
 
   Optionally specify any number of alternate base images for given [media queries](#media-presets)
   (specified in `_data/picture.yml`). This is one of of picture's strongest features, often referred
-  to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction). 
+  to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction).
 
   Give your images in order of ascending specificity (The first image is the most general). They will
   be provided to the browser in reverse order, and it will select the first one with a media query
@@ -253,12 +253,12 @@ need to set HTML attribute values which begin with `'--'`, either set them first
   *Examples*: `--link https://example.com`, `--link /blog/some_post/`
 
     Wrap the image in an anchor tag, with the `href` attribute set to whatever value you give it.
-    This will override automatic source image linking, if you have enabled it. 
+    This will override automatic source image linking, if you have enabled it.
 
     **Note**: Don't disable the `nomarkdown` global setting if you would like do this within markdown
     files and you are using Kramdown (Jekyll's default markdown parser.)
 
-  ##### `--(element)` 
+  ##### `--(element)`
 
   *Format:* `--(picture|img|source|a|parent|alt) (Whatever HTML attributes you want)`
 
@@ -286,16 +286,16 @@ need to set HTML attribute values which begin with `'--'`, either set them first
   `{% picture example.jpg alt="alt text" class="super-duper" %}`
 
   This will continue to work. For backwards compatibility, behavior of previous versions is
-  maintained: all attributes specified this way are applied to the img tag. 
+  maintained: all attributes specified this way are applied to the img tag.
 
 #### Line breaks
 Line breaks and spaces are interchangeable, the following is perfectly acceptable:
 
 ```
-{% 
+{%
   picture my-preset
-    img.jpg 
-    mobile: alt.jpg 
+    img.jpg
+    mobile: alt.jpg
     --alt Alt Text
     --picture class="stumpy"
 %}
@@ -309,7 +309,7 @@ You can use liquid variables in a picture tag:
 # Configuration
 
 **All configuration is optional**. If you are happy with the defaults, you don't have to touch a
-single yaml file. 
+single yaml file.
 
 ## Global Configuration
 
@@ -318,7 +318,7 @@ Global settings are stored under the `picture:` key in `/_config.yml`.
 **Example config:**
 
 ```yml
-picture: 
+picture:
   source: "assets/images/fullsize"
   output: "assets/images/generated"
 ```
@@ -332,9 +332,9 @@ picture:
   *Default:* Jekyll site root.
 
   To make writing tags easier you can specify a source directory for your assets. Base images in the
-  tag will be relative to the `source` directory, which is relative to the Jekyll site root. 
+  tag will be relative to the `source` directory, which is relative to the Jekyll site root.
 
-  For example, if `source` is set to `assets/images/_fullsize`, the tag 
+  For example, if `source` is set to `assets/images/_fullsize`, the tag
   `{% picture enishte/portrait.jpg --alt An unsual picture %}` will look for a file at
   `assets/images/_fullsize/enishte/portrait.jpg`.
 
@@ -344,10 +344,10 @@ picture:
 
     *Example:* `output: resized_images/`
 
-    *Default*: `generated/` 
+    *Default*: `generated/`
 
   Jekyll Picture Tag saves resized, reformatted images to the `output` directory in your compiled
-  site. The organization of your `source` directory is maintained. 
+  site. The organization of your `source` directory is maintained.
 
   This setting is relative to your compiled site, which means `_site` unless you've changed it.
 
@@ -373,6 +373,16 @@ picture:
 
   Whether to use relative (`/generated/test(...).jpg`) or absolute
   (`https://example.com/generated/test(...).jpg`) urls in your src and srcset attributes.
+
+  * **Use a CDN Url**
+
+      *Format:* `cdn_url: (url)`
+
+      *Example:* `cdn_url: https://cdn.example.com`
+
+      *Default*: none
+
+    Use for images that are hosted at a different domain or subdomain than the Jekyll site root. Overrides `relative_url`.
 
 * **Kramdown nomarkdown fix**
 
@@ -411,7 +421,7 @@ create this file, and probably the `_data/` directory as well.
 All settings are optional, moderately sensible defaults have been implemented. A template can be
 found in the [example data file](examples/_data/picture.yml) in the examples directory.
 
-**Example settings:** 
+**Example settings:**
 
 ```yml
 
@@ -428,11 +438,11 @@ markup_presets:
   default:
     formats: [webp, original]
     widths: [200, 400, 800, 1600]
-    media_widths: 
-      mobile: [200, 400, 600] 
+    media_widths:
+      mobile: [200, 400, 600]
       tablet: [400, 600, 800]
     size: 800px
-    sizes: 
+    sizes:
       mobile: 100vw
       desktop: 60vw
     attributes:
@@ -448,14 +458,14 @@ markup_presets:
     formats: [webp, original]
     widths: [200, 400, 600, 800]
     noscript: true
-    attributes: 
+    attributes:
       img: class="lazy"
 
 ```
 
 #### Media Presets
 
-*Format:* 
+*Format:*
 
 ```yml
 media_presets:
@@ -466,7 +476,7 @@ media_presets:
 
 ```
 
-*Example:* 
+*Example:*
 
 ```yml
 media_presets:
@@ -482,7 +492,7 @@ queries, because yml gets confused by free colons.
 
 #### Markup Presets
 
-*Format:* 
+*Format:*
 
 ```yml
 markup_presets:
@@ -531,15 +541,15 @@ Width based srcsets look like this: `srcset="img.jpg 600w, img2.jpg 800w, img3.j
 device's pixel ratio, so in combination with the sizes attribute (if given, otherwise it assumes the
 image will be 100vw) they can select the best-fitting image for the space it will fill on the screen.
 
-Multiplier based srcsets look like this: `srcset="img.jpg 1x, img2.jpg 1.5x, img3.jpg 3x"`. The 
+Multiplier based srcsets look like this: `srcset="img.jpg 1x, img2.jpg 1.5x, img3.jpg 3x"`. The
 browser is less smart here; it looks at its own device's pixel ratio, compares it to the given
 multiplier, and picks the closest one. It doesn't consider anything else at all. Multiplier based
 srcsets are best used when the image will always be the same size, on all screen sizes.
 
 To use a width based srcset in a preset, specify a `widths` setting (or don't, for the default), and
-optionally the `sizes` and `size` settings. 
+optionally the `sizes` and `size` settings.
 
-To use a multiplier based srcset, set `pixel_ratios` and `base_width`. 
+To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
 
 * **Markup format**
 
@@ -590,18 +600,18 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
   *Default*: `[400, 600, 800, 1000]`
 
   Array of image widths to generate, in pixels. For use when you want a size-based srcset
-  (`srcset="img.jpg 800w, img2.jpg 1600w"`). 
+  (`srcset="img.jpg 800w, img2.jpg 1600w"`).
 
 * **media_widths**
 
-    *Format:* 
+    *Format:*
 
     ```yml
     media_widths:
       (media preset name): [integer, integer, (...)]
     ```
 
-    *Example:* 
+    *Example:*
 
     ```yml
     media_widths:
@@ -622,13 +632,13 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
     *Example:* `fallback_width: 800`
                `fallback_format: jpg`
 
-    *Default*: `800` and `original` 
+    *Default*: `800` and `original`
 
-  Properties of the fallback image, format and width. 
+  Properties of the fallback image, format and width.
 
 * **Sizes**
 
-    *Format:* 
+    *Format:*
     ```yml
     sizes:
       (media query): (CSS dimension)
@@ -667,7 +677,7 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
 
 * **Pixel Ratios**
 
-  *Format:* `pixel_ratios: [number, number, number (...)]` 
+  *Format:* `pixel_ratios: [number, number, number (...)]`
 
   *Example:* `pixel_ratios: [1, 1.5, 2]`
 
@@ -686,10 +696,10 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
 
 * **HTML Attributes**
 
-  *Format:* 
+  *Format:*
 
   ```yml
-  attributes: 
+  attributes:
     (element): '(attributes)'
     (element): '(attributes)'
     (element): '(attributes)'
@@ -768,7 +778,7 @@ while to remove unused images.
 
 # Contribute
 
-Report bugs and feature proposals in the 
+Report bugs and feature proposals in the
 [Github issue tracker](https://github.com/robwierzbowski/jekyll-picture-tag/issues).
 
 Pull requests are encouraged. With a few exceptions, this plugin is written to follow the Rubocop
@@ -785,7 +795,7 @@ though! Just allow modifications and I'll take care of it.
 * 1.0.2 Jan 18, 2019: Fix ruby version specification
 * 1.0.1 Jan 13, 2019: Added ruby version checking for more helpful error messages when running old versions of ruby.
 * **1.0.0** Nov 27, 2018: Rewrite from the ground up. See [migration.md](/migration.md).
-* 0.2.2 Aug  2, 2013: Bugfixes. 
+* 0.2.2 Aug  2, 2013: Bugfixes.
 * 0.2.1 Jul 17, 2013: Refactor again, add Liquid parsing.
 * 0.2.0 Jul 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.
 * 0.1.1 Jul  5, 2013: Quick round of code improvements.
