@@ -68,15 +68,27 @@ module PictureTag
         end
       end
 
-      # https://example.com/my-base-path/assets/generated-images/image.jpg
-      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      # |     site url     | site path  |    j-p-t dest dir     |
       def url_prefix
-        File.join(
-          self['picture']['relative_url'] ? '' : PictureTag.config['url'],
-          PictureTag.config['baseurl'],
-        )
+        # Check if a CDN URL has been set
+        if self['picture']['cdn_url'].empty?
+          # https://example.com/my-base-path/assets/generated-images/image.jpg
+          # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          # |     site url     | site path  |    j-p-t dest dir     |
+          File.join(
+            self['picture']['relative_url'] ? '' : PictureTag.config['url'],
+            PictureTag.config['baseurl'],
+          )
+        else
+          # https://cdn.example.com/my-base-path/assets/generated-images/image.jpg
+          # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          # |        cdn url       |  site path |    j-p-t dest dir     |
+          File.join(
+            self['picture']['cdn_url'],
+            PictureTag.config['baseurl'],
+          )
+        end
       end
+
     end
   end
 end
