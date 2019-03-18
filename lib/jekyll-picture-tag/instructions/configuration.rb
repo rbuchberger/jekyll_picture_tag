@@ -11,6 +11,13 @@ module PictureTag
         @content[key]
       end
 
+      # Digs into jekyll context, returns current environment
+      def jekyll_env
+        # It would be really great if the jekyll devs actually documented
+        # the context object. 
+        PictureTag.context.environments.first['jekyll']['environment']
+      end
+
       # Site.source is the master jekyll source directory
       # Source dir is the jekyll-picture-tag source directory.
       def source_dir
@@ -24,12 +31,18 @@ module PictureTag
         File.join PictureTag.site.dest, self['picture']['output']
       end
 
-      # Takes our config into account. Generated images, not source
+      # Generated images, not source images.
+      # https://example.com/my-base-path/assets/generated-images/image.jpg
+      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      # |     domain       |  baseurl   |    j-p-t output dir   | filename
       def build_url(filename)
         File.join url_prefix, self['picture']['output'], filename
       end
 
       # For linking source images
+      # https://example.com/my-base-path/assets/source-images/image.jpg
+      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      # |     domain       |  baseurl   |   j-p-t source dir | filename
       def build_source_url(filename)
         File.join url_prefix, self['picture']['source'], filename
       end
