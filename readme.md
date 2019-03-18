@@ -376,13 +376,30 @@ picture:
 
   * **Use a CDN Url**
 
-      *Format:* `cdn_url: (url)`
+    *Format:* `cdn_url: (url)`
 
-      *Example:* `cdn_url: https://cdn.example.com`
+    *Example:* `cdn_url: https://cdn.example.com`
 
-      *Default*: none
+    *Default*: none
 
-    Use for images that are hosted at a different domain or subdomain than the Jekyll site root. Overrides `relative_url`.
+    Use for images that are hosted at a different domain or subdomain than the Jekyll site root. Overrides
+    `relative_url`. Keep reading, the next option is important.
+
+  * **CDN build environments**
+
+    *Format:* `cdn_environments: (array of strings)`
+
+    *Example:* `cdn_environments: ['production', 'staging']`
+
+    *Default*: `['production']`
+
+    It's likely that if you're using a CDN, you may not want to use it in your local development environment. This
+    allows you to build a site with local images while in development, and still push to a CDN when you build for
+    production by specifying a different [environment](https://jekyllrb.com/docs/configuration/environments/). 
+
+    **Note that the default jekyll environment is `development`**, meaning that if you only set `cdn_url` and run
+    `jekyll serve` or `jekyll build`, nothing will change. You'll either need to run `JEKYLL_ENV=production bundle exec
+    jekyll build`, or add `development` to this setting.
 
 * **Kramdown nomarkdown fix**
 
