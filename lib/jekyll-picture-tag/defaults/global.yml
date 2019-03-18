@@ -4,7 +4,7 @@ picture:
   output: generated
   suppress_warnings: false
   relative_url: true
-  cdn_url: ''
+  cdn_environments: ['production']
   nomarkdown: true
 
 url: ''
