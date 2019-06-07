@@ -74,25 +74,23 @@ group :jekyll_plugins do
 end
 ```
 
-Write this:
+Put this liquid tag somewhere:
 
 `{% picture test.jpg %}`
 
-Get this:
+Get this in your generated site:
 
 ```html
 <!-- Line breaks added for readability, the actual markup will not have them. -->
-<img
-  src="http://localhost:4000/generated/test-800by450-195f7d.jpg"
-  srcset="
-    http://localhost:4000/generated/test-400by225-195f7d.jpg 400w,
-    http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
-    http://localhost:4000/generated/test-800by450-195f7d.jpg 800w,
-    http://localhost:4000/generated/test-1000by563-195f7d.jpg 1000w"
->
+
+<img src="/generated/test-800-195f7d.jpg" 
+  srcset="/generated/test-400-195f7d.jpg 400w,
+          /generated/test-600-195f7d.jpg 600w,
+          /generated/test-800-195f7d.jpg 800w,
+          /generated/test-1000-195f7d.jpg 1000w">
 ```
 
-**Here's a more complete example:**
+### Here's a more complete example:
 
 With this configuration:
 
@@ -120,42 +118,44 @@ Write this:
 Get this:
 
 ```html
-
 <!-- Formatted for readability -->
+
 <picture>
   <source
-    sizes="(max-width: 600px) 80vw, 500px"
+    sizes="(max-width: 600px) 80vw, 600px"
     media="(max-width: 600px)"
-    type="image/webp"
-    srcset="http://localhost:4000/generated/test2-600by338-21bb6f.webp 600w,
-    http://localhost:4000/generated/test2-900by506-21bb6f.webp 900w,
-    http://localhost:4000/generated/test2-1200by675-21bb6f.webp 1200w">
-
+    srcset="
+      /generated/test2-600-21bb6f.webp   600w,
+      /generated/test2-900-21bb6f.webp   900w,
+      /generated/test2-1200-21bb6f.webp 1200w
+    "
+    type="image/webp">
   <source
-    sizes="(max-width: 600px) 80vw, 500px"
-    type="image/webp"
-    srcset="http://localhost:4000/generated/test-600by338-195f7d.webp 600w,
-    http://localhost:4000/generated/test-900by506-195f7d.webp 900w,
-    http://localhost:4000/generated/test-1200by675-195f7d.webp 1200w">
-
+    sizes="(max-width: 600px) 80vw, 600px"
+    srcset="
+      /generated/test-600-195f7d.webp   600w,
+      /generated/test-900-195f7d.webp   900w,
+      /generated/test-1200-195f7d.webp 1200w
+    "
+    type="image/webp">
   <source
-    sizes="(max-width: 600px) 80vw, 500px"
+    sizes="(max-width: 600px) 80vw, 600px"
     media="(max-width: 600px)"
-    type="image/jpeg"
-    srcset="http://localhost:4000/generated/test2-600by338-21bb6f.jpg 600w,
-    http://localhost:4000/generated/test2-900by506-21bb6f.jpg 900w,
-    http://localhost:4000/generated/test2-1200by675-21bb6f.jpg 1200w">
-
+    srcset="
+      /generated/test2-600-21bb6f.jpg   600w,
+      /generated/test2-900-21bb6f.jpg   900w,
+      /generated/test2-1200-21bb6f.jpg 1200w
+    "
+    type="image/jpeg">
   <source
-    sizes="(max-width: 600px) 80vw, 500px"
-    type="image/jpeg"
-    srcset="http://localhost:4000/generated/test-600by338-195f7d.jpg 600w,
-    http://localhost:4000/generated/test-900by506-195f7d.jpg 900w,
-    http://localhost:4000/generated/test-1200by675-195f7d.jpg 1200w">
-
-  <img
-    src="http://localhost:4000/generated/test-800by450-195f7d.jpg"
-    alt="Alternate Text">
+    sizes="(max-width: 600px) 80vw, 600px"
+    srcset="
+      /generated/test-600-195f7d.jpg   600w,
+      /generated/test-900-195f7d.jpg   900w,
+      /generated/test-1200-195f7d.jpg 1200w
+    "
+    type="image/jpeg">
+  <img src="/generated/test-800-195f7d.jpg" alt="Alternate Text">
 </picture>
 ```
 
@@ -173,11 +173,14 @@ Pull requests are encouraged. With a few exceptions, this plugin is written to f
 default settings (except the frozen string literal comment).
 
 If you add a new setting, it is helpful to add a default value (look under `lib/defaults/`) and
-relevant documentation to the readme. Don't let that stop you from submitting a pull request,
-though! Just allow modifications and I'll take care of it.
+relevant documentation. Don't let that stop you from submitting a pull request, though! Just allow
+modifications and I'll take care of it.
 
 # Release History
 
+* 1.3.0 Jun  7, 2019: Initial compatibility with Jekyll 4.0, bugfixes, change to generated image
+    naming. The first build after this update will be longer, and you might want to clear out your
+    generated images.
 * 1.2.0 Feb  9, 2019: Add nomarkdown fix, noscript option, relative url option, anchor tag wrappers
 * 1.1.0 Jan 22, 2019: Add direct_url markup format, auto-orient images before stripping metadata.
 * 1.0.2 Jan 18, 2019: Fix ruby version specification
