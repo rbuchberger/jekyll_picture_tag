@@ -19,7 +19,7 @@ module PictureTag
       private
 
       def load_preset
-        PictureTag.preset['attributes'] || {}
+        PictureTag.preset['attributes'].dup || {}
       end
 
       # Syntax this function processes:
