@@ -178,6 +178,7 @@ modifications and I'll take care of it.
 
 # Release History
 
+* 1.3.1 Jun 21, 2019: Bugfix
 * 1.3.0 Jun  7, 2019: Initial compatibility with Jekyll 4.0, bugfixes, change to generated image
     naming. The first build after this update will be longer, and you might want to clear out your
     generated images.
