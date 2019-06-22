@@ -37,6 +37,7 @@ module PictureTag
         markup
       end
 
+      # Media is the media query associated with the desired source image.
       def build_srcset(media, format)
         if PictureTag.preset['pixel_ratios']
           build_pixel_ratio_srcset(media, format)
