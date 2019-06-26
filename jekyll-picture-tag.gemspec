@@ -10,11 +10,16 @@ Gem::Specification.new do |spec|
   spec.email         = ['robert@buchberger.cc']
 
   spec.summary       = 'Easy responsive images for Jekyll.'
-  spec.description   = <<-HEREDOC
-    Jekyll Picture Tag is a liquid tag that adds responsive images to your Jekyll static site. It follows the picture
-    element pattern, and polyfills older browsers with Picturefill. Jekyll Picture Tag automatically creates resized
-    source images, is fully configurable, and covers all use cases — including art direction and resolution switching —
-    with a little YAML configuration and a simple template tag.
+  spec.description   = <<~HEREDOC
+     ____                                _           _
+    |  _ \  ___ _ __  _ __ ___  ___ __ _| |_ ___  __| |
+    | | | |/ _ \ '_ \| '__/ _ \/ __/ _` | __/ _ \/ _` |
+    | |_| |  __/ |_) | | |  __/ (_| (_| | ||  __/ (_| |
+    |____/ \___| .__/|_|  \___|\___\__,_|\__\___|\__,_|
+               |_|
+
+    This gem has been renamed! Use jekyll_picture_tag instead, which is now
+    hosted on rubygems.
   HEREDOC
   spec.homepage      = 'https://github.com/rbuchberger/jekyll-picture-tag'
   spec.license       = 'BSD-3-Clause'
