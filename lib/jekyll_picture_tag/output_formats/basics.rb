@@ -31,10 +31,9 @@ module PictureTag
 
       # Handles various wrappers around basic markup
       def wrap(markup)
-        markup = anchor_tag(markup) if PictureTag.html_attributes['link']
-
-        if PictureTag.html_attributes['link'] && PictureTag.nomarkdown?
-          markup = nomarkdown_wrapper(markup.to_s)
+        if PictureTag.html_attributes['link']
+          markup = anchor_tag(markup)
+          markup = nomarkdown_wrapper(markup.to_s) if PictureTag.nomarkdown?
         end
 
         markup
