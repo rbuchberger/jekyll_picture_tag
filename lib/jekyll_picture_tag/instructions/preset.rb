@@ -27,6 +27,16 @@ module PictureTag
         @content['fallback_width']
       end
 
+      # Allows a per-preset hard override of the global nomarkdown setting and
+      # JPT's feeble attempts at auto-detection.
+      def nomarkdown?
+        if @content['nomarkdown'].nil?
+          PictureTag.config.nomarkdown?
+        else
+          @content['nomarkdown']
+        end
+      end
+
       private
 
       def build_preset

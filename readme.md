@@ -178,6 +178,9 @@ modifications and I'll take care of it.
 
 # Release History
 
+* 1.5.0 Jun 26, 2019: 
+  * better `{::nomarkdown}` necessity detection
+  * allow user to override `{::nomarkdown}` autodetection
 * 1.4.0 Jun 26, 2019:
   * Rename gem from `jekyll-picture-tag` to `jekyll_picture_tag`, allowing us to use rubygems again.
   * Add new output format: `naked_srcset`.
