@@ -76,10 +76,6 @@ module PictureTag
       @config.build_source_url(filename)
     end
 
-    def nomarkdown?
-      @config.nomarkdown?
-    end
-
     # Preset forwarding
     def widths(media)
       @preset.widths(media)
@@ -92,6 +88,11 @@ module PictureTag
     def fallback_width
       @preset.fallback_width
     end
+
+    def nomarkdown?
+      @preset.nomarkdown?
+    end
+
 
     # Params forwarding
     def preset_name
