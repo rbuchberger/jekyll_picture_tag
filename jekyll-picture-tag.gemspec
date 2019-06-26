@@ -1,3 +1,20 @@
+# Why 2 gemspecs?
+
+# Originally, this gem was named 'jekyll-picture-tag', and published on rubygems
+# under this name. There was a break in development, during which push access to
+# rubygems was lost. Development was later resumed, and as a workaround for that
+# issue the installation instructions were to source the gem from the Github
+# repository.
+#
+# Ultimately, the decision was made to rename it by switching the dashes for
+# underscores, which follows best practice and allows pushing it to rubygems
+# under the new name. The drawback of this situation is that everyone who
+# followed the installaion instructions previously would see their site
+# inexplicably break, as it would be searching for a gemspec that doesn't exist.
+# As a workaround (to the old workaround... sigh) this gemspec lets us print a
+# warning and then require the new version, which keeps old sites working while
+# encouraging people to use rubygems.
+
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'jekyll_picture_tag/version'
