@@ -11,7 +11,7 @@ puts <<~HEREDOC
 
   and replace it with:
 
-  gem 'jekyll_picture_tag', '~> 1.3'
+  gem 'jekyll_picture_tag'
 
   Sorry about that. For an explanation, see issue #120:
   https://github.com/rbuchberger/jekyll-picture-tag/issues/120
