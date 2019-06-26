@@ -9,3 +9,4 @@
 /tmp/
 .idea
 jekyll-picture-tag.iml
+*.gem

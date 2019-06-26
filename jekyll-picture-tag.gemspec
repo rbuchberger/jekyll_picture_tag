@@ -7,8 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = PictureTag::VERSION
   spec.authors       = ['Robert Wierzbowski', 'Brendan Tobolaski',
                         'Robert Buchberger']
-  spec.email         = ['hello@robwierzbowski.com', 'brendan@tobolaski.com',
-                        'robert@buchberger.cc']
+  spec.email         = ['robert@buchberger.cc']
 
   spec.summary       = 'Easy responsive images for Jekyll.'
   spec.description   = <<-HEREDOC
@@ -17,7 +16,7 @@ Gem::Specification.new do |spec|
     source images, is fully configurable, and covers all use cases — including art direction and resolution switching —
     with a little YAML configuration and a simple template tag.
   HEREDOC
-  spec.homepage      = 'https://github.com/robwierzbowski/jekyll-picture-tag'
+  spec.homepage      = 'https://github.com/rbuchberger/jekyll-picture-tag'
   spec.license       = 'BSD-3-Clause'
   spec.require_paths = ['lib']
 
@@ -32,9 +31,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.3'
 
   spec.add_dependency 'fastimage', '~> 2'
+  spec.add_dependency 'mime-types', '~> 3'
   spec.add_dependency 'mini_magick', '~> 4'
   spec.add_dependency 'objective_elements', '~> 1.1'
-  spec.add_dependency 'mime-types', '~> 3'
 
-  spec.add_runtime_dependency 'jekyll', '< 4'
+  spec.add_runtime_dependency 'jekyll', '< 5'
 end
