@@ -60,8 +60,8 @@ module PictureTag
 
       def no_preset
         Utils.warning(
-          " Preset \"#{@name}\" not found in _data/picture.yml under "\
-          'markup_presets key. Using default values.'
+          " Preset \"#{@name}\" not found in #{PictureTag.config['data_dir']}/"\
+          + 'picture.yml under markup_presets key. Using default values.'
         )
 
         {}
