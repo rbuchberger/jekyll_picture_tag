@@ -3,7 +3,7 @@ module PictureTag
   # advantage by storing expensive file reads and writes in instance variables,
   # to be reused by many different source images.
   class SourceImage
-    attr_reader :name, :shortname
+    attr_reader :name, :shortname, :missing
 
     def initialize(relative_filename)
       @shortname = relative_filename
@@ -18,12 +18,12 @@ module PictureTag
       size[:width]
     end
 
-    def aspect_ratio
-      @aspect_ratio ||= size[:width].to_f / size[:height].to_f
-    end
-
     def digest
-      @digest ||= Digest::MD5.hexdigest(File.read(@name))[0..5]
+      @digest ||= if @missing
+                    'x' * 6
+                  else
+                    Digest::MD5.hexdigest(File.read(@name))[0..5]
+                  end
     end
 
     # Includes path relative to default sorce folder, and the original filename.
@@ -40,7 +40,12 @@ module PictureTag
     private
 
     def build_size
-      width, height = FastImage.size(@name)
+      if @missing
+        width = 999_999
+        height = 999_999
+      else
+        width, height = FastImage.size(@name)
+      end
 
       {
         width: width,
@@ -52,11 +57,34 @@ module PictureTag
     def grab_file(source_file)
       source_name = File.join(PictureTag.config.source_dir, source_file)
 
-      unless File.exist? source_name
-        raise "Jekyll Picture Tag could not find #{source_name}."
+      if File.exist? source_name
+        @missing = false
+
+      elsif PictureTag.config.continue_on_missing?
+        @missing = true
+        Utils.warning missing_image_warning(source_name)
+
+      else
+        raise missing_image_error(source_name)
       end
 
       source_name
+    end
+
+    def missing_image_warning(source_name)
+      <<~HEREDOC
+        Could not find #{source_name}. Your site will have broken images in it.
+        Continuing.
+      HEREDOC
+    end
+
+    def missing_image_error(source_name)
+      <<~HEREDOC
+        Jekyll Picture Tag could not find #{source_name}. You can force the
+        build to continue anyway by setting "picture: ignore_missing_images:
+        true" in "_config.yml". This setting can also accept a jekyll build
+        environment, or an array of environments.
+      HEREDOC
     end
   end
 end

@@ -4,12 +4,14 @@ class GeneratedImage
   require 'mini_magick'
   require 'fastimage'
 
+  attr_reader :width
+
   def initialize(source_file:, width:, format:)
     @source = source_file
     @width  = width
     @format = format
 
-    generate_image unless File.exist? absolute_filename
+    generate_image unless File.exist?(absolute_filename) || @source.missing
   end
 
   def name
@@ -21,10 +23,6 @@ class GeneratedImage
 
   def absolute_filename
     @absolute_filename ||= File.join(PictureTag.config.dest_dir, name)
-  end
-
-  def width
-    @width
   end
 
   private
@@ -45,7 +43,7 @@ class GeneratedImage
 
     image.write absolute_filename
 
-    FileUtils.chmod(0644, absolute_filename)
+    FileUtils.chmod(0o644, absolute_filename)
   end
 
   # Make sure destination directory exists
