@@ -178,6 +178,9 @@ modifications and I'll take care of it.
 
 # Release History
 
+* 1.6.0 Jul  2, 2019:
+  * Missing Preset warning respects `data_dir` setting
+  * Add `continue_on_missing` option
 * 1.5.0 Jun 26, 2019: 
   * better `{::nomarkdown}` necessity detection
   * allow user to override `{::nomarkdown}` autodetection
