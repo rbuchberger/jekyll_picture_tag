@@ -3,9 +3,10 @@ require_relative './instructions/html_attributes'
 require_relative './instructions/preset'
 require_relative './instructions/tag_parser'
 
-# Allows us to access settings as methods on PictureTag itself.
 module PictureTag
-  class << self
+  # Provides a unified interface for getting information. This module is meant
+  # to be the source of truth for "What to do."
+  module Instructions
     attr_reader :context, :config, :params, :preset, :html_attributes
 
     def init(raw_tag_params, context)
@@ -13,21 +14,19 @@ module PictureTag
 
       # Create global config (big picture). Config class loads jekyll
       # data/config files, and the j-p-t defaults from included yml files.
-      @config = Instructions::Configuration.new
+      @config = Configuration.new
 
       # Parse tag params. We must do this before setting the preset, because
       # it's one of the params.
-      @params = Instructions::TagParser.new(raw_tag_params)
+      @params = TagParser.new raw_tag_params
 
       # Create preset. Takes preset name from params, merges associated settings
       # with default values.
-      @preset = Instructions::Preset.new
+      @preset = Preset.new
 
       # Create HTML attributes. Depends on both the preset and tag params, so
       # we must do this after creating both.
-      @html_attributes = Instructions::HTMLAttributeSet.new(
-        @params.html_attributes_raw
-      )
+      @html_attributes = HTMLAttributeSet.new @params.html_attributes_raw
 
       # Keep our generated files
       Utils.keep_files
@@ -46,8 +45,7 @@ module PictureTag
     # Returns class of the selected output format
     def output_class
       Object.const_get(
-        'PictureTag::OutputFormats::' +
-          Utils.titleize(PictureTag.preset['markup'])
+        'PictureTag::OutputFormats::' + Utils.titleize(preset['markup'])
       )
     end
 
