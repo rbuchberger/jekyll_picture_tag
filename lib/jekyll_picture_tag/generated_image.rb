@@ -11,7 +11,7 @@ class GeneratedImage
     @width  = width
     @format = format
 
-    generate_image unless skip_generation?
+    generate_image unless File.exist?(absolute_filename) || @source.missing
   end
 
   def name
@@ -26,10 +26,6 @@ class GeneratedImage
   end
 
   private
-
-  def skip_generation?
-    File.exist?(absolute_filename) || @source.missing
-  end
 
   def generate_image
     puts 'Generating new image file: ' + name
