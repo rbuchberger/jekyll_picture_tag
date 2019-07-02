@@ -63,5 +63,9 @@ module PictureTag
     def self.biggest_source
       PictureTag.source_images.values.max_by(&:width)
     end
+
+    def self.titleize(input)
+      input.split('_').map(&:capitalize).join
+    end
   end
 end

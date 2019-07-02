@@ -55,11 +55,8 @@ module PictureTag
 
     # This is the class name of whichever output format we are selecting:
     def output_class
-      'PictureTag::OutputFormats::' + titleize(PictureTag.preset['markup'])
-    end
-
-    def titleize(input)
-      input.split('_').map(&:capitalize).join
+      'PictureTag::OutputFormats::' +
+        Utils.titleize(PictureTag.preset['markup'])
     end
   end
 end
