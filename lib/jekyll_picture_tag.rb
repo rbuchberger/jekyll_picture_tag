@@ -1,3 +1,4 @@
+require 'jekyll'
 require 'objective_elements'
 
 require_relative 'jekyll_picture_tag/generated_image'
