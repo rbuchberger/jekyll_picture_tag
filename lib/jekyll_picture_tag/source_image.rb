@@ -60,7 +60,7 @@ module PictureTag
       if File.exist? source_name
         @missing = false
 
-      elsif PictureTag.config['picture']['ignore_missing_images']
+      elsif PictureTag.config.continue_on_missing?
         @missing = true
         Utils.warning "Could not find #{source_name}. Continuing."
 

@@ -14,7 +14,7 @@ module PictureTag
       # Digs into jekyll context, returns current environment
       def jekyll_env
         # It would be really great if the jekyll devs actually documented
-        # the context object. 
+        # the context object.
         PictureTag.context.environments.first['jekyll']['environment']
       end
 
@@ -51,6 +51,19 @@ module PictureTag
         Utils.markdown_page? && self['picture']['nomarkdown']
       end
 
+      def continue_on_missing?
+        setting = @content['picture']['ignore_missing_images']
+
+        # Config setting can be a string, an array, or a boolean
+        if setting.is_a? Array
+          setting.include? jekyll_env
+        elsif setting.is_a? String
+          setting == jekyll_env
+        else
+          setting
+        end
+      end
+
       private
 
       def build_config
@@ -84,14 +97,14 @@ module PictureTag
       # Juuust complicated enough to extract to its own function.
       def cdn?
         self['picture']['cdn_url'] &&
-          self['picture']['cdn_environments'].include?( jekyll_env )
+          self['picture']['cdn_environments'].include?(jekyll_env)
       end
 
       # https://example.com/my-base-path/assets/generated-images/image.jpg
       # ^^^^^^^^^^^^^^^^^^^^
       # |     domain       |  baseurl   |    j-p-t output dir   | filename
       def domain
-        if cdn? 
+        if cdn?
           self['picture']['cdn_url']
         elsif self['picture']['relative_url']
           ''
@@ -106,12 +119,11 @@ module PictureTag
       def url_prefix
         # We use file.join because the ruby url methods don't like relative
         # urls.
-          File.join(
-            domain,
-            self['baseurl'],
-          )
+        File.join(
+          domain,
+          self['baseurl']
+        )
       end
-
     end
   end
 end
