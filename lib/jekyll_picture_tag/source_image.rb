@@ -62,13 +62,20 @@ module PictureTag
 
       elsif PictureTag.config.continue_on_missing?
         @missing = true
-        Utils.warning "Could not find #{source_name}. Continuing."
+        Utils.warning missing_image_warning(source_name)
 
       else
         raise missing_image_error(source_name)
       end
 
       source_name
+    end
+
+    def missing_image_warning(source_name)
+      <<~HEREDOC
+        Could not find #{source_name}. Your site will have broken images in it.
+        Continuing.
+      HEREDOC
     end
 
     def missing_image_error(source_name)
