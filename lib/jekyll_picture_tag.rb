@@ -16,23 +16,31 @@ require_relative 'jekyll_picture_tag/version'
 #
 # Description: Easy responsive images for Jekyll.
 #
-# Download: https://github.com/robwierzbowski/jekyll-picture-tag
-# Documentation: https://github.com/robwierzbowski/jekyll-picture-tag/readme.md
-# Issues: https://github.com/robwierzbowski/jekyll-picture-tag/issues
+# Download: https://github.com/rbuchberger/jekyll_picture_tag
+# Documentation: https://github.com/rbuchberger/jekyll_picture_tag/readme.md
+# Issues: https://github.com/rbuchberger/jekyll_picture_tag/issues
 #
 # Syntax:
-#   {% picture [preset] img.jpg [media_query: alt-img.jpg] [attr="value"] %}
+# {% picture [preset] img.jpg [media_query: alt-img.jpg] [attributes] %}
 #
-# Example:
+# Examples:
+#
 #   {% picture poster.jpg --alt The strange case of responsive images %}
-#   {% picture gallery poster.jpg source_small: poster_closeus.jpg
-#   alt="The strange case of responsive images" class="gal-img" %}
+#
+#   {% picture
+#      gallery
+#      poster.jpg
+#      source_small: poster_closeus.jpg
+#      --alt The strange case of responsive images
+#      --img class="gal-img"
+#   %}
 #
 # See the documentation for full configuration and usage instructions.
 module PictureTag
   extend Instructions
   ROOT_PATH = __dir__
 
+  # This is the actual liquid tag, which provides the interface with Jekyll.
   class Picture < Liquid::Tag
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
