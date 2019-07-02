@@ -43,6 +43,14 @@ module PictureTag
       @context.registers[:page]
     end
 
+    # Returns class of the selected output format
+    def output_class
+      Object.const_get(
+        'PictureTag::OutputFormats::' +
+          Utils.titleize(PictureTag.preset['markup'])
+      )
+    end
+
     # Media query presets. It's really just a hash, and there are no default
     # values, so extracting it to its own class is overkill.
     def media_presets
@@ -92,7 +100,6 @@ module PictureTag
     def nomarkdown?
       @preset.nomarkdown?
     end
-
 
     # Params forwarding
     def preset_name

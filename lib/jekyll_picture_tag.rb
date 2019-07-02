@@ -42,21 +42,7 @@ module PictureTag
       PictureTag.init(@raw_params, context)
 
       # Return a string:
-      build_markup.to_s
-    end
-
-    private
-
-    # Super clever metaprogramming. It's the dynamic version of MyClass.new;
-    # instantiate the class defined in our config.
-    def build_markup
-      Object.const_get(output_class).new
-    end
-
-    # This is the class name of whichever output format we are selecting:
-    def output_class
-      'PictureTag::OutputFormats::' +
-        Utils.titleize(PictureTag.preset['markup'])
+      PictureTag.output_class.new.to_s
     end
   end
 end
