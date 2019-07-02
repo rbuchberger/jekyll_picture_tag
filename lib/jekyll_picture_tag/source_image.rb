@@ -82,7 +82,8 @@ module PictureTag
       <<~HEREDOC
         Jekyll Picture Tag could not find #{source_name}. You can force the
         build to continue anyway by setting "picture: ignore_missing_images:
-        true" in "_config.yml"
+        true" in "_config.yml". This setting can also accept a jekyll build
+        environment, or an array of environments.
       HEREDOC
     end
   end
