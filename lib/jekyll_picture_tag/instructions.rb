@@ -82,6 +82,10 @@ module PictureTag
       @config.build_source_url(filename)
     end
 
+    def continue_on_missing?
+      @config.continue_on_missing?
+    end
+
     # Preset forwarding
     def widths(media)
       @preset.widths(media)
