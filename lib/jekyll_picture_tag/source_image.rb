@@ -55,17 +55,17 @@ module PictureTag
 
     # Turn a relative filename into an absolute one, and make sure it exists.
     def grab_file(source_file)
-      source_name = File.join(PictureTag.config.source_dir, source_file)
+      source_name = File.join(PictureTag.source_dir, source_file)
 
       if File.exist? source_name
         @missing = false
 
-      elsif PictureTag.config.continue_on_missing?
+      elsif PictureTag.continue_on_missing?
         @missing = true
         Utils.warning missing_image_warning(source_name)
 
       else
-        raise missing_image_error(source_name)
+        raise ArgumentError, missing_image_error(source_name)
       end
 
       source_name
