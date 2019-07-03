@@ -2,10 +2,7 @@ require 'test_helper'
 
 class TestUtils < Minitest::Test
   include PictureTag
-
-  LiquidTemplate = Struct.new(:render)
-  ImageStruct = Struct.new(:width)
-  SiteStub = Struct.new(:config)
+  include TestHelper
 
   # Should strip a trailing slash
   def test_keep_files
@@ -23,8 +20,31 @@ class TestUtils < Minitest::Test
   end
 
   # test_warning_enabled
+  def test_warning_enabled
+    PictureTag.expects(:config).returns(
+      'picture' => {
+        'suppress_warnings' => false
+      }
+    )
+
+    # First arg is stdout, second is a regex matching stderr
+    assert_output nil, /test message/ do
+      Utils.warning('test message')
+    end
+  end
 
   # test_warning_disabled
+  def test_warning_disabled
+    PictureTag.expects(:config).returns(
+      'picture' => {
+        'suppress_warnings' => true
+      }
+    )
+
+    assert_silent do
+      Utils.warning('test message')
+    end
+  end
 
   # test_liquid_lookup
   def test_liquid_lookup
