@@ -60,19 +60,9 @@ class TestUtils < Minitest::Test
     Utils.liquid_lookup(params)
   end
 
-  def test_process_format_original
-    PictureTag.stubs(:source_images).returns('media' => 'jpg')
-
-    assert_equal Utils.process_format('original', 'media'), 'jpg'
-  end
-
-  def test_process_format_other
-    assert_equal Utils.process_format('jpg', 'media'), 'jpg'
-  end
-
   # test_count_srcsets
   def test_count_srcsets
-    PictureTag.stubs(:preset).returns('formats' => [1, 2, 3, 4])
+    PictureTag.stubs(:formats).returns([1, 2, 3, 4])
     PictureTag.stubs(:source_images).returns(a: 'a', b: 'b')
 
     assert_equal Utils.count_srcsets, 8

@@ -17,14 +17,16 @@ class GeneratedImageTest < Minitest::Test
     SourceImageStub.new(base_name: @base_name,
                         name: @name,
                         missing: false,
-                        digest: @digest)
+                        digest: @digest,
+                        ext: 'jpg')
   end
 
   def source_missing
     SourceImageStub.new(base_name: @base_name,
                         name: @name,
                         missing: true,
-                        digest: @digest)
+                        digest: @digest,
+                        ext: 'jpg')
   end
 
   def tested(stub)
@@ -128,5 +130,15 @@ class GeneratedImageTest < Minitest::Test
 
     GeneratedImage.new(source_file: source_missing, width: 100, format:
                        'webp').send(:check_dest_dir)
+  end
+
+  def test_process_format_original
+    assert_equal 'jpg',
+                 tested(source_existing).send(:process_format, 'original')
+  end
+
+  def test_process_format_other
+    assert_equal 'webp',
+                 tested(source_existing).send(:process_format, 'WEBP')
   end
 end

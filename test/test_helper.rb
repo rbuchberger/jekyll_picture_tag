@@ -16,6 +16,7 @@ module TestHelper
     :name,
     :missing,
     :digest,
+    :ext,
     keyword_init: true
   )
 end
