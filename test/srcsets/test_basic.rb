@@ -17,6 +17,13 @@ class TestSrcsetBasic < Minitest::Test
     )
   end
 
+  # to_a
+  def test_to_a
+    @tested.expects(:widths).returns([100])
+    @tested.expects(:build_srcset_entry).with(100).returns('correct')
+    assert_equal ['correct'], @tested.to_a
+  end
+
   # to_s
   def test_to_s
     @tested.expects(:to_a).returns(%w[correct answer])

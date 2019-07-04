@@ -17,13 +17,6 @@ class TestSrcsetWidth < Minitest::Test
     )
   end
 
-  # to_a
-  def test_to_a
-    @tested.expects(:widths).returns([100])
-    @tested.expects(:build_srcset_entry).with(100).returns('correct')
-    assert_equal ['correct'], @tested.to_a
-  end
-
   # sizes
   def test_sizes_existing
     PictureTag.stubs(:preset).returns(

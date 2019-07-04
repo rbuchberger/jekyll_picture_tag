@@ -18,6 +18,10 @@ module PictureTag
         @source_image = PictureTag.source_images[@media]
       end
 
+      def to_a
+        widths.collect { |w| build_srcset_entry(w) }
+      end
+
       def to_s
         to_a.join(', ')
       end
