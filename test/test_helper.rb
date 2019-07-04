@@ -21,4 +21,8 @@ module TestHelper
     :shortname,
     keyword_init: true
   )
+
+  GeneratedImageStub = Struct.new(
+    :name, :width, keyword_init: true
+  )
 end
