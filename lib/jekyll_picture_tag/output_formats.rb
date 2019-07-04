@@ -1,4 +1,4 @@
-require_relative 'output_formats/basics'
+require_relative 'output_formats/basic'
 require_relative 'output_formats/data_attributes'
 require_relative 'output_formats/auto'
 require_relative 'output_formats/img'

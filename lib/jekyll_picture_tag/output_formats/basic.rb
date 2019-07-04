@@ -3,7 +3,7 @@ module PictureTag
   # own option.
   module OutputFormats
     # Generic functions common to all output formats.
-    module Basics
+    class Basic
       include ObjectiveElements
 
       # Used for both the fallback image, and for the complete markup.
