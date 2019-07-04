@@ -2,7 +2,6 @@
 # Represents a generated source file.
 class GeneratedImage
   require 'mini_magick'
-  require 'fastimage'
 
   attr_reader :width
 
@@ -15,14 +14,11 @@ class GeneratedImage
   end
 
   def name
-    name = @source.base_name
-    name << "-#{@width}-"
-    name << @source.digest
-    name << '.' + @format
+    @source.base_name + "-#{@width}-" + @source.digest + '.' + @format
   end
 
   def absolute_filename
-    @absolute_filename ||= File.join(PictureTag.config.dest_dir, name)
+    @absolute_filename ||= File.join(PictureTag.dest_dir, name)
   end
 
   private
