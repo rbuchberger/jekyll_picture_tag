@@ -50,7 +50,7 @@ module PictureTag
             private
 
       def handle_small_source(targets, image_width)
-        PictureTag::Utils.warning(
+        Utils.warning(
           " #{@source_image.shortname} is #{image_width}px wide, smaller than" \
           " at least one size in the set #{targets}. Will not enlarge."
         )
