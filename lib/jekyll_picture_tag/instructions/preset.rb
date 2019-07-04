@@ -19,8 +19,12 @@ module PictureTag
         width_hash[media]
       end
 
+      def formats
+        @content['formats']
+      end
+
       def fallback_format
-        PictureTag::Utils.process_format(@content['fallback_format'], nil)
+        @content['fallback_format']
       end
 
       def fallback_width

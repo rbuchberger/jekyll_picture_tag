@@ -1,3 +1,5 @@
+require 'fastimage'
+require 'mime-types'
 module PictureTag
   # Handles srcset generation, which also handles file generation.
   module Srcsets
@@ -8,16 +10,11 @@ module PictureTag
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
     module Basics
-      require 'fastimage'
-      require 'mime-types'
       attr_reader :media, :source_image
 
       def initialize(media:, format:)
         @media = media # Associated Media Query, can be nil
-
-        # Output format:
-        @format = Utils.process_format(format, media)
-
+        @format = format # output format
         @source_image = PictureTag.source_images[@media]
       end
 
@@ -50,7 +47,7 @@ module PictureTag
         "(#{PictureTag.media_presets[@media]})"
       end
 
-      private
+            private
 
       def handle_small_source(targets, image_width)
         PictureTag::Utils.warning(
@@ -72,7 +69,6 @@ module PictureTag
           format: @format
         )
       end
-
-    end
+          end
   end
 end

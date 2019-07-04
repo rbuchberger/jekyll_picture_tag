@@ -6,7 +6,7 @@ module PictureTag
       include PictureTag::OutputFormats::Basics
 
       def srcset
-        build_srcset(nil, PictureTag.preset['formats'].first)
+        build_srcset(nil, PictureTag.formats.first)
       end
 
       def base_markup

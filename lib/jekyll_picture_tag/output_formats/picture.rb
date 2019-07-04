@@ -8,7 +8,7 @@ module PictureTag
       def srcsets
         sets = []
 
-        PictureTag.preset['formats'].each do |format|
+        PictureTag.formats.each do |format|
           # We have 2 dimensions here: formats, and source images. Formats are
           # provided in the order they must be returned, source images are
           # provided in the reverse (least to most preferable) and must be

@@ -28,18 +28,9 @@ module PictureTag
         Liquid::Template.parse(params).render(PictureTag.context)
       end
 
-      # Allows us to use 'original' as a format name.
-      def process_format(format, media)
-        if format.casecmp('original').zero?
-          PictureTag.source_images[media].ext
-        else
-          format.downcase
-        end
-      end
-
       # Used for auto markup configuration and such
       def count_srcsets
-        formats = PictureTag.preset['formats'].length
+        formats = PictureTag.formats.length
         source_images = PictureTag.source_images.length
 
         formats * source_images

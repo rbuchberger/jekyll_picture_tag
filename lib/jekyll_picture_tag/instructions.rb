@@ -91,6 +91,10 @@ module PictureTag
       @preset.widths(media)
     end
 
+    def formats
+      @preset.formats
+    end
+
     def fallback_format
       @preset.fallback_format
     end

@@ -5,7 +5,7 @@ module PictureTag
       include Basics
 
       def to_s
-        build_srcset(nil, PictureTag.preset['formats'].first).to_s
+        build_srcset(nil, PictureTag.formats.first).to_s
       end
     end
   end
