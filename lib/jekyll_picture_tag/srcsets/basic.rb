@@ -9,7 +9,7 @@ module PictureTag
     # - Return an array of srcset entries.
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
-    module Basics
+    class Basic
       attr_reader :media, :source_image
 
       def initialize(media:, format:)

@@ -2,9 +2,7 @@ module PictureTag
   module Srcsets
     # Creates a srcset in the "(filename) (width)w, (...)" format.
     # Example: "img.jpg 400w, img2.jpg 600w, img3.jpg 800w"
-    class Width
-      include Basics
-
+    class Width < Basic
       def to_a
         widths.collect { |w| build_srcset_entry(w) }
       end
