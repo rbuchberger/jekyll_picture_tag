@@ -40,33 +40,38 @@ class GeneratedImageTest < Minitest::Test
 
   # initialize existing source existing dest
   def test_init_with_both
-    File.expects(:exist?)
+    PictureTag.stubs(:dest_dir).returns(@dest_dir)
+    File.stubs(:exist?)
         .with(@dest_dir + '/testimage-100-aaaaaa.webp')
         .returns(true)
-    PictureTag.expects(:dest_dir).returns(@dest_dir)
 
-    GeneratedImage.new(source_file: source_existing, width: 100, format: 'webp')
+    GeneratedImage.any_instance.expects(:generate_image).never
+    assert GeneratedImage.new(
+      source_file: source_existing, width: 100, format: 'webp'
+    )
   end
 
   # initialize existing source missing dest
   def test_init_missing_dest
-    File.expects(:exist?)
+    PictureTag.stubs(:dest_dir).returns(@dest_dir)
+    File.stubs(:exist?)
         .with(@dest_dir + '/testimage-100-aaaaaa.webp')
         .returns(false)
 
     GeneratedImage.any_instance.expects(:generate_image)
-    PictureTag.expects(:dest_dir).returns(@dest_dir)
-
-    GeneratedImage.new(source_file: source_existing, width: 100, format: 'webp')
+    assert GeneratedImage.new(
+      source_file: source_existing, width: 100, format: 'webp'
+    )
   end
 
   # initialize missing source
   def test_init_missing_source
-    File.expects(:exist?)
+    PictureTag.stubs(:dest_dir).returns(@dest_dir)
+    File.stubs(:exist?)
         .with(@dest_dir + '/testimage-100-aaaaaa.webp')
         .returns(false)
-    PictureTag.expects(:dest_dir).returns(@dest_dir)
 
+    GeneratedImage.any_instance.expects(:generate_image).never
     assert_silent do
       GeneratedImage.new(source_file: source_missing,
                          width: 100,
@@ -86,50 +91,65 @@ class GeneratedImageTest < Minitest::Test
   end
 
   # test generate image
-  # Can't get this one working. Need to figure out how to test block arguments
+  # Can't get this one working.
   def test_generate_image
     skip
-    # dummy = Object.new
-    #
-    # MiniMagick::Image.expects(:open).with(@name).returns(dummy)
-    #
-    # dummy.expects(:combine_options)
-    #
-    # dummy.expects(:format).with('webp')
-    #
-    # GeneratedImage.any_instance.expects(:check_dest_dir)
-    # GeneratedImage.any_instance.stubs(:absolute_filename).returns('correct')
-    # dummy.expects(:write).with('correct')
-    # FileUtils.expects(:chmod).with(0o644, 'correct')
-    #
-    # GeneratedImage.new(source_file: source_missing, width: 100, format:
-    #                    'webp').send(:generate_image)
+
+    dummy_image = Object.new
+    dummy_option = Object.new
+    PictureTag.stubs(:dest_dir).returns(@dest_dir)
+
+    tested_object = GeneratedImage.new(source_file: source_missing, width: 100,
+                                       format: 'webp')
+
+    MiniMagick::Image.stubs(:open).with(@name).returns(dummy_image)
+
+    dummy_image.stubs(:format).with('webp') # << doesn't work.
+
+    dummy_image.stubs(:combine_options).yields(dummy_option)
+
+    dummy_option.expects(:resize).with('100x')
+    dummy_option.expects(:auto_orient)
+    dummy_option.expects(:strip)
+
+    tested_object.expects(:write_image).with(dummy_image)
+
+    tested_object.send(:generate_image)
+  end
+
+  def test_write_image
+    dummy = Object.new
+    GeneratedImage.any_instance.stubs(:absolute_filename).returns('correct')
+
+    GeneratedImage.any_instance.expects(:check_dest_dir)
+    FileUtils.expects(:chmod).with(0o644, 'correct')
+    dummy.expects(:write).with('correct')
+
+    GeneratedImage.new(
+      source_file: source_missing,
+      width: 100,
+      format: 'webp'
+    ).send(:write_image, dummy)
   end
 
   # check dest dir exists
   def test_check_dest_dir_existing
-    Dir.expects(:exist?)
-       .with('/home/loser/generated')
-       .returns(true)
-    PictureTag.stubs(:dest_dir)
-              .returns('/home/loser/generated/')
+    PictureTag.stubs(:dest_dir).returns('/home/loser/generated/')
+    Dir.stubs(:exist?).with('/home/loser/generated').returns(true)
 
-    GeneratedImage.new(source_file: source_missing, width: 100, format:
-                       'webp').send(:check_dest_dir)
+    FileUtils.expects(:mkdir_p).never
+
+    tested(source_existing).send(:check_dest_dir)
   end
 
   # check dest dir missing
   def test_check_dest_dir_missing
-    Dir.expects(:exist?)
-       .with('/home/loser/generated')
-       .returns(false)
-    PictureTag.stubs(:dest_dir)
-              .returns('/home/loser/generated/')
-    FileUtils.expects(:mkdir_p)
-             .with('/home/loser/generated')
+    PictureTag.stubs(:dest_dir).returns('/home/loser/generated/')
+    Dir.stubs(:exist?).with('/home/loser/generated').returns(false)
 
-    GeneratedImage.new(source_file: source_missing, width: 100, format:
-                       'webp').send(:check_dest_dir)
+    FileUtils.expects(:mkdir_p).with('/home/loser/generated')
+
+    tested(source_existing).send(:check_dest_dir)
   end
 
   def test_process_format_original

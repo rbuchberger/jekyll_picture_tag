@@ -12,14 +12,13 @@ class TestOutputFormatBasic < Minitest::Test
   def test_build_base_img
     tag_stub = SingleTagStub.new('img', [])
     fallback_stub = SingleTagStub.new('fallback')
-    SingleTag.expects(:new).with('img').returns(tag_stub)
-    PictureTag.expects(:html_attributes).returns(
-      'img' => 'img attributes',
-      'implicit' => 'implicit attributes',
+    SingleTag.stubs(:new).with('img').returns(tag_stub)
+    PictureTag.stubs(:html_attributes).returns(
+      'img' => 'img attributes', 'implicit' => 'implicit attributes',
       'alt' => 'alt text'
     )
+    @tested.stubs(:build_fallback_image).returns(fallback_stub)
 
-    @tested.expects(:build_fallback_image).returns(fallback_stub)
     @tested.expects(:add_src).with(tag_stub, 'fallback')
     @tested.expects(:add_alt).with(tag_stub, 'alt text')
     assert_equal tag_stub, @tested.build_base_img
@@ -27,16 +26,16 @@ class TestOutputFormatBasic < Minitest::Test
 
   # to_s
   def test_to_s
-    @tested.expects(:base_markup).returns('good markup')
-    @tested.expects(:wrap).with('good markup').returns(:wrapped_markup)
+    @tested.stubs(:base_markup).returns('base markup')
+    @tested.stubs(:wrap).with('base markup').returns(:wrapped_markup)
 
     assert_equal 'wrapped_markup', @tested.to_s
   end
 
   # wrap
   def test_wrap
-    PictureTag.expects(:html_attributes).returns('link' => 'good link')
-    PictureTag.expects(:nomarkdown?).returns(true)
+    PictureTag.stubs(:html_attributes).returns('link' => 'good link')
+    PictureTag.stubs(:nomarkdown?).returns(true)
 
     @tested.expects(:anchor_tag).with('markup').returns('<a>markup</a>')
     @tested.expects(:nomarkdown_wrapper).with('<a>markup</a>')
@@ -46,7 +45,7 @@ class TestOutputFormatBasic < Minitest::Test
   end
 
   def test_skip_wrap
-    PictureTag.expects(:html_attributes).returns('link' => nil)
+    PictureTag.stubs(:html_attributes).returns('link' => nil)
 
     assert_equal 'correct', @tested.send(:wrap, 'correct')
   end
@@ -75,7 +74,8 @@ class TestOutputFormatBasic < Minitest::Test
   # add_src
   def test_add_src
     dummy = Object.new
-    PictureTag.expects(:build_url).with('some name').returns('good src')
+
+    PictureTag.stubs(:build_url).with('some name').returns('good src')
     dummy.expects(:src=).with('good src')
 
     @tested.send(:add_src, dummy, 'some name')
@@ -84,7 +84,7 @@ class TestOutputFormatBasic < Minitest::Test
   # add_srcset
   def test_add_srcset
     dummy_srcset = Object.new
-    dummy_srcset.expects(:to_s).returns('good srcset')
+    dummy_srcset.stubs(:to_s).returns('good srcset')
 
     dummy_element = Object.new
     dummy_element.expects(:srcset=).with('good srcset')
@@ -95,8 +95,7 @@ class TestOutputFormatBasic < Minitest::Test
   # add_sizes
   def test_add_sizes
     dummy_srcset = Object.new
-    dummy_srcset.expects(:sizes).returns('good sizes')
-    dummy_srcset.expects(:sizes).returns('good sizes')
+    dummy_srcset.stubs(:sizes).returns('good sizes')
 
     dummy_element = Object.new
     dummy_element.expects(:sizes=).with('good sizes')
@@ -115,8 +114,8 @@ class TestOutputFormatBasic < Minitest::Test
   # add_media
   def test_add_media
     dummy_srcset = Object.new
-    dummy_srcset.expects(:media).returns('yes')
-    dummy_srcset.expects(:media_attribute).returns('good attribute')
+    dummy_srcset.stubs(:media).returns('yes')
+    dummy_srcset.stubs(:media_attribute).returns('good attribute')
 
     dummy_element = Object.new
     dummy_element.expects(:media=).with('good attribute')
@@ -126,9 +125,9 @@ class TestOutputFormatBasic < Minitest::Test
 
   # build_fallback_image
   def test_build_fallback_image
-    PictureTag.expects(:source_images).returns(nil => 'source image')
-    PictureTag.expects(:fallback_format).returns('fallback format')
-    PictureTag.expects(:fallback_width).returns('fallback width')
+    PictureTag.stubs(:source_images).returns(nil => 'source image')
+    PictureTag.stubs(:fallback_format).returns('fallback format')
+    PictureTag.stubs(:fallback_width).returns('fallback width')
 
     GeneratedImage.expects(:new).with(source_file: 'source image',
                                       format: 'fallback format',
