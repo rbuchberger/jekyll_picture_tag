@@ -6,7 +6,8 @@ class TestUtils < Minitest::Test
 
   # Should strip a trailing slash
   def test_keep_files
-    sitestub = SiteStub.new('keep_files' => [])
+    sitestub = Object.new
+    sitestub.stubs(:config).returns('keep_files' => [])
     PictureTag.stubs(:site).returns(sitestub)
     PictureTag.stubs(:config).returns(
       'picture' => {
@@ -21,7 +22,7 @@ class TestUtils < Minitest::Test
 
   # test_warning_enabled
   def test_warning_enabled
-    PictureTag.expects(:config).returns(
+    PictureTag.stubs(:config).returns(
       'picture' => {
         'suppress_warnings' => false
       }
@@ -35,7 +36,7 @@ class TestUtils < Minitest::Test
 
   # test_warning_disabled
   def test_warning_disabled
-    PictureTag.expects(:config).returns(
+    PictureTag.stubs(:config).returns(
       'picture' => {
         'suppress_warnings' => true
       }
@@ -48,16 +49,13 @@ class TestUtils < Minitest::Test
 
   # test_liquid_lookup
   def test_liquid_lookup
-    template_stub = LiquidTemplate.new
+    template_stub = Object.new
+    PictureTag.stubs(:context).returns('context')
 
-    params = 'params'
-    context = 'context'
+    Liquid::Template.stubs(:parse).with('params').returns(template_stub)
+    template_stub.expects(:render).with('context')
 
-    Liquid::Template.expects(:parse).with(params).returns(template_stub)
-    PictureTag.stubs(:context).returns(context)
-    template_stub.expects(:render).with(context)
-
-    Utils.liquid_lookup(params)
+    Utils.liquid_lookup('params')
   end
 
   # test_count_srcsets
