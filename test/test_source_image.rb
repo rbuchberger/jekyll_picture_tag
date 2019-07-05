@@ -22,8 +22,8 @@ class TestSourceImage < Minitest::Test
 
   # digest_existing
   def test_digest_existing
-    Digest::MD5.expects(:hexdigest).returns(('a'..'z').to_a.join)
-    File.expects(:read).returns('i am a file i swear')
+    Digest::MD5.stubs(:hexdigest).returns(('a'..'z').to_a.join)
+    File.stubs(:read).returns('i am a file i swear')
 
     assert_equal ('a'..'f').to_a.join, setup_existing.digest
   end
@@ -45,7 +45,7 @@ class TestSourceImage < Minitest::Test
 
   # size existing
   def test_size_existing
-    FastImage.expects(:size).with('/dev/urandom.jpg').returns([88, 99])
+    FastImage.stubs(:size).with('/dev/urandom.jpg').returns([88, 99])
 
     assert_equal({ width: 88, height: 99 }, setup_existing.size)
   end
@@ -57,26 +57,26 @@ class TestSourceImage < Minitest::Test
 
   # grab_file existing
   def test_grab_file_existing
-    PictureTag.expects(:source_dir).returns('/home/loser/')
-    File.expects(:exist?).with('/home/loser/image.jpg').returns(true)
+    PictureTag.stubs(:source_dir).returns('/home/loser/')
+    File.stubs(:exist?).with('/home/loser/image.jpg').returns(true)
 
     assert_equal '/home/loser/image.jpg', SourceImage.new('image.jpg').name
   end
 
   # grab_file missing
   def test_grab_file_missing_continue
-    PictureTag.expects(:source_dir).returns('/home/loser/')
-    File.expects(:exist?).with('/home/loser/image.jpg').returns(false)
-    PictureTag.expects(:continue_on_missing?).returns(true)
-    Utils.expects(:warning)
+    PictureTag.stubs(:source_dir).returns('/home/loser/')
+    File.stubs(:exist?).with('/home/loser/image.jpg').returns(false)
+    PictureTag.stubs(:continue_on_missing?).returns(true)
 
+    Utils.expects(:warning)
     assert SourceImage.new('image.jpg').missing
   end
 
   def test_grab_file_missing_abort
-    PictureTag.expects(:source_dir).returns('/home/loser/')
-    File.expects(:exist?).with('/home/loser/image.jpg').returns(false)
-    PictureTag.expects(:continue_on_missing?).returns(false)
+    PictureTag.stubs(:source_dir).returns('/home/loser/')
+    File.stubs(:exist?).with('/home/loser/image.jpg').returns(false)
+    PictureTag.stubs(:continue_on_missing?).returns(false)
 
     assert_raises ArgumentError do
       SourceImage.new('image.jpg')
