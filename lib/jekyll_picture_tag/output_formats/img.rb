@@ -4,7 +4,7 @@ module PictureTag
     # Used when <picture> is unnecessary.
     class Img < Basic
       def srcset
-        build_srcset(nil, PictureTag.formats.first)
+        @srcset ||= build_srcset(nil, PictureTag.formats.first)
       end
 
       def base_markup

@@ -73,6 +73,6 @@ module PictureTag
           format: @format
         )
       end
-          end
+    end
   end
 end

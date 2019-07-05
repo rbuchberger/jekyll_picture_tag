@@ -35,6 +35,10 @@ class GeneratedImage
 
     image.format @format
 
+    write_image(image)
+  end
+
+  def write_image(image)
     check_dest_dir
 
     image.write absolute_filename
