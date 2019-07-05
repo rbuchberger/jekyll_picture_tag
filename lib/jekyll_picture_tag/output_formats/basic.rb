@@ -42,22 +42,13 @@ module PictureTag
       # Media is the media query associated with the desired source image.
       def build_srcset(media, format)
         if PictureTag.preset['pixel_ratios']
-          build_pixel_ratio_srcset(media, format)
+          Srcsets::PixelRatio.new(media: media, format: format)
         else
-          build_width_srcset(media, format)
+          Srcsets::Width.new(media: media, format: format)
         end
       end
 
-      def build_pixel_ratio_srcset(media, format)
-        Srcsets::PixelRatio.new(media: media, format: format)
-      end
-
-      def build_width_srcset(media, format)
-        Srcsets::Width.new(media: media, format: format)
-      end
-
       # Extracting these functions to their own methods for easy overriding.
-      # They are destructive.
       def add_src(element, name)
         element.src = PictureTag.build_url name
       end
