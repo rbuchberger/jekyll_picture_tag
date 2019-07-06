@@ -1,9 +1,9 @@
-# Generated Image
-# Represents a generated source file.
-module PictureTag
-  class GeneratedImage
-    require 'mini_magick'
+require 'mini_magick'
 
+module PictureTag
+  # Generated Image
+  # Represents a generated source file.
+  class GeneratedImage
     attr_reader :width
 
     def initialize(source_file:, width:, format:)
