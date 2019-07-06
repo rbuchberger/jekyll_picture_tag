@@ -22,11 +22,8 @@ class TestUtils < Minitest::Test
 
   # test_warning_enabled
   def test_warning_enabled
-    PictureTag.stubs(:config).returns(
-      'picture' => {
-        'suppress_warnings' => false
-      }
-    )
+    PictureTag
+      .stubs(:config).returns('picture' => { 'suppress_warnings' => false })
 
     # First arg is stdout, second is a regex matching stderr
     assert_output nil, /test message/ do
@@ -36,11 +33,8 @@ class TestUtils < Minitest::Test
 
   # test_warning_disabled
   def test_warning_disabled
-    PictureTag.stubs(:config).returns(
-      'picture' => {
-        'suppress_warnings' => true
-      }
-    )
+    PictureTag
+      .stubs(:config).returns('picture' => { 'suppress_warnings' => true })
 
     assert_silent do
       Utils.warning('test message')
