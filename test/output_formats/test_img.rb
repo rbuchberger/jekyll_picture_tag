@@ -1,34 +1,20 @@
 require 'test_helper'
+require_relative './test_helper_output'
 
 class TestOutputFormatImg < Minitest::Test
   include PictureTag
   include TestHelper
+  include OutputFormatTestHelper
 
   def setup
-    GeneratedImage
-      .stubs(:new)
-      .returns(GeneratedImageStub.new(name: 'generated.img', width: 999))
-    PictureTag::Srcsets::Basic
-      .stubs(:new)
-      .returns(SrcsetWidthStub.new(nil, 'srcset', nil))
-    PictureTag.stubs(fallback_format: 'fallback format',
-                     fallback_width: 100,
-                     preset: { 'widths' => [100, 200, 300] },
-                     source_images: { nil => 'img.jpg' },
-                     formats: ['original'],
-                     build_url: 'good_url',
-                     html_attributes: {},
-                     nomarkdown: false)
+    stub_srcset
+    stub_generated_image
+    stub_picture_tag
+
+    PictureTag.stubs(source_images: { nil => 'img.jpg' },
+                     formats: ['original'])
 
     @tested = OutputFormats::Img.new
-  end
-
-  def pixel_ratio_stub
-    SrcsetWidthStub.new(nil, 'pixel srcset', nil)
-  end
-
-  def width_stub
-    SrcsetWidthStub.new(nil, 'width srcset', nil)
   end
 
   # Test cases:
@@ -66,7 +52,7 @@ class TestOutputFormatImg < Minitest::Test
   # img with srcset and sizes
   def test_srcset_and_sizes
     Srcsets::Width.stubs(:new).returns(
-      SrcsetWidthStub.new('correct sizes', 'width srcset')
+      SrcsetStub.new('correct sizes', 'width srcset')
     )
 
     correct = <<~HEREDOC
@@ -97,8 +83,8 @@ class TestOutputFormatImg < Minitest::Test
 
     assert_equal correct, @tested.to_s
   end
-  # img with img attributes
 
+  # img with img attributes
   def test_img_attrs
     PictureTag.stubs(:html_attributes).returns('img' => 'class="img"')
 
@@ -122,5 +108,55 @@ class TestOutputFormatImg < Minitest::Test
   end
 
   # anchor tag wrapper
-  # nomarkdown wrapper
+  def test_anchor_tag
+    PictureTag.stubs(:html_attributes)
+              .returns('link' => 'some link')
+
+    correct = <<~HEREDOC
+      <a href="some link">
+        <img src="good_url" srcset="srcset">
+      </a>
+    HEREDOC
+
+    assert_equal correct, @tested.to_s
+  end
+
+  # anchor with attributes
+  def test_anchor_with_attrs
+    PictureTag.stubs(:html_attributes)
+              .returns('link' => 'some link', 'a' => 'class="anchor"')
+
+    correct = <<~HEREDOC
+      <a class="anchor" href="some link">
+        <img src="good_url" srcset="srcset">
+      </a>
+    HEREDOC
+
+    assert_equal correct, @tested.to_s
+  end
+
+  # nomarkdown wrapper autodetection
+  # Setting is true, but with no link it shouldn't wrap
+  def test_nomarkdown_wrapper_autodetect
+    PictureTag.stubs(:nomarkdown?).returns(true)
+
+    correct = <<~HEREDOC
+      <img src="good_url" srcset="srcset">
+    HEREDOC
+
+    assert_equal correct, @tested.to_s
+  end
+
+  # setting is true, with link. Should get oneline with wrapper
+  def test_nomarkdown_wrapper
+    PictureTag.stubs(:nomarkdown? => true,
+                     'html_attributes' => { 'link' => 'some link' })
+
+    correct = <<~HEREDOC
+      {::nomarkdown}<a href="some link">  <img src="good_url" srcset="srcset"></a>{:/nomarkdown}
+    HEREDOC
+    correct.delete!("\n")
+
+    assert_equal correct, @tested.to_s
+  end
 end

@@ -25,4 +25,8 @@ module TestHelper
   SingleTagStub = Struct.new(
     :name, :attributes
   )
+
+  SrcsetStub = Struct.new(
+    :sizes, :to_s, :media, :mime_type
+  )
 end
