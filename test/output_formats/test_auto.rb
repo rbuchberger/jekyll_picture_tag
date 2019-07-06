@@ -6,7 +6,8 @@ class TestOutputFormatAuto < Minitest::Test
 
   # one srcset
   def test_one_srcset
-    Utils.expects(:count_srcsets).returns 1
+    Utils.stubs(:count_srcsets).returns 1
+
     OutputFormats::Img.expects(:new)
 
     OutputFormats::Auto.new
@@ -14,7 +15,8 @@ class TestOutputFormatAuto < Minitest::Test
   # multiple srcsets
 
   def test_multiple_srcsets
-    Utils.expects(:count_srcsets).returns 3
+    Utils.stubs(:count_srcsets).returns 3
+
     OutputFormats::Picture.expects(:new)
 
     OutputFormats::Auto.new
