@@ -84,7 +84,7 @@ module PictureTag
       # Kramdown is super picky about the {::nomarkdown} extension-- we have to
       # strip line breaks or nothing works.
       def nomarkdown_wrapper(content)
-        "{::nomarkdown}#{content.delete("\n")}{:/nomarkdown}"
+        "{::nomarkdown}#{content.delete("\n").gsub(/>  </, '><')}{:/nomarkdown}"
       end
 
       def anchor_tag(content)

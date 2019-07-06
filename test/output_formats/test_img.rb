@@ -153,7 +153,7 @@ class TestOutputFormatImg < Minitest::Test
                      'html_attributes' => { 'link' => 'some link' })
 
     correct = <<~HEREDOC
-      {::nomarkdown}<a href="some link">  <img src="good_url" srcset="srcset"></a>{:/nomarkdown}
+      {::nomarkdown}<a href="some link"><img src="good_url" srcset="srcset"></a>{:/nomarkdown}
     HEREDOC
     correct.delete!("\n")
 
