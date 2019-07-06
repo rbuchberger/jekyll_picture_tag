@@ -27,6 +27,6 @@ module TestHelper
   )
 
   SrcsetStub = Struct.new(
-    :sizes, :to_s, :media, :mime_type
+    :sizes, :to_s, :media, :mime_type, :media_attribute
   )
 end
