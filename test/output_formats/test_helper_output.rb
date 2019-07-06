@@ -10,7 +10,7 @@ module OutputFormatTestHelper
   end
 
   def stub_generated_image
-    GeneratedImage
+    PictureTag::GeneratedImage
       .stubs(:new)
       .returns(GeneratedImageStub.new(name: 'generated.img', width: 999))
   end
