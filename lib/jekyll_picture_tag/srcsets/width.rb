@@ -28,7 +28,7 @@ module PictureTag
       def build_srcset_entry(width)
         file = generate_file(width)
 
-        "#{PictureTag.build_url(file.name)} #{file.width}w"
+        "#{file.uri} #{file.width}w"
       end
 
       def build_size_entry(media, size)

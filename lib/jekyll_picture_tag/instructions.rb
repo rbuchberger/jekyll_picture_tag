@@ -74,10 +74,6 @@ module PictureTag
       @config.dest_dir
     end
 
-    def build_url(filename)
-      @config.build_url(filename)
-    end
-
     def build_source_url(filename)
       @config.build_source_url(filename)
     end

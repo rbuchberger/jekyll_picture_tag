@@ -51,7 +51,7 @@ module PictureTag
         "(#{PictureTag.media_presets[@media]})"
       end
 
-            private
+      private
 
       def handle_small_source(targets, image_width)
         Utils.warning(

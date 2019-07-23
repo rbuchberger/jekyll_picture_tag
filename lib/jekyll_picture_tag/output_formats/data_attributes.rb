@@ -10,7 +10,7 @@ module PictureTag
       private
 
       def add_src(element, name)
-        element.attributes << { 'data-src' => PictureTag.build_url(name) }
+        element.attributes << { 'data-src' => ImgURI.new(name).to_s }
       end
 
       def add_srcset(element, srcset)

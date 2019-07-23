@@ -7,6 +7,7 @@ require_relative 'jekyll_picture_tag/output_formats'
 require_relative 'jekyll_picture_tag/source_image'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
+require_relative 'jekyll_picture_tag/img_uri'
 
 # Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski   : @robwierzbowski

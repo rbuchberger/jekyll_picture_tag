@@ -22,6 +22,10 @@ module PictureTag
       @absolute_filename ||= File.join(PictureTag.dest_dir, name)
     end
 
+    def uri
+      ImgURI.new(name).to_s
+    end
+
     private
 
     def generate_image

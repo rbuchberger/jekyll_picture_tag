@@ -19,7 +19,7 @@ module PictureTag
         pixel_ratio = (width.to_f / PictureTag.preset['base_width']).round(2)
         file = generate_file(width)
 
-        "#{PictureTag.build_url(file.name)} #{pixel_ratio}x"
+        "#{file.uri} #{pixel_ratio}x"
       end
     end
   end

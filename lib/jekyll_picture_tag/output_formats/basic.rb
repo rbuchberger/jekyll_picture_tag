@@ -16,7 +16,7 @@ module PictureTag
 
         fallback = build_fallback_image
 
-        add_src(img, fallback.name)
+        add_src(img, fallback.uri)
 
         add_alt(img, attributes['alt'])
 
@@ -49,8 +49,8 @@ module PictureTag
       end
 
       # Extracting these functions to their own methods for easy overriding.
-      def add_src(element, name)
-        element.src = PictureTag.build_url name
+      def add_src(element, uri)
+        element.src = uri
       end
 
       def add_srcset(element, srcset)
