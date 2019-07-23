@@ -1,13 +1,14 @@
 module PictureTag
   # Handles a given source image file and its properties. Provides a speed
   # advantage by storing expensive file reads and writes in instance variables,
-  # to be reused by many different source images.
+  # to be reused by many different generated images.
   class SourceImage
-    attr_reader :name, :shortname, :missing
+    attr_reader :name, :shortname, :missing, :media_preset
 
-    def initialize(relative_filename)
+    def initialize(relative_filename, media_preset = nil)
       @shortname = relative_filename
       @name = grab_file relative_filename
+      @media_preset = media_preset
     end
 
     def size

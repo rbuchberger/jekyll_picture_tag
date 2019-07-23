@@ -10,12 +10,12 @@ module PictureTag
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
     class Basic
-      attr_reader :media, :source_image
+      attr_reader :format, :source_image, :media
 
-      def initialize(media:, format:)
-        @media = media # Associated Media Query, can be nil
+      def initialize(source_image, format)
         @format = format # output format
-        @source_image = PictureTag.source_images[@media]
+        @source_image = source_image
+        @media = source_image.media_preset
       end
 
       def to_a

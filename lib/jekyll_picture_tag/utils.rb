@@ -30,10 +30,7 @@ module PictureTag
 
       # Used for auto markup configuration and such
       def count_srcsets
-        formats = PictureTag.formats.length
-        source_images = PictureTag.source_images.length
-
-        formats * source_images
+        PictureTag.formats.length * PictureTag.source_images.length
       end
 
       # Returns whether or not the current page is a markdown file.
@@ -47,7 +44,7 @@ module PictureTag
 
       # Returns the widest source image
       def biggest_source
-        PictureTag.source_images.values.max_by(&:width)
+        PictureTag.source_images.max_by(&:width)
       end
 
       def titleize(input)

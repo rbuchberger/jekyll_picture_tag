@@ -31,9 +31,22 @@ module PictureTag
       end
 
       def source_images
-        @source_images ||=
-          params.source_names
-                .transform_values { |n| PictureTag::SourceImage.new n }
+        @source_images ||= build_source_images
+      end
+
+      def build_source_images
+        source_names = params.source_names
+        media_presets = params.media_presets
+
+        sources = [SourceImage.new(source_names.shift)]
+
+        while params.source_names.any?
+          sources << SourceImage.new(
+            source_names.shift, media_presets.shift
+          )
+        end
+
+        sources
       end
 
       # Returns a class constant for the selected output format, which is used

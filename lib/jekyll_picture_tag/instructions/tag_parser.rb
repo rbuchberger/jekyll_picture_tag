@@ -5,27 +5,26 @@ module PictureTag
     # queries (if present). The leftovers (html attributes) are handed off to
     # its respective class.
     class TagParser
-      attr_reader :preset_name, :leftovers, :source_names
+      attr_reader :preset_name, :leftovers, :source_names, :media_presets
       def initialize(raw_params)
         @params = PictureTag::Utils.liquid_lookup(raw_params).split
 
         @preset_name = grab_preset_name
 
-        # source_names keys are media queries, values are source images. The
-        # first param specified will be our base image, so it has no associated
-        # media query. Yes, nil can be a hash key.
-        @source_names = { nil => @params.shift }
+        # The first param specified will be our base image, so it has no
+        # associated media query.
+        @media_presets = []
+        @source_names = [@params.shift]
 
         # Detect and store arguments of the format 'media_query: img.jpg' as
         # keys and values.
         while @params.first =~ /[\w\-]+:/
-          media_query = @params.shift[0..-2]
-          image_filename = @params.shift
-
-          @source_names[media_query] = image_filename
+          # There's an extra ':' at the end we need to remove:
+          @media_presets << @params.shift[0..-2]
+          @source_names << @params.shift
         end
 
-        # Anything left will be html attributes, which is some other classes
+        # Anything left will be html attributes, which is some other classes'
         # problem.
         @leftovers = @params.join(' ')
       end

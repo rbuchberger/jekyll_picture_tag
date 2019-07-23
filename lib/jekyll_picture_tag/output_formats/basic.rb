@@ -40,11 +40,11 @@ module PictureTag
       end
 
       # Media is the media query associated with the desired source image.
-      def build_srcset(media, format)
+      def build_srcset(source_image, format)
         if PictureTag.preset['pixel_ratios']
-          Srcsets::PixelRatio.new(media: media, format: format)
+          Srcsets::PixelRatio.new(source_image, format)
         else
-          Srcsets::Width.new(media: media, format: format)
+          Srcsets::Width.new(source_image, format)
         end
       end
 
@@ -72,7 +72,7 @@ module PictureTag
       # File, not HTML
       def build_fallback_image
         GeneratedImage.new(
-          source_file: PictureTag.source_images[nil],
+          source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width
         )
