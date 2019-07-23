@@ -8,6 +8,7 @@ require_relative 'jekyll_picture_tag/source_image'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
 require_relative 'jekyll_picture_tag/img_uri'
+require_relative 'jekyll_picture_tag/router'
 
 # Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski   : @robwierzbowski
@@ -38,7 +39,7 @@ require_relative 'jekyll_picture_tag/img_uri'
 #
 # See the documentation for full configuration and usage instructions.
 module PictureTag
-  extend Instructions
+  extend Router
   ROOT_PATH = __dir__
 
   # This is the actual liquid tag, which provides the interface with Jekyll.
