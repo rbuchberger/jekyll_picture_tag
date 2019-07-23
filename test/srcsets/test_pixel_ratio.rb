@@ -18,21 +18,4 @@ class TestSrcsetPixelRatio < Minitest::Test
       format: 'some format'
     )
   end
-
-  # widths
-  def test_widths
-    @tested.expects(:check_widths).with([100, 150, 200])
-
-    @tested.send(:widths)
-  end
-
-  # build_srcset_entry
-  def test_build_srcset_entry
-    file_stub = GeneratedImageStub.new(name: 'good filename')
-
-    @tested.expects(:generate_file).with(200).returns(file_stub)
-    PictureTag.expects(:build_url).with('good filename').returns('good url')
-
-    assert_equal 'good url 2.0x', @tested.send(:build_srcset_entry, 200)
-  end
 end
