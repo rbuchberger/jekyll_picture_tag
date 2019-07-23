@@ -50,8 +50,16 @@ module PictureTag
     end
 
     def render(context)
-      # We can't initialize the tag until we have a context.
-      PictureTag.init(@raw_params, context)
+      # Jekyll passes in a mostly undocumented context object, which appears to
+      # hold the entire site, including configuration and the _data dir.
+      PictureTag.context = context
+
+      # The instruction set depends on both the context and the tag parameters:
+      PictureTag.instructions = Instructions::Set.new(@raw_params)
+
+      # We need to explicitly prevent jekyll from overwriting our generated
+      # files:
+      Utils.keep_files
 
       # Return a string:
       PictureTag.output_class.new.to_s
