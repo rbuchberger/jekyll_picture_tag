@@ -7,8 +7,14 @@ module PictureTag
         @content = build_config
       end
 
+      # returns jekyll's configuration (picture is a subset)
       def [](key)
         @content[key]
+      end
+
+      # picturetag specific configuration
+      def pconfig
+        @content['picture']
       end
 
       # Digs into jekyll context, returns current environment
@@ -46,6 +52,10 @@ module PictureTag
         else
           setting
         end
+      end
+
+      def cdn?
+        pconfig['cdn_url'] && pconfig['cdn_environments'].include?(jekyll_env)
       end
 
       private

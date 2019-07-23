@@ -82,6 +82,14 @@ module PictureTag
       @config.continue_on_missing?
     end
 
+    def cdn?
+      @config.cdn?
+    end
+
+    def pconfig
+      @config.pconfig
+    end
+
     # Preset forwarding
     def widths(media)
       @preset.widths(media)
