@@ -19,7 +19,7 @@ module TestHelper
   )
 
   GeneratedImageStub = Struct.new(
-    :name, :width, keyword_init: true
+    :name, :width, :uri, keyword_init: true
   )
 
   SingleTagStub = Struct.new(

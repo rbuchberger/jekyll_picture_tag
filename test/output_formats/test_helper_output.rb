@@ -17,14 +17,15 @@ module OutputFormatTestHelper
   def stub_generated_image
     PictureTag::GeneratedImage
       .stubs(:new)
-      .returns(GeneratedImageStub.new(name: 'generated.img', width: 999))
+      .returns(GeneratedImageStub.new(
+                 name: 'generated.img', uri: 'good_url', width: 999
+               ))
   end
 
   def stub_picture_tag
     PictureTag.stubs(fallback_format: 'fallback format',
                      fallback_width: 100,
                      preset: { 'widths' => [100, 200, 300] },
-                     build_url: 'good_url',
                      html_attributes: {},
                      nomarkdown?: false)
   end
