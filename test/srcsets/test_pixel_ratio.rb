@@ -1,21 +1,26 @@
-require 'test_helper'
+require_relative 'test_helper_srcsets'
+
 class TestSrcsetPixelRatio < Minitest::Test
-  include PictureTag
-  include TestHelper
-
+  include TestHelperSrcset
   def setup
-    @source_image = SourceImageStub.new(width: 1000, shortname: 'some name')
+    build_source_stub
+    build_genstubs
 
-    PictureTag.stubs(:source_images).returns(
-      'mobile' => @source_image
-    )
+    PictureTag.stubs(preset: {
+                       'pixel_ratios' => [1, 1.5, 2, 3],
+                       'base_width' => 100
+                     })
 
-    PictureTag.stubs(:preset).returns('pixel_ratios' => [1, 1.5, 2],
-                                      'base_width' => 100)
+    @tested = Srcsets::PixelRatio.new(@source_image, 'original')
+  end
 
-    @tested = Srcsets::PixelRatio.new(
-      media: 'mobile',
-      format: 'some format'
-    )
+  def test_basic
+    correct =
+      '/img-100-aaaaa.jpg 1.0x, ' \
+      '/img-150-aaaaa.jpg 1.5x, ' \
+      '/img-200-aaaaa.jpg 2.0x, ' \
+      '/img-300-aaaaa.jpg 3.0x'
+
+    assert_equal correct, @tested.to_s
   end
 end
