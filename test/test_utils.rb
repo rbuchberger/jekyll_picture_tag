@@ -76,15 +76,15 @@ class TestUtils < Minitest::Test
 
   # test_biggest_source
   def test_biggest_source
-    images = {}
+    images = []
 
     5.times do |i|
-      images[i] = ImageStruct.new(100 + i * 100)
+      images << ImageStruct.new(100 + i * 100)
     end
 
     PictureTag.stubs(:source_images).returns(images)
 
-    assert_equal images[4], Utils.biggest_source
+    assert_equal images.last, Utils.biggest_source
   end
 
   def test_titleize

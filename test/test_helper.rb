@@ -15,6 +15,7 @@ module TestHelper
     :ext,
     :width,
     :shortname,
+    :media_preset,
     keyword_init: true
   )
 

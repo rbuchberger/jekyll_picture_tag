@@ -8,12 +8,14 @@ class TestSourceImage < Minitest::Test
     PictureTag.stubs(:source_dir).returns('/home/loser/')
     File.stubs(:exist?).returns(true)
 
-    @tested = SourceImage.new('img.jpg')
+    @tested = SourceImage.new('img.jpg', 'media preset')
   end
 
   def test_digest
-    Digest::MD5.stubs(:hexdigest).returns(('a'..'z').to_a.join)
-    File.stubs(:read).with('/home/loser/img.jpg').returns('i am a file i swear')
+    File.stubs(:read).with('/home/loser/img.jpg').returns('some file')
+    Digest::MD5.stubs(:hexdigest)
+               .with('some file')
+               .returns(('a'..'z').to_a.join)
 
     assert_equal ('a'..'f').to_a.join, @tested.digest
   end
@@ -47,5 +49,9 @@ class TestSourceImage < Minitest::Test
     assert_raises ArgumentError do
       SourceImage.new('img.jpg')
     end
+  end
+
+  def test_media_preset
+    assert_equal 'media preset', @tested.media_preset
   end
 end
