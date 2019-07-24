@@ -18,7 +18,7 @@ class GeneratedImageTest < Minitest::Test
 
   def tested
     GeneratedImage
-      .new(source_file: @source_stub, width: 100, format: 'WEBP')
+      .new(source_file: @source_stub, width: 100, format: 'webp')
   end
 
   def test_init_existing_dest
@@ -87,18 +87,7 @@ class GeneratedImageTest < Minitest::Test
     tested
   end
 
-  def test_process_format_original
-    File.stubs(:exist?)
-        .with('/home/loser/generated/img-100-aaaaaa.jpg')
-        .returns(true)
-
-    original_test = GeneratedImage.new(source_file: @source_stub, width: 100,
-                                       format: 'original')
-
-    assert_equal '.jpg', File.extname(original_test.name)
-  end
-
-  def test_process_format
+  def test_format
     assert_equal '.webp', File.extname(tested.name)
   end
 end
