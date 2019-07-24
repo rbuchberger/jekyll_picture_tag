@@ -13,8 +13,8 @@ module PictureTag
       attr_reader :format, :source_image, :media
 
       def initialize(source_image, format)
-        @format = format # output format
         @source_image = source_image
+        @format = process_format format
         @media = source_image.media_preset
       end
 
@@ -72,6 +72,14 @@ module PictureTag
           width: width,
           format: @format
         )
+      end
+
+      def process_format(format)
+        if format.casecmp('original').zero?
+          @source_image.ext
+        else
+          format.downcase
+        end
       end
     end
   end
