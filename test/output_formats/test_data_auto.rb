@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestAuto < Minitest::Test
+class TestDataAuto < Minitest::Test
   include PictureTag
   include TestHelper
 
@@ -8,17 +8,17 @@ class TestAuto < Minitest::Test
   def test_one_srcset
     Utils.stubs(:count_srcsets).returns 1
 
-    OutputFormats::Img.expects(:new)
+    OutputFormats::DataImg.expects(:new)
 
-    OutputFormats::Auto.new
+    OutputFormats::DataAuto.new
   end
   # multiple srcsets
 
   def test_multiple_srcsets
     Utils.stubs(:count_srcsets).returns 3
 
-    OutputFormats::Picture.expects(:new)
+    OutputFormats::DataPicture.expects(:new)
 
-    OutputFormats::Auto.new
+    OutputFormats::DataAuto.new
   end
 end
