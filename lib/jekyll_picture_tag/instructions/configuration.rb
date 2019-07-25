@@ -61,31 +61,28 @@ module PictureTag
       private
 
       def build_config
-        YAML.safe_load(
-          # Jekyll Picture Tag Default settings
-          File.read(
-            File.join(ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml')
-          )
-        ).merge(
-          # _config.yml defined settings
-          PictureTag.site.config
-        ) do |_key, jpt_default, site_value|
-          setting_merge(jpt_default, site_value)
+        setting_merge(defaults, PictureTag.site.config)
+      end
+
+      def setting_merge(default, jekyll)
+        jekyll.merge default do |_key, j, d|
+          if d.respond_to? :merge
+            setting_merge(d, j)
+          else
+            j || d
+          end
         end
       end
 
-      def setting_merge(jpt_default, site_value)
-        if site_value.nil?
-          # Jekyll baseurl is nil if not configured, which breaks things.
-          # jpt_default is an empty string, which doesn't.
-          jpt_default
-        elsif site_value.is_a? Hash
-          # We'll merge hashes one level deep. If we need true deep merging,
-          # we'll import a gem or do something recursive.
-          jpt_default.merge site_value
-        else
-          site_value
-        end
+      def defaults
+        # Jekyll Picture Tag Default settings
+        YAML.safe_load(
+          File.read(
+            File.join(
+              ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml'
+            )
+          )
+        )
       end
     end
   end

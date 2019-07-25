@@ -28,7 +28,7 @@ module PictureTag
       elsif PictureTag.pconfig['relative_url']
         ''
       else
-        PictureTag.config['url']
+        PictureTag.url || ''
       end
     end
 
@@ -36,14 +36,16 @@ module PictureTag
     #                     ^^^^^^^^^^^^^
     # |     domain       |  baseurl   |       directory       | filename
     def baseurl
-      PictureTag.config['baseurl']
+      PictureTag.config['baseurl'] || ''
     end
 
     # https://example.com/my-base-path/assets/generated-images/image.jpg
     #                                  ^^^^^^^^^^^^^^^^^^^^^^^^
     # |     domain       |  baseurl   |       directory       | filename
     def directory
-      PictureTag.pconfig[@source_image ? 'source' : 'output']
+      PictureTag.pconfig[
+        @source_image ? 'source' : 'output'
+      ]
     end
   end
 end
