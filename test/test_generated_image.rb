@@ -54,19 +54,6 @@ class GeneratedImageTest < Minitest::Test
     skip
   end
 
-  # def stub_generate_image
-  #   File.stubs(:exist?).with(@destfile).returns(false)
-  #
-  #   image = Object.new
-  #   option = Object.new
-  #
-  #   MiniMagick::Image.stubs(:open).returns(image)
-  #
-  #   image.stubs(:combine_options).yields(option)
-  #
-  #   option.stub_all
-  # end
-
   # check dest dir exists
   def test_dest_dir_existing
     skip
@@ -89,5 +76,14 @@ class GeneratedImageTest < Minitest::Test
 
   def test_format
     assert_equal '.webp', File.extname(tested.name)
+  end
+
+  def test_format_original
+    File.stubs(:exist?).returns true
+    format = GeneratedImage
+             .new(source_file: @source_stub, width: 100, format: 'original')
+             .format
+
+    assert_equal 'jpg', format
   end
 end

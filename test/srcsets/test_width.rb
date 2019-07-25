@@ -36,7 +36,8 @@ class TestSrcsetWidth < Minitest::Test
     PictureTag.stubs(widths: [600])
 
     GeneratedImage.expects(:new)
-                  .with(source_file: @source_image, width: 600, format: 'jpg')
+                  .with(source_file: @source_image, width: 600,
+                        format: 'original')
                   .returns(gstub(600))
 
     @tested.to_s

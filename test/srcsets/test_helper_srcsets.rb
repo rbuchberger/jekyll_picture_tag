@@ -23,11 +23,12 @@ module TestHelperSrcset
     GeneratedImageStub.new(
       name: "img-#{width}-aaaaa.jpg",
       uri: "/img-#{width}-aaaaa.jpg",
-      width: width
+      width: width,
+      format: 'jpg'
     )
   end
 
-  def stub_generated(width, returns, format = 'jpg')
+  def stub_generated(width, returns, format = 'original')
     GeneratedImage.stubs(:new)
                   .with(source_file: @source_image, width: width,
                         format: format)
