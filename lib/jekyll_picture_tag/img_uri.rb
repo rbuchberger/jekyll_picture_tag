@@ -28,7 +28,7 @@ module PictureTag
       elsif PictureTag.pconfig['relative_url']
         ''
       else
-        PictureTag.url || ''
+        PictureTag.config['url'] || ''
       end
     end
 
