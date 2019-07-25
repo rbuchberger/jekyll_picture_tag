@@ -25,9 +25,7 @@ module PictureTag
         check_widths PictureTag.widths(@media)
       end
 
-      def build_srcset_entry(width)
-        file = generate_file(width)
-
+      def build_srcset_entry(file)
         "#{file.uri} #{file.width}w"
       end
 

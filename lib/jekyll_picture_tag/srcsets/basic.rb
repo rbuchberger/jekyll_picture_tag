@@ -10,16 +10,26 @@ module PictureTag
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
     class Basic
-      attr_reader :format, :source_image, :media
+      attr_reader :source_image, :media
 
-      def initialize(source_image, format)
+      def initialize(source_image, input_format)
         @source_image = source_image
-        @format = process_format format
+        @input_format = input_format
         @media = source_image.media_preset
       end
 
+      def format
+        # Input format might be 'original', which is handled by the generated
+        # image.
+        @format ||= files.first.format
+      end
+
+      def files
+        @files ||= widths.collect { |w| generate_file(w) }
+      end
+
       def to_a
-        widths.collect { |w| build_srcset_entry(w) }
+        files.collect { |f| build_srcset_entry(f) }
       end
 
       def to_s
@@ -29,7 +39,7 @@ module PictureTag
       # Allows us to add a type attribute to whichever element contains this
       # srcset.
       def mime_type
-        MIME::Types.type_for(@format).first.to_s
+        MIME::Types.type_for(format).first.to_s
       end
 
       # Some srcsets have them, for those that don't return nil.
@@ -70,16 +80,8 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @format
+          format: @input_format
         )
-      end
-
-      def process_format(format)
-        if format.casecmp('original').zero?
-          @source_image.ext
-        else
-          format.downcase
-        end
       end
     end
   end

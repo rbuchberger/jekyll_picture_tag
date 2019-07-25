@@ -13,11 +13,12 @@ module PictureTag
         check_widths target
       end
 
-      def build_srcset_entry(width)
+      def build_srcset_entry(file)
         # We have to recalculate the pixel ratio after verifying our source
         # image is large enough.
-        pixel_ratio = (width.to_f / PictureTag.preset['base_width']).round(2)
-        file = generate_file(width)
+        pixel_ratio = (
+          file.width.to_f / PictureTag.preset['base_width']
+        ).round(2)
 
         "#{file.uri} #{pixel_ratio}x"
       end

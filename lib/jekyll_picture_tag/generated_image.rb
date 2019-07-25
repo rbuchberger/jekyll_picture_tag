@@ -4,12 +4,12 @@ module PictureTag
   # Generated Image
   # Represents a generated source file.
   class GeneratedImage
-    attr_reader :width
+    attr_reader :width, :format
 
     def initialize(source_file:, width:, format:)
       @source = source_file
       @width  = width
-      @format = format
+      @format = process_format format
 
       generate_image unless File.exist?(absolute_filename) || @source.missing
     end
@@ -55,6 +55,14 @@ module PictureTag
     def check_dest_dir
       dir = File.dirname absolute_filename
       FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+    end
+
+    def process_format(format)
+      if format.casecmp('original').zero?
+        @source.ext
+      else
+        format.downcase
+      end
     end
   end
 end
