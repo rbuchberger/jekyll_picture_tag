@@ -3,6 +3,8 @@ require 'mocha/minitest'
 require 'jekyll_picture_tag'
 
 module TestHelper
+  TEST_DIR = __dir__
+
   ImageStruct = Struct.new(:width)
 
   ConfigStub = Struct.new(:source_dir)

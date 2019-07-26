@@ -5,12 +5,12 @@ class GeneratedImageTest < Minitest::Test
   include TestHelper
 
   def setup
-    @destfile = '/home/loser/generated/img-100-aaaaaa.webp'
-    PictureTag.stubs(:dest_dir).returns('/home/loser/generated')
+    @destfile = '/tmp/jpt/img-100-aaaaaa.webp'
+    PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
     File.stubs(:exist?).with(@destfile).returns true
 
     @source_stub = SourceImageStub.new(base_name: 'img',
-                                       name: '/home/loser/img.jpg',
+                                       name: '/tmp/jpt/img.jpg',
                                        missing: false,
                                        digest: 'a' * 6,
                                        ext: 'jpg')
@@ -44,34 +44,8 @@ class GeneratedImageTest < Minitest::Test
 
   # absolute filename
   def test_absolute_filename
-    assert_equal '/home/loser/generated/img-100-aaaaaa.webp',
+    assert_equal '/tmp/jpt/img-100-aaaaaa.webp',
                  tested.absolute_filename
-  end
-
-  # test generate image
-  # Can't get this one working.
-  def test_generate_image
-    skip
-  end
-
-  # check dest dir exists
-  def test_dest_dir_existing
-    skip
-    Dir.stubs(:exist?).with('/home/loser/generated').returns(true)
-
-    FileUtils.expects(:mkdir_p).never
-
-    tested
-  end
-
-  # check dest dir missing
-  def test_dest_dir_missing
-    skip
-    Dir.stubs(:exist?).with('/home/loser/generated').returns(false)
-
-    FileUtils.expects(:mkdir_p).with('/home/loser/generated')
-
-    tested
   end
 
   def test_format
