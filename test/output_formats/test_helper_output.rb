@@ -23,12 +23,16 @@ module OutputFormatTestHelper
 
   def source_stub_basic
     @source_stub_basic ||=
-      SourceImageStub.new(name: 'img.jpg', media_preset: nil)
+      SourceImageStub.new(name: 'img.jpg', media_preset: nil, width: 2000)
   end
 
   def source_stub_media
     @source_stub_media ||=
-      SourceImageStub.new(name: 'mobile.jpg', media_preset: 'mobile')
+      SourceImageStub.new(
+        name: 'mobile.jpg',
+        media_preset: 'mobile',
+        width: 2000
+      )
   end
 
   def stub_picture_tag

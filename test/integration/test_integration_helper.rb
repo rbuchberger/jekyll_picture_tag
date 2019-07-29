@@ -10,10 +10,34 @@ module TestIntegrationHelper
   SiteStub = Struct.new(:config, :data, :source, :dest)
   TokenStub = Struct.new(:line_number, :locale)
 
-  def tested(params)
+  def tested(params = 'rms.jpg')
     PictureTag::Picture
       .send(:new, 'picture', params, TokenStub.new(true, 'something'))
       .render(@context)
+  end
+
+  def rms_filename(width: 100, format: 'jpg')
+    "/tmp/jpt/generated/rms-#{width}-46a48b.#{format}"
+  end
+
+  def spx_filename(width: 100, format: 'jpg')
+    "/tmp/jpt/generated/spx-#{width}-2e8bb3.#{format}"
+  end
+
+  def rms_file_array(widths, formats)
+    files = formats.collect do |f|
+      widths.collect { |w| rms_filename(width: w, format: f) }
+    end
+
+    files.flatten
+  end
+
+  def spx_file_array(widths, formats)
+    files = formats.collect do |f|
+      widths.collect { |w| spx_filename(width: w, format: f) }
+    end
+
+    files.flatten
   end
 
   def base_stubs
@@ -44,7 +68,7 @@ module TestIntegrationHelper
     @jekyll_env = 'development'
     @jconfig = { 'picture' => @pconfig, 'keep_files' => [] }
     @data = { 'picture' => @pdata }
-    @page = {}
+    @page = { 'ext' => 'html' }
     @site_source = TEST_DIR
     @site_dest = '/tmp/jpt'
   end
