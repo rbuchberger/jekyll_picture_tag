@@ -74,7 +74,7 @@ module PictureTag
         GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width
+          width: checked_fallback_width
         )
       end
 
@@ -93,6 +93,20 @@ module PictureTag
         anchor.href = PictureTag.html_attributes['link']
 
         content.add_parent anchor
+      end
+
+      def checked_fallback_width
+        source = PictureTag.source_images.first
+        target = PictureTag.fallback_width
+
+        if target > source.width
+          Utils.warning "#{source.shortname} is smaller than the " \
+            "requested fallback width of #{target}px. Using #{source.width}" \
+            ' px instead.'
+          source.width
+        else
+          target
+        end
       end
     end
   end
