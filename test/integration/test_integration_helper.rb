@@ -11,11 +11,13 @@ module TestIntegrationHelper
   TokenStub = Struct.new(:line_number, :locale)
 
   def tested(params = 'rms.jpg')
-    Nokogiri::HTML(
-      PictureTag::Picture
-        .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
-        .render(@context)
-    )
+    Nokogiri::HTML(tested_base(params))
+  end
+
+  def tested_base(params = 'rms.jpg')
+    PictureTag::Picture
+      .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
+      .render(@context)
   end
 
   def rms_filename(width: 100, format: 'jpg')
@@ -40,6 +42,16 @@ module TestIntegrationHelper
     end
 
     files.flatten
+  end
+
+  def std_spx_ss
+    '/generated/spx-25-2e8bb3.jpg 25w,' \
+       ' /generated/spx-50-2e8bb3.jpg 50w, /generated/spx-100-2e8bb3.jpg 100w'
+  end
+
+  def std_rms_ss
+    '/generated/rms-25-46a48b.jpg 25w,' \
+      ' /generated/rms-50-46a48b.jpg 50w, /generated/rms-100-46a48b.jpg 100w'
   end
 
   def spx_file_array(widths, formats)
@@ -83,61 +95,106 @@ module TestIntegrationHelper
     @pconfig = {}
     @pdata = {
       'markup_presets' => {
-        # auto
+        'default' => {
+          'widths' => @widths
+        },
+
         'auto' => {
           'widths' => @widths,
           'formats' => %w[webp original]
         },
-        # data auto
+
         'data_auto' => {
           'markup' => 'data_auto',
           'widths' => @widths,
           'formats' => %w[webp original]
         },
-        # data img
+
         'data_img' => {
           'markup' => 'data_img',
           'widths' => @widths
         },
-        # data picture
+
         'data_picture' => {
           'markup' => 'data_picture',
           'widths' => @widths,
           'formats' => %w[webp original]
         },
-        # direct url
+
         'direct_url' => {
           'markup' => 'direct_url',
-          'fallback_width' => 35
+          'fallback_width' => 100
         },
 
-        # img
         'img' => {
           'markup' => 'img',
           'widths' => @widths
         },
 
-        # naked srcset
         'naked_srcset' => {
           'markup' => 'naked_srcset',
           'widths' => @widths
         },
 
-        # picture
-        'picture' => {
-          'markup' => 'picture'
-        }
+        'sizes' => {
+          'sizes' => {
+            'mobile' => '80vw'
+          },
+          'size' => '50%'
+        },
 
-        # pixel ratio sourceset
-        # attributes from preset
-        # attributes from tag
-        # link something
-        # link source
+        'pixel_ratio' => {
+          'base_width' => 10,
+          'pixel_ratios' => [1, 2, 3]
+        },
+
+        'attributes' => {
+          'formats' => %w[webp original],
+          'widths' => @widths,
+          'attributes' => {
+            'parent' => 'class="parent"',
+            'alt' => 'Alternate Text',
+            'a' => 'class="anchor"',
+            'picture' => 'data-awesomeness="11"',
+            'source' => 'class="source"',
+            'img' => 'class="img"'
+          }
+        },
+
+        'link_source' => {
+          'widths' => @widths,
+          'link_source' => true
+        },
+
+        'media_widths' => {
+          'widths' => @widths,
+          'media_widths' => {
+            'mobile' => [10, 20, 30]
+          }
+        },
+
+        'data_noscript' => {
+          'markup' => 'data_img',
+          'widths' => @widths,
+          'noscript' => true
+        },
+
+        'fallback' => {
+          'widths' => @widths,
+          'fallback_width' => 35,
+          'fallback_format' => 'webp'
+        },
+
+        'nomarkdown' => {
+          'widths' => @widths,
+          'nomarkdown' => true
+        }
       },
 
       'media_presets' => {
         'mobile' => 'max-width: 600px'
       }
+
     }
 
     @jekyll_env = 'development'

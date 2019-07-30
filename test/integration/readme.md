@@ -1,22 +1,5 @@
 # Test cases
 
-## presets
-- html attributes (all, including alt text and parent) from preset
-- pixel ratio srcset
-- source image linking
-- sizes attribute
-- media widths
-- output formats
-  * auto
-  * img
-  * picture
-  * data_auto
-  * data_img
-  * data_picture
-    - noscript tag
-  * naked_srcset
-  * direct_url
-
 ## configuration
 
 - nomarkdown wrapper

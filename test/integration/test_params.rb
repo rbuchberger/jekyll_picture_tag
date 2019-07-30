@@ -22,14 +22,15 @@ class TestIntegrationParams < Minitest::Test
     img = output.at_css('img')
 
     assert_equal rms_url, img['src']
-    assert_equal rms_url + ' 100w', img['srcset']
+    assert_equal std_rms_ss, img['srcset']
     assert File.exist? rms_filename
   end
 
   # Make sure it doesn't overwrite existing files
   def test_with_existing
     FileUtils.mkdir_p '/tmp/jpt/generated'
-    FileUtils.touch rms_filename
+    @widths.each { |w| FileUtils.touch rms_filename(width: w) }
+
     MiniMagick::Image.expects(:open).never
 
     tested
