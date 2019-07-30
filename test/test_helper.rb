@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require 'mocha/minitest'
 require 'jekyll_picture_tag'
+require 'pry'
+require 'nokogiri'
 
 module TestHelper
   TEST_DIR = __dir__
