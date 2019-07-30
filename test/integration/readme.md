@@ -1,26 +1,33 @@
 # Test cases
 
-- Basic test case, default settings, missing images
-- basic test case, default settings, existing images
-- multiple source images
-- at least one case for every output format, plus additional cases as necessary
+## presets
+- html attributes (all, including alt text and parent) from preset
 - pixel ratio srcset
 - source image linking
-- regular linking
-
-- html attributes (all, including alt text) from preset
-- html attributes (all, including alt text) from tag
 - sizes attribute
-- anchor tag wrapper
-- nomarkdown wrapper
+- media widths
+- output formats
+  * auto
+  * img
+  * picture
+  * data_auto
+  * data_img
+  * data_picture
+    - noscript tag
+  * naked_srcset
+  * direct_url
 
+## configuration
+
+- nomarkdown wrapper
 - suppress warnings
 - continue on missing
 - relative urls
 - cdn url
 - cdn environments
 
-- media widths
+# other
+
 - look through issue history
 - no persistence between tag args
 

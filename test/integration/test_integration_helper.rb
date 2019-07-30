@@ -11,17 +11,27 @@ module TestIntegrationHelper
   TokenStub = Struct.new(:line_number, :locale)
 
   def tested(params = 'rms.jpg')
-    PictureTag::Picture
-      .send(:new, 'picture', params, TokenStub.new(true, 'something'))
-      .render(@context)
+    Nokogiri::HTML(
+      PictureTag::Picture
+        .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
+        .render(@context)
+    )
   end
 
   def rms_filename(width: 100, format: 'jpg')
-    "/tmp/jpt/generated/rms-#{width}-46a48b.#{format}"
+    '/tmp/jpt' + rms_url(width: width, format: format)
+  end
+
+  def rms_url(width: 100, format: 'jpg')
+    "/generated/rms-#{width}-46a48b.#{format}"
+  end
+
+  def spx_url(width: 100, format: 'jpg')
+    "/generated/spx-#{width}-2e8bb3.#{format}"
   end
 
   def spx_filename(width: 100, format: 'jpg')
-    "/tmp/jpt/generated/spx-#{width}-2e8bb3.#{format}"
+    '/tmp/jpt' + spx_url(width: width, format: format)
   end
 
   def rms_file_array(widths, formats)
@@ -47,6 +57,12 @@ module TestIntegrationHelper
     stub_liquid
   end
 
+  # Since Nokogiri apparently still doesn't know about HTML5, we have to
+  # ignore 'invalid tag errors' which have an 801 code (I think):
+  def errors_ok?(output)
+    output.errors.none? { |e| e.code != 801 }
+  end
+
   def stub_console
     PictureTag::GeneratedImage.any_instance.stubs(:puts)
     PictureTag::Utils.stubs(:warning)
@@ -63,8 +79,67 @@ module TestIntegrationHelper
   end
 
   def build_defaults
+    @widths = [25, 50, 100]
     @pconfig = {}
-    @pdata = {}
+    @pdata = {
+      'markup_presets' => {
+        # auto
+        'auto' => {
+          'widths' => @widths,
+          'formats' => %w[webp original]
+        },
+        # data auto
+        'data_auto' => {
+          'markup' => 'data_auto',
+          'widths' => @widths,
+          'formats' => %w[webp original]
+        },
+        # data img
+        'data_img' => {
+          'markup' => 'data_img',
+          'widths' => @widths
+        },
+        # data picture
+        'data_picture' => {
+          'markup' => 'data_picture',
+          'widths' => @widths,
+          'formats' => %w[webp original]
+        },
+        # direct url
+        'direct_url' => {
+          'markup' => 'direct_url',
+          'fallback_width' => 35
+        },
+
+        # img
+        'img' => {
+          'markup' => 'img',
+          'widths' => @widths
+        },
+
+        # naked srcset
+        'naked_srcset' => {
+          'markup' => 'naked_srcset',
+          'widths' => @widths
+        },
+
+        # picture
+        'picture' => {
+          'markup' => 'picture'
+        }
+
+        # pixel ratio sourceset
+        # attributes from preset
+        # attributes from tag
+        # link something
+        # link source
+      },
+
+      'media_presets' => {
+        'mobile' => 'max-width: 600px'
+      }
+    }
+
     @jekyll_env = 'development'
     @jconfig = { 'picture' => @pconfig, 'keep_files' => [] }
     @data = { 'picture' => @pdata }
