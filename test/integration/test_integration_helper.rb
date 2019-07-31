@@ -15,9 +15,14 @@ module TestIntegrationHelper
   end
 
   def tested_base(params = 'rms.jpg')
-    PictureTag::Picture
-      .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
-      .render(@context)
+    output = ''
+    @stdout, @stderr = capture_io do
+      output = PictureTag::Picture
+               .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
+               .render(@context)
+    end
+
+    output
   end
 
   def rms_filename(width: 100, format: 'jpg')
@@ -75,9 +80,15 @@ module TestIntegrationHelper
     output.errors.none? { |e| e.code != 801 }
   end
 
-  def stub_console
-    PictureTag::GeneratedImage.any_instance.stubs(:puts)
-    PictureTag::Utils.stubs(:warning)
+  def nomarkdown_wrapped?(string)
+    # rubocop:disable Style/RegexpLiteral
+    start  = /^\{::nomarkdown\}/
+    finish = /\{:\/nomarkdown\}$/
+    # rubocop:enable Style/RegexpLiteral
+
+    string =~ start &&
+      string =~ finish &&
+      !string.include?("\n")
   end
 
   def build_context_stub
@@ -193,12 +204,19 @@ module TestIntegrationHelper
 
       'media_presets' => {
         'mobile' => 'max-width: 600px'
+      },
+
+      'too_large' => {
+        'widths' => [400, 600, 800],
+        'fallback_width' => 800
       }
 
     }
 
     @jekyll_env = 'development'
-    @jconfig = { 'picture' => @pconfig, 'keep_files' => [] }
+    @jconfig = { 'picture' => @pconfig,
+                 'keep_files' => [],
+                 'url' => 'example.com' }
     @data = { 'picture' => @pdata }
     @page = { 'ext' => 'html' }
     @site_source = TEST_DIR
