@@ -65,11 +65,11 @@ module PictureTag
       end
 
       def setting_merge(default, jekyll)
-        jekyll.merge default do |_key, j, d|
-          if d.respond_to? :merge
-            setting_merge(d, j)
+        jekyll.merge default do |_key, config_setting, default_setting|
+          if default_setting.respond_to? :merge
+            setting_merge(default_setting, config_setting)
           else
-            j || d
+            config_setting
           end
         end
       end
