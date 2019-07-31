@@ -5,6 +5,8 @@ class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
   def setup
     base_stubs
+
+    File.stubs(:exist?).returns(true)
   end
 
   def teardown
@@ -14,6 +16,7 @@ class TestIntegrationPresets < Minitest::Test
   # widths 25, 50, 100
   # formats webp, original
   def test_picture_files
+    File.unstub(:exist?)
     tested('auto rms.jpg')
 
     files = rms_file_array(@widths, %w[webp jpg])
