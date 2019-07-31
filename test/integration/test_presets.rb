@@ -5,7 +5,6 @@ class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
   def setup
     base_stubs
-    stub_console
   end
 
   def teardown
@@ -19,6 +18,7 @@ class TestIntegrationPresets < Minitest::Test
 
     files = rms_file_array(@widths, %w[webp jpg])
     assert(files.all? { |f| File.exist?(f) })
+    assert @stdout.include? 'Generating'
   end
 
   # widths 25, 50, 100
@@ -179,8 +179,6 @@ class TestIntegrationPresets < Minitest::Test
   def test_nomarkdown
     output = tested_base 'nomarkdown rms.jpg --link example.com'
 
-    assert_equal '{::nomarkdown}', output[0..13]
-    assert_equal '{:/nomarkdown}', output[-14..-1]
-    refute output.include? "\n"
+    assert nomarkdown_wrapped? output
   end
 end

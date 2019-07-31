@@ -1,19 +1,3 @@
-# Test cases
-
-## configuration
-
-- nomarkdown wrapper
-- suppress warnings
-- continue on missing
-- relative urls
-- cdn url
-- cdn environments
-
-# other
-
-- look through issue history
-- no persistence between tag args
-
 # Jekyll inputs:
 
 * context

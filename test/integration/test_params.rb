@@ -7,7 +7,6 @@ class TestIntegrationParams < Minitest::Test
 
   def setup
     base_stubs
-    stub_console
   end
 
   def teardown
@@ -56,6 +55,21 @@ class TestIntegrationParams < Minitest::Test
     assert img['class'].include? 'implicit'
     assert img['class'].include? 'img'
     assert(sources.all? { |s| s['class'] == 'source' })
+  end
+
+  # Make sure attributes don't stick around between multiple instances
+  def test_arg_persistence
+    tested 'rms.jpg --img class="goaway"'
+
+    assert_nil tested.at_css('img')['class']
+  end
+
+  # Make sure corrected widths don't persist
+  def test_width_persistence
+    tested 'too_large rms.jpg'
+
+    tested 'too_large spx.jpg'
+    assert @stderr.include? 'spx.jpg'
   end
 
   def test_link
