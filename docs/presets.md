@@ -17,6 +17,8 @@ browser widths until you understand it.
 
 ## Example settings
 
+A more thorough example can be found under `docs/examples/_data/picture.yml`.
+
 ```yml
 
 # _data/picture.yml
@@ -348,8 +350,9 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
 
     *Default:* `false`
 
-  Surround image with a link to the original source file. Your source image directory must
-  be published as part of the compiled site.
+  Surround image with a link to the original source file. Your source image directory must be
+  published as part of the compiled site. If you run into weird issues with the output, see
+  [notes](notes.md).
 
 * **Nomarkdown override**
    

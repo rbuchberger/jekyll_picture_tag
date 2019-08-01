@@ -1,18 +1,46 @@
+```
 ---
 layout: post
 title: Tag examples
+image: img.jpg
 ---
+```
 
-{% picture portrait.jpg --alt An unsual picture %}
+- Standard image, default preset, with alt text:
 
-What was the narrative that this representation was meant to embellish and complete? As I regarded
-the work, I slowly sensed that the underlying tale was the picture itself. The painting wasn’t the
-extension of a story at all, it was something in its own right.
+  `{% picture portrait.jpg --alt An unsual picture %}`
 
-### Variations
+- Select the `gallery` `markup_preset` (which you must define!):
 
-With a preset specified:
-{% picture gallery portrait.jpg --alt An unsual picture --picture data-downloadable="true" %}
+  `{% picture gallery portrait.jpg %} `
 
-With an alternate source images:
-{% picture half portrait.jpg tablet: dream-midrange.jpg desktop: dream-fullpage.jpg --alt An unsual picture --picture data-downloadable="true" %}
+- Specify html attributes:
+
+  `{% picture portrait.jpg --picture class="some classes" data-downloadable="true" %}`
+
+- Provide multiple source images for different screen sizes: (note that you must
+define the mobile `media_preset`):
+
+  `{% picture portrait.jpg mobile: portrait-cropped.jpg %}`
+
+- Wrap picture in a link to something: 
+
+  `{% picture portrait.jpg --link /profile.html %}`
+
+- Use liquid variables:
+
+  `{% picture {{ post.image }} %}`
+
+- Line breaks and indentation are fine:
+
+```
+  {% 
+    picture 
+      gallery
+      portrait.jpg
+      mobile: portrait-cropped.jpg
+      --picture class="portrait" data-downloadable="true"
+      --img data-awesomeness="11"
+      --alt Ugly Mug
+  %}
+```
