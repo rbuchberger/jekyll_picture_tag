@@ -56,6 +56,32 @@ class TestIntegrationConfig < Minitest::Test
     assert @stderr.include? 'asdf.jpg'
   end
 
+  def test_missing_source_array
+    File.unstub(:exist?)
+    @pconfig['ignore_missing_images'] = %w[development testing]
+
+    output = tested 'asdf.jpg'
+
+    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
+      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+
+    assert_equal ss, output.at_css('img')['srcset']
+    assert @stderr.include? 'asdf.jpg'
+  end
+
+  def test_missing_source_string
+    File.unstub(:exist?)
+    @pconfig['ignore_missing_images'] = 'development'
+
+    output = tested 'asdf.jpg'
+
+    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
+      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+
+    assert_equal ss, output.at_css('img')['srcset']
+    assert @stderr.include? 'asdf.jpg'
+  end
+
   def test_missing_source_nocontinue
     File.unstub(:exist?)
 
