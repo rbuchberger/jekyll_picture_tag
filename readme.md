@@ -2,67 +2,61 @@
 
 **Easy responsive images for Jekyll.**
 
-It's easy to throw an image on a webpage and call it a day. Doing justice to your users by serving it
-efficiently on all screen sizes is tedious and tricky. Tedious, tricky things should be automated.
+It's easy to throw an image on a webpage and call it a day. Doing justice to your users by serving
+it efficiently on all browsers and screen sizes is tedious and tricky. Tedious, tricky things should be
+automated.
 
-Jekyll Picture Tag is a liquid tag that adds responsive images to your
-[Jekyll](http://jekyllrb.com) static site. It automatically creates resized,
-reformatted source images, is fully configurable, implements sensible defaults,
-and solves both the art direction and resolution switching problems, with a
-little YAML configuration and a simple template tag. It can be configured to
-work with JavaScript libraries such as
+Jekyll Picture Tag is a liquid tag that adds responsive images to your [Jekyll](http://jekyllrb.com)
+static site. It automatically creates resized, reformatted source images, is fully configurable,
+implements sensible defaults, and solves both the art direction and resolution switching problems,
+with a little YAML configuration and a simple template tag. It offers several different output
+formats, and can be configured to work with JavaScript libraries such as
 [LazyLoad](https://github.com/verlok/lazyload).
 
 ## Why use Jekyll Picture Tag?
 
-**Performance:** The fastest sites are static sites. If we're not using responsive images we're
-throwing those performance gains away by serving kilobytes of pixels a user will never see.
+**Performance:** The fastest sites are static sites, but when you plonk a 2mb picture of your dog at
+the top of a blog post you're throwing it all away.
 
 **Design:** Your desktop image may not work well on mobile, regardless of its resolution. We often
-want to do more than just resize images for different screen sizes.
+want to do more than just resize images for different screen sizes, we want to crop them or use a
+different image entirely.
 
 **Developer Sanity:** Image downloading starts before the browser has parsed your CSS and
 JavaScript; this gets them on the page *fast*, but it leads to some ridiculously verbose markup.
-Ultimately, to serve responsive images correctly, we must:
+To serve responsive images correctly, we must:
 
--   Generate, name, and organize the required images (formats \* resolutions, for each source image)
--   Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
-    should be used.
--   Inform the browser how large the space for that image on the page will be (which also probably has associated media
-    queries).
+- Generate, name, and organize the required images (formats \* resolutions \* source images)
+- Inform the browser about the image itself-- format, size, URI, and the screen sizes where it
+  should be used.
+- Inform the browser how large the space for that image on the page will be (which also probably
+  has associated media queries).
 
-It's a lot. It's tedious and complicated. Jekyll Picture Tag automates it.
+It's a lot. It's tedious and complicated. Jekyll Picture Tag makes it easy.  
 
 ## Features
 
 * Automatic generation of resized, converted image files.
-* Automatic generation of complex markup in one of several different formats.
+* Automatic generation of complex markup in several different formats.
 * No configuration required, extensive configuration available.
-* Auto-select between `<picture>` or lone `<img>` as necessary.
-* Support for both width based and pixel ratio based srcsets.
-* Webp conversion.
 * `sizes` attribute assistance.
-* named media queries so you don't have to remember them.
-* Optional `<noscript>` tag with a basic fallback image, so you can lazy load without excluding your
-    javascript-impaired users.
 * Optionally, automatically link to the source image. Or manually link to anywhere else, with just a
-    tag parameter!
+  tag parameter!
 
+## Documentation
 
-# Documentation
+It's all in the `docs` folder:
 
-It's mostly in the wiki.
-
-* [Installation](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Installation)
-* [Usage](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Liquid-Tag-Usage)
-* [Global settings](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Global-Configuration)
-* [Presets](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Writing-Presets)
-* [Other notes](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Miscellaneous-notes-and-FAQ)
-* [Contribute](#contribute)
+* [Installation](docs/installation.md)
+* [Usage](docs/usage.md)
+* [Global settings](docs/global_configuration.md)
+* [Presets](docs/presets.md)
+* [Other notes](docs/notes.md)
+* [Contribute](contributing.md)
 * [Release History](#release-history)
-* [License](#license)
+* [License](LICENSE.txt)
 
-# Quick start / Demo
+## Quick start / Demo
 
 **All configuration is optional.** Here's the simplest possible use case:
 
@@ -81,21 +75,22 @@ Put this liquid tag somewhere:
 Get this in your generated site:
 
 ```html
-<!-- Line breaks added for readability, the actual markup will not have them. -->
+<!-- Formatted for readability -->
 
 <img src="/generated/test-800-195f7d.jpg"
-  srcset="/generated/test-400-195f7d.jpg 400w,
-          /generated/test-600-195f7d.jpg 600w,
-          /generated/test-800-195f7d.jpg 800w,
-          /generated/test-1000-195f7d.jpg 1000w">
+  srcset="
+    /generated/test-400-195f7d.jpg   400w,
+    /generated/test-600-195f7d.jpg   600w,
+    /generated/test-800-195f7d.jpg   800w,
+    /generated/test-1000-195f7d.jpg 1000w
+    ">
 ```
 
 ### Here's a more complete example:
 
-With this configuration:
+Create `_data/picture.yml`, add the following:
 
 ```yml
-
 # _data/picture.yml
 
 media_presets:
@@ -108,7 +103,6 @@ markup_presets:
     sizes:
       mobile: 80vw
     size: 500px
-
 ```
 
 Write this:
@@ -164,20 +158,14 @@ for image conversions, so it must be installed on your system. There's a very go
 already have it. If you want to build webp images, you will need to install a webp delegate for it
 as well.
 
-# Contribute
+## Release History
 
-Report bugs and feature proposals in the
-[Github issue tracker](https://github.com/robwierzbowski/jekyll-picture-tag/issues).
-
-Pull requests are encouraged. With a few exceptions, this plugin is written to follow the Rubocop
-default settings (except the frozen string literal comment).
-
-If you add a new setting, it is helpful to add a default value (look under `lib/defaults/`) and
-relevant documentation. Don't let that stop you from submitting a pull request, though! Just allow
-modifications and I'll take care of it.
-
-# Release History
-
+* 1.7.0
+  * Moderately significant refactor and code cleanup 
+  * Mostly complete set of tests added
+  * Documentation restructure
+  * Bugfix: Fallback image width will now be checked against source image width.
+  * Bugfix: Minor fix to nomarkdown wrapper output
 * 1.6.0 Jul  2, 2019:
   * Missing Preset warning respects `data_dir` setting
   * Add `continue_on_missing` option
@@ -203,14 +191,9 @@ modifications and I'll take care of it.
   * auto-orient images before stripping metadata
 * 1.0.2 Jan 18, 2019: Fix ruby version specification
 * 1.0.1 Jan 13, 2019: Added ruby version checking
-* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See [the migration
-  guide](https://github.com/rbuchberger/jekyll-picture-tag/wiki/Migrating-from-versions-prior-to-1.0).
+* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See the [migration guide](docs/migration.md).
 * 0.2.2 Aug  2, 2013: Bugfixes
 * 0.2.1 Jul 17, 2013: Refactor again, add Liquid parsing.
 * 0.2.0 Jul 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.
 * 0.1.1 Jul  5, 2013: Quick round of code improvements.
 * 0.1.0 Jul  5, 2013: Initial release.
-
-# License
-
-[BSD-NEW](http://en.wikipedia.org/wiki/BSD_License)
