@@ -1,8 +1,13 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/test/'
+end
+
 require 'minitest/autorun'
 require 'mocha/minitest'
-require 'jekyll_picture_tag'
 require 'pry'
 require 'nokogiri'
+require 'jekyll_picture_tag'
 
 module TestHelper
   TEST_DIR = __dir__
