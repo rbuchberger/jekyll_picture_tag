@@ -40,9 +40,18 @@ You can disable nomarkdown tags globally by setting `nomarkdown: false` under th
 You can enable or disable markdown tags per preset by adding `nomarkdown: true|false` to them.
 **This setting overrides everything else, both JPT autodetection and the global setting.**
 
+## Input checking
+
+Jekyll Picture Tag is very trusting. It doesn't do much checking of your inputs, and it does not
+fail gracefully if you for example pass it a string when it expects an array. It's on the to-do
+list, but for now if you get cryptic errors then double-check your settings and tag arguments.
+
 ## Git LFS
 
-Putting this here because it bit me: If you want to use git LFS, make sure that your hosting provider makes those images available during the build process. Netlify, for example, does not. You won't find this out until you have gone through the entire migration process and try to deploy for the first time.
+Putting this here because it bit me: If you want to use git LFS, make sure that your hosting
+provider makes those images available during the build process.  Netlify, for example, does not. You
+won't find this out until you have gone through the entire migration process and try to deploy for
+the first time.
 
 ## Lazy Loading, and other javascript related tomfoolery
 

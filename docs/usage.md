@@ -36,13 +36,16 @@ need to set HTML attribute values which begin with `'--'`, either set them first
 
   *Default:* `default`
 
-  Optionally specify a markup [preset](https://github.com/rbuchberger/jekyll_picture_tag/wiki/Writing-Presets) to use, or leave blank for the `default` preset.
+  Optionally specify a markup
+  [preset](https://github.com/rbuchberger/jekyll_picture_tag/wiki/Writing-Presets) to use, or leave
+  blank for the `default` preset.
 
 * **Source Image** (Required)
 
   *Format:* `(Image filename, relative to source setting in _config.yml)`
 
-  The base image that will be resized for your picture sources. Can be pretty much any raster image (as long as imagemagick understands it).
+  The base image that will be resized for your picture sources. Can be pretty much any raster image
+  (as long as imagemagick understands it).
 
 * **Alternate images**
 

@@ -160,7 +160,7 @@ as well.
 
 ## Release History
 
-* 1.7.0
+* 1.7.0 (WIP)
   * Moderately significant refactor and code cleanup 
   * Mostly complete set of tests added
   * Documentation restructure
