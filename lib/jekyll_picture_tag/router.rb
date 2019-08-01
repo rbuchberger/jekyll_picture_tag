@@ -5,7 +5,7 @@ module PictureTag
 
   # At first I thought I'd do some sweet dynamic metaprogramming here, but it
   # ended up complicated and clever, rather than convenient and understandable.
-  # This way is not strictly DRY, but it's understandable and readable. If it
+  # This way is not strictly DRY, but it's straightforward and readable. If it
   # gets big, I'll refactor.
   module Router
     attr_accessor :instructions, :context
@@ -89,10 +89,6 @@ module PictureTag
 
     def nomarkdown?
       preset.nomarkdown?
-    end
-
-    def preset_name
-      preset.name
     end
   end
 end
