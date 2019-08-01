@@ -10,6 +10,7 @@ require 'nokogiri'
 require 'jekyll_picture_tag'
 require_relative 'stubs/jekyll'
 
+# This module gives us a basic setup to run our tests.
 module TestHelper
   TEST_DIR = __dir__
   include JekyllStub
