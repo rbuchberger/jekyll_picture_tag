@@ -68,6 +68,8 @@ group :jekyll_plugins do
 end
 ```
 
+Run `bundle install`
+
 Put this liquid tag somewhere:
 
 `{% picture test.jpg %}`
@@ -86,9 +88,19 @@ Get this in your generated site:
     ">
 ```
 
-### Here's a more complete example:
+### Look man, that's cool and all but I just want webp.
 
 Create `_data/picture.yml`, add the following:
+
+```yml
+markup_presets:
+  default:
+    formats: [webp, original]
+```
+
+If you get errors, make sure you have imagemagick installed with a webp delegate.
+
+### Here's a more complex example:
 
 ```yml
 # _data/picture.yml
