@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     direction and resolution switching — with a little YAML configuration and a
     simple template tag.
   HEREDOC
-  spec.homepage      = 'https://github.com/rbuchberger/jekyll-picture-tag'
+  spec.homepage      = 'https://github.com/rbuchberger/jekyll_picture_tag'
   spec.license       = 'BSD-3-Clause'
   spec.require_paths = ['lib']
 
