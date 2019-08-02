@@ -1,4 +1,6 @@
+# rubocop:disable Naming/FileName
 puts '-' * 80
+# rubocop:enable Naming/FileName
 
 puts <<~HEREDOC
   \033[31;1;4m

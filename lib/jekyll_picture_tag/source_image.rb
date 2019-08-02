@@ -1,13 +1,14 @@
 module PictureTag
   # Handles a given source image file and its properties. Provides a speed
   # advantage by storing expensive file reads and writes in instance variables,
-  # to be reused by many different source images.
+  # to be reused by many different generated images.
   class SourceImage
-    attr_reader :name, :shortname, :missing
+    attr_reader :name, :shortname, :missing, :media_preset
 
-    def initialize(relative_filename)
+    def initialize(relative_filename, media_preset = nil)
       @shortname = relative_filename
       @name = grab_file relative_filename
+      @media_preset = media_preset
     end
 
     def size
@@ -55,17 +56,17 @@ module PictureTag
 
     # Turn a relative filename into an absolute one, and make sure it exists.
     def grab_file(source_file)
-      source_name = File.join(PictureTag.config.source_dir, source_file)
+      source_name = File.join(PictureTag.source_dir, source_file)
 
       if File.exist? source_name
         @missing = false
 
-      elsif PictureTag.config.continue_on_missing?
+      elsif PictureTag.continue_on_missing?
         @missing = true
         Utils.warning missing_image_warning(source_name)
 
       else
-        raise missing_image_error(source_name)
+        raise ArgumentError, missing_image_error(source_name)
       end
 
       source_name

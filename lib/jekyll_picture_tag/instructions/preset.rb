@@ -3,8 +3,8 @@ module PictureTag
     # Handles the specific tag image set to construct.
     class Preset
       attr_reader :name
-      def initialize
-        @name = PictureTag.preset_name
+      def initialize(name)
+        @name = name
         @content = build_preset
       end
 
@@ -19,8 +19,12 @@ module PictureTag
         width_hash[media]
       end
 
+      def formats
+        @content['formats']
+      end
+
       def fallback_format
-        PictureTag::Utils.process_format(@content['fallback_format'], nil)
+        @content['fallback_format']
       end
 
       def fallback_width

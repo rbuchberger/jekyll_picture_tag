@@ -2,13 +2,7 @@ module PictureTag
   module Srcsets
     # Creates a srcset in the "(filename) (width)w, (...)" format.
     # Example: "img.jpg 400w, img2.jpg 600w, img3.jpg 800w"
-    class Width
-      include Basics
-
-      def to_a
-        widths.collect { |w| build_srcset_entry(w) }
-      end
-
+    class Width < Basic
       # Sizes html attribute. Since it's intimately related to srcset, we
       # generate it at the same time.
       def sizes
@@ -31,10 +25,8 @@ module PictureTag
         check_widths PictureTag.widths(@media)
       end
 
-      def build_srcset_entry(width)
-        file = generate_file(width)
-
-        "#{PictureTag.build_url(file.name)} #{file.width}w"
+      def build_srcset_entry(file)
+        "#{file.uri} #{file.width}w"
       end
 
       def build_size_entry(media, size)

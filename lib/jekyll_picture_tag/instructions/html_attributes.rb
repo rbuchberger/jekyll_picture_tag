@@ -50,9 +50,9 @@ module PictureTag
       def handle_url
         return unless PictureTag.preset['link_source'] && !self['link']
 
-        @content['link'] = PictureTag.build_source_url(
-          Utils.biggest_source.shortname
-        )
+        target = Utils.biggest_source.shortname
+
+        @content['link'] = ImgURI.new(target, source_image: true).to_s
       end
     end
   end

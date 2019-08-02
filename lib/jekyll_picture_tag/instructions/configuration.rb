@@ -7,8 +7,14 @@ module PictureTag
         @content = build_config
       end
 
+      # returns jekyll's configuration (picture is a subset)
       def [](key)
         @content[key]
+      end
+
+      # picturetag specific configuration
+      def pconfig
+        @content['picture']
       end
 
       # Digs into jekyll context, returns current environment
@@ -21,34 +27,18 @@ module PictureTag
       # Site.source is the master jekyll source directory
       # Source dir is the jekyll-picture-tag source directory.
       def source_dir
-        File.join PictureTag.site.source, self['picture']['source']
+        File.join PictureTag.site.source, pconfig['source']
       end
 
       # site.dest is the master jekyll destination directory
       # source_dest is the jekyll-picture-tag destination directory. (generated
       # file location setting.)
       def dest_dir
-        File.join PictureTag.site.dest, self['picture']['output']
-      end
-
-      # Generated images, not source images.
-      # https://example.com/my-base-path/assets/generated-images/image.jpg
-      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      # |     domain       |  baseurl   |    j-p-t output dir   | filename
-      def build_url(filename)
-        File.join url_prefix, self['picture']['output'], filename
-      end
-
-      # For linking source images
-      # https://example.com/my-base-path/assets/source-images/image.jpg
-      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      # |     domain       |  baseurl   |   j-p-t source dir | filename
-      def build_source_url(filename)
-        File.join url_prefix, self['picture']['source'], filename
+        File.join PictureTag.site.dest, pconfig['output']
       end
 
       def nomarkdown?
-        Utils.markdown_page? && self['picture']['nomarkdown']
+        Utils.markdown_page? && pconfig['nomarkdown']
       end
 
       def continue_on_missing?
@@ -64,64 +54,34 @@ module PictureTag
         end
       end
 
+      def cdn?
+        pconfig['cdn_url'] && pconfig['cdn_environments'].include?(jekyll_env)
+      end
+
       private
 
       def build_config
+        setting_merge(defaults, PictureTag.site.config)
+      end
+
+      def setting_merge(default, jekyll)
+        jekyll.merge default do |_key, config_setting, default_setting|
+          if default_setting.respond_to? :merge
+            setting_merge(default_setting, config_setting)
+          else
+            config_setting
+          end
+        end
+      end
+
+      def defaults
+        # Jekyll Picture Tag Default settings
         YAML.safe_load(
-          # Jekyll Picture Tag Default settings
           File.read(
-            File.join(ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml')
+            File.join(
+              ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml'
+            )
           )
-        ).merge(
-          # _config.yml defined settings
-          PictureTag.site.config
-        ) do |_key, jpt_default, site_value|
-          setting_merge(jpt_default, site_value)
-        end
-      end
-
-      def setting_merge(jpt_default, site_value)
-        if site_value.nil?
-          # Jekyll baseurl is nil if not configured, which breaks things.
-          # jpt_default is an empty string, which doesn't.
-          jpt_default
-        elsif site_value.is_a? Hash
-          # We'll merge hashes one level deep. If we need true deep merging,
-          # we'll import a gem or do something recursive.
-          jpt_default.merge site_value
-        else
-          site_value
-        end
-      end
-
-      # Juuust complicated enough to extract to its own function.
-      def cdn?
-        self['picture']['cdn_url'] &&
-          self['picture']['cdn_environments'].include?(jekyll_env)
-      end
-
-      # https://example.com/my-base-path/assets/generated-images/image.jpg
-      # ^^^^^^^^^^^^^^^^^^^^
-      # |     domain       |  baseurl   |    j-p-t output dir   | filename
-      def domain
-        if cdn?
-          self['picture']['cdn_url']
-        elsif self['picture']['relative_url']
-          ''
-        else
-          self['url']
-        end
-      end
-
-      # https://example.com/my-base-path/assets/generated-images/image.jpg
-      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      # |     domain       |  baseurl   |    j-p-t output dir   | filename
-      def url_prefix
-        # We use file.join because the ruby url methods don't like relative
-        # urls.
-        File.join(
-          domain,
-          self['baseurl']
         )
       end
     end

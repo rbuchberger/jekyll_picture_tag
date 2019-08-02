@@ -2,25 +2,15 @@ module PictureTag
   module OutputFormats
     # Represents a <picture> tag, enclosing at least 2 <source> tags and an
     # <img> tag.
-    class Picture
-      include Basics
-
+    class Picture < Basic
       def srcsets
+        formats = PictureTag.formats
+        # Source images are provided in reverse order and must be flipped:
+        images = PictureTag.source_images.reverse
         sets = []
 
-        PictureTag.preset['formats'].each do |format|
-          # We have 2 dimensions here: formats, and source images. Formats are
-          # provided in the order they must be returned, source images are
-          # provided in the reverse (least to most preferable) and must be
-          # flipped. We'll use an intermediate value to accomplish this.
-          format_set = []
-
-          # Source images are defined in the tag params, and associated with
-          # media queries. The base (first provided) image has a key of nil.
-          PictureTag.source_images.each_key do |media|
-            format_set << build_srcset(media, format)
-          end
-          sets.concat format_set.reverse
+        formats.each do |format|
+          images.each { |image| sets << build_srcset(image, format) }
         end
 
         sets

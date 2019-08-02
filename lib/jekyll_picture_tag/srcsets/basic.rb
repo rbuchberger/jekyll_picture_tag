@@ -1,3 +1,5 @@
+require 'fastimage'
+require 'mime-types'
 module PictureTag
   # Handles srcset generation, which also handles file generation.
   module Srcsets
@@ -7,18 +9,27 @@ module PictureTag
     # - Return an array of srcset entries.
     # - Call generate_file for each entry, giving it the desired width in
     #   pixels.
-    module Basics
-      require 'fastimage'
-      require 'mime-types'
-      attr_reader :media, :source_image
+    class Basic
+      attr_reader :source_image, :media
 
-      def initialize(media:, format:)
-        @media = media # Associated Media Query, can be nil
+      def initialize(source_image, input_format)
+        @source_image = source_image
+        @input_format = input_format
+        @media = source_image.media_preset
+      end
 
-        # Output format:
-        @format = Utils.process_format(format, media)
+      def format
+        # Input format might be 'original', which is handled by the generated
+        # image.
+        @format ||= files.first.format
+      end
 
-        @source_image = PictureTag.source_images[@media]
+      def files
+        @files ||= widths.collect { |w| generate_file(w) }
+      end
+
+      def to_a
+        files.collect { |f| build_srcset_entry(f) }
       end
 
       def to_s
@@ -28,7 +39,7 @@ module PictureTag
       # Allows us to add a type attribute to whichever element contains this
       # srcset.
       def mime_type
-        MIME::Types.type_for(@format).first.to_s
+        MIME::Types.type_for(format).first.to_s
       end
 
       # Some srcsets have them, for those that don't return nil.
@@ -53,7 +64,7 @@ module PictureTag
       private
 
       def handle_small_source(targets, image_width)
-        PictureTag::Utils.warning(
+        Utils.warning(
           " #{@source_image.shortname} is #{image_width}px wide, smaller than" \
           " at least one size in the set #{targets}. Will not enlarge."
         )
@@ -69,10 +80,9 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @format
+          format: @input_format
         )
       end
-
     end
   end
 end

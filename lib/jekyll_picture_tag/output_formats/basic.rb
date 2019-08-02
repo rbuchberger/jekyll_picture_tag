@@ -3,7 +3,7 @@ module PictureTag
   # own option.
   module OutputFormats
     # Generic functions common to all output formats.
-    module Basics
+    class Basic
       include ObjectiveElements
 
       # Used for both the fallback image, and for the complete markup.
@@ -16,7 +16,7 @@ module PictureTag
 
         fallback = build_fallback_image
 
-        add_src(img, fallback.name)
+        add_src(img, fallback.uri)
 
         add_alt(img, attributes['alt'])
 
@@ -40,26 +40,17 @@ module PictureTag
       end
 
       # Media is the media query associated with the desired source image.
-      def build_srcset(media, format)
+      def build_srcset(source_image, format)
         if PictureTag.preset['pixel_ratios']
-          build_pixel_ratio_srcset(media, format)
+          Srcsets::PixelRatio.new(source_image, format)
         else
-          build_width_srcset(media, format)
+          Srcsets::Width.new(source_image, format)
         end
       end
 
-      def build_pixel_ratio_srcset(media, format)
-        Srcsets::PixelRatio.new(media: media, format: format)
-      end
-
-      def build_width_srcset(media, format)
-        Srcsets::Width.new(media: media, format: format)
-      end
-
       # Extracting these functions to their own methods for easy overriding.
-      # They are destructive.
-      def add_src(element, name)
-        element.src = PictureTag.build_url name
+      def add_src(element, uri)
+        element.src = uri
       end
 
       def add_srcset(element, srcset)
@@ -81,9 +72,9 @@ module PictureTag
       # File, not HTML
       def build_fallback_image
         GeneratedImage.new(
-          source_file: PictureTag.source_images[nil],
+          source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width
+          width: checked_fallback_width
         )
       end
 
@@ -93,7 +84,7 @@ module PictureTag
       # Kramdown is super picky about the {::nomarkdown} extension-- we have to
       # strip line breaks or nothing works.
       def nomarkdown_wrapper(content)
-        "{::nomarkdown}#{content.delete("\n")}{:/nomarkdown}"
+        "{::nomarkdown}#{content.delete("\n").gsub(/>  </, '><')}{:/nomarkdown}"
       end
 
       def anchor_tag(content)
@@ -102,6 +93,20 @@ module PictureTag
         anchor.href = PictureTag.html_attributes['link']
 
         content.add_parent anchor
+      end
+
+      def checked_fallback_width
+        source = PictureTag.source_images.first
+        target = PictureTag.fallback_width
+
+        if target > source.width
+          Utils.warning "#{source.shortname} is smaller than the " \
+            "requested fallback width of #{target}px. Using #{source.width}" \
+            ' px instead.'
+          source.width
+        else
+          target
+        end
       end
     end
   end

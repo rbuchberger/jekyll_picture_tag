@@ -2,11 +2,11 @@ module PictureTag
   module OutputFormats
     # Represents a bare <img> tag with a srcset attribute.
     # Used when <picture> is unnecessary.
-    class Img
-      include PictureTag::OutputFormats::Basics
-
+    class Img < Basic
       def srcset
-        build_srcset(nil, PictureTag.preset['formats'].first)
+        @srcset ||= build_srcset(
+          PictureTag.source_images.first, PictureTag.formats.first
+        )
       end
 
       def base_markup

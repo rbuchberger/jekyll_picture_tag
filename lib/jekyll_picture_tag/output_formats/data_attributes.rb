@@ -9,8 +9,8 @@ module PictureTag
 
       private
 
-      def add_src(element, name)
-        element.attributes << { 'data-src' => PictureTag.build_url(name) }
+      def add_src(element, uri)
+        element.attributes << { 'data-src' => uri }
       end
 
       def add_srcset(element, srcset)

@@ -1,4 +1,0 @@
-# Sample Jekyll Picture Tag settings
-picture:
-  source: assets/images/_fullsize
-  output: generated

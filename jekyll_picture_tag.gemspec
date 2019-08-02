@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     direction and resolution switching — with a little YAML configuration and a
     simple template tag.
   HEREDOC
-  spec.homepage      = 'https://github.com/rbuchberger/jekyll-picture-tag'
+  spec.homepage      = 'https://github.com/rbuchberger/jekyll_picture_tag'
   spec.license       = 'BSD-3-Clause'
   spec.require_paths = ['lib']
 
@@ -27,9 +27,14 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ['>= 2.5', '< 3']
 
-  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'minitest', '~> 5.11'
+  spec.add_development_dependency 'mocha', '~> 1.9'
+  spec.add_development_dependency 'nokogiri', '~> 1.10'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 12.3'
+  spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'simplecov'
 
   spec.add_dependency 'fastimage', '~> 2'
   spec.add_dependency 'mime-types', '~> 3'
