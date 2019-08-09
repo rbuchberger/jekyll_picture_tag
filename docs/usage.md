@@ -1,13 +1,12 @@
 # Liquid Tag Usage
 
-The tag takes a mix of user input and pointers to configuration settings:
+The tag takes a mix of user input and pointers to configuration settings. The only required argument
+is the base image:
 
 `{% picture [preset] (source image) [alternate images] [attributes] %}`
 
-Note the tag parser separates arguments by looking for some whitespace followed by `'--'`. If you
-need to set HTML attribute values which begin with `'--'`, either set them first
-(`class="--my-class"`) or using `_data/picture.yml` settings. `class="some-class
---some-other-class"` will break things.  
+For filenames with spaces, you can either surround it with quotes (`"my image.jpg"`) or escape the
+space with a backslash (`"my\ image.jpg"`).
 
 ## Examples:
 
@@ -16,6 +15,8 @@ need to set HTML attribute values which begin with `'--'`, either set them first
 `{% picture thumbnail example.jpg %}`
 
 `{% picture blog_index {{ post.image }} --link {{ post.url }} %}`
+
+`{% picture "some example.jpg" mobile: other\ example.jpg %}`
 
 ```
 {% picture 
