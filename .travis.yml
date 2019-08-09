@@ -1,5 +1,5 @@
 language: ruby
-cache: bundlerr
+cache: bundler
 
 before_install:
   - sudo apt-get install -y webp
