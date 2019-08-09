@@ -18,7 +18,7 @@ module PictureTag
 
         # Detect and store arguments of the format 'media_query: img.jpg' as
         # keys and values.
-        add_media_source while @params.first =~ /[\w\-]+:/
+        add_media_source while @params.first =~ /[\w\-]+:$/
       end
 
       def leftovers
@@ -28,7 +28,6 @@ module PictureTag
       private
 
       def add_media_source
-        # There's an extra ':' at the end we need to remove:
         @media_presets << @params.shift.delete_suffix(':')
         @source_names << strip_quotes(@params.shift)
       end
@@ -59,12 +58,19 @@ module PictureTag
       end
 
       def handle_char(char)
+        # last character was a backslash:
         if @escaped
           close_escape char
+
+        # char is a backslash or a quote:
         elsif char.match(/["\\]/)
           handle_special char
+
+        # Character isn't whitespace, or it's inside double quotes:
         elsif @in_quotes || char.match(/\S/)
           @word << char
+
+        # Character is whitespace outside of double quotes:
         else
           add_word
         end
@@ -91,8 +97,8 @@ module PictureTag
         @escaped = false
       end
 
-      def strip_quotes(raw_name)
-        raw_name.delete_prefix('"').delete_suffix('"')
+      def strip_quotes(name)
+        name.delete_prefix('"').delete_suffix('"')
       end
     end
   end
