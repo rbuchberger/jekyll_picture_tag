@@ -34,17 +34,24 @@ class TagParserTest < Minitest::Test
 
   # base image with whitespace in filename
   def test_base_whitespace
-    skip
+    assert_equal 'white space.jpg', tested('"white space.jpg"').source_names.first
   end
 
   # media queries with whitespace in filename
   def test_media_whitespace
-    skip
+    params = 'img.jpg mobile: "white space.jpg"'
+
+    assert_equal 'white space.jpg', tested(params).source_names[1]
+  end
+
+  def test_escaped_space
+    params = 'white\\ space.jpg'
+    assert_equal 'white space.jpg', tested(params).source_names.first
   end
 
   # leftovers
   def test_leftovers
-    correct = '--picture class="some class"'
+    correct = ['--picture', 'class="some class"']
     params = 'img.jpg mobile: mobile.jpg --picture class="some class"'
     assert_equal correct, tested(params).leftovers
   end
