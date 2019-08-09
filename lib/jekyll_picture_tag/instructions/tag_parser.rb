@@ -5,7 +5,7 @@ module PictureTag
     # queries (if present). The leftovers (html attributes) are handed off to
     # its respective class.
     class TagParser
-      attr_reader :preset_name, :leftovers, :source_names, :media_presets
+      attr_reader :preset_name, :source_names, :media_presets
       def initialize(raw_params)
         @params = build_words PictureTag::Utils.liquid_lookup(raw_params)
 
@@ -21,9 +21,8 @@ module PictureTag
         add_media_source while @params.first =~ /[\w\-]+:/
       end
 
-        # Anything left will be html attributes, which is some other classes'
-        # problem.
-        @leftovers = @params.join(' ')
+      def leftovers
+        @params
       end
 
       private
