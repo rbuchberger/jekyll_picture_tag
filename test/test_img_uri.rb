@@ -20,8 +20,8 @@ class ImgUriTest < Minitest::Test
     )
   end
 
-  def tested
-    ImgURI.new('img.jpg').to_s
+  def tested(param = 'img.jpg', source_image: false)
+    ImgURI.new(param, source_image: source_image).to_s
   end
 
   # relative url
@@ -54,6 +54,12 @@ class ImgUriTest < Minitest::Test
   # source image
   def test_source_image
     assert_equal 'example.com/source-dir/img.jpg',
-                 ImgURI.new('img.jpg', source_image: true).to_s
+                 tested('img.jpg', source_image: true)
+  end
+
+  # url encoding
+  def test_url_encoding
+    param = 'white space.jpg'
+    assert_equal 'example.com/output-dir/white%20space.jpg', tested(param)
   end
 end
