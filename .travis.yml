@@ -1,6 +1,8 @@
 language: ruby
+cache: bundlerr
 
 before_install:
+  - sudo apt-get install -y webp
   - gem update --system
   - gem install bundler
 
