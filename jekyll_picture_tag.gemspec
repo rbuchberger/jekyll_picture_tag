@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'simplecov'
 
+  spec.add_dependency 'addressable', '~> 2.6'
   spec.add_dependency 'fastimage', '~> 2'
   spec.add_dependency 'mime-types', '~> 3'
   spec.add_dependency 'mini_magick', '~> 4'
