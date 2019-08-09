@@ -42,11 +42,6 @@ module PictureTag
         ext.casecmp('.md').zero? || ext.casecmp('.markdown').zero?
       end
 
-      # Returns the widest source image
-      def biggest_source
-        PictureTag.source_images.max_by(&:width)
-      end
-
       def titleize(input)
         input.split('_').map(&:capitalize).join
       end
