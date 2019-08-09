@@ -34,7 +34,8 @@ class TagParserTest < Minitest::Test
 
   # base image with whitespace in filename
   def test_base_whitespace
-    assert_equal 'white space.jpg', tested('"white space.jpg"').source_names.first
+    assert_equal 'white space.jpg',
+                 tested('"white space.jpg"').source_names.first
   end
 
   # media queries with whitespace in filename
