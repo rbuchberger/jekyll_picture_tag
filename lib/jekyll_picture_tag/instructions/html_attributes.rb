@@ -9,7 +9,7 @@ module PictureTag
         @content = load_preset
 
         parse_params(params) if params
-        handle_url
+        handle_source_url
       end
 
       def [](key)
@@ -37,16 +37,11 @@ module PictureTag
           end
         end
       end
-      # Handles anchor tag destination. Can come from 2 places in 2 formats:
-      # Can come from defaults, preset, or tag
-      # Default is false. Preset can specify either true or false
-      # Tag params can be a URL
 
-      # picture test.jpg --url http://example.com
-      def handle_url
-        return unless PictureTag.preset['link_source'] && !self['link']
+      def handle_source_url
+        return unless PictureTag.preset['link_source'] && self['link'].nil?
 
-        target = Utils.biggest_source.shortname
+        target = PictureTag.source_images.first.shortname
 
         @content['link'] = ImgURI.new(target, source_image: true).to_s
       end
