@@ -1,16 +1,9 @@
 # Writing Output Formats
 
-
 ## Naming and Instantiating
 
-Names from the configuration wiAn output format is instantiated will be
-converted from snake case to title case (I'm not sure what it's called.) And
-instantiated. 
-
-Example:
-
-In `_data/picture.yml`: `markup: example_format` will cause the plugin to use
-an instance of `ExampleFormat` (with no arguments.)
+In the relevant `_data/picture.yml` preset, `markup: example_format` will cause
+the plugin to use an instance of `ExampleFormat` (with no arguments.)
 
 You'll need to add an appropriate `require_relative` statement to
 `../output_formats.rb`
@@ -24,13 +17,13 @@ it this way because information flow was getting arduous; I was passing a lot
 of information to classes which only needed it to pass on to classes they
 instantiate.
 
-`PictureTag.source_images` returns a hash of the source images provided in the
-liquid tag. This relies on 2 properties of ruby hashes: They maintain their
-order, and `nil` is a perfectly good key. The first image (unqualified) is
-stored under `PictureTag.source_images[nil]`, and the rest of the keys are
-media queries named in `_data/picture.yml`.
+`PictureTag.source_images` returns an array of the source images provided in
+the liquid tag. The first one is the base image, the rest that follow are
+associated with media queries. Check out `source_image.rb` to see what they
+offer.
 
-There's a lot of information available, dig around in `../instructions.rb`. Output formats should only consume this information, never modify it.
+There's a lot of information available, dig around in `../router.rb`.
+Output formats should only consume this information, never modify it.
 
 ## Producing output
 

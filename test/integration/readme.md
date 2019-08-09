@@ -1,4 +1,7 @@
-# Jekyll inputs:
+These are my notes from writing the integration tests. Might be useful later so
+I'll leave it in the repo.
+
+## Jekyll inputs:
 
 * context
   - .environments.first['jekyll']['environment']
@@ -23,7 +26,7 @@
 * params
   - whatever's in the liquid tag, minus the starting 'picture'
 
-# Calls to jekyll/liquid: 
+## Calls to jekyll/liquid: 
 
 * Liquid::Template.parse(params).render(context)
 * Liquid::Template.register_tag('picture', PictureTag::Picture)
