@@ -17,7 +17,7 @@ module PictureTag
     # |     domain       |  baseurl   |       directory       | filename
     def to_s
       Addressable::URI.escape(
-        File.join([domain, baseurl, directory, @filename])
+        File.join(domain, baseurl, directory, @filename)
       )
     end
 
