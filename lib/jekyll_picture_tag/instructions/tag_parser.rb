@@ -7,7 +7,7 @@ module PictureTag
     class TagParser
       attr_reader :preset_name, :source_names, :media_presets
       def initialize(raw_params)
-        @params = build_words PictureTag::Utils.liquid_lookup(raw_params)
+        build_params PictureTag::Utils.liquid_lookup(raw_params)
 
         @preset_name = grab_preset_name
 
@@ -29,7 +29,7 @@ module PictureTag
 
       def add_media_source
         # There's an extra ':' at the end we need to remove:
-        @media_presets << @params.shift[0..-2]
+        @media_presets << @params.shift.delete_suffix(':')
         @source_names << strip_quotes(@params.shift)
       end
 
@@ -47,16 +47,15 @@ module PictureTag
       # parse the string by characters to break it up correctly. I'm sure
       # there's a library to do this, but it's not that much code honestly. If
       # this starts getting big, we'll pull in a new dependency.
-      def build_words(raw_params)
-        @words = []
+      def build_params(raw_params)
+        @params = []
         @word = ''
         @in_quotes = false
         @escaped = false
 
         raw_params.each_char { |c| handle_char(c) }
 
-        add_word
-        @words
+        add_word # We have to explicitly add the last one.
       end
 
       def handle_char(char)
@@ -83,7 +82,7 @@ module PictureTag
       def add_word
         return if @word.empty?
 
-        @words << @word
+        @params << @word
         @word = ''
       end
 
