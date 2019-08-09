@@ -79,4 +79,35 @@ class TestIntegrationParams < Minitest::Test
     assert_equal 'example.com', output.at_css('a')['href']
     assert output.at_css('a').children.include? output.at_css('img')
   end
+
+  # Test an image with a space in it
+  def test_escaped_whitespace
+    output = tested('rms\ with\ space.jpg')
+    assert output.errors.empty?
+
+    img = output.at_css('img')
+    src = '/generated/rms%20with%20space-100-46a48b.jpg'
+    ss = '/generated/rms%20with%20space-25-46a48b.jpg 25w,' \
+      ' /generated/rms%20with%20space-50-46a48b.jpg 50w,' \
+      ' /generated/rms%20with%20space-100-46a48b.jpg 100w'
+
+    assert_equal src, img['src']
+    assert_equal ss, img['srcset']
+    assert File.exist? '/tmp/jpt/generated/rms with space-100-46a48b.jpg'
+  end
+
+  def test_quoted_whitespace
+    output = tested('"rms with space.jpg"')
+    assert output.errors.empty?
+
+    img = output.at_css('img')
+    src = '/generated/rms%20with%20space-100-46a48b.jpg'
+    ss = '/generated/rms%20with%20space-25-46a48b.jpg 25w,' \
+      ' /generated/rms%20with%20space-50-46a48b.jpg 50w,' \
+      ' /generated/rms%20with%20space-100-46a48b.jpg 100w'
+
+    assert_equal src, img['src']
+    assert_equal ss, img['srcset']
+    assert File.exist? '/tmp/jpt/generated/rms with space-100-46a48b.jpg'
+  end
 end
