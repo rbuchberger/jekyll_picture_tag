@@ -28,10 +28,14 @@ class TestSourceImage < Minitest::Test
     assert_equal 'jpg', @tested.ext
   end
 
-  def test_size_existing
-    FastImage.stubs(:size).with('/home/loser/img.jpg').returns([88, 99])
+  def test_width_existing
+    image_stub = Object.new
+    image_stub.stubs(:width).returns(88)
 
-    assert_equal({ width: 88, height: 99 }, @tested.size)
+    MiniMagick::Image
+      .stubs(:open).with('/home/loser/img.jpg').returns(image_stub)
+
+    assert_equal 88, @tested.width
   end
 
   def test_grab_file

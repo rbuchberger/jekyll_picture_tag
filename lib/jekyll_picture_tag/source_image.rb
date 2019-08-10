@@ -4,6 +4,7 @@ module PictureTag
   # to be reused by many different generated images.
   class SourceImage
     attr_reader :name, :shortname, :missing, :media_preset
+    include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)
       @shortname = relative_filename
@@ -11,12 +12,12 @@ module PictureTag
       @media_preset = media_preset
     end
 
-    def size
-      @size ||= build_size
-    end
-
     def width
-      size[:width]
+      @width ||= if @missing
+                   999_999
+                 else
+                   image.width
+                 end
     end
 
     def digest
@@ -40,18 +41,8 @@ module PictureTag
 
     private
 
-    def build_size
-      if @missing
-        width = 999_999
-        height = 999_999
-      else
-        width, height = FastImage.size(@name)
-      end
-
-      {
-        width: width,
-        height: height
-      }
+    def image
+      @image ||= Image.open(@name)
     end
 
     # Turn a relative filename into an absolute one, and make sure it exists.

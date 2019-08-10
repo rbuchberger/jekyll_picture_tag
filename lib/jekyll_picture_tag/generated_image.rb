@@ -4,6 +4,7 @@ module PictureTag
   # Generated Image
   # Represents a generated source file.
   class GeneratedImage
+    include MiniMagick
     attr_reader :width, :format
 
     def initialize(source_file:, width:, format:)
@@ -30,7 +31,8 @@ module PictureTag
 
     def generate_image
       puts 'Generating new image file: ' + name
-      image = MiniMagick::Image.open(@source.name)
+      image = Image.open(@source.name)
+
       # Scale and crop
       image.combine_options do |i|
         i.resize "#{@width}x"
