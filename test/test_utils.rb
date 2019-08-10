@@ -74,19 +74,6 @@ class TestUtils < Minitest::Test
     refute Utils.markdown_page?
   end
 
-  # test_biggest_source
-  def test_biggest_source
-    images = []
-
-    5.times do |i|
-      images << ImageStruct.new(100 + i * 100)
-    end
-
-    PictureTag.stubs(:source_images).returns(images)
-
-    assert_equal images.last, Utils.biggest_source
-  end
-
   def test_titleize
     assert_equal Utils.titleize('snake_case'), 'SnakeCase'
   end

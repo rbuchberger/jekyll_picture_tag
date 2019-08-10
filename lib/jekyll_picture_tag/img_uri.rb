@@ -1,3 +1,5 @@
+require 'addressable'
+
 module PictureTag
   # Represents a link to an image. We use the File library rather than the URI
   # library to build these because it doesn't like relative URIs.
@@ -14,7 +16,9 @@ module PictureTag
     # https://example.com/my-base-path/assets/generated-images/image.jpg
     # |     domain       |  baseurl   |       directory       | filename
     def to_s
-      File.join domain, baseurl, directory, @filename
+      Addressable::URI.escape(
+        File.join(domain, baseurl, directory, @filename)
+      )
     end
 
     private
