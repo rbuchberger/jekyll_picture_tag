@@ -52,7 +52,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
     assert File.exist? @out_file
 
-    width, _height = FastImage.size(@out_file)
+    width = MiniMagick::Image.open(@out_file).width
 
     assert_equal width, 50
   end

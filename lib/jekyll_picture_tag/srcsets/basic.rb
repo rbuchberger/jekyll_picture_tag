@@ -1,4 +1,3 @@
-require 'fastimage'
 require 'mime-types'
 module PictureTag
   # Handles srcset generation, which also handles file generation.
