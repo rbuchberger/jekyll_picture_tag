@@ -149,16 +149,22 @@ module JekyllStub
         'nomarkdown' => {
           'widths' => @widths,
           'nomarkdown' => true
+        },
+
+        'too_large' => {
+          'widths' => [400, 600, 800],
+          'fallback_width' => 800
+        },
+
+        'formats' => {
+          'widths' => [100],
+          'fallback_width' => 100,
+          'formats' => %w[jpg jp2 png webp gif]
         }
       },
 
       'media_presets' => {
         'mobile' => 'max-width: 600px'
-      },
-
-      'too_large' => {
-        'widths' => [400, 600, 800],
-        'fallback_width' => 800
       }
 
     }
