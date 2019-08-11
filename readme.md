@@ -180,6 +180,7 @@ as well.
   * Bugfix: Fallback image width will now be checked against source image width.
   * Bugfix: Minor fix to nomarkdown wrapper output
   * link_source will now target the base source image, rather than finding the biggest one.
+  * Remove fastimage dependency, add addressable dependency.
   * Moderately significant refactoring and code cleanup 
   * Decent set of tests added
 * 1.6.0 Jul  2, 2019:
