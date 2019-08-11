@@ -173,6 +173,8 @@ as well.
 ## Release History
 
 * 1.7.0 (WIP)
+  * Add support for setting generated image quality, either generally or specific to given
+    formats.
   * Add support for spaces and other url-encoded characters in filenames
   * Documentation restructure - Moved it out of the wiki, into the `docs` folder.
   * Bugfix: Fallback image width will now be checked against source image width.
