@@ -190,7 +190,7 @@ class TestIntegrationPresets < Minitest::Test
   # convert from each to each, make sure nothing breaks.
   def test_conversions
     File.unstub(:exist?)
-    formats = %w[jpg jp2 png webp gif]
+    formats = %w[jpg png webp gif]
 
     formats.each do |input_format|
       output = tested "formats rms.#{input_format}"
@@ -206,7 +206,7 @@ class TestIntegrationPresets < Minitest::Test
 
     formats.each do |format|
       assert_equal(
-        5, files.count { |f| File.extname(f) == '.' + format }
+        formats.length, files.count { |f| File.extname(f) == '.' + format }
       )
     end
   end
