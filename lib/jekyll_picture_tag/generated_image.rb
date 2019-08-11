@@ -4,8 +4,8 @@ module PictureTag
   # Generated Image
   # Represents a generated source file.
   class GeneratedImage
-    include MiniMagick
     attr_reader :width, :format
+    include MiniMagick
 
     def initialize(source_file:, width:, format:)
       @source = source_file
@@ -16,7 +16,7 @@ module PictureTag
     end
 
     def name
-      @source.base_name + "-#{@width}-" + @source.digest + '.' + @format
+      "#{@source.base_name}-#{@width}-#{@source.digest}.#{@format}"
     end
 
     def absolute_filename
@@ -29,11 +29,11 @@ module PictureTag
 
     private
 
-    def generate_image
-      puts 'Generating new image file: ' + name
-      image = Image.open(@source.name)
+    def image
+      @image ||= Image.open(@source.name)
+    end
 
-      # Scale and crop
+    def process_image
       image.combine_options do |i|
         i.resize "#{@width}x"
         i.auto_orient
@@ -41,11 +41,16 @@ module PictureTag
       end
 
       image.format @format
-
-      write_image(image)
+      image.quality PictureTag.quality(@format)
     end
 
-    def write_image(image)
+    def generate_image
+      puts 'Generating new image file: ' + name
+      process_image
+      write_image
+    end
+
+    def write_image
       check_dest_dir
 
       image.write absolute_filename
