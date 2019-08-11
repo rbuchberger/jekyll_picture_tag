@@ -1,5 +1,5 @@
 # Why 2 gemspecs?
-
+#
 # Originally, this gem was named 'jekyll-picture-tag', and published on rubygems
 # under this name. There was a break in development, during which push access to
 # rubygems was lost. Development was later resumed, and as a workaround for that
@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
     This gem has been renamed! Use jekyll_picture_tag instead, which is now
     hosted on rubygems.
   HEREDOC
-  spec.homepage      = 'https://github.com/rbuchberger/jekyll-picture-tag'
+  spec.homepage      = 'https://github.com/rbuchberger/jekyll_picture_tag'
   spec.license       = 'BSD-3-Clause'
   spec.require_paths = ['lib']
 
@@ -48,14 +48,5 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ['>= 2.5', '< 3']
 
-  spec.add_development_dependency 'bundler', '~> 1.16'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake', '~> 12.3'
-
-  spec.add_dependency 'fastimage', '~> 2'
-  spec.add_dependency 'mime-types', '~> 3'
-  spec.add_dependency 'mini_magick', '~> 4'
-  spec.add_dependency 'objective_elements', '~> 1.1'
-
-  spec.add_runtime_dependency 'jekyll', '< 5'
+  spec.add_dependency 'jekyll_picture_tag'
 end

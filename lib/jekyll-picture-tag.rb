@@ -11,9 +11,9 @@ puts <<~HEREDOC
 
   gem 'jekyll-picture-tag', git: 'https://github.com/robwierzbowski/jekyll-picture-tag/'
 
-  and replace it with:
+  and replace it with something like:
 
-  gem 'jekyll_picture_tag'
+  gem 'jekyll_picture_tag', '~> 1.6'
 
   Sorry about that. For an explanation, see issue #120:
   https://github.com/rbuchberger/jekyll-picture-tag/issues/120
@@ -22,4 +22,4 @@ HEREDOC
 
 puts '-' * 80
 
-require_relative 'jekyll_picture_tag'
+require 'jekyll_picture_tag'
