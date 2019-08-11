@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 
 before_install:
-  - sudo apt-get install -y webp libopenjp2-7 libopenjp2-tools
+  - sudo apt-get install -y webp libopenjpeg5 openjpeg-tools
   - gem update --system
   - gem install bundler
 
