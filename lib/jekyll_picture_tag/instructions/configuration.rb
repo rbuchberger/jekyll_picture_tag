@@ -3,18 +3,14 @@ module PictureTag
     # Global config (big picture). loads jekyll data/config files, and the j-p-t
     # defaults from included yml files.
     class Configuration
-      def initialize
-        @content = build_config
-      end
-
       # returns jekyll's configuration (picture is a subset)
       def [](key)
-        @content[key]
+        content[key]
       end
 
       # picturetag specific configuration
       def pconfig
-        @content['picture']
+        content['picture']
       end
 
       # Digs into jekyll context, returns current environment
@@ -42,7 +38,7 @@ module PictureTag
       end
 
       def continue_on_missing?
-        setting = @content['picture']['ignore_missing_images']
+        setting = pconfig['ignore_missing_images']
 
         # Config setting can be a string, an array, or a boolean
         if setting.is_a? Array
@@ -60,8 +56,8 @@ module PictureTag
 
       private
 
-      def build_config
-        setting_merge(defaults, PictureTag.site.config)
+      def content
+        @content ||= setting_merge(defaults, PictureTag.site.config)
       end
 
       def setting_merge(default, jekyll)

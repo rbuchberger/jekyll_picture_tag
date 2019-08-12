@@ -19,8 +19,8 @@ class TestSourceImageMissing < Minitest::Test
   end
 
   # size missing
-  def test_size
-    assert_equal({ width: 999_999, height: 999_999 }, @tested.size)
+  def test_width
+    assert_equal 999_999, @tested.width
   end
 
   def test_warning

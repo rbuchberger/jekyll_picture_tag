@@ -187,10 +187,11 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
   * jxr
   * jp2
 
-  Array (yml sequence) of the image formats you'd like to generate, in decreasing order
-  of preference. Browsers will render the first format they find and understand, so **If you put jpg
+  Array (yml sequence) of the image formats you'd like to generate, in decreasing order of
+  preference. Browsers will render the first format they find and understand, so **If you put jpg
   before webp, your webp images will never be used**. `original` does what you'd expect. To supply
-  webp, you must have an imagemagick webp delegate installed.
+  webp, you must have an imagemagick webp delegate installed. (Most package managers just name it
+  'webp')
 
 * **widths**
 
@@ -305,6 +306,45 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
   *Example:* `base_width: 100`
 
   When using pixel ratios, you must supply a base width. This sets how wide the 1x image should be.
+
+* **Quality**
+
+  *Format:* `quality: integer <= 100`
+
+  *Example:* `quality: 80`
+
+  *Default:* `75`
+
+  This allows you to specify an image compression level for all image formats (where it makes sense,
+  anyway). The next option allows you to set them per format.
+
+* **Format Quality**
+
+  *Format:* 
+
+  ```yml
+  format_quality:
+    (format): integer <= 100
+    (format): integer <= 100
+    (format): integer <= 100
+    (...)
+  ```
+
+  *Example:*
+
+  ```
+  format_quality:
+    jpg: 75
+    png: 65
+    webp: 55
+  ```
+
+  *Default:* quality setting (above)
+
+  This allows you to specify quality settings for various image formats, allowing you to take
+  advantage of webp's better compression algorithm without trashing your jpg images (for example).
+  If you don't give a setting for a particular format it'll fall back to the `quality` setting
+  above, and if you don't set *that* it'll default to 75.
 
 * **HTML Attributes**
 

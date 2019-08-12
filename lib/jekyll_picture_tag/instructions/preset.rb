@@ -41,6 +41,13 @@ module PictureTag
         end
       end
 
+      def quality(format = nil)
+        qualities = @content['format_quality'] || {}
+        qualities.default = @content['quality']
+
+        qualities[format]
+      end
+
       private
 
       def build_preset

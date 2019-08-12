@@ -13,13 +13,15 @@ install`.
 
 ## Testing
 
-`rake test` runs the test suite. Ignore the mini_magick `method redefined` warnings (unless you know
-how to fix them?) The integration tests are really fast, so I didn't bother separating them into
-their own rake task.
+`rake test` runs the test suite (both unit tests and integration tests). Ignore the mini_magick
+`method redefined` warnings (unless you know how to fix them?) 
 
-Simplecov is set up as well, you'll get a measurement of coverage in the test output and a nice
-report in the `coverage` directory. I'd like to move to mutation based coverage testing, but that's
-a project for another day.
+`rake unit` runs just the unit tests, while `rake integration` runs the integration tests. The unit
+test coverage isn't stellar, but both unit and integration tests together hit 100%.
+
+Speaking of coverage, simplecov is set up -- you'll get a measurement of coverage in the test output
+and a nice report in the `coverage` directory. I'd like to move to mutation based coverage testing,
+but that's a project for another day.
 
 The tests do output a few images to the `/tmp/` directory, which I'm pretty sure means it won't work
 on Windows. This is fixable if there is a need, so if that gets in your way just ask.
@@ -27,7 +29,7 @@ on Windows. This is fixable if there is a need, so if that gets in your way just
 `rake rubocop` checks code formatting, `rake rubocop:auto_correct` will try to fix any rubocop
 issues, if possible.
 
-`rake` will run both the tests and rubocop.
+`rake` will run all tests and rubocop.
 
 ## Guidelines
 

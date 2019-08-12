@@ -30,7 +30,7 @@ class TestIntegrationParams < Minitest::Test
     FileUtils.mkdir_p '/tmp/jpt/generated'
     @widths.each { |w| FileUtils.touch rms_filename(width: w) }
 
-    MiniMagick::Image.expects(:open).never
+    MiniMagick::Image.any_instance.expects(:write).never
 
     tested
   end

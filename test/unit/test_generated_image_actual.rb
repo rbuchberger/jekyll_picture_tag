@@ -9,7 +9,7 @@ class GeneratedImageActualTest < MiniTest::Test
   include TestHelper
 
   def setup
-    PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
+    PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75)
     @out_file = '/tmp/jpt/rms-50-rrrrrr.jpg'
     @out_dir = '/tmp/jpt'
 
@@ -52,7 +52,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
     assert File.exist? @out_file
 
-    width, _height = FastImage.size(@out_file)
+    width = MiniMagick::Image.open(@out_file).width
 
     assert_equal width, 50
   end
