@@ -13,6 +13,19 @@ with a little YAML configuration and a simple template tag. It offers several di
 formats, and can be configured to work with JavaScript libraries such as
 [LazyLoad](https://github.com/verlok/lazyload).
 
+## Documentation
+
+It's all in the [`docs`](docs/) folder:
+
+* [Installation](docs/installation.md)
+* [Usage](docs/usage.md)
+* [Global settings](docs/global_configuration.md)
+* [Presets](docs/presets.md)
+* [Other notes](docs/notes.md)
+* [Contribute](contributing.md)
+* [Release History](#release-history)
+* [License](LICENSE.txt)
+
 ## Why use Jekyll Picture Tag?
 
 **Performance:** The fastest sites are static sites, but when you plonk a 2mb picture of your dog at
@@ -42,19 +55,6 @@ It's a lot. It's tedious and complicated. Jekyll Picture Tag makes it easy.
 * `sizes` attribute assistance.
 * Optionally, automatically link to the source image. Or manually link to anywhere else, with just a
   tag parameter!
-
-## Documentation
-
-It's all in the `docs` folder:
-
-* [Installation](docs/installation.md)
-* [Usage](docs/usage.md)
-* [Global settings](docs/global_configuration.md)
-* [Presets](docs/presets.md)
-* [Other notes](docs/notes.md)
-* [Contribute](contributing.md)
-* [Release History](#release-history)
-* [License](LICENSE.txt)
 
 ## Quick start / Demo
 
@@ -172,7 +172,7 @@ as well.
 
 ## Release History
 
-* 1.7.0 (WIP)
+* 1.7.0 Aug 12, 2019
   * Add support for setting generated image quality, either generally or specific to given
     formats.
   * Add support for spaces and other url-encoded characters in filenames
