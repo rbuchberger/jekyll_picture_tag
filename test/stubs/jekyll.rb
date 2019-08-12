@@ -160,6 +160,13 @@ module JekyllStub
           'widths' => [100],
           'fallback_width' => 100,
           'formats' => %w[jpg jp2 png webp gif]
+        },
+
+        'quality' => {
+          'quality' => 30,
+          'format_quality' => {
+            'webp' => 45
+          }
         }
       },
 
