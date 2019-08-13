@@ -1,3 +1,4 @@
+{% raw %}
 # Liquid Tag Usage
 
 The tag takes a mix of user input and pointers to configuration settings. The only required argument
@@ -129,3 +130,6 @@ Line breaks and spaces are interchangeable, the following is perfectly acceptabl
 You can use liquid variables in a picture tag:
 
 `{% picture {{ post.featured_image }} --alt Our Project %}`
+
+
+{% endraw %}

@@ -1,3 +1,4 @@
+{% raw %}
 # Migrating from versions < 1.0
 
 This document details the changes from previous versions (Everything before 1.0), and how to migrate
@@ -176,3 +177,4 @@ markup_presets:
       source_wide_hi: [900]
       source_wide: [600]
 ```
+{% endraw %}

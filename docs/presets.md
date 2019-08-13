@@ -1,3 +1,4 @@
+{% raw %}
 # Writing Presets
 
 Presets are stored in `_data/picture.yml`, to avoid cluttering `_config.yml`. You will have to
@@ -405,3 +406,4 @@ To use a multiplier based srcset, set `pixel_ratios` and `base_width`.
   Hard setting for `{::nomarkdown}` tags, overrides both autodetection and the global setting in
   `_config.yml`. See [notes](notes.md) for a detailed explanation. 
 
+{% endraw %}
