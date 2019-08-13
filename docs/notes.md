@@ -1,3 +1,4 @@
+{% raw %}
 # Notes and FAQ
 
 ## Extra {::nomarkdown} tags or mangled HTML?
@@ -83,3 +84,5 @@ that this will break source image linking, if you wish to enable it. (Can't link
 aren't public!)
 
 The `output` directory is never deleted by Jekyll. You may want to empty it once in awhile, to clear out unused images. 
+
+{% endraw %}

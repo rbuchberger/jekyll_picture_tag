@@ -1,3 +1,4 @@
+{% raw %}
 # Global Configuration
 
 **All configuration is optional**. If you are happy with the defaults, you don't have to touch a
@@ -113,3 +114,5 @@ picture:
   from within a markdown file. 
 
   This setting is overridden by the same setting in a preset. See [this wiki page](https://github.com/rbuchberger/jekyll_picture_tag/wiki/Extra-%7B::nomarkdown%7D-tags-or-mangled-html%3F) for more detailed information. 
+
+{% endraw %}
