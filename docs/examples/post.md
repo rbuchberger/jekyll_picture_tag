@@ -1,3 +1,4 @@
+{% raw %}
 ```
 ---
 layout: post
@@ -44,3 +45,4 @@ define the mobile `media_preset`):
       --alt Ugly Mug
   %}
 ```
+{% endraw %}
