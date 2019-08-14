@@ -1,6 +1,9 @@
 theme: jekyll-theme-slate
 title: Jekyll Picture Tag
 
+url: ''
+baseurl: '/jekyll_picture_tag'
+
 defaults:
   - 
     scope: 
