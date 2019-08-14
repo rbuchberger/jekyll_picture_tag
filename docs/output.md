@@ -4,7 +4,7 @@
 # Output Formats
 
 This is a listing of the various text arrangements that JPT can give you. Select one by setting
-`markup:` in the relevant [markup preset](presets).
+`markup:` in the relevant [markup preset]({{ site.baseurl }}/presets).
 
 Example: 
 

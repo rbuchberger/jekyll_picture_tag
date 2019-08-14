@@ -43,14 +43,14 @@ Given in order:
 
 * **Preset**
 
-  Select a [markup preset](/presets#markup-presets), or omit to use the `default` preset. Presets
+  Select a [markup preset]({{ site.baseurl }}/presets#markup-presets), or omit to use the `default` preset. Presets
   are collections of settings that determine nearly everything about JPT's output, from the image
   formats used to the exact format your markup will take.
 
 * **Base Image** (Required)
 
   Can be any raster image (as long as you have the required ImageMagick delegate). Relative to
-  jekyll's root directory, or the `source` [setting](/global_configuration) if you've configured it.
+  jekyll's root directory, or the `source` [setting]({{ site.baseurl }}/global_configuration) if you've configured it.
 
   For filenames with spaces, either use double quotes (`"my image.jpg"`) or a backslash (`my\
   image.jpg`).
@@ -62,7 +62,7 @@ Given in order:
     *Example:* `tablet: img_cropped.jpg mobile: img_cropped_more.jpg`
 
   Optionally specify any number of alternate base images for given [screen
-  sizes](/presets/#media-presets) (specified in `_data/picture.yml`). This is called [art
+  sizes]({{ site.baseurl }}/presets/#media-presets) (specified in `_data/picture.yml`). This is called [art
   direction](http://usecases.responsiveimages.org/#art-direction), and is one of JPT's strongest
   features.
 
@@ -85,7 +85,7 @@ Given in order:
       This will override automatic source image linking, if you have enabled it.
 
       **Note**: If you get either mangled HTML or extra {::nomarkdown} tags when using this, read
-      [here](/notes).
+      [here]({{ site.baseurl }}/notes).
 
   * **`--alt`**
   

@@ -6,7 +6,7 @@ id: quickstart
 
 **All configuration is optional.** Here's the simplest possible use case:
 
-1. [Install](/installation)
+1. [Install]({{ site.baseurl }}/installation)
 
 2. Write this: {% raw %} `{% picture test.jpg %}` {% endraw %}
 
@@ -39,9 +39,9 @@ markup_presets:
 
 ### Here's a more complete demonstration:
 
-[Presets](/presets) are named collections of settings that tell JPT what you want it to give you.
+[Presets]({{ site.baseurl }}/presets) are named collections of settings that tell JPT what you want it to give you.
 Media presets are just CSS media queries, and markup presets determine the output text and images.
-You choose one with the second [tag parameter](/usage), or omit for the `default` (as in these
+You choose one with the second [tag parameter]({{ site.baseurl }}/usage), or omit for the `default` (as in these
 examples). They are located in `_data/picture.yml`. Here's an example:
 
 ```yml

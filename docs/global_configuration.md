@@ -116,4 +116,5 @@ picture:
   Whether or not to surround j-p-t's output with a `{::nomarkdown}..{:/nomarkdown}` block when called
   from within a markdown file. 
 
-  This setting is overridden by the same setting in a preset. See [this wiki page](https://github.com/rbuchberger/jekyll_picture_tag/wiki/Extra-%7B::nomarkdown%7D-tags-or-mangled-html%3F) for more detailed information. 
+  This setting is overridden by the same setting in a preset. See [the notes]({{ site.baseurl
+  }}/notes) for more detailed information. 

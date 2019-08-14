@@ -38,7 +38,7 @@
   * auto-orient images before stripping metadata
 * 1.0.2 Jan 18, 2019: Fix ruby version specification
 * 1.0.1 Jan 13, 2019: Added ruby version checking
-* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See the [migration guide](/migration).
+* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See the [migration guide]({{ site.baseurl }}/migration).
 * 0.2.2 Aug  2, 2013: Bugfixes
 * 0.2.1 Jul 17, 2013: Refactor again, add Liquid parsing.
 * 0.2.0 Jul 14, 2013: Rewrite code base, bring in line with Jekyll Image Tag.

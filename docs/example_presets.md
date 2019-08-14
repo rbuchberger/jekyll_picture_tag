@@ -4,7 +4,7 @@
 
 These are example settings- I mostly made them up off the top of my head. You
 probably don't want to just copy-paste them. The full documentation
-for these can be found [here](/presets).
+for these can be found [here]({{ site.baseurl }}/presets).
 
 ```yml
 

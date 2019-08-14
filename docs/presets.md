@@ -7,7 +7,7 @@ Presets are named collections of settings that determine basically everything ab
 They are stored in `_data/picture.yml`, to avoid cluttering `_config.yml`. You will have to create
 this file, and probably the `_data/` directory as well.
 
-Here's an [example data file](/example_presets).
+Here's an [example data file]({{ site.baseurl }}/example_presets).
 
 ## Required Knowledge
 
@@ -94,7 +94,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
   *Default*: `auto`
 
-  Defines what format the generated text will take. They are documented [here](/output).
+  Defines what format the generated text will take. They are documented [here]({{ site.baseurl }}/output).
 
  
 * **Image Formats**
@@ -292,7 +292,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
   Surround image with a link to the original source file. Your source image directory must be
   published as part of the compiled site. If you run into weird issues with the output, see
-  the [notes](/notes).
+  the [notes]({{ site.baseurl }}/notes).
 
 * **Nomarkdown override**
    
@@ -303,4 +303,4 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     *Default:* `nil`
 
   Hard setting for `{::nomarkdown}` tags, overrides both autodetection and the global setting in
-  `_config.yml`. See the [notes](/notes) for a detailed explanation. 
+  `_config.yml`. See the [notes]({{ site.baseurl }}/notes) for a detailed explanation. 
