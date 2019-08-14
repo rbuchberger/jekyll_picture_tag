@@ -1,7 +1,12 @@
-# These are example settings. I mostly made them up off the top of my head. You
-# probably don't want to just copy-paste these settings. It's worth your time to
-# learn responsive images, so you'll understand what these settings mean.
-# The full documentation for these settings can be found in docs/presets.md
+---
+---
+# /_data/picture.yml
+
+These are example settings- I mostly made them up off the top of my head. You
+probably don't want to just copy-paste them. The full documentation
+for these can be found [here](/presets).
+
+```yml
 
 # Media presets are just named css media queries, used in several places:
 # - To specify alternate source images (for art direction)
@@ -14,44 +19,47 @@ media_presets:
   tablet: 'max-width: 900px'
   mobile: 'max-width: 600px'
 
-# Markup presets allow you to group settings together, and select one of them by name in your jekyll
-# tag. All settings are optional.
+# Markup presets allow you to group settings together, and select one of them by
+# name in your jekyll tag. All settings are optional.
 markup_presets:
-  # If you don't specify a preset in the liquid tag (just say 
-  # {% picture image.jpg %}), you'll get the 'default' preset:
+
   default:
-    # What form the output markup should take.
+    # What form the output markup should take:
     markup: auto
 
     # Must be an array, and order matters. Defaults to just 'original', which
     # does what you'd expect.
     formats: [webp, original]
 
-    # Must be an array: which image sizes (width in pixels) to generate (unless directed otherwise
-    # below). If not specified, will use sensible default values.
+    # Must be an array: which image sizes (width in pixels) to generate (unless
+    # directed otherwise below). If not specified, will use sensible default
+    # values.
     widths: [200, 400, 800, 1600]
 
-    # Alternate source images (for art direction) are associated with media query presets. Here, you
-    # can optionally specify a different set of sizes to generate for those alternate source images.
-    # This is how you avoid generating a 1600 pixel wide image that's only shown on narrow screens.
+    # Alternate source images (for art direction) are associated with media
+    # query presets. Here, you can optionally specify a different set of sizes
+    # to generate for those alternate source images.  This is how you avoid
+    # generating a 1600 pixel wide image that's only shown on narrow screens.
     # Must be arrays.
     media_widths: 
       mobile: [200, 400, 600] 
       tablet: [400, 600, 800]
 
-    # For building the 'sizes' attribute on img and source tags. specifies how wide the image will
-    # be when a given media query is true. Note that every source in a given <picture> tag will have
-    # the same associated sizes attribute.
+    # For building the 'sizes' attribute on img and source tags. specifies how
+    # wide the image will be when a given media query is true. Note that every
+    # source in a given <picture> tag will have the same associated sizes
+    # attribute.
     sizes: 
       mobile: 100vw
       tablet: 80vw
 
-    # Specifies an optional, unconditional size attribute. Can be given alone, or if specified in
-    # combination with 'sizes' below, will be given last (when no media queries apply).
+    # Specifies an optional, unconditional size attribute. Can be given alone,
+    # or if specified in combination with 'sizes' below, will be given last
+    # (when no media queries apply).
     size: 800px
 
-    # Specify the properties of the fallback image. If not specified, will return a 900 pixel
-    # wide image in the original format.
+    # Specify the properties of the fallback image. If not specified, will
+    # return a 900 pixel wide image in the original format.
     fallback_width: 800
     fallback_format: original
 
@@ -80,8 +88,8 @@ markup_presets:
     attributes:
       img: 'class="icon"'
 
-  # Here's an example of how you'd configure jekyll-picture-tag to work with something like
-  # lazyload:
+  # Here's an example of how you'd configure jekyll-picture-tag to work with
+  # something like lazyload:
   # https://github.com/verlok/lazyload
   lazy:
     # data_auto gives you data-src, data-srcset, and data-sizes instead of src,
@@ -93,7 +101,8 @@ markup_presets:
     attributes: 
       img: class="lazy"
 
-  # This is an example of how you'd get generated image and a URL, and nothing else.
+  # This is an example of how you'd get generated image and a URL, and nothing
+  # else.
   direct:
     markup: direct_url
     fallback_format: webp # Default original
@@ -103,3 +112,5 @@ markup_presets:
   srcset:
     markup: naked_srcset
     formats: [webp] # must be an array, even if it only has one item
+
+```

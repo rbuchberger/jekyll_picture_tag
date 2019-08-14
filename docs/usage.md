@@ -1,135 +1,113 @@
+---
+---
+# How to use the Liquid Tag:
+
+## Format:
+
 {% raw %}
-# Liquid Tag Usage
+`{% picture [preset] (base image) [alternate images] [attributes] %}`
+{% endraw %}
 
-The tag takes a mix of user input and pointers to configuration settings. The only required argument
-is the base image:
-
-`{% picture [preset] (source image) [alternate images] [attributes] %}`
-
-For filenames with spaces, you can either surround it with quotes (`"my image.jpg"`) or escape the
-space with a backslash (`"my\ image.jpg"`).
+The only required argument is the base image. Line breaks and extra spaces are fine, and you can
+use liquid variables anywhere.
 
 ## Examples:
 
+{% raw %}
 `{% picture example.jpg %}`
 
-`{% picture thumbnail example.jpg %}`
+`{% picture thumbnail example.jpg --alt Example Image %}`
+
+`{% picture example.jpg --picture class="attribute-demo" %}`
 
 `{% picture blog_index {{ post.image }} --link {{ post.url }} %}`
 
 `{% picture "some example.jpg" mobile: other\ example.jpg %}`
 
-```
+```md
 {% picture 
   hero 
   example.jpg 
-  mobile: example_cropped.jpg 
+  tablet: example_cropped.jpg
+  mobile: example_cropped_more.jpg 
   --alt Happy Puppy 
   --picture class="hero" 
   --link /
 %}
 ```
+{% endraw %}
 
 ## Argument reference
 
+Given in order:
+
 * **Preset**
 
-  *Format:* `(name of a markup preset described in _data/picture.yml)`
+  Select a [markup preset](/presets#markup-presets), or omit to use the `default` preset. Presets
+  are collections of settings that determine nearly everything about JPT's output, from the image
+  formats used to the exact format your markup will take.
 
-  *Default:* `default`
+* **Base Image** (Required)
 
-  Optionally specify a markup
-  [preset](https://github.com/rbuchberger/jekyll_picture_tag/wiki/Writing-Presets) to use, or leave
-  blank for the `default` preset.
+  Can be any raster image (as long as you have the required ImageMagick delegate). Relative to
+  jekyll's root directory, or the `source` [setting](/global_configuration) if you've configured it.
 
-* **Source Image** (Required)
-
-  *Format:* `(Image filename, relative to source setting in _config.yml)`
-
-  The base image that will be resized for your picture sources. Can be pretty much any raster image
-  (as long as imagemagick understands it).
+  For filenames with spaces, either use double quotes (`"my image.jpg"`) or a backslash (`my\
+  image.jpg`).
 
 * **Alternate images**
 
-    *Format:* `(media query preset): (image filename, relative to source directory)`
+    *Format:* `(media query preset): (filename) (...)`
 
     *Example:* `tablet: img_cropped.jpg mobile: img_cropped_more.jpg`
 
-  Optionally specify any number of alternate base images for given [media queries](#media-presets)
-  (specified in `_data/picture.yml`). This is one of of picture's strongest features, often referred
-  to as the [art direction use case](http://usecases.responsiveimages.org/#art-direction).
+  Optionally specify any number of alternate base images for given [screen
+  sizes](/presets/#media-presets) (specified in `_data/picture.yml`). This is called [art
+  direction](http://usecases.responsiveimages.org/#art-direction), and is one of JPT's strongest
+  features.
 
   Give your images in order of ascending specificity (The first image is the most general). They will
-  be provided to the browser in reverse order, and it will select the first one with a media query
-  that evaluates true.
+  be provided to the browser in reverse order, and it will select the first one with an applicable
+  media query.
 
 * **Attributes**
 
-  Optionally specify any number of HTML attributes. These will be added to any attributes you've
-  set in a preset. They can take a few different formats:
+  Optionally specify any number of HTML attributes, or an href target. These will be added to any
+  attributes you've set in a preset.
 
-  ##### `--link`
+  * **`--link`**
 
-  *Format:* `--link (some url)`
+    *Format:* `--link (some url)`
 
-  *Examples*: `--link https://example.com`, `--link /blog/some_post/`
+    *Examples*: `--link https://example.com`, `--link /blog/some_post/`
 
-    Wrap the image in an anchor tag, with the `href` attribute set to whatever value you give it.
-    This will override automatic source image linking, if you have enabled it.
+      Wrap the image in an anchor tag, with the `href` attribute set to whatever value you give it.
+      This will override automatic source image linking, if you have enabled it.
 
-    **Note**: Don't disable the `nomarkdown` global setting if you would like do this within markdown
-    files and you are using Kramdown (Jekyll's default markdown parser.)
-  ##### `--alt`
+      **Note**: If you get either mangled HTML or extra {::nomarkdown} tags when using this, read
+      [here](/notes).
+
+  * **`--alt`**
   
-  *Format:* `--alt (alt text)`
+    *Format:* `--alt (alt text)`
 
-  *Example:* `--alt Here is my alt text!`
+    *Example:* `--alt Here is my alt text!`
 
-  Shortcut for `--img alt="..."`
+    Convenience shortcut for `--img alt="..."`
   
-  ##### `--(element)`
+  * **`--(element)`**
 
-  *Format:* `--(picture|img|source|a|parent) (Standard HTML attributes)`
+    *Format:* `--(picture|img|source|a|parent) (Standard HTML attributes)`
 
-  *Example:* `--img class="awesome-fade-in" id="coolio" --a data-awesomeness="11"`
+    *Example:* `--img class="awesome-fade-in" id="coolio" --a data-awesomeness="11"`
 
-  Apply attributes to a given HTML element. Your options are:
+    Apply attributes to a given HTML element. Your options are:
 
-  * `picture`
-  * `img`
-  * `source`
-  * `a` (anchor tag)
-  * `parent`
+    * `picture`
+    * `img`
+    * `source`
+    * `a` (anchor tag)
+    * `parent`
 
-  `--parent` will be applied to the `<picture>` if present, otherwise the `<img>`; useful when using
-    the `auto` output format.
-
-  ##### Old syntax
-
-  The old syntax is to just dump all attributes at the end:
-
-  `{% picture example.jpg alt="alt text" class="super-duper" %}`
-
-  This will continue to work. For backwards compatibility, behavior of previous versions is
-  maintained: all attributes specified this way are applied to the img tag.
-
-#### Line breaks
-Line breaks and spaces are interchangeable, the following is perfectly acceptable:
-
-```
-{%
-  picture my-preset
-    img.jpg
-    mobile: alt.jpg
-    --alt Alt Text
-    --picture class="stumpy"
-%}
-```
-#### Liquid variables
-
-You can use liquid variables in a picture tag:
-
-`{% picture {{ post.featured_image }} --alt Our Project %}`
-
-
-{% endraw %}
+    `--parent` will be applied to the `<picture>` if present, otherwise the `<img>`; useful when
+    using an `auto` output format.
