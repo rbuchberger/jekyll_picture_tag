@@ -1,0 +1,31 @@
+  @media (max-width: 600px) {
+    ul.directory {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  ul.directory {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding-left: 0;
+    flex-grow: 0;
+  }  
+
+  ul.directory li {
+    margin: .3em;
+  }
+
+  ul.directory a {
+    line-height: 2;
+    padding: 8px 20px;
+  }
+
+  li.active a {
+    border-radius: 3px;
+    background-color: #007edf;
+    color: #fff;
+    box-shadow: 2px 2px 3px #999;
+  }
