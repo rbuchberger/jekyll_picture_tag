@@ -10,3 +10,6 @@
 .idea
 jekyll-picture-tag.iml
 *.gem
+/docs/_site/
+/docs/.jekyll-cache/
+/docs/.sass-cache/

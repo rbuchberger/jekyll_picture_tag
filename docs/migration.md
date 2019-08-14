@@ -1,4 +1,5 @@
-{% raw %}
+---
+---
 # Migrating from versions < 1.0
 
 This document details the changes from previous versions (Everything before 1.0), and how to migrate
@@ -38,7 +39,9 @@ describes how to get your site working with the new version.
 Previous tag syntax has been extended, but backwards compatibility (and behaviour of previous
 versions) is maintained. 
 
+{% raw %}
 `{% picture img.jpg (implicit attributes) --(argument) (explicit attributes) %}`
+{% endraw %}
 
 Implicit attributes are the old way. They are specified after the last source image, and before any
 explicit attributes (if they are included). These attributes are applied to the `<img>` tag, as in
@@ -177,4 +180,3 @@ markup_presets:
       source_wide_hi: [900]
       source_wide: [600]
 ```
-{% endraw %}

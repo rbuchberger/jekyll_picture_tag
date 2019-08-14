@@ -1,1 +1,10 @@
 theme: jekyll-theme-slate
+title: Jekyll Picture Tag
+
+defaults:
+  - 
+    scope: 
+      path: ''
+    values:
+      layout: directory
+  

@@ -1,3 +1,5 @@
+---
+---
 # Contributing
 
 Bug reports, feature requests, and feedback are very welcome, either through github issues or via
@@ -31,24 +33,30 @@ issues, if possible.
 
 `rake` will run all tests and rubocop.
 
+## Docs
+
+The docs are set up for github pages, which is based on jekyll. You can preview them locally as you
+edit:
+
+1. `cd docs`
+2. `bundle install`
+3. `bundle exec jekyll serve`
+
 ## Guidelines
 
-* Generally, go for straightforward and readable rather than terse and clever.
-  I'm not actually a very good programmer; I need simple code that's easy to understand.
+* Generally, go for straightforward and readable rather than terse and clever.  I'm not actually a
+  very good programmer; I need simple code that's easy to understand.
 
 * Internal refactoring is welcome, especially in the name of the previous point.
 
-* I'm very reluctant to introduce breaking changes to configuration settings.
-  This rule isn't hard and fast, but I'm not going to do it without a good reason.
+* I'm very reluctant to introduce breaking changes to configuration settings. This rule isn't
+  absolute, but I'm not going to do it without a good reason.
 
-* The addition of new test cases whenever relevant is certainly appreciated.
-  This project went for awhile without any proper tests, but now that we're at 100% coverage it
-  would be nice to keep it that way. 
+* The addition of new test cases whenever relevant is certainly appreciated. This project went for
+  awhile without any proper tests, but now that we're at 100% coverage it would be nice to keep it
+  that way. 
 
 * I've been using 80 characters for code and 100 characters for documentation.
-
-* The code coverage is currently at 100%. I'm not going to make maintaining this a hard and fast
-  rule, but I'd really like to see it stay this way.
 
 ## Hard rules
 
