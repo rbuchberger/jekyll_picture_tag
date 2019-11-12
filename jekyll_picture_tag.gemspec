@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.3'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'solargraph'
 
   spec.add_dependency 'addressable', '~> 2.6'
   spec.add_dependency 'mime-types', '~> 3'
