@@ -19,7 +19,11 @@ module PictureTag
       private
 
       def load_preset
-        PictureTag.preset['attributes'].dup || {}
+        # Shamelessly stolen from stackoverflow. Deep cloning a hash is
+        # surprisingly tricky! I could pull in ActiveSupport and get
+        # Hash#deep_dup, but for now I don't think it's necessary.
+
+        Marshal.load(Marshal.dump(PictureTag.preset['attributes'])) || {}
       end
 
       # Syntax this function processes:
