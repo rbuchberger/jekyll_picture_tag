@@ -95,6 +95,12 @@ class TestIntegrationPresets < Minitest::Test
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
+  def test_attribute_persistence
+    tested 'attributes rms.jpg --img class="goaway"'
+
+    test_attributes
+  end
+
   # link source
   def test_link_source
     output = tested 'link_source rms.jpg'
