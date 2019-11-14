@@ -95,10 +95,23 @@ class TestIntegrationPresets < Minitest::Test
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
+  # Ensure that attributes passed into the tag do not persist to other tags.
   def test_attribute_persistence
     tested 'attributes rms.jpg --img class="goaway"'
 
     test_attributes
+  end
+
+  # Ensure that when attributes are passed from both the argument and the
+  # preset, they all make it into the final output.
+  def test_combined_attributes
+    output = tested 'attributes rms.jpg --img class="arg classes"'
+    attrs = output.at_css('img')['class'].split
+
+    assert errors_ok? output
+    assert_includes attrs, 'arg'
+    assert_includes attrs, 'classes'
+    assert_includes attrs, 'img'
   end
 
   # link source
