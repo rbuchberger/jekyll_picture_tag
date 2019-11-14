@@ -4,22 +4,28 @@ module PictureTag
     # sent to various elements.
     # Stored as a hash, with string keys.
     class HTMLAttributeSet
-      # Initialize with leftovers passed into the liquid tag
+      # Initialize with leftovers passed into the liquid tag. These leftovers
+      # (params) take the form of an array of strings, called words, which the
+      # tag parser has separated.
       def initialize(params)
-        @content = load_preset
+        @attributes = load_preset
 
         parse_params(params) if params
         handle_source_url
       end
 
       def [](key)
-        @content[key]
+        @attributes[key]
       end
 
       private
 
       def load_preset
-        PictureTag.preset['attributes'].dup || {}
+        # Shamelessly stolen from stackoverflow. Deep cloning a hash is
+        # surprisingly tricky! I could pull in ActiveSupport and get
+        # Hash#deep_dup, but for now I don't think it's necessary.
+
+        Marshal.load(Marshal.dump(PictureTag.preset['attributes'])) || {}
       end
 
       # Syntax this function processes:
@@ -30,10 +36,10 @@ module PictureTag
         words.each do |word|
           if word.match(/^--/)
             key = word.delete_prefix('--')
-          elsif @content[key]
-            @content[key] << ' ' + word
+          elsif @attributes[key]
+            @attributes[key] << ' ' + word
           else
-            @content[key] = word
+            @attributes[key] = word
           end
         end
       end
@@ -43,7 +49,7 @@ module PictureTag
 
         target = PictureTag.source_images.first.shortname
 
-        @content['link'] = ImgURI.new(target, source_image: true).to_s
+        @attributes['link'] = ImgURI.new(target, source_image: true).to_s
       end
     end
   end

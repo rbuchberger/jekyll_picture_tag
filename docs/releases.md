@@ -2,6 +2,9 @@
 ---
 # Release History
 
+* 1.7.1 Nov 14, 2019
+  * Fix some HTML attribute related bugs
+  * Add a few items to the FAQ
 * 1.7.0 Aug 12, 2019
   * Add support for setting generated image quality, either generally or specific to given
     formats.

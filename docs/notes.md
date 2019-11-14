@@ -2,6 +2,22 @@
 ---
 # Notes and FAQ
 
+* #### Github Pages?
+
+  Github Pages only allows a very short whitelist of plugins, which sadly does not include JPT. You
+  can either run it locally, then commit and push the generated files (rather than the source
+  files), or just host it some other way. I recommend Netlify.
+
+* #### HTML attributes
+
+  Jekyll Picture Tag has comprehensive attribute support for all generated HTML. You can add
+  attributes both through the [liquid tag]({{ site.baseurl }}/usage), and the [preset]({{
+  site.baseurl }}/presets) (scroll down a bi make sure that your hosting
+  provider makes those images available during the build process.  Netlify, for example, does not.
+  You won't find this out until you have gone through the entire migration process and try to deploy
+  for the first time.
+
+
 * #### Extra {::nomarkdown} tags or mangled HTML?
 
   **TLDR up front:** There's a bug involving `<picture>` tags wrapped in `<a>` tags which is not in my
@@ -41,19 +57,6 @@
 
   You can enable or disable markdown tags per preset by adding `nomarkdown: true|false` to them.
   **This setting overrides everything else, both JPT autodetection and the global setting.**
-
-* ### Input checking
-
-  Jekyll Picture Tag is very trusting. It doesn't do much checking of your inputs, and it does not
-  fail gracefully if you for example pass it a string when it expects an array. It's on the to-do
-  list, but for now if you get cryptic errors then double-check your settings and tag arguments.
-
-* ### Git LFS
-
-  I'm Putting this here because it bit me: If you want to use git LFS, make sure that your hosting
-  provider makes those images available during the build process.  Netlify, for example, does not.
-  You won't find this out until you have gone through the entire migration process and try to deploy
-  for the first time.
 
 * ### Managing Generated Images
 
