@@ -108,7 +108,6 @@ class TestIntegrationPresets < Minitest::Test
     output = tested 'attributes rms.jpg --img class="arg classes"'
     attrs = output.at_css('img')['class'].split
 
-    assert errors_ok? output
     assert_includes attrs, 'arg'
     assert_includes attrs, 'classes'
     assert_includes attrs, 'img'
