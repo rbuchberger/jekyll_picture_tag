@@ -9,6 +9,9 @@ this file, and probably the `_data/` directory as well.
 
 Here's an [example data file]({{ site.baseurl }}/example_presets).
 
+Any settings which are specific to particular output formats are documented on the [output
+formats]({{site.baseurl}}/output) page.
+
 ## Required Knowledge
 
 If you don't know the difference between resolution switching and art direction, stop now and read

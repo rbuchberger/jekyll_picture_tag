@@ -65,15 +65,34 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal '(max-width: 600px) 80vw, 50%', output.at_css('img')['sizes']
   end
 
-  # pixel ratio sourceset
+  # Pixel ratio srcset
   def test_pixel_ratio
     output = tested 'pixel_ratio rms.jpg'
-    assert errors_ok? output
 
     correct = '/generated/rms-10-46a48b.jpg 1.0x,'\
       ' /generated/rms-20-46a48b.jpg 2.0x, /generated/rms-30-46a48b.jpg 3.0x'
 
     assert_equal correct, output.at_css('img')['srcset']
+  end
+
+  # data_ output with sizes attr, yes data-sizes
+  def test_data_img_yes_size
+    output = tested('data_img_yes_size rms.jpg')
+
+    assert errors_ok? output
+
+    assert_equal '(max-width: 600px) 80vw, 50%',
+                 output.at_css('img')['data-sizes']
+  end
+
+  # data_ output with sizes attr, no data-sizes
+  def test_data_img_no_size
+    output = tested('data_img_no_size rms.jpg')
+
+    assert errors_ok? output
+
+    assert_equal '(max-width: 600px) 80vw, 50%',
+                 output.at_css('img')['sizes']
   end
 
   # attributes from preset
