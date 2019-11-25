@@ -82,6 +82,26 @@ module JekyllStub
           'formats' => %w[webp original]
         },
 
+        'data_img_no_size' => {
+          'markup' => 'picture',
+          'widths' => @widths,
+          'sizes' => {
+            'mobile' => '80vw'
+          },
+          'size' => '50%',
+          'data_sizes' => false
+        },
+
+        'data_img_yes_size' => {
+          'markup' => 'data_auto',
+          'widths' => @widths,
+          'sizes' => {
+            'mobile' => '80vw'
+          },
+          'size' => '50%',
+          'data_sizes' => true
+        },
+
         'direct_url' => {
           'markup' => 'direct_url',
           'fallback_width' => 100
