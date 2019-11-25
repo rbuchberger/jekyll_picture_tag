@@ -38,7 +38,8 @@ module OutputFormatTestHelper
   def stub_picture_tag
     PictureTag.stubs(fallback_format: 'fallback format',
                      fallback_width: 100,
-                     preset: { 'widths' => [100, 200, 300] },
+                     preset: { 'widths' => [100, 200, 300],
+                               'data_sizes' => true },
                      html_attributes: {},
                      nomarkdown?: false)
   end

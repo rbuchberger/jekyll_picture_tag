@@ -83,7 +83,7 @@ module JekyllStub
         },
 
         'data_img_no_size' => {
-          'markup' => 'picture',
+          'markup' => 'data_img',
           'widths' => @widths,
           'sizes' => {
             'mobile' => '80vw'
@@ -93,7 +93,7 @@ module JekyllStub
         },
 
         'data_img_yes_size' => {
-          'markup' => 'data_auto',
+          'markup' => 'data_img',
           'widths' => @widths,
           'sizes' => {
             'mobile' => '80vw'
