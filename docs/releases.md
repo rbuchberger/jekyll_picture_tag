@@ -2,6 +2,8 @@
 ---
 # Release History
 
+* 1.8.0 Nov 25, 2019
+  * Add `data_sizes` setting for the `data_` family of output formats.
 * 1.7.1 Nov 14, 2019
   * Fix some HTML attribute related bugs
   * Add a few items to the FAQ
