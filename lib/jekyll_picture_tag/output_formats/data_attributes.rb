@@ -18,7 +18,10 @@ module PictureTag
       end
 
       def add_sizes(element, srcset)
-        element.attributes << { 'data-sizes' => srcset.sizes } if srcset.sizes
+        return unless srcset.sizes
+
+        attribute = PictureTag.preset['data_sizes'] ? 'data-sizes' : 'sizes'
+        element.attributes << { attribute => srcset.sizes }
       end
 
       def build_noscript(base_content)
