@@ -50,19 +50,43 @@ module PictureTag
     end
 
     def render(context)
-      # Jekyll passes in a mostly undocumented context object, which appears to
-      # hold the entire site, including configuration and the _data dir.
+      setup(context)
+
+      if PictureTag.disabled?
+        placeholder
+      else
+        PictureTag.output_class.new.to_s
+      end
+    end
+
+    private
+
+    def setup(context)
       PictureTag.context = context
 
-      # The instruction set depends on both the context and the tag parameters:
+      # Now that we have both the tag parameters and the context object, we can
+      # build our instruction set.
       PictureTag.instructions = Instructions::Set.new(@raw_params)
 
       # We need to explicitly prevent jekyll from overwriting our generated
-      # files:
+      # image files:
       Utils.keep_files
+    end
 
-      # Return a string:
-      PictureTag.output_class.new.to_s
+    def placeholder
+      <<~HEREDOC
+        <div>
+          <h3>
+            JPT Image Placeholder
+          </h3>
+
+          <p>
+            Jekyll Picture Tag is disabled for this build environment. See the
+            <a href="https://rbuchberger.github.io/jekyll_picture_tag/global_configuration">
+            relevant docs</a> for more information.
+          </p>
+        </div>
+      HEREDOC
     end
   end
 end
