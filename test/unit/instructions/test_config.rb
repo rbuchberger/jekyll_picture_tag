@@ -89,4 +89,22 @@ class ConfigTest < Minitest::Test
 
     refute tested.cdn?
   end
+
+  def test_disabled_bool
+    @pconfig['disabled'] = true
+
+    assert tested.disabled?
+  end
+
+  def test_disabled_string
+    @pconfig['disabled'] = 'development'
+
+    assert tested.disabled?
+  end
+
+  def test_disabled_array
+    @pconfig['disabled'] = ['production']
+
+    refute tested.disabled?
+  end
 end
