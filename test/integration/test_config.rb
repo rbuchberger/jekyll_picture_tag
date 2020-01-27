@@ -150,4 +150,22 @@ class TestIntegrationConfig < Minitest::Test
     assert_equal src, output.at_css('img')['src']
     assert_equal ss, output.at_css('img')['srcset']
   end
+
+  def test_disabled
+    @pconfig['disabled'] = ['development']
+
+    correct = <<~HEREDOC
+      <h3>
+        JPT Image Placeholder
+      </h3>
+
+      <p>
+        Jekyll Picture Tag is disabled for this build environment. See the <a
+        href="https://rbuchberger.github.io/jekyll_picture_tag/global_configuration">relevant
+        docs</a> for more information.
+      </p>
+    HEREDOC
+
+    assert_equal tested_base, correct
+  end
 end
