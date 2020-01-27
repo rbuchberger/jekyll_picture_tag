@@ -70,6 +70,14 @@ class ConfigTest < Minitest::Test
     refute tested.continue_on_missing?
   end
 
+  def test_continue_bad_arg
+    @pconfig['ignore_missing_images'] = 42
+
+    assert_raises ArgumentError do
+      tested.continue_on_missing?
+    end
+  end
+
   def test_cdn
     @pconfig['cdn_url'] = 'some cdn'
     @pconfig['cdn_environments'] = %w[development production]
