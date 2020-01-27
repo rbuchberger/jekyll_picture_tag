@@ -69,6 +69,10 @@ module PictureTag
       config.pconfig
     end
 
+    def disabled?
+      config.disabled?
+    end
+
     # Preset forwarding
 
     def widths(media)
