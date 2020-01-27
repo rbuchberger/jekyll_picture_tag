@@ -107,4 +107,12 @@ class ConfigTest < Minitest::Test
 
     refute tested.disabled?
   end
+
+  def test_disabled_bad_arg
+    @pconfig['disabled'] = 42
+
+    assert_raises ArgumentError do
+      tested.disabled?
+    end
+  end
 end
