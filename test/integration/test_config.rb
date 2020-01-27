@@ -155,15 +155,17 @@ class TestIntegrationConfig < Minitest::Test
     @pconfig['disabled'] = ['development']
 
     correct = <<~HEREDOC
-      <h3>
-        JPT Image Placeholder
-      </h3>
+      <div>
+        <h3>
+          JPT Image Placeholder
+        </h3>
 
-      <p>
-        Jekyll Picture Tag is disabled for this build environment. See the <a
-        href="https://rbuchberger.github.io/jekyll_picture_tag/global_configuration">relevant
-        docs</a> for more information.
-      </p>
+        <p>
+          Jekyll Picture Tag is disabled for this build environment. See the <a
+          href="https://rbuchberger.github.io/jekyll_picture_tag/global_configuration">relevant
+          docs</a> for more information.
+        </p>
+      </div>
     HEREDOC
 
     assert_equal tested_base, correct
