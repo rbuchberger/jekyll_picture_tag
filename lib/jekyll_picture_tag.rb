@@ -84,7 +84,7 @@ module PictureTag
 
     def placeholder
       <<~HEREDOC
-        <div>
+        <div style="border: 1px solid red; padding: 10px;">
           <h3>
             JPT Image Placeholder
           </h3>
