@@ -111,10 +111,31 @@ picture:
 
   *Example:* `nomarkdown: false`
 
-  *Default*: `true`
+  *Default:* `true`
 
   Whether or not to surround j-p-t's output with a `{::nomarkdown}..{:/nomarkdown}` block when called
   from within a markdown file. 
 
   This setting is overridden by the same setting in a preset. See [the notes]({{ site.baseurl
   }}/notes) for more detailed information. 
+
+* **Disable Jekyll Picture Tag**
+
+  *Format:* `disabled: (true|false|environment|array of environments)`
+
+  *Examples:* 
+
+    - `disabled: true`
+
+    - `disabled: development`
+
+    - `disabled: [development, staging]`
+
+  *Default:* `false`
+
+  Disable image generation entirely and leave a generic placeholder instead. Useful for debugging,
+  or to speed up site builds when you're working on something else.
+
+  Hint: If you're going to toggle this on and off frequently, you might just use an environment
+  variable. Set this to something like `nopics`, and then start the Jekyll server with something
+  like `JEKYLL_ENV=nopics bundle exec jekyll serve` when you don't want image generation.
