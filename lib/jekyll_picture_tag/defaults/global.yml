@@ -7,3 +7,4 @@ picture:
   cdn_environments: ['production']
   nomarkdown: true
   ignore_missing_images: false
+  disabled: false

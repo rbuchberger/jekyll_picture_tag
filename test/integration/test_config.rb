@@ -150,4 +150,10 @@ class TestIntegrationConfig < Minitest::Test
     assert_equal src, output.at_css('img')['src']
     assert_equal ss, output.at_css('img')['srcset']
   end
+
+  def test_disabled
+    @pconfig['disabled'] = ['development']
+
+    assert_includes tested_base, 'Placeholder'
+  end
 end

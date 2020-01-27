@@ -38,26 +38,51 @@ module PictureTag
       end
 
       def continue_on_missing?
-        setting = pconfig['ignore_missing_images']
-
-        # Config setting can be a string, an array, or a boolean
-        if setting.is_a? Array
-          setting.include? jekyll_env
-        elsif setting.is_a? String
-          setting == jekyll_env
-        else
-          setting
-        end
+        env_check pconfig['ignore_missing_images']
+      rescue ArgumentError
+        raise ArgumentError,
+              <<~HEREDOC
+                continue_on_missing setting invalid. Must be either a boolean
+                (true/false), an environment name, or an array of environment
+                names.
+              HEREDOC
       end
 
       def cdn?
         pconfig['cdn_url'] && pconfig['cdn_environments'].include?(jekyll_env)
       end
 
+      def disabled?
+        env_check pconfig['disabled']
+      rescue ArgumentError
+        raise ArgumentError,
+              <<~HEREDOC
+                "disabled" setting invalid. Must be either a boolean
+                (true/false), an environment name, or an array of environment
+                names.
+              HEREDOC
+      end
+
       private
 
       def content
         @content ||= setting_merge(defaults, PictureTag.site.config)
+      end
+
+      # There are a few config settings which can either be booleans,
+      # environment names, or arrays of environment names. This method works it
+      # out and returns a boolean.
+      def env_check(setting)
+        if setting.is_a? Array
+          setting.include? jekyll_env
+        elsif setting.is_a? String
+          setting == jekyll_env
+        elsif [true, false].include? setting
+          setting
+        else
+          raise ArgumentError,
+                "#{setting} must either be a string, an array, or a boolean."
+        end
       end
 
       def setting_merge(default, jekyll)
