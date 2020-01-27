@@ -132,6 +132,18 @@ class TestIntegrationPresets < Minitest::Test
     assert_includes attrs, 'img'
   end
 
+  def test_empty_attributes
+    output = tested_base 'empty_attributes rms.jpg'
+
+    assert_includes output, 'alt=""'
+  end
+
+  def test_overwritten_empty_attributes
+    output = tested_base 'empty_attributes rms.jpg --alt Alternate Text'
+
+    assert_includes output, 'alt="Alternate Text"'
+  end
+
   # link source
   def test_link_source
     output = tested 'link_source rms.jpg'

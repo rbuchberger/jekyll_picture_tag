@@ -142,6 +142,10 @@ module JekyllStub
           }
         },
 
+        'empty_attributes' => {
+          'alt' => ''
+        },
+
         'link_source' => {
           'widths' => @widths,
           'link_source' => true
