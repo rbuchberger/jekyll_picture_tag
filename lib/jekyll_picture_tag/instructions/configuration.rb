@@ -52,6 +52,17 @@ module PictureTag
         pconfig['cdn_url'] && pconfig['cdn_environments'].include?(jekyll_env)
       end
 
+      def disabled?
+        env_check pconfig['disabled']
+      rescue ArgumentError
+        raise ArgumentError,
+              <<~HEREDOC
+                "disabled" setting invalid. Must be either a boolean
+                (true/false), an environment name, or an array of environment
+                names.
+              HEREDOC
+      end
+
       private
 
       def content
