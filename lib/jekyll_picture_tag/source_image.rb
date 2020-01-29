@@ -4,6 +4,7 @@ module PictureTag
   # to be reused by many different generated images.
   class SourceImage
     attr_reader :name, :shortname, :missing, :media_preset
+    attr_accessor :digest_guess
     include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)
@@ -23,12 +24,16 @@ module PictureTag
     def digest
       @digest ||= if @missing
                     'x' * 6
+                  elsif PictureTag.fast_build? && @digest_guess
+                    # Digest guess will be handed off to this class by the first
+                    # generated image which needs it (via attr_accessor).
+                    @digest_guess
                   else
                     Digest::MD5.hexdigest(File.read(@name))[0..5]
                   end
     end
 
-    # Includes path relative to default sorce folder, and the original filename.
+    # Includes path relative to default source folder and the original filename.
     def base_name
       @shortname.delete_suffix File.extname(@shortname)
     end
