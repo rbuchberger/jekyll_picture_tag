@@ -156,4 +156,16 @@ class TestIntegrationConfig < Minitest::Test
 
     assert_includes tested_base, 'Placeholder'
   end
+
+  def test_fast_build
+    @pconfig['fast_build'] = true
+
+    Digest::MD5.expects(:hexdigest).never
+    Dir.expects(:glob)
+       .with('/tmp/jpt/generated/rms-100-??????.jpg')
+       .returns(['/tmp/jpt/generated/rms-100-46a48b.jpg'])
+
+    output = tested 'rms.jpg'
+    assert_equal std_rms_ss, output.at_css('img')['srcset']
+  end
 end
