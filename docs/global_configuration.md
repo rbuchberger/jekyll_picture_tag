@@ -165,8 +165,8 @@ picture:
 
   *Default:* `false`
 
-  Disable image generation entirely and leave a generic placeholder instead. Useful for debugging,
-  or to speed up site builds when you're working on something else.
+  Disable image and markup generation entirely. Useful for debugging, or to speed up site builds
+  when you're working on something else.
 
   Hint: If you're going to toggle this on and off frequently, you might just use an environment
   variable. Set this to something like `nopics`, and then start the Jekyll server with something
