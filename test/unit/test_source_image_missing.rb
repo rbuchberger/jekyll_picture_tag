@@ -7,6 +7,7 @@ class TestSourceImageMissing < Minitest::Test
   def setup
     PictureTag.stubs(:source_dir).returns('/home/loser/')
     PictureTag.stubs(:continue_on_missing?).returns(true)
+    PictureTag.stubs(:fast_build?).returns(false)
     Utils.stubs(:warning)
     File.stubs(:exist?).with('/home/loser/img.jpg').returns(false)
 

@@ -29,6 +29,7 @@ module TestHelper
     :width,
     :shortname,
     :media_preset,
+    :digest_guess,
     keyword_init: true
   )
 

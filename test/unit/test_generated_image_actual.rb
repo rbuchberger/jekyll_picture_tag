@@ -10,6 +10,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
   def setup
     PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75)
+    PictureTag.stubs(:fast_build?).returns(false)
     @out_file = '/tmp/jpt/rms-50-rrrrrr.jpg'
     @out_dir = '/tmp/jpt'
 

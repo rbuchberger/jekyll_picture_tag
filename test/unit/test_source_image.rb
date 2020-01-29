@@ -6,6 +6,7 @@ class TestSourceImage < Minitest::Test
 
   def setup
     PictureTag.stubs(:source_dir).returns('/home/loser/')
+    PictureTag.stubs(:fast_build?).returns(false)
     File.stubs(:exist?).returns(true)
 
     @tested = SourceImage.new('img.jpg', 'media preset')

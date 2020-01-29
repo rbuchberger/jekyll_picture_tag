@@ -7,13 +7,15 @@ class GeneratedImageTest < Minitest::Test
   def setup
     @destfile = '/tmp/jpt/img-100-aaaaaa.webp'
     PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
+    PictureTag.stubs(:fast_build?).returns(false)
     File.stubs(:exist?).with(@destfile).returns true
 
     @source_stub = SourceImageStub.new(base_name: 'img',
                                        name: '/tmp/jpt/img.jpg',
                                        missing: false,
                                        digest: 'a' * 6,
-                                       ext: 'jpg')
+                                       ext: 'jpg',
+                                       digest_guess: nil)
   end
 
   def tested
