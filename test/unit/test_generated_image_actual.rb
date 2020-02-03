@@ -32,7 +32,7 @@ class GeneratedImageActualTest < MiniTest::Test
   def tested
     GeneratedImage.new(
       source_file: @test_image, width: 50, format: 'original'
-    )
+    ).generate
   end
 
   def make_dest_dir

@@ -24,18 +24,7 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def test_init_existing_dest
-    GeneratedImage.any_instance.expects(:generate_image).never
-
-    tested
-  end
-
-  def test_init_missing_dest
-    File.unstub(:exist?)
-    File.stubs(:exist?)
-        .with(@destfile)
-        .returns(false)
-
-    GeneratedImage.any_instance.expects(:generate_image)
+    GeneratedImage.any_instance.expects(:generate).never
 
     tested
   end
