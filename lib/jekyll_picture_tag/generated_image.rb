@@ -32,6 +32,8 @@ module PictureTag
       name_left + digest + name_right
     end
 
+    # https://example.com/assets/images/myimage-100-123abc.jpg
+    #                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def uri
       ImgURI.new(name).to_s
     end
