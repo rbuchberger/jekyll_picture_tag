@@ -4,9 +4,6 @@ class TestIntegrationConfig < Minitest::Test
 
   def setup
     base_stubs
-
-    # Speed things up a bit by not generating images:
-    File.stubs(:exist?).returns(true)
   end
 
   def teardown
@@ -158,6 +155,7 @@ class TestIntegrationConfig < Minitest::Test
   end
 
   def test_fast_build
+    File.stubs(:exist?).returns(true)
     @pconfig['fast_build'] = true
 
     Digest::MD5.expects(:hexdigest).never

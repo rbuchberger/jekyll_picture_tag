@@ -5,8 +5,6 @@ class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
   def setup
     base_stubs
-
-    File.stubs(:exist?).returns(true)
   end
 
   def teardown
