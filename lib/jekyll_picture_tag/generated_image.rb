@@ -10,8 +10,14 @@ module PictureTag
       @source = source_file
       @width  = width
       @format = process_format format
+    end
 
-      generate_image unless File.exist?(absolute_filename) || @source.missing
+    def exists?
+      File.exist?(absolute_filename)
+    end
+
+    def generate
+      generate_image unless @source.missing || exists?
     end
 
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
