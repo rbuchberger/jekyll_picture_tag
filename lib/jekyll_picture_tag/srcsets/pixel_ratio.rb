@@ -6,11 +6,9 @@ module PictureTag
       private
 
       def widths
-        target = PictureTag.preset['pixel_ratios'].collect do |p|
+        PictureTag.preset['pixel_ratios'].collect do |p|
           p * PictureTag.preset['base_width']
         end
-
-        check_widths target
       end
 
       def build_srcset_entry(file)
