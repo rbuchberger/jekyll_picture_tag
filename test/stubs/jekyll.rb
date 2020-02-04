@@ -143,7 +143,9 @@ module JekyllStub
         },
 
         'empty_attributes' => {
-          'alt' => ''
+          'attributes' => {
+            'alt' => ''
+          }
         },
 
         'link_source' => {
