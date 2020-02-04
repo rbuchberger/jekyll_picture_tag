@@ -102,6 +102,7 @@ module PictureTag
       end
 
       image.format @format
+      image.quality PictureTag.quality(@format)
     end
 
     def write_image
