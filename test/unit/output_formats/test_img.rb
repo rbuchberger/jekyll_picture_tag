@@ -139,4 +139,18 @@ class TestImg < Minitest::Test
 
     assert_equal correct, @tested.to_s
   end
+
+  def test_empty_alt
+    PictureTag.stubs(:html_attributes)
+              .returns('img' => 'alt=""')
+
+    assert_includes @tested.to_s, 'alt=""'
+  end
+
+  def test_empty_alt_shortcut
+    PictureTag.stubs(:html_attributes)
+              .returns('alt' => '')
+
+    assert_includes @tested.to_s, 'alt=""'
+  end
 end

@@ -49,6 +49,18 @@ class HTMLAttributeSetTest < Minitest::Test
     assert_equal 'alt=""', tested(words)['img']
   end
 
+  def test_preset_empty_alt_shortcut
+    @preset['attributes']['alt'] = ''
+
+    assert_equal '', tested['alt']
+  end
+
+  def test_tag_empty_alt_shortcut
+    words = ['--alt', '']
+
+    assert_equal '', tested(words)['alt']
+  end
+
   SourceStub = Struct.new(:shortname)
   UriStub = Struct.new(:to_s)
   def test_link_source
