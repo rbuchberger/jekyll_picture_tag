@@ -253,7 +253,7 @@ class TestIntegrationPresets < Minitest::Test
     tested 'quality rms.jpg'
 
     i = Image.open(rms_filename)
-    assert_equal 30, i.data['quality']
+    assert_equal 30, i.data['quality'].to_i
   end
 
   # Apparently mini_magick can only read quality from jpegs.
@@ -261,6 +261,6 @@ class TestIntegrationPresets < Minitest::Test
     tested 'format_quality rms.jpg'
 
     i = Image.open(rms_filename)
-    assert_equal 45, i.data['quality']
+    assert_equal 45, i.data['quality'].to_i
   end
 end
