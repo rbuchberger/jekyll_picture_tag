@@ -2,6 +2,13 @@
 ---
 # Release History
 
+* 1.9.0 Feb 2, 2020
+  * Add `fast_build` global setting
+  * Add `disabled` global setting
+  * Reduce unnecessary disk IO; sites with many source images should see build times improve when
+    no new images need to be generated.
+  * Add support for empty attributes; specifically so best-practice for decorative images (`alt=""`)
+    is possible.
 * 1.8.0 Nov 25, 2019
   * Add `data_sizes` setting for the `data_` family of output formats.
 * 1.7.1 Nov 14, 2019
