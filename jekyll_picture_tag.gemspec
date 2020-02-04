@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'addressable', '~> 2.6'
   spec.add_dependency 'mime-types', '~> 3'
   spec.add_dependency 'mini_magick', '~> 4'
-  spec.add_dependency 'objective_elements', '~> 1.1.1'
+  spec.add_dependency 'objective_elements', '~> 1.1.2'
 
   spec.add_runtime_dependency 'jekyll', '< 5'
 end
