@@ -265,6 +265,21 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
   tag: HTML element names, `alt:`, `link:`, and `parent:`. Unescaped double quotes cause problems
   with yml, so it's recommended to surround them with single quotes.
 
+  If you set attributes in both the liquid tag and the preset, they will be combined (space
+  separated). 
+
+  *Example:* If you set `img: class="someclass"` here, and `--img class="otherclass"` in the
+  liquid tag, you'll ultimately get `class="someclass otherclass"` in the generated markup.
+
+  To set empty alt text (best practice for decorative images), you have several options: 
+
+  - (preset attributes) `img: alt=""`
+  - (preset attributes) `alt: ""`
+  - (liquid tag) `--img alt=""`
+  - (liquid tag) `--alt ""`
+
+  `alt: (...)` and `--alt (...)` will replace (override) `img: alt="(...)"` and `--img alt="(...)"`
+
 * **Fallback Width**
 
     *Format:* `fallback_width: (integer)`             
