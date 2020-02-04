@@ -133,8 +133,14 @@ class TestIntegrationPresets < Minitest::Test
     assert_includes attrs, 'img'
   end
 
-  def test_empty_attributes
+  def test_empty_preset_attributes
     output = tested_base 'empty_attributes rms.jpg'
+
+    assert_includes output, 'alt=""'
+  end
+
+  def test_empty_tag_attributes
+    output = tested_base 'rms.jpg --alt ""'
 
     assert_includes output, 'alt=""'
   end
