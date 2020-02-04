@@ -18,9 +18,9 @@ require_relative 'jekyll_picture_tag/router'
 #
 # Description: Easy responsive images for Jekyll.
 #
-# Download: https://github.com/rbuchberger/jekyll_picture_tag
-# Documentation: https://github.com/rbuchberger/jekyll_picture_tag/readme.md
-# Issues: https://github.com/rbuchberger/jekyll_picture_tag/issues
+# Download: https://rubygems.org/gems/jekyll_picture_tag
+# Documentation: https://rbuchberger.github.io/jekyll_picture_tag/
+# Issues: https://github.com/rbuchberger/jekyll_picture_tag/
 #
 # Syntax:
 # {% picture [preset] img.jpg [media_query: alt-img.jpg] [attributes] %}
@@ -39,30 +39,47 @@ require_relative 'jekyll_picture_tag/router'
 #
 # See the documentation for full configuration and usage instructions.
 module PictureTag
+  # The router module is important. If you're looking for the actual code which
+  # handles a `PictureTag.(some method)`, start there.
   extend Router
+
   ROOT_PATH = __dir__
 
   # This is the actual liquid tag, which provides the interface with Jekyll.
   class Picture < Liquid::Tag
+    # First jekyll initializes our class with a few arguments, of which we only
+    # care about the params (arguments passed to the liquid tag). Jekyll makes
+    # no attempt to parse them; they're given as a string.
     def initialize(tag_name, raw_params, tokens)
       @raw_params = raw_params
       super
     end
 
+    # Then jekyll calls the 'render' method and passes it a mostly undocumented
+    # context object, which appears to hold the entire site including its
+    # configuration and the parsed _data dir.
     def render(context)
-      # Jekyll passes in a mostly undocumented context object, which appears to
-      # hold the entire site, including configuration and the _data dir.
+      setup(context)
+
+      if PictureTag.disabled?
+        ''
+      else
+        PictureTag.output_class.new.to_s
+      end
+    end
+
+    private
+
+    def setup(context)
       PictureTag.context = context
 
-      # The instruction set depends on both the context and the tag parameters:
+      # Now that we have both the tag parameters and the context object, we can
+      # build our instruction set.
       PictureTag.instructions = Instructions::Set.new(@raw_params)
 
       # We need to explicitly prevent jekyll from overwriting our generated
-      # files:
+      # image files:
       Utils.keep_files
-
-      # Return a string:
-      PictureTag.output_class.new.to_s
     end
   end
 end

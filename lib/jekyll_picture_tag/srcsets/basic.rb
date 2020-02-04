@@ -24,7 +24,7 @@ module PictureTag
       end
 
       def files
-        @files ||= widths.collect { |w| generate_file(w) }
+        @files ||= build_files
       end
 
       def to_a
@@ -46,15 +46,6 @@ module PictureTag
         nil
       end
 
-      # Check our source image size vs requested sizes
-      def check_widths(targets)
-        if targets.any? { |t| t > @source_image.width }
-          handle_small_source(targets, @source_image.width)
-        else
-          targets
-        end
-      end
-
       # Generates an HTML attribute
       def media_attribute
         "(#{PictureTag.media_presets[@media]})"
@@ -62,17 +53,39 @@ module PictureTag
 
       private
 
-      def handle_small_source(targets, image_width)
+      def build_files
+        # By 'files', we mean the GeneratedImage class.
+        return target_files if target_files.all?(&:exists?)
+
+        # This triggers GeneratedImage to actually build an image file.
+        files = checked_targets
+        files.each(&:generate)
+
+        files
+      end
+
+      def checked_targets
+        if target_files.any? { |f| f.width > @source_image.width }
+
+          small_source_warn
+
+          files = target_files.reject { |f| f.width >= @source_image.width }
+          files.push(generate_file(@source_image.width))
+        end
+
+        files || target_files
+      end
+
+      def target_files
+        @target_files ||= widths.collect { |w| generate_file(w) }
+      end
+
+      def small_source_warn
         Utils.warning(
-          " #{@source_image.shortname} is #{image_width}px wide, smaller than" \
-          " at least one size in the set #{targets}. Will not enlarge."
+          " #{@source_image.shortname} is #{@source_image.width}px wide,"\
+          " smaller than at least one size in the set #{widths}. Will not"\
+          ' enlarge.'
         )
-
-        small_targets = targets.dup.delete_if { |t| t >= image_width }
-
-        small_targets.push image_width
-
-        small_targets
       end
 
       def generate_file(width)

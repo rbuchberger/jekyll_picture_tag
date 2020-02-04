@@ -7,6 +7,7 @@ class GeneratedImageMissingTest < Minitest::Test
   def setup
     @destfile = '/home/loser/generated/img-100-xxxxxx.webp'
     PictureTag.stubs(:dest_dir).returns('/home/loser/generated')
+    PictureTag.stubs(:fast_build?).returns(false)
     File.stubs(:exist?)
         .with(@destfile).returns false
 

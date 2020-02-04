@@ -70,6 +70,14 @@ class ConfigTest < Minitest::Test
     refute tested.continue_on_missing?
   end
 
+  def test_continue_bad_arg
+    @pconfig['ignore_missing_images'] = 42
+
+    assert_raises ArgumentError do
+      tested.continue_on_missing?
+    end
+  end
+
   def test_cdn
     @pconfig['cdn_url'] = 'some cdn'
     @pconfig['cdn_environments'] = %w[development production]
@@ -88,5 +96,39 @@ class ConfigTest < Minitest::Test
     @pconfig['cdn_environments'] = ['development']
 
     refute tested.cdn?
+  end
+
+  def test_disabled_bool
+    @pconfig['disabled'] = true
+
+    assert tested.disabled?
+  end
+
+  def test_disabled_string
+    @pconfig['disabled'] = 'development'
+
+    assert tested.disabled?
+  end
+
+  def test_disabled_array
+    @pconfig['disabled'] = ['production']
+
+    refute tested.disabled?
+  end
+
+  def test_disabled_bad_arg
+    @pconfig['disabled'] = 42
+
+    assert_raises ArgumentError do
+      tested.disabled?
+    end
+  end
+
+  def test_fast_build_bad_arg
+    @pconfig['fast_build'] = 42
+
+    assert_raises ArgumentError do
+      tested.fast_build?
+    end
   end
 end

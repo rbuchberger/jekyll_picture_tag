@@ -22,7 +22,7 @@ module PictureTag
       private
 
       def widths
-        check_widths PictureTag.widths(@media)
+        PictureTag.widths(@media)
       end
 
       def build_srcset_entry(file)

@@ -1,12 +1,13 @@
 require_relative './test_integration_helper'
+require 'mini_magick'
 
 # This class focuses on testing various output formats and their configurations.
 class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
+  include MiniMagick
+
   def setup
     base_stubs
-
-    File.stubs(:exist?).returns(true)
   end
 
   def teardown
@@ -258,5 +259,20 @@ class TestIntegrationPresets < Minitest::Test
         formats.length, files.count { |f| File.extname(f) == '.' + format }
       )
     end
+  end
+
+  def test_quality_base
+    tested 'quality rms.jpg'
+
+    i = Image.open(rms_filename)
+    assert_equal 30, i.data['quality']
+  end
+
+  # Apparently mini_magick can only read quality from jpegs.
+  def test_format_quality
+    tested 'format_quality rms.jpg'
+
+    i = Image.open(rms_filename)
+    assert_equal 45, i.data['quality']
   end
 end

@@ -187,9 +187,18 @@ module JekyllStub
         },
 
         'quality' => {
+          'widths' => [100],
           'quality' => 30,
           'format_quality' => {
             'webp' => 45
+          }
+        },
+
+        'format_quality' => {
+          'widths' => [100],
+          'quality' => 30,
+          'format_quality' => {
+            'jpg' => 45
           }
         }
       },
