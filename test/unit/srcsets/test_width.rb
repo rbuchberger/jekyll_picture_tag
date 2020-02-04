@@ -35,11 +35,13 @@ class TestSrcsetWidth < Minitest::Test
   def test_image_generation
     PictureTag.stubs(widths: [600])
 
+    stub = gstub(600)
+
     GeneratedImage.expects(:new)
                   .with(source_file: @source_image, width: 600,
                         format: 'original')
-                  .returns(gstub(600))
-
+                  .returns(stub)
+    stub.expects(:generate)
     @tested.to_s
   end
 
@@ -79,5 +81,10 @@ class TestSrcsetWidth < Minitest::Test
 
     Utils.expects(:warning)
     assert_equal correct, @tested.to_s
+  end
+
+  # Make sure we don't check image width unnecessarily.
+  def test_unneeded_widths_check
+    @source_image.expects(:width).never
   end
 end

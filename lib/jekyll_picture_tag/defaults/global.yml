@@ -8,3 +8,4 @@ picture:
   nomarkdown: true
   ignore_missing_images: false
   disabled: false
+  fast_build: false

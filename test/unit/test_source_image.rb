@@ -6,6 +6,7 @@ class TestSourceImage < Minitest::Test
 
   def setup
     PictureTag.stubs(:source_dir).returns('/home/loser/')
+    PictureTag.stubs(:fast_build?).returns(false)
     File.stubs(:exist?).returns(true)
 
     @tested = SourceImage.new('img.jpg', 'media preset')
@@ -18,6 +19,14 @@ class TestSourceImage < Minitest::Test
                .returns(('a'..'z').to_a.join)
 
     assert_equal ('a'..'f').to_a.join, @tested.digest
+  end
+
+  def test_digest_guess
+    @tested.digest_guess = 'abc123'
+    PictureTag.stubs(:fast_build?).returns(true)
+
+    Digest::MD5.expects(:hexdigest).never
+    assert_equal 'abc123', @tested.digest
   end
 
   def test_base_name

@@ -63,6 +63,17 @@ module PictureTag
               HEREDOC
       end
 
+      def fast_build?
+        env_check pconfig['fast_build']
+      rescue ArgumentError
+        raise ArgumentError,
+              <<~HEREDOC
+                "fast_build" setting invalid. Must be either a boolean
+                (true/false), an environment name, or an array of environment
+                names.
+              HEREDOC
+      end
+
       private
 
       def content

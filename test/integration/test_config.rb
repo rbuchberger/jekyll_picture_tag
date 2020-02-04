@@ -4,9 +4,6 @@ class TestIntegrationConfig < Minitest::Test
 
   def setup
     base_stubs
-
-    # Speed things up a bit by not generating images:
-    File.stubs(:exist?).returns(true)
   end
 
   def teardown
@@ -154,6 +151,28 @@ class TestIntegrationConfig < Minitest::Test
   def test_disabled
     @pconfig['disabled'] = ['development']
 
-    assert_includes tested_base, 'Placeholder'
+    assert_equal tested_base, ''
+  end
+
+  def test_fast_build
+    File.stubs(:exist?).returns(true)
+    @pconfig['fast_build'] = true
+
+    Digest::MD5.expects(:hexdigest).never
+    Dir.expects(:glob)
+       .with('/tmp/jpt/generated/rms-800-??????.jpg')
+       .returns(['/tmp/jpt/generated/rms-800-46a48b.jpg'])
+
+    output = tested 'rms.jpg'
+    assert_equal std_rms_ss, output.at_css('img')['srcset']
+  end
+
+  # When building images which already exist, source image width should never be
+  # called because it's a huge performance hit.
+  def test_no_width_check
+    File.stubs(:exist?).returns(true)
+    SourceImage.any_instance.expects(:width).never
+
+    tested
   end
 end

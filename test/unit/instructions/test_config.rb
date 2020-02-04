@@ -123,4 +123,12 @@ class ConfigTest < Minitest::Test
       tested.disabled?
     end
   end
+
+  def test_fast_build_bad_arg
+    @pconfig['fast_build'] = 42
+
+    assert_raises ArgumentError do
+      tested.fast_build?
+    end
+  end
 end

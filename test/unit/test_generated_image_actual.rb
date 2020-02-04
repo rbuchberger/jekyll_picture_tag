@@ -10,6 +10,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
   def setup
     PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75)
+    PictureTag.stubs(:fast_build?).returns(false)
     @out_file = '/tmp/jpt/rms-50-rrrrrr.jpg'
     @out_dir = '/tmp/jpt'
 
@@ -31,7 +32,7 @@ class GeneratedImageActualTest < MiniTest::Test
   def tested
     GeneratedImage.new(
       source_file: @test_image, width: 50, format: 'original'
-    )
+    ).generate
   end
 
   def make_dest_dir

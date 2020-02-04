@@ -24,7 +24,8 @@ module TestHelperSrcset
       name: "img-#{width}-aaaaa.jpg",
       uri: "/img-#{width}-aaaaa.jpg",
       width: width,
-      format: 'jpg'
+      format: 'jpg',
+      exists?: false
     )
   end
 

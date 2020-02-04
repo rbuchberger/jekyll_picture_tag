@@ -73,6 +73,10 @@ module PictureTag
       config.disabled?
     end
 
+    def fast_build?
+      config.fast_build?
+    end
+
     # Preset forwarding
 
     def widths(media)

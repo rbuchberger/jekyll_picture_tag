@@ -69,8 +69,20 @@ module PictureTag
         element.media = srcset.media_attribute if srcset.media
       end
 
-      # File, not HTML
+      # GeneratedImage class, not HTML
       def build_fallback_image
+        fallback = GeneratedImage.new(
+          source_file: PictureTag.source_images.first,
+          format: PictureTag.fallback_format,
+          width: PictureTag.fallback_width
+        )
+
+        return fallback if fallback.exists?
+
+        build_new_fallback_image
+      end
+
+      def build_new_fallback_image
         GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,

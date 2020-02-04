@@ -62,7 +62,7 @@ module PictureTag
       setup(context)
 
       if PictureTag.disabled?
-        placeholder
+        ''
       else
         PictureTag.output_class.new.to_s
       end
@@ -80,22 +80,6 @@ module PictureTag
       # We need to explicitly prevent jekyll from overwriting our generated
       # image files:
       Utils.keep_files
-    end
-
-    def placeholder
-      <<~HEREDOC
-        <div style="border: 1px solid red; padding: 10px;">
-          <h3>
-            JPT Image Placeholder
-          </h3>
-
-          <p>
-            Jekyll Picture Tag is disabled for this build environment. See the
-            <a href="https://rbuchberger.github.io/jekyll_picture_tag/global_configuration">
-            relevant docs</a> for more information.
-          </p>
-        </div>
-      HEREDOC
     end
   end
 end
