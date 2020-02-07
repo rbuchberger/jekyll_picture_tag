@@ -50,6 +50,16 @@ module PictureTag
 
       private
 
+      # Return arbitrary setting values, taking their defaults into account.
+      # Ex: quality can be set for all image formats, or individually per
+      # format. Per-format settings should override the general setting.
+      def setting_lookup(setting, prefix, lookup)
+        media_values = @content[prefix + '_' + setting] || {}
+        media_values.default = @content[setting]
+
+        media_values[lookup]
+      end
+
       def build_preset
         # The _data/picture.yml file is optional.
         picture_data_file = grab_data_file
