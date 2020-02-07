@@ -42,7 +42,16 @@ module PictureTag
       # Image quality setting, possibly dependent on format.
       def quality(format = nil)
         setting_lookup('quality', 'format', format)
+      end
 
+      # Gravity setting (for imagemagick cropping)
+      def gravity(media = nil)
+        setting_lookup('gravity', 'media', media)
+      end
+
+      # Crop value
+      def crop(media = nil)
+        setting_lookup('crop', 'media', media)
       end
 
       private
