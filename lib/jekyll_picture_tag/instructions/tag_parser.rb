@@ -5,9 +5,10 @@ module PictureTag
     # queries (if present). The leftovers (html attributes) are handed off to
     # its respective class.
     class TagParser
-      attr_reader :preset_name, :source_names, :media_presets
+      attr_reader :preset_name, :source_names, :media_presets, :gravities,
+                  :geometries
       def initialize(raw_params)
-        build_params PictureTag::Utils.liquid_lookup(raw_params)
+        split_params Utils.liquid_lookup(raw_params)
 
         @preset_name = grab_preset_name
 
@@ -15,10 +16,12 @@ module PictureTag
         # associated media query.
         @media_presets = []
         @source_names = [] << strip_quotes(@params.shift)
+        @geometries = {}
+        @gravities = {}
 
         # Detect and store arguments of the format 'media_query: img.jpg' as
-        # keys and values.
-        add_media_source while @params.first =~ /[\w\-]+:$/
+        # keys and values:
+        parse_params
       end
 
       def leftovers
@@ -27,9 +30,45 @@ module PictureTag
 
       private
 
+      def parse_params
+        @finished = false
+        parse_param(@params.first) until @finished
+      end
+
+      def parse_param(param)
+        #  No param      Explicit HTML attribute   Implicit HTML attribute
+        if param.nil? || param.match?(/^--\S*/) || param.match?(/^\w*="/)
+          @finished = true
+
+        # Media query
+        elsif param.match?(/[\w\-]+:$/)
+          add_media_source
+
+        # gravity
+        elsif Utils::GRAVITIES.keys.include? param.downcase
+          add_gravity
+
+        # The geometry can take many forms; we'll assume that if it doesn't
+        # meet one of the previous cases we'll assume that's what it is.
+        else
+          add_geometry
+        end
+      end
+
       def add_media_source
         @media_presets << @params.shift.delete_suffix(':')
         @source_names << strip_quotes(@params.shift)
+      end
+
+      # Gravities and geometries are stored in a hash, keyed by their media
+      # presets. Note that the base image will have a media preset of nil, which
+      # is a perfectly fine hash key.
+      def add_gravity
+        @gravities[@media_presets.last] = @params.shift
+      end
+
+      def add_geometry
+        @geometries[@media_presets.last] = @params.shift
       end
 
       # First param is the preset name, unless it's a filename.
@@ -46,7 +85,7 @@ module PictureTag
       # parse the string by characters to break it up correctly. I'm sure
       # there's a library to do this, but it's not that much code honestly. If
       # this starts getting big, we'll pull in a new dependency.
-      def build_params(raw_params)
+      def split_params(raw_params)
         @params = []
         @word = ''
         @in_quotes = false
