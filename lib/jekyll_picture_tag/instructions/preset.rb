@@ -12,13 +12,6 @@ module PictureTag
         @content[key]
       end
 
-      # Returns the set of widths to use for a given media query.
-      def widths(media)
-        width_hash = self['media_widths'] || {}
-        width_hash.default = self['widths']
-        width_hash[media]
-      end
-
       def formats
         @content['formats']
       end
@@ -41,11 +34,15 @@ module PictureTag
         end
       end
 
-      def quality(format = nil)
-        qualities = @content['format_quality'] || {}
-        qualities.default = @content['quality']
+      # Image widths to generate for a given media query.
+      def widths(media = nil)
+        setting_lookup('widths', 'media', media)
+      end
 
-        qualities[format]
+      # Image quality setting, possibly dependent on format.
+      def quality(format = nil)
+        setting_lookup('quality', 'format', format)
+
       end
 
       private
