@@ -1,4 +1,5 @@
 require 'mini_magick'
+require 'base32'
 
 module PictureTag
   # Represents a generated image file.
@@ -6,10 +7,12 @@ module PictureTag
     attr_reader :width, :format
     include MiniMagick
 
-    def initialize(source_file:, width:, format:)
+    def initialize(source_file:, width:, format:, crop: nil, gravity: '')
       @source = source_file
       @width  = width
       @format = process_format format
+      @crop = crop
+      @gravity = gravity
     end
 
     def exists?
@@ -57,7 +60,19 @@ module PictureTag
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
     #                                                                 ^^^^
     def name_right
-      '.' + @format
+      crop_code + '.' + @format
+    end
+
+    # Encode the crop settings, so we can detect when they change.  We use a
+    # base32 encoding scheme to pack more information into fewer characters,
+    # without dealing with various filesystem naming limitations that would crop
+    # up using base64 (such as NTFS being case insensitive).
+    def crop_code
+      return '' unless @crop
+
+      Base32.encode(
+        Digest::MD5.hexdigest(@crop + @gravity)
+      )[0..2]
     end
 
     # Used for the fast build option: look for a file which matches everything
@@ -77,7 +92,12 @@ module PictureTag
 
     # Returns a list of images which are probably correct.
     def dest_glob
-      Dir.glob File.join(PictureTag.dest_dir, name_left + '?' * 6 + name_right)
+      query = File.join(
+        PictureTag.dest_dir,
+        name_left + '?' * 6 + name_right
+      )
+
+      Dir.glob query
     end
 
     def image
@@ -96,13 +116,19 @@ module PictureTag
 
     def process_image
       image.combine_options do |i|
-        i.resize "#{@width}x"
         i.auto_orient
+        crop_image(i) if @crop
+        i.resize "#{@width}x"
         i.strip
       end
 
       image.format @format
       image.quality PictureTag.quality(@format)
+    end
+
+    def crop_image(image)
+      image.gravity @gravity
+      image.crop @crop
     end
 
     def write_image
