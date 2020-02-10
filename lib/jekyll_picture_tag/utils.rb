@@ -2,20 +2,18 @@ module PictureTag
   # This is a little module to hold logic that doesn't fit other places. If it
   # starts getting big, refactor.
   module Utils
-    # These are valid values for ImageMagick's gravity argument, along with
-    # abbreviations useful for file naming.
+    # These are valid ImageMagick gravity arguments (relevant to our use
+    # case):
     GRAVITIES =
-      {
-        'center' => 'C',
-        'north' => 'N',
-        'northeast' => 'NE',
-        'east' => 'E',
-        'southeast' => 'SE',
-        'south' => 'S',
-        'southwest' => 'SW',
-        'west' => 'W',
-        'northwest' => 'NW'
-      }.freeze
+      %w[center
+         north
+         northeast
+         east
+         southeast
+         south
+         southwest
+         west
+         northwest].freeze
 
     class << self
       # Configure Jekyll to keep our generated files
