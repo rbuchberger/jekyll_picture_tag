@@ -87,8 +87,8 @@ module PictureTag
       end
 
       def raise_error(param)
-        raise ArgumentError "Could not parse '#{param}' in the following tag:" \
-          + "\n  {% picture #{@raw_params} %}"
+        raise ArgumentError, "Could not parse '#{param}' in the following "\
+          "tag: \n  {% picture #{@raw_params} %}"
       end
     end
   end
