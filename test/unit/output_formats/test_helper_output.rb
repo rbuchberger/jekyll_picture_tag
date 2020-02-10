@@ -8,7 +8,8 @@ module OutputFormatTestHelper
     stub_generated_image
     stub_picture_tag
 
-    PictureTag.stubs(source_images: [source_stub_basic], formats: %w[original])
+    PictureTag.stubs(source_images: [source_stub_basic], formats: %w[original],
+                     crop: nil, gravity: 'center')
   end
 
   def stub_generated_image

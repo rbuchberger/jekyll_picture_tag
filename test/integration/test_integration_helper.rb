@@ -25,20 +25,20 @@ module TestIntegrationHelper
     output
   end
 
-  def rms_filename(width: 100, format: 'jpg')
-    '/tmp/jpt' + rms_url(width: width, format: format)
+  def rms_filename(width: 100, format: 'jpg', crop: '')
+    '/tmp/jpt' + rms_url(width: width, format: format, crop: crop)
   end
 
-  def rms_url(width: 100, format: 'jpg')
-    "/generated/rms-#{width}-46a48b.#{format}"
+  def rms_url(width: 100, format: 'jpg', crop: '')
+    "/generated/rms-#{width}-46a48b#{crop}.#{format}"
   end
 
-  def spx_url(width: 100, format: 'jpg')
-    "/generated/spx-#{width}-2e8bb3.#{format}"
+  def spx_url(width: 100, format: 'jpg', crop: '')
+    "/generated/spx-#{width}-2e8bb3#{crop}.#{format}"
   end
 
-  def spx_filename(width: 100, format: 'jpg')
-    '/tmp/jpt' + spx_url(width: width, format: format)
+  def spx_filename(width: 100, format: 'jpg', crop: '')
+    '/tmp/jpt' + spx_url(width: width, format: format, crop: crop)
   end
 
   def std_spx_ss
@@ -51,17 +51,17 @@ module TestIntegrationHelper
       ' /generated/rms-50-46a48b.jpg 50w, /generated/rms-100-46a48b.jpg 100w'
   end
 
-  def rms_file_array(widths, formats)
+  def rms_file_array(widths, formats, crop: '')
     files = formats.collect do |f|
-      widths.collect { |w| rms_filename(width: w, format: f) }
+      widths.collect { |w| rms_filename(width: w, format: f, crop: crop) }
     end
 
     files.flatten
   end
 
-  def spx_file_array(widths, formats)
+  def spx_file_array(widths, formats, crop: '')
     files = formats.collect do |f|
-      widths.collect { |w| spx_filename(width: w, format: f) }
+      widths.collect { |w| spx_filename(width: w, format: f, crop: crop) }
     end
 
     files.flatten
