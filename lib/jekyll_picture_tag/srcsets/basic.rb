@@ -92,7 +92,9 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @input_format
+          format: @input_format,
+          crop: PictureTag.crop(@media),
+          gravity: PictureTag.gravity(@media)
         )
       end
     end
