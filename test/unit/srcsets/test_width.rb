@@ -7,7 +7,7 @@ class TestSrcsetWidth < Minitest::Test
     build_source_stub
     build_genstubs
 
-    PictureTag.stubs(widths: [100, 200, 300])
+    PictureTag.stubs(widths: [100, 200, 300], crop: nil, gravity: 'center')
 
     @tested = Srcsets::Width.new(@source_image, 'original')
   end
@@ -39,7 +39,7 @@ class TestSrcsetWidth < Minitest::Test
 
     GeneratedImage.expects(:new)
                   .with(source_file: @source_image, width: 600,
-                        format: 'original')
+                        format: 'original', crop: nil, gravity: 'center')
                   .returns(stub)
     stub.expects(:generate)
     @tested.to_s
