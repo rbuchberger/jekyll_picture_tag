@@ -74,4 +74,10 @@ class TagParserTest < Minitest::Test
       ' --picture class="some class"'
     assert_equal correct, tested(params).leftovers
   end
+
+  def test_bad_arg
+    assert_raises ArgumentError do
+      tested 'img.jpg asdf.jpg 3:2'
+    end
+  end
 end

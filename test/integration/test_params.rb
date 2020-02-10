@@ -57,6 +57,21 @@ class TestIntegrationParams < Minitest::Test
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
+  def test_crop
+    output = tested('rms.jpg 10:1 north')
+
+    correct = '/generated/rms-25-46a48bMZS.jpg 25w,'\
+      ' /generated/rms-50-46a48bMZS.jpg 50w,'\
+      ' /generated/rms-100-46a48bMZS.jpg 100w'
+
+    assert_equal correct, output.at_css('img')['srcset']
+    correct_digest = '437b1064b40ab26973db318427946083'
+    generated_digest =
+      Digest::MD5.hexdigest(File.read(rms_filename(crop: 'MZS')))
+
+    assert_equal correct_digest, generated_digest
+  end
+
   # Make sure attributes don't stick around between multiple instances
   def test_arg_persistence
     tested 'rms.jpg --img class="goaway"'

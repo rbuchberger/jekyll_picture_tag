@@ -263,4 +263,19 @@ class TestIntegrationPresets < Minitest::Test
     i = Image.open(rms_filename)
     assert_equal 45, i.data['quality'].to_i
   end
+
+  def test_crop
+    tested 'crop rms.jpg mobile: spx.jpg'
+
+    correct_rms_digest = '08f40871325683f0de7eb42ae4c14056'
+    correct_spx_digest = 'e8131f4d2d8038edbb940838e5622a7f'
+    generated_rms_digest =
+      Digest::MD5.hexdigest(File.read(rms_filename(crop: 'GVR')))
+
+    generated_spx_digest =
+      Digest::MD5.hexdigest(File.read(spx_filename(crop: 'GU2')))
+
+    assert_equal correct_rms_digest, generated_rms_digest
+    assert_equal correct_spx_digest, generated_spx_digest
+  end
 end

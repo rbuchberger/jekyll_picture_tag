@@ -61,5 +61,12 @@ class GeneratedImageTest < Minitest::Test
     assert_equal 'aaaaaa', @source_stub.digest_guess
   end
 
-  def test_digest_guess_missing_dest; end
+  def test_digest_guess_missing_dest
+    Dir.stubs(:glob).with('/tmp/jpt/img-100-??????.webp').returns([])
+    PictureTag.stubs(:fast_build?).returns(true)
+
+    @source_stub.expects(:digest_guess=).never
+
+    tested.absolute_filename
+  end
 end
