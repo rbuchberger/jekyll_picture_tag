@@ -74,7 +74,9 @@ module PictureTag
         fallback = GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width
+          width: PictureTag.fallback_width,
+          crop: PictureTag.crop,
+          gravity: PictureTag.gravity
         )
 
         return fallback if fallback.exists?
@@ -86,7 +88,9 @@ module PictureTag
         GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: checked_fallback_width
+          width: checked_fallback_width,
+          crop: PictureTag.crop,
+          gravity: PictureTag.gravity
         )
       end
 
