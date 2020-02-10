@@ -47,6 +47,14 @@ module PictureTag
       @instructions.source_images
     end
 
+    def crop(media = nil)
+      @instructions.crop(media)
+    end
+
+    def gravity(media = nil)
+      @instructions.gravity(media)
+    end
+
     # Config Forwarding
 
     def source_dir
