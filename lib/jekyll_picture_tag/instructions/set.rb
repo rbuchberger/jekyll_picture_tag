@@ -34,6 +34,24 @@ module PictureTag
         @source_images ||= build_source_images
       end
 
+      def crop(media = nil)
+        params.geometries[media] || preset.crop(media)
+      end
+
+      def gravity(media = nil)
+        params.gravities[media] || preset.gravity(media)
+      end
+
+      # Returns a class constant for the selected output format, which is used
+      # to dynamically instantiate it.
+      def output_class
+        Object.const_get(
+          'PictureTag::OutputFormats::' + Utils.titleize(preset['markup'])
+        )
+      end
+
+      private
+
       def build_source_images
         source_names = params.source_names
         media_presets = params.media_presets
@@ -47,14 +65,6 @@ module PictureTag
         end
 
         sources
-      end
-
-      # Returns a class constant for the selected output format, which is used
-      # to dynamically instantiate it.
-      def output_class
-        Object.const_get(
-          'PictureTag::OutputFormats::' + Utils.titleize(preset['markup'])
-        )
       end
     end
   end
