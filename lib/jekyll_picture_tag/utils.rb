@@ -18,7 +18,7 @@ module PictureTag
     # This is an attempt to recognize valid imagemagick geometry arguments
     # with regex. It only tries to match values which don't preserve aspect
     # ratio, as they're the ones people might actually need here.
-    GEOMETRY_REGEX = /\A\d*%?[x:]?\d*[%!]?([+-]\d+[+-]\d+)?\Z/i.freeze
+    GEOMETRY_REGEX = /\A\d*%?[x:]?\d*[%!]?([+-]\d+){,2}\Z/i.freeze
 
     class << self
       # Configure Jekyll to keep our generated files
