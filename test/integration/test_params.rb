@@ -72,6 +72,16 @@ class TestIntegrationParams < Minitest::Test
     assert_equal correct_digest, generated_digest
   end
 
+  # Make sure that when cropping images, we don't enlarge widths
+  def test_crop_width_check
+    output = tested('rms.jpg 1:2')
+    correct = '/generated/rms-25-46a48bHE3.jpg 25w, '\
+              '/generated/rms-50-46a48bHE3.jpg 50w'
+
+    assert @stderr.include? 'rms.jpg'
+    assert_equal correct, output.at_css('img')['srcset']
+  end
+
   # Make sure attributes don't stick around between multiple instances
   def test_arg_persistence
     tested 'rms.jpg --img class="goaway"'
