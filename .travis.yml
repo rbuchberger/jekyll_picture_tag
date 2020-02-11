@@ -4,7 +4,7 @@ cache: bundler
 before_install:
   - sudo apt-get install -y webp build-essential
   - wget https://www.imagemagick.org/download/ImageMagick.tar.gz
-  - tar xf ImageMatick.tar.gz
+  - tar xf ImageMagick.tar.gz
   - cd ImageMagick-7*
   - ./configure
   - make
