@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 
 before_install:
-  - sudo apt-get install -y webp build-essential ffmpeg
+  - sudo apt-get install -y webp build-essential ffmpeg libopenjp2-7 libopenjp2-tools
   - wget https://www.imagemagick.org/download/ImageMagick.tar.gz
   - tar xf ImageMagick.tar.gz
   - cd ImageMagick-7*
