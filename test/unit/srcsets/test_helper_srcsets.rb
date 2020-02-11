@@ -19,13 +19,13 @@ module TestHelperSrcset
     [100, 150, 200, 300].each { |i| stub_generated(i, gstub(i)) }
   end
 
-  def gstub(width)
+  def gstub(width, exists: false)
     GeneratedImageStub.new(
       name: "img-#{width}-aaaaa.jpg",
       uri: "/img-#{width}-aaaaa.jpg",
       width: width,
       format: 'jpg',
-      exists?: false
+      exists?: exists
     )
   end
 

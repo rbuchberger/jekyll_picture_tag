@@ -85,6 +85,10 @@ class TestSrcsetWidth < Minitest::Test
 
   # Make sure we don't check image width unnecessarily.
   def test_unneeded_widths_check
+    GeneratedImage.unstub(:new)
+    GeneratedImage.stubs(:new).returns(gstub(600, exists: true))
     @source_image.expects(:width).never
+
+    @tested.to_s
   end
 end
