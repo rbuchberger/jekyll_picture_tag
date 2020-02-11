@@ -71,17 +71,19 @@ module PictureTag
 
       # GeneratedImage class, not HTML
       def build_fallback_image
-        fallback = GeneratedImage.new(
+        return fallback_candidate if fallback_candidate.exists?
+
+        build_new_fallback_image
+      end
+
+      def fallback_candidate
+        @fallback_candidate ||= GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width,
           crop: PictureTag.crop,
           gravity: PictureTag.gravity
         )
-
-        return fallback if fallback.exists?
-
-        build_new_fallback_image
       end
 
       def build_new_fallback_image
@@ -111,15 +113,26 @@ module PictureTag
         content.add_parent anchor
       end
 
+      def source
+        PictureTag.source_images.first
+      end
+
+      def source_width
+        if PictureTag.crop
+          fallback_candidate.cropped_source_width
+        else
+          source.width
+        end
+      end
+
       def checked_fallback_width
-        source = PictureTag.source_images.first
         target = PictureTag.fallback_width
 
-        if target > source.width
+        if target > source_width
           Utils.warning "#{source.shortname} is smaller than the " \
-            "requested fallback width of #{target}px. Using #{source.width}" \
+            "requested fallback width of #{target}px. Using #{source_width}" \
             ' px instead.'
-          source.width
+          source_width
         else
           target
         end
