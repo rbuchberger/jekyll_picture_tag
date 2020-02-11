@@ -2,7 +2,7 @@ language: ruby
 cache: bundler
 
 before_install:
-  - sudo apt-get install -y webp build-essential
+  - sudo apt-get install -y webp build-essential ffmpeg
   - wget https://www.imagemagick.org/download/ImageMagick.tar.gz
   - tar xf ImageMagick.tar.gz
   - cd ImageMagick-7*
@@ -10,6 +10,8 @@ before_install:
   - make
   - sudo make install
   - sudo ldconfig /usr/local/lib
+  - cd ..
+  - rm -rf ImageMagick*
   - gem update --system
   - gem install bundler
 
