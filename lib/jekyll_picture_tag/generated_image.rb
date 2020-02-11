@@ -41,6 +41,10 @@ module PictureTag
       ImgURI.new(name).to_s
     end
 
+    def cropped_source_width
+      image.width
+    end
+
     private
 
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
@@ -63,7 +67,7 @@ module PictureTag
       crop_code + '.' + @format
     end
 
-    # Encode the crop settings, so we can detect when they change.  We use a
+    # Hash the crop settings, so we can detect when they change.  We use a
     # base32 encoding scheme to pack more information into fewer characters,
     # without dealing with various filesystem naming limitations that would crop
     # up using base64 (such as NTFS being case insensitive).
@@ -100,24 +104,31 @@ module PictureTag
       Dir.glob query
     end
 
-    def image
-      @image ||= Image.open(@source.name)
-    end
-
-    def dest_dir
-      File.dirname absolute_filename
-    end
-
     def generate_image
       puts 'Generating new image file: ' + name
       process_image
       write_image
     end
 
+    def image
+      @image ||= open_image
+    end
+
+    def open_image
+      image_base = Image.open(@source.name)
+      image_base.combine_options do |i|
+        i.auto_orient
+        if @crop
+          i.gravity @gravity
+          i.crop @crop
+        end
+      end
+
+      image_base
+    end
+
     def process_image
       image.combine_options do |i|
-        i.auto_orient
-        crop_image(i) if @crop
         i.resize "#{@width}x"
         i.strip
       end
@@ -126,22 +137,17 @@ module PictureTag
       image.quality PictureTag.quality(@format)
     end
 
-    def crop_image(image)
-      image.gravity @gravity
-      image.crop @crop
-    end
-
     def write_image
-      check_dest_dir
+      # Make sure destination directory exists:
+      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
 
       image.write absolute_filename
 
       FileUtils.chmod(0o644, absolute_filename)
     end
 
-    # Make sure destination directory exists
-    def check_dest_dir
-      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
+    def dest_dir
+      File.dirname absolute_filename
     end
 
     def process_format(format)
