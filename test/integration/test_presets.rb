@@ -216,6 +216,15 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal correct, output.at_css('img')['src']
   end
 
+  # Ensure fallback images aren't enlarged when cropped.
+  def test_cropped_fallback
+    output = tested 'fallback rms.jpg 1:3'
+    correct = rms_url(width: 30, format: 'webp', crop: 'MEY')
+
+    assert_includes @stderr, 'rms.jpg'
+    assert_equal correct, output.at_css('img')['src']
+  end
+
   # nomarkdown override
   def test_nomarkdown
     output = tested_base 'nomarkdown rms.jpg --link example.com'
