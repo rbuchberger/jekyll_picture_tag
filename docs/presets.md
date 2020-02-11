@@ -206,6 +206,56 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
   When using pixel ratios, you must supply a base width. This sets how wide the 1x image should be.
 
+* **Crop & Media Crop**
+
+  *Format:* 
+
+  ```yml
+    crop: (geometery)
+    media_crop:
+    (media_preset): (geometry)
+    (media_preset): (geometry)
+    (...)
+  ```
+
+  *Example:* 
+
+  ```yml
+    crop: 16:9
+    media_crop:
+      tablet: 3:2
+      mobile: 1:1
+  ```
+
+   Crop geometry, given either generally or for specific media presets.  The hierarchy is:
+   `tag argument` > `media_crop:` > `crop:`.
+
+   This setting accepts the same arguments as the `crop geometry` [tag parameter](usage).
+
+* **Gravity & Media_gravity**
+
+  ```yml
+    crop: (gravity)
+    media_crop:
+    (media_preset): (gravity)
+    (media_preset): (gravity)
+    (...)
+  ```
+
+  *Example:* 
+
+  ```yml
+    crop: north
+    media_crop:
+      tablet: east
+      mobile: southwest
+  ```
+
+   Crop gravity, given either generally or for specific media presets.  The hierarchy is:
+   `tag argument` > `media_crop:` > `crop:` > `center` (default).
+
+   This setting accepts the same arguments as the `crop gravity` [tag parameter](usage).
+
 * **Quality**
 
   *Format:* `quality: 0 <= integer <= 100`
