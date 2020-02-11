@@ -12,7 +12,8 @@
 
 * Run `$ bundle install`
 
-* See if you have ImageMagick with `$ convert --version`. You should see something like this:
+* See if you have ImageMagick version 7 or higher with `$ convert --version`.
+  You should see something like this:
 
   ```
   ~ $ convert --version 

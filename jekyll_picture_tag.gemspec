@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
 
+  spec.requirements << 'ImageMagick, >= v7.0'
+
   spec.required_ruby_version = ['>= 2.5', '< 3']
 
   spec.add_development_dependency 'bundler', '~> 2.0'
