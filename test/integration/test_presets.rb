@@ -267,13 +267,15 @@ class TestIntegrationPresets < Minitest::Test
   def test_crop
     tested 'crop rms.jpg mobile: spx.jpg'
 
-    correct_rms_digest = '08f40871325683f0de7eb42ae4c14056'
-    correct_spx_digest = 'e8131f4d2d8038edbb940838e5622a7f'
+    correct_rms_digest =
+      '2a68dcbf962ecac4448f9de333923e247d32021f8f9b270156db33de8f6f2658'
+    correct_spx_digest =
+      '8d067b16c907203c442779fb9fae95b7690a9071d0678575b753aa733f9ca475'
     generated_rms_digest =
-      Digest::MD5.hexdigest(File.read(rms_filename(crop: 'GVR')))
+      MiniMagick::Image.open(rms_filename(crop: 'GVR')).signature
 
     generated_spx_digest =
-      Digest::MD5.hexdigest(File.read(spx_filename(crop: 'GU2')))
+      MiniMagick::Image.open(spx_filename(crop: 'GU2')).signature
 
     assert_equal correct_rms_digest, generated_rms_digest
     assert_equal correct_spx_digest, generated_spx_digest
