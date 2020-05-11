@@ -27,4 +27,16 @@
 * **Note webp under delegates.** This is required if you want to generate webp files. Any image format
 you want to handle will require an appropriate delegate; You may have to install additional packages
 to accomplish this.
+## Cropping and Imagemagick
 
+Cropping to an aspect ratio depends on ImageMagick 7+. Ubuntu, somewhat annoyingly, only offers
+version 6 in its official repositories. This matters even if you don't run Ubuntu, because many
+build & deployment services you might use (including Netlify and Travis CI) do.
+
+If you'd like to use both the cropping feature and such a service, or it's inconvenient to install
+version 7 in your development environment, you will likely want to build your site in a docker
+container. The Alpine Linux repos include version 7, so you'll want an Alpine Linux based image
+rather than an Ubuntu based one. Convenienly this includes the [offical Jekyll
+image](https://hub.docker.com/r/jekyll/jekyll).
+
+Once I work out how to actually do that, I'll add some guidance here.

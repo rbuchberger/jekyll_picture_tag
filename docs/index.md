@@ -57,8 +57,9 @@ markup_presets:
     size: 500px
 ```
 
-Both the preset and the liquid tag accept aspect ratios to crop. With the above preset, if you write
-this:
+Imagemagick can easily crop images to an aspect ratio, though you should **read the whole
+installation guide before using this feature**. With the above preset, if you write this:
+
 
 {% raw %}
 `{% picture test.jpg 3:2 mobile: test2.jpg 1:1 --alt Alternate Text %}`

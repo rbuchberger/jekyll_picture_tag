@@ -58,6 +58,8 @@ Given in order:
 
 - **Crop**
 
+  **Check the [ installation guide ](installation) before using this feature.**
+
   Crop an image to a given aspect ratio or size. This argument is given as a `geometry` and
   (optionally) a `gravity`, which can appear in either order and are thin wrappers around
   ImageMagick's [geometry](http://www.imagemagick.org/script/command-line-processing.php#geometry)

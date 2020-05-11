@@ -227,10 +227,13 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
       mobile: 1:1
   ```
 
-   Crop geometry, given either generally or for specific media presets.  The hierarchy is:
-   `tag argument` > `media_crop:` > `crop:`.
+  **Check the [ installation guide ](installation) before using this feature.**
 
-   This setting accepts the same arguments as the `crop geometry` [tag parameter](usage).
+  Crop geometry, given either generally or for specific media presets. The hierarchy is:
+  `tag argument` > `media_crop:` > `crop:`.
+
+  This setting accepts the same arguments as the `crop geometry` [tag parameter](usage).
+
 
 * **Gravity & Media_gravity**
 
