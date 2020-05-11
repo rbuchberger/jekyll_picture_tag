@@ -22,7 +22,7 @@ browser widths until you understand it.
 
 ## Media Presets
 
-*Format:*
+_Format:_
 
 ```yml
 media_presets:
@@ -32,11 +32,11 @@ media_presets:
 
 ```
 
-*Example:*
+_Example:_
 
 ```yml
 media_presets:
-  desktop: 'min-width: 1200px'
+  desktop: "min-width: 1200px"
 ```
 
 These are named media queries for use in a few different places: specifying alternate source images
@@ -45,7 +45,7 @@ settings. Quotes are recommended around the media queries, because yml gets conf
 
 ## Markup Presets
 
-*Format:*
+_Format:_
 
 ```yml
 markup_presets:
@@ -56,7 +56,7 @@ markup_presets:
   (...)
 ```
 
-*Example:*
+_Example:_
 
 ```yml
 markup_presets:
@@ -84,29 +84,28 @@ The `default` preset will be used if none is specified. A preset name can't cont
 
 For images that are different sizes on different screens (most images), use a width-based srcset
 (which is the default). Specify a `widths` setting (or don't, for the default set), and optionally
-the `sizes` and `size` settings. 
+the `sizes` and `size` settings.
 
 Use a multiplier-based srcset when the image will always be the same size, regardless of screen
 width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratios` and `base_width`.
 
 ### Settings reference
 
-* **Markup format**
+- **Markup format**
 
-  *Format:* `markup: (setting)`
+  _Format:_ `markup: (setting)`
 
-  *Default*: `auto`
+  _Default_: `auto`
 
   Defines what format the generated text will take. They are documented [here]({{ site.baseurl }}/output).
 
- 
 * **Image Formats**
 
-  *Format:* `format: [format1, format2, (...)]`  
+  _Format:_ `format: [format1, format2, (...)]`
 
-  *Example:* `format: [webp, original]`
+  _Example:_ `format: [webp, original]`
 
-  *Default*: `original`
+  _Default_: `original`
 
   Array (yml sequence) of the image formats you'd like to generate, in decreasing order of
   preference. Browsers will render the first format they find and understand, so **If you put jpg
@@ -114,37 +113,37 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
   webp, you must have an imagemagick webp delegate installed. (Most package managers just name it
   'webp')
 
-  *Supported formats are anything which imagemagick supports, and has an installed delegate. See a
-  list by running `$ convert --version`*
+  _Supported formats are anything which imagemagick supports, and has an installed delegate. See a
+  list by running `$ convert --version`_
 
 * **Widths**
 
-  *Format:* `widths: [integer, integer, (...)]`
+  _Format:_ `widths: [integer, integer, (...)]`
 
-  *Example:* `widths: [600, 800, 1200]`
+  _Example:_ `widths: [600, 800, 1200]`
 
-  *Default*: `[400, 600, 800, 1000]`
+  _Default_: `[400, 600, 800, 1000]`
 
   Array of image widths to generate, in pixels. For use when you want a width-based srcset
   (`srcset="img.jpg 800w, img2.jpg 1600w"`).
 
 * **Media_widths**
 
-    *Format:*
+  _Format:_
 
   ```yml
   media_widths:
     (media preset name): [integer, integer, (...)]
   ```
 
-    *Example:*
+  _Example:_
 
   ```yml
   media_widths:
     mobile: [400, 600, 800]
   ```
 
-    *Default:* Widths setting
+  _Default:_ Widths setting
 
   If you are using art direction, there is no sense in generating desktop-size files for your mobile
   image. You can specify sets of widths to associate with given media queries. If not specified,
@@ -152,7 +151,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
 * **Sizes**
 
-    *Format:*
+  _Format:_
 
   ```yml
   sizes:
@@ -160,7 +159,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     (...)
   ```
 
-    *Example:*
+  _Example:_
 
   ```yml
   sizes:
@@ -173,7 +172,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
   image will be (on the screen) when a given media query is true. CSS dimensions can be given in
   `px`, `em`, or `vw`. To be used along with a width-based srcset.
 
-  Provide these in order of most restrictive to least restrictive. The browser will choose the 
+  Provide these in order of most restrictive to least restrictive. The browser will choose the
   first one with an applicable media query.
 
   You don't have to provide a sizes attribute at all. If you don't, the browser will assume the
@@ -181,17 +180,17 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
 * **Size**
 
-  *Format:* `size: (CSS Dimension)`
+  _Format:_ `size: (CSS Dimension)`
 
-  *Example:* `size: 80vw`
+  _Example:_ `size: 80vw`
 
   Unconditional `sizes` setting, to be supplied either alone or after all conditional sizes.
 
 * **Pixel Ratios**
 
-  *Format:* `pixel_ratios: [number, number, number (...)]`
+  _Format:_ `pixel_ratios: [number, number, number (...)]`
 
-  *Example:* `pixel_ratios: [1, 1.5, 2]`
+  _Example:_ `pixel_ratios: [1, 1.5, 2]`
 
   Array of images to construct, given in multiples of the base width. If you set this, you must also
   give a `base_width`.
@@ -200,26 +199,79 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
 
 * **Base Width**
 
-  *Format:* `base_width: integer`
+  _Format:_ `base_width: integer`
 
-  *Example:* `base_width: 100`
+  _Example:_ `base_width: 100`
 
   When using pixel ratios, you must supply a base width. This sets how wide the 1x image should be.
 
+* **Crop & Media Crop**
+
+  _Format:_
+
+  ```yml
+    crop: (geometery)
+    media_crop:
+    (media_preset): (geometry)
+    (media_preset): (geometry)
+    (...)
+  ```
+
+  _Example:_
+
+  ```yml
+  crop: 16:9
+  media_crop:
+    tablet: 3:2
+    mobile: 1:1
+  ```
+
+  **Check the [ installation guide ](installation) before using this feature.**
+
+  Crop geometry, given either generally or for specific media presets. The hierarchy is:
+  `tag argument` > `media_crop:` > `crop:`.
+
+  This setting accepts the same arguments as the `crop geometry` [tag parameter](usage).
+
+
+* **Gravity & Media_gravity**
+
+  ```yml
+    crop: (gravity)
+    media_crop:
+    (media_preset): (gravity)
+    (media_preset): (gravity)
+    (...)
+  ```
+
+  _Example:_
+
+  ```yml
+  crop: north
+  media_crop:
+    tablet: east
+    mobile: southwest
+  ```
+
+  Crop gravity, given either generally or for specific media presets. The hierarchy is:
+  `tag argument` > `media_crop:` > `crop:` > `center` (default).
+
+  This setting accepts the same arguments as the `crop gravity` [tag parameter](usage).
+
 * **Quality**
 
-  *Format:* `quality: 0 <= integer <= 100`
+  _Format:_ `quality: 0 <= integer <= 100`
 
-  *Example:* `quality: 80`
+  _Example:_ `quality: 80`
 
-  *Default:* `75`
+  _Default:_ `75`
 
   This allows you to specify an image compression level for all image formats (where it makes sense,
   anyway). The next option allows you to set them per format.
 
 * **Format Quality**
 
-  *Format:* 
+  _Format:_
 
   ```yml
   format_quality:
@@ -227,7 +279,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     (...)
   ```
 
-  *Example:*
+  _Example:_
 
   ```
   format_quality:
@@ -236,16 +288,16 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     webp: 55
   ```
 
-  *Default:* quality setting (above)
+  _Default:_ quality setting (above)
 
   This allows you to specify quality settings for various image formats, allowing you to take
   advantage of webp's better compression algorithm without trashing your jpg images (for example).
   If you don't give a setting for a particular format it'll fall back to the `quality` setting
-  above, and if you don't set *that* it'll default to 75.
+  above, and if you don't set _that_ it'll default to 75.
 
 * **HTML Attributes**
 
-  *Format:*
+  _Format:_
 
   ```yml
   attributes:
@@ -253,7 +305,7 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     (...)
   ```
 
-  *Example:*
+  _Example:_
 
   ```yml
   attributes:
@@ -261,49 +313,49 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
     picture: 'class="even-cooler"'
   ```
 
-  HTML attributes you would like to add.  The same arguments are available here as in the liquid
+  HTML attributes you would like to add. The same arguments are available here as in the liquid
   tag: HTML element names, `alt:`, `link:`, and `parent:`. Unescaped double quotes cause problems
   with yml, so it's recommended to surround them with single quotes.
 
 * **Fallback Width**
 
-    *Format:* `fallback_width: (integer)`             
+  _Format:_ `fallback_width: (integer)`
 
-    *Example:* `fallback_width: 800`
+  _Example:_ `fallback_width: 800`
 
-    *Default*: `800`
+  _Default_: `800`
 
   Width of the fallback image.
 
 * **Fallback Format**
 
-    *Format:*  `fallback_format: (format)`
+  _Format:_ `fallback_format: (format)`
 
-    *Example:* `fallback_format: jpg`
+  _Example:_ `fallback_format: jpg`
 
-    *Default*: `original`
+  _Default_: `original`
 
   Format of the fallback image
 
 * **Source Image Link**
 
-    *Format:* `link_source: (true|false)`
+  _Format:_ `link_source: (true|false)`
 
-    *Example:* `link_source: true`
+  _Example:_ `link_source: true`
 
-    *Default:* `false`
+  _Default:_ `false`
 
   Surround image with a link to the original source file. Your source image directory must be
   published as part of the compiled site. If you run into weird issues with the output, see
   the [notes]({{ site.baseurl }}/notes).
 
 * **Nomarkdown override**
-   
-    *Format:* `nomarkdown: (true|false)`
 
-    *Example:* `nomarkdown: false`
+  _Format:_ `nomarkdown: (true|false)`
 
-    *Default:* `nil`
+  _Example:_ `nomarkdown: false`
+
+  _Default:_ `nil`
 
   Hard setting for `{::nomarkdown}` tags, overrides both autodetection and the global setting in
-  `_config.yml`. See the [notes]({{ site.baseurl }}/notes) for a detailed explanation. 
+  `_config.yml`. See the [notes]({{ site.baseurl }}/notes) for a detailed explanation.

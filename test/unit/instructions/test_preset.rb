@@ -4,7 +4,7 @@ class PresetTest < Minitest::Test
   include TestHelper
   include JekyllStub
   # Honestly, this one is more a test of my stubs than a test of the logic.
-  # Whatever.
+  # The preset stubs can be found in test/stubs/jekyll.rb
 
   def setup
     build_defaults
@@ -75,5 +75,29 @@ class PresetTest < Minitest::Test
     Utils.expects(:warning)
 
     tested('asdf')
+  end
+
+  def test_crop
+    assert_equal '3:2', tested('crop').crop
+  end
+
+  def test_crop_default
+    assert_equal '3:2', tested('crop').crop('desktop')
+  end
+
+  def test_media_crop
+    assert_equal '16:9', tested('crop').crop('mobile')
+  end
+
+  def test_gravity
+    assert_equal 'north', tested('crop').gravity
+  end
+
+  def test_gravity_default
+    assert_equal 'north', tested('crop').gravity('desktop')
+  end
+
+  def test_media_gravity
+    assert_equal 'northwest', tested('crop').gravity('mobile')
   end
 end

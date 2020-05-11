@@ -196,6 +196,17 @@ module JekyllStub
           'format_quality' => {
             'jpg' => 45
           }
+        },
+
+        'crop' => {
+          'crop' => '3:2',
+          'media_crop' => {
+            'mobile' => '16:9'
+          },
+          'gravity' => 'north',
+          'media_gravity' => {
+            'mobile' => 'northwest'
+          }
         }
       },
 

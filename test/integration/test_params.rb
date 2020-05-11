@@ -57,6 +57,33 @@ class TestIntegrationParams < Minitest::Test
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
+  def test_crop
+    output = tested('rms.jpg 10:1 north')
+
+    correct = '/generated/rms-25-46a48bMZS.jpg 25w,'\
+      ' /generated/rms-50-46a48bMZS.jpg 50w,'\
+      ' /generated/rms-100-46a48bMZS.jpg 100w'
+
+    assert_equal correct, output.at_css('img')['srcset']
+
+    correct_digest =
+      'cc5089aa5a8cfaea93d2cf940402ec2fcde49799370c390bd2388ede9c26f67f'
+    generated_digest =
+      MiniMagick::Image.open(rms_filename(crop: 'MZS')).signature
+
+    assert_equal correct_digest, generated_digest
+  end
+
+  # Make sure that when cropping images, we don't enlarge widths
+  def test_crop_width_check
+    output = tested('rms.jpg 1:2')
+    correct = '/generated/rms-25-46a48bHE3.jpg 25w, '\
+              '/generated/rms-45-46a48bHE3.jpg 45w'
+
+    assert @stderr.include? 'rms.jpg'
+    assert_equal correct, output.at_css('img')['srcset']
+  end
+
   # Make sure attributes don't stick around between multiple instances
   def test_arg_persistence
     tested 'rms.jpg --img class="goaway"'

@@ -2,6 +2,10 @@
 ---
 # Release History
 
+* 1.10.0 May 11, 2020
+  * **Image Cropping support!** access the power of ImageMagick's `crop` function.
+  * Don't issue a warning when `default` preset is not found.
+  * Documentation improvements
 * 1.9.0 Feb 2, 2020
   * Add `fast_build` global setting
   * Add `disabled` global setting

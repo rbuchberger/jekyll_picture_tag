@@ -1,4 +1,5 @@
 require 'mini_magick'
+require 'base32'
 
 module PictureTag
   # Represents a generated image file.
@@ -6,10 +7,12 @@ module PictureTag
     attr_reader :width, :format
     include MiniMagick
 
-    def initialize(source_file:, width:, format:)
+    def initialize(source_file:, width:, format:, crop: nil, gravity: '')
       @source = source_file
       @width  = width
       @format = process_format format
+      @crop = crop
+      @gravity = gravity
     end
 
     def exists?
@@ -38,6 +41,10 @@ module PictureTag
       ImgURI.new(name).to_s
     end
 
+    def cropped_source_width
+      image.width
+    end
+
     private
 
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
@@ -57,7 +64,19 @@ module PictureTag
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
     #                                                                 ^^^^
     def name_right
-      '.' + @format
+      crop_code + '.' + @format
+    end
+
+    # Hash the crop settings, so we can detect when they change.  We use a
+    # base32 encoding scheme to pack more information into fewer characters,
+    # without dealing with various filesystem naming limitations that would crop
+    # up using base64 (such as NTFS being case insensitive).
+    def crop_code
+      return '' unless @crop
+
+      Base32.encode(
+        Digest::MD5.hexdigest(@crop + @gravity)
+      )[0..2]
     end
 
     # Used for the fast build option: look for a file which matches everything
@@ -77,15 +96,12 @@ module PictureTag
 
     # Returns a list of images which are probably correct.
     def dest_glob
-      Dir.glob File.join(PictureTag.dest_dir, name_left + '?' * 6 + name_right)
-    end
+      query = File.join(
+        PictureTag.dest_dir,
+        name_left + '?' * 6 + name_right
+      )
 
-    def image
-      @image ||= Image.open(@source.name)
-    end
-
-    def dest_dir
-      File.dirname absolute_filename
+      Dir.glob query
     end
 
     def generate_image
@@ -94,10 +110,26 @@ module PictureTag
       write_image
     end
 
+    def image
+      @image ||= open_image
+    end
+
+    def open_image
+      image_base = Image.open(@source.name)
+      image_base.combine_options do |i|
+        i.auto_orient
+        if @crop
+          i.gravity @gravity
+          i.crop @crop
+        end
+      end
+
+      image_base
+    end
+
     def process_image
       image.combine_options do |i|
         i.resize "#{@width}x"
-        i.auto_orient
         i.strip
       end
 
@@ -106,16 +138,16 @@ module PictureTag
     end
 
     def write_image
-      check_dest_dir
+      # Make sure destination directory exists:
+      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
 
       image.write absolute_filename
 
       FileUtils.chmod(0o644, absolute_filename)
     end
 
-    # Make sure destination directory exists
-    def check_dest_dir
-      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
+    def dest_dir
+      File.dirname absolute_filename
     end
 
     def process_format(format)

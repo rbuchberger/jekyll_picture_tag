@@ -12,13 +12,6 @@ module PictureTag
         @content[key]
       end
 
-      # Returns the set of widths to use for a given media query.
-      def widths(media)
-        width_hash = self['media_widths'] || {}
-        width_hash.default = self['widths']
-        width_hash[media]
-      end
-
       def formats
         @content['formats']
       end
@@ -41,14 +34,37 @@ module PictureTag
         end
       end
 
-      def quality(format = nil)
-        qualities = @content['format_quality'] || {}
-        qualities.default = @content['quality']
+      # Image widths to generate for a given media query.
+      def widths(media = nil)
+        setting_lookup('widths', 'media', media)
+      end
 
-        qualities[format]
+      # Image quality setting, possibly dependent on format.
+      def quality(format = nil)
+        setting_lookup('quality', 'format', format)
+      end
+
+      # Gravity setting (for imagemagick cropping)
+      def gravity(media = nil)
+        setting_lookup('gravity', 'media', media)
+      end
+
+      # Crop value
+      def crop(media = nil)
+        setting_lookup('crop', 'media', media)
       end
 
       private
+
+      # Return arbitrary setting values, taking their defaults into account.
+      # Ex: quality can be set for all image formats, or individually per
+      # format. Per-format settings should override the general setting.
+      def setting_lookup(setting, prefix, lookup)
+        media_values = @content[prefix + '_' + setting] || {}
+        media_values.default = @content[setting]
+
+        media_values[lookup]
+      end
 
       def build_preset
         # The _data/picture.yml file is optional.
@@ -70,10 +86,14 @@ module PictureTag
       end
 
       def no_preset
-        Utils.warning(
-          " Preset \"#{@name}\" not found in #{PictureTag.config['data_dir']}/"\
-          + 'picture.yml under markup_presets key. Using default values.'
-        )
+        unless @name == 'default'
+          Utils.warning(
+            <<~HEREDOC
+              Preset "#{@name}" not found in {PictureTag.config['data_dir']}/picture.yml
+              under markup_presets key. Using default values."
+            HEREDOC
+          )
+        end
 
         {}
       end

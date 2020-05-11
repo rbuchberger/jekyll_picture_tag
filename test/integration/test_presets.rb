@@ -216,6 +216,15 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal correct, output.at_css('img')['src']
   end
 
+  # Ensure fallback images aren't enlarged when cropped.
+  def test_cropped_fallback
+    output = tested 'fallback rms.jpg 1:3'
+    correct = rms_url(width: 30, format: 'webp', crop: 'MEY')
+
+    assert_includes @stderr, 'rms.jpg'
+    assert_equal correct, output.at_css('img')['src']
+  end
+
   # nomarkdown override
   def test_nomarkdown
     output = tested_base 'nomarkdown rms.jpg --link example.com'
@@ -262,5 +271,22 @@ class TestIntegrationPresets < Minitest::Test
 
     i = Image.open(rms_filename)
     assert_equal 45, i.data['quality'].to_i
+  end
+
+  def test_crop
+    tested 'crop rms.jpg mobile: spx.jpg'
+
+    correct_rms_digest =
+      '2a68dcbf962ecac4448f9de333923e247d32021f8f9b270156db33de8f6f2658'
+    correct_spx_digest =
+      '8d067b16c907203c442779fb9fae95b7690a9071d0678575b753aa733f9ca475'
+    generated_rms_digest =
+      MiniMagick::Image.open(rms_filename(crop: 'GVR')).signature
+
+    generated_spx_digest =
+      MiniMagick::Image.open(spx_filename(crop: 'GU2')).signature
+
+    assert_equal correct_rms_digest, generated_rms_digest
+    assert_equal correct_spx_digest, generated_spx_digest
   end
 end

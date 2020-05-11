@@ -9,8 +9,8 @@ class GeneratedImageActualTest < MiniTest::Test
   include TestHelper
 
   def setup
-    PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75)
-    PictureTag.stubs(:fast_build?).returns(false)
+    PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75, fast_build?: false,
+                     gravity: 'center')
     @out_file = '/tmp/jpt/rms-50-rrrrrr.jpg'
     @out_dir = '/tmp/jpt'
 

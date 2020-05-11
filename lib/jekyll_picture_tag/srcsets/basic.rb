@@ -65,15 +65,23 @@ module PictureTag
       end
 
       def checked_targets
-        if target_files.any? { |f| f.width > @source_image.width }
+        if target_files.any? { |f| f.width > source_width }
 
           small_source_warn
 
-          files = target_files.reject { |f| f.width >= @source_image.width }
-          files.push(generate_file(@source_image.width))
+          files = target_files.reject { |f| f.width >= source_width }
+          files.push(generate_file(source_width))
         end
 
         files || target_files
+      end
+
+      def source_width
+        @source_width ||= if PictureTag.crop(@media)
+                            target_files.first.cropped_source_width
+                          else
+                            @source_image.width
+                          end
       end
 
       def target_files
@@ -82,9 +90,12 @@ module PictureTag
 
       def small_source_warn
         Utils.warning(
-          " #{@source_image.shortname} is #{@source_image.width}px wide,"\
-          " smaller than at least one size in the set #{widths}. Will not"\
-          ' enlarge.'
+          <<~HEREDOC
+            #{@source_image.shortname}
+            is #{source_width}px wide (after cropping, if applicable),
+            smaller than at least one size in the set #{widths}.
+            Will not enlarge.
+          HEREDOC
         )
       end
 
@@ -92,7 +103,9 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @input_format
+          format: @input_format,
+          crop: PictureTag.crop(@media),
+          gravity: PictureTag.gravity(@media)
         )
       end
     end
