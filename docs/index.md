@@ -110,5 +110,5 @@ You'll get something like this:
 ```
 
 In other words, you have the art direction, format switching, and resolution switching problems
-*solved*, with a one-liner and a config file that is 1/3 as long as the output markup. Lighthouse is
-happy, and you don't even need to crop things yourself.
+*solved*, with a one-liner and a nicely readable config file that is 1/3 as long as the output
+markup. Lighthouse is happy, and you don't even need to crop things yourself.
