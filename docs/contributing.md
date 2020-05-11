@@ -20,6 +20,10 @@ $ bundle install
 
 ## Testing
 
+You probably only need to use docker if it's inconvenient to install ImageMagick 7.
+
+### Bare Metal
+
 `rake test` runs the test suite (both unit tests and integration tests). Ignore the mini_magick
 `method redefined` warnings (unless you know how to fix them?) 
 
@@ -37,6 +41,16 @@ on Windows. This is fixable if there is a need, so if that gets in your way just
 issues, if possible.
 
 `rake` will run all tests and rubocop.
+
+### Docker
+
+The following commands will build and run the tests inside a docker image. This is useful if it's
+inconvenient to install ImageMagick 7, or to ensure the Travis CI build will succeed:
+
+```
+$ docker build . -t jpt
+$ docker run -t jpt
+```
 
 ## Docs
 
