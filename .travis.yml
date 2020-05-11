@@ -1,11 +1,8 @@
-language: ruby
-cache: bundler
+services:
+  - docker
 
 before_install:
-  - sudo apt-get install -y webp
-  - gem update --system
-  - gem install bundler
+  - docker build . -t JPT
 
 script:
-  - bundle exec rake test
-  - bundle exec rake rubocop
+  - docker run -t JPT
