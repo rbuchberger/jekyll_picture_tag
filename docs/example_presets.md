@@ -75,7 +75,7 @@ markup_presets:
     # your source images will need to be part of the deployed site for this to
     # work. If you have issues such as mangled HTML or extra {::nomarkdown}
     # tags floating around, see docs/notes.md
-    link-source: true
+    link_source: true
 
   # This is an example of how you would create a 'multiplier' based srcset;
   # useful when an image will always be the same size on all screens (icons,
