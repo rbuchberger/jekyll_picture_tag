@@ -9,13 +9,14 @@ module JekyllStub
     @pdata = picture_data_stub
 
     @jekyll_env = 'development'
+    @site_dest = '/tmp/jpt'
     @jconfig = { 'picture' => @pconfig,
                  'keep_files' => [],
+                 'destination' => @site_dest,
                  'url' => 'example.com' }
     @data = { 'picture' => @pdata }
     @page = { 'ext' => 'html' }
     @site_source = TestHelper::TEST_DIR
-    @site_dest = '/tmp/jpt'
   end
 
   def build_context_stub

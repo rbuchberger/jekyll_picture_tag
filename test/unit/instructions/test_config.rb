@@ -8,7 +8,7 @@ class ConfigTest < Minitest::Test
     build_defaults
 
     @site_source = 'jekyll_source'
-    @site_dest = 'jekyll_dest'
+    @jconfig['destination'] = 'jekyll_dest'
     @pconfig['source'] = 'jpt_source'
     @pconfig['output'] = 'jpt_dest'
 

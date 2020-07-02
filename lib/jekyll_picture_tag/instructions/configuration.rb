@@ -30,7 +30,7 @@ module PictureTag
       # source_dest is the jekyll-picture-tag destination directory. (generated
       # file location setting.)
       def dest_dir
-        File.join PictureTag.site.dest, pconfig['output']
+        File.join PictureTag.site.config['destination'], pconfig['output']
       end
 
       def nomarkdown?
