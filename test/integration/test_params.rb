@@ -67,7 +67,7 @@ class TestIntegrationParams < Minitest::Test
     assert_equal correct, output.at_css('img')['srcset']
 
     correct_digest =
-      'cc5089aa5a8cfaea93d2cf940402ec2fcde49799370c390bd2388ede9c26f67f'
+      '257f0cdf64bc05b1e474265216ec85994d3123e609b812ed75d875610a85455c'
     generated_digest =
       MiniMagick::Image.open(rms_filename(crop: 'MZS')).signature
 

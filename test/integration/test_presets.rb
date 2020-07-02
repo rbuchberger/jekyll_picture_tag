@@ -277,9 +277,9 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     correct_rms_digest =
-      '2a68dcbf962ecac4448f9de333923e247d32021f8f9b270156db33de8f6f2658'
+      '69b6f2a0390503b855f0ea0e31338dfd3da3238af18e657c201c7bb0dd1dab34'
     correct_spx_digest =
-      '8d067b16c907203c442779fb9fae95b7690a9071d0678575b753aa733f9ca475'
+      '707744953a4dfb5495d8225942eb63e9361dd21b9aa1bb7786100f857d7e7050'
     generated_rms_digest =
       MiniMagick::Image.open(rms_filename(crop: 'GVR')).signature
 
