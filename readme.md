@@ -41,12 +41,14 @@ https://rbuchberger.github.io/jekyll_picture_tag/
 
 https://rbuchberger.github.io/jekyll_picture_tag/releases
 
-Latest version: 
+Latest versions: 
 
 * 1.10.0 May 11, 2020
   * **Image Cropping support!** access the power of ImageMagick's `crop` function.
   * Don't issue a warning when `default` preset is not found.
   * Documentation improvements
+* 1.10.1 July 2, 2020
+  * Bugfix for erroneously regenerated images
 
 ## Help Wanted
 

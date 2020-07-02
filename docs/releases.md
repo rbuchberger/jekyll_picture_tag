@@ -2,6 +2,8 @@
 ---
 # Release History
 
+* 1.10.1 July 2, 2020
+  * Bugfix for erroneously regenerated images
 * 1.10.0 May 11, 2020
   * **Image Cropping support!** access the power of ImageMagick's `crop` function.
   * Don't issue a warning when `default` preset is not found.
