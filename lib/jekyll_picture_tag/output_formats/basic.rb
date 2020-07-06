@@ -73,7 +73,17 @@ module PictureTag
       def build_fallback_image
         return fallback_candidate if fallback_candidate.exists?
 
-        build_new_fallback_image
+        image = GeneratedImage.new(
+          source_file: PictureTag.source_images.first,
+          format: PictureTag.fallback_format,
+          width: checked_fallback_width,
+          crop: PictureTag.crop,
+          gravity: PictureTag.gravity
+        )
+
+        image.generate
+
+        image
       end
 
       def fallback_candidate
@@ -81,16 +91,6 @@ module PictureTag
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width,
-          crop: PictureTag.crop,
-          gravity: PictureTag.gravity
-        )
-      end
-
-      def build_new_fallback_image
-        GeneratedImage.new(
-          source_file: PictureTag.source_images.first,
-          format: PictureTag.fallback_format,
-          width: checked_fallback_width,
           crop: PictureTag.crop,
           gravity: PictureTag.gravity
         )
