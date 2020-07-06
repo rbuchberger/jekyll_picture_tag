@@ -216,6 +216,14 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal correct, output.at_css('img')['src']
   end
 
+  # Fallback is actually generated
+  def test_fallback_exists
+    File.unstub :exist?
+    tested 'fallback rms.jpg'
+
+    assert File.exist? rms_filename(width: 35, format: 'webp')
+  end
+
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
     output = tested 'fallback rms.jpg 1:3'
