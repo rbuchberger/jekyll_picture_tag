@@ -49,6 +49,8 @@ Latest versions:
   * Documentation improvements
 * 1.10.1 July 2, 2020
   * Bugfix for erroneously regenerated images
+* 1.10.2 July 6, 2020
+  * Bugfix for fallback image files not actually getting generated
 
 ## Help Wanted
 
