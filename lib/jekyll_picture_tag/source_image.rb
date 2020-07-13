@@ -11,6 +11,8 @@ module PictureTag
       #                                  ^^^^^^^^^^^^^^^^^^^^^^
       @shortname = relative_filename
       @media_preset = media_preset
+
+      @missing = missing?
     end
 
     def width
@@ -57,16 +59,19 @@ module PictureTag
 
       if File.exist? source_name
         @missing = false
+    def missing?
+      if File.exist? name
+        false
 
       elsif PictureTag.continue_on_missing?
-        @missing = true
-        Utils.warning missing_image_warning(source_name)
+        Utils.warning(missing_image_warning)
+        true
 
       else
-        raise ArgumentError, missing_image_error(source_name)
+        raise ArgumentError, missing_image_error
       end
+    end
 
-      source_name
     end
 
     def missing_image_warning(source_name)
