@@ -1,5 +1,8 @@
 require 'test_helper'
 
+# Source cache and generated cache don't differ in functionality, just
+# information format. These unit tests give sufficient coverage for both, as well
+# as the Cache::Base module.
 class TestCache < Minitest::Test
   include PictureTag
   include TestHelper
@@ -8,6 +11,10 @@ class TestCache < Minitest::Test
     PictureTag.stubs(:site).returns(build_site_stub)
 
     @tested = Cache::Source.new('img.jpg')
+  end
+
+  def teardown
+    FileUtils.rm_rf '/tmp/jpt/'
   end
 
   # Initialize empty
