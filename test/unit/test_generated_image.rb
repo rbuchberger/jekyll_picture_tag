@@ -10,7 +10,7 @@ class GeneratedImageTest < Minitest::Test
     PictureTag.stubs(:fast_build?).returns(false)
     PictureTag.stubs(:quality).returns(75)
     File.stubs(:exist?).with(@destfile).returns true
-    Cache::Generated.stubs(:new).returns({ width: 100, height: 100 })
+    Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
 
     @source_stub = SourceImageStub.new(base_name: 'img',
                                        name: '/tmp/jpt/img.jpg',
@@ -21,8 +21,8 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def tested
-    GeneratedImage
-      .new(source_file: @source_stub, width: 100, format: 'webp')
+    @tested ||= GeneratedImage
+                .new(source_file: @source_stub, width: 100, format: 'webp')
   end
 
   def test_init_existing_dest
@@ -52,5 +52,22 @@ class GeneratedImageTest < Minitest::Test
              .format
 
     assert_equal 'jpg', format
+  end
+
+  def test_source_width
+    assert_equal tested.source_width, 100
+  end
+
+  def test_source_height
+    assert_equal tested.source_height, 80
+  end
+
+  def test_uri
+    uri_stub = Object.new
+
+    ImgURI.expects(:new).with(tested.name).returns(uri_stub)
+    uri_stub.expects(:to_s)
+
+    tested.uri
   end
 end

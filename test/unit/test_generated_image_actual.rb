@@ -10,7 +10,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
   def setup
     PictureTag.stubs(dest_dir: '/tmp/jpt', quality: 75, fast_build?: false,
-                     gravity: 'center')
+                     gravity: 'center', site: site_stub)
     @out_file = 'rms-50-21053d7bb.jpg'
     @out_dir = '/tmp/jpt'
 
@@ -24,18 +24,21 @@ class GeneratedImageActualTest < MiniTest::Test
     FileUtils.rm @out_file if File.exist? @out_file
   end
 
+  def site_stub
+    stub = Object.new
+    stub.stubs(:cache_dir).returns('cache')
+
+    stub
+  end
+
   def teardown
     FileUtils.rm_r @out_dir if Dir.exist? @out_dir
   end
 
-  def base_image
-    @base_image ||= GeneratedImage.new(
+  def tested
+    @tested ||= GeneratedImage.new(
       source_file: @test_image, width: 50, format: 'original'
     )
-  end
-
-  def tested
-    base_image.generate
   end
 
   def make_dest_dir
@@ -51,33 +54,30 @@ class GeneratedImageActualTest < MiniTest::Test
     make_dest_dir
 
     assert_output do
-      tested
+      tested.generate
     end
 
-    assert File.exist? base_image.absolute_filename
+    assert File.exist? tested.absolute_filename
 
-    width = MiniMagick::Image.open(base_image.absolute_filename).width
+    width = MiniMagick::Image.open(tested.absolute_filename).width
 
     assert_equal width, 50
-  end
-
-  # check dest dir exists
-  def test_dest_dir_existing
-    skip
-    make_dest_dir
-    stub_puts
-
-    FileUtils.expects(:mkdir_p).never
-
-    tested
   end
 
   # check dest dir missing
   def test_dest_dir_missing
     stub_puts
 
-    tested
+    tested.generate
 
     assert Dir.exist? @out_dir
+  end
+
+  def test_update_cache
+    Cache::Generated.any_instance.expects(:[]=).with(:width, 100)
+    Cache::Generated.any_instance.expects(:[]=).with(:height, 89)
+    Cache::Generated.any_instance.expects(:write)
+
+    tested.source_width
   end
 end
