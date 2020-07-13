@@ -38,23 +38,12 @@ module PictureTag
       end
 
       def directory
-        File.join PictureTag.site.cache_dir,
-                  'jpt',
-                  cache_dir
+        File.join(PictureTag.site.cache_dir, 'jpt', cache_dir)
       end
 
       # /home/dave/my_blog/.jekyll-cache/jpt/somefolder/myimage.jpg.json
       def filename
-        File.join directory,
-                  @base_name + '.json'
-      end
-
-      def cache_dir
-        ''
-      end
-
-      def template
-        {}
+        File.join(directory, @base_name + '.json')
       end
     end
   end
