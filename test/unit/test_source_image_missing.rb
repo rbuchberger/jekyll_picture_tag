@@ -25,6 +25,10 @@ class TestSourceImageMissing < Minitest::Test
     assert_equal 999_999, @tested.width
   end
 
+  def test_height
+    assert_equal 999_999, @tested.height
+  end
+
   def test_warning
     Utils.expects(:warning)
 
