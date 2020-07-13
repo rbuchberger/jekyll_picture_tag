@@ -60,16 +60,16 @@ class TestIntegrationParams < Minitest::Test
   def test_crop
     output = tested('rms.jpg 10:1 north')
 
-    correct = '/generated/rms-25-46a48bMZS.jpg 25w,'\
-      ' /generated/rms-50-46a48bMZS.jpg 50w,'\
-      ' /generated/rms-100-46a48bMZS.jpg 100w'
+    correct = '/generated/rms-25-8d4abac33.jpg 25w,'\
+      ' /generated/rms-50-8d4abac33.jpg 50w,'\
+      ' /generated/rms-100-8d4abac33.jpg 100w'
 
     assert_equal correct, output.at_css('img')['srcset']
 
     correct_digest =
       '257f0cdf64bc05b1e474265216ec85994d3123e609b812ed75d875610a85455c'
     generated_digest =
-      MiniMagick::Image.open(rms_filename(crop: 'MZS')).signature
+      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-8d4abac33.jpg').signature
 
     assert_equal correct_digest, generated_digest
   end
@@ -77,8 +77,8 @@ class TestIntegrationParams < Minitest::Test
   # Make sure that when cropping images, we don't enlarge widths
   def test_crop_width_check
     output = tested('rms.jpg 1:2')
-    correct = '/generated/rms-25-46a48bHE3.jpg 25w, '\
-              '/generated/rms-45-46a48bHE3.jpg 45w'
+    correct = '/generated/rms-25-3ef76e91f.jpg 25w, '\
+              '/generated/rms-45-3ef76e91f.jpg 45w'
 
     assert @stderr.include? 'rms.jpg'
     assert_equal correct, output.at_css('img')['srcset']
@@ -113,14 +113,14 @@ class TestIntegrationParams < Minitest::Test
     assert output.errors.empty?
 
     img = output.at_css('img')
-    src = '/generated/rms%20with%20space-100-46a48b.jpg'
-    ss = '/generated/rms%20with%20space-25-46a48b.jpg 25w,' \
-      ' /generated/rms%20with%20space-50-46a48b.jpg 50w,' \
-      ' /generated/rms%20with%20space-100-46a48b.jpg 100w'
+    src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'
+    ss = '/generated/rms%20with%20space-25-9ffc043fa.jpg 25w,' \
+      ' /generated/rms%20with%20space-50-9ffc043fa.jpg 50w,' \
+      ' /generated/rms%20with%20space-100-9ffc043fa.jpg 100w'
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-46a48b.jpg'
+    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
   end
 
   def test_quoted_whitespace
@@ -128,13 +128,13 @@ class TestIntegrationParams < Minitest::Test
     assert output.errors.empty?
 
     img = output.at_css('img')
-    src = '/generated/rms%20with%20space-100-46a48b.jpg'
-    ss = '/generated/rms%20with%20space-25-46a48b.jpg 25w,' \
-      ' /generated/rms%20with%20space-50-46a48b.jpg 50w,' \
-      ' /generated/rms%20with%20space-100-46a48b.jpg 100w'
+    src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'
+    ss = '/generated/rms%20with%20space-25-9ffc043fa.jpg 25w,' \
+      ' /generated/rms%20with%20space-50-9ffc043fa.jpg 50w,' \
+      ' /generated/rms%20with%20space-100-9ffc043fa.jpg 100w'
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-46a48b.jpg'
+    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
   end
 end

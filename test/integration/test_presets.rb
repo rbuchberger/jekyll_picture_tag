@@ -17,7 +17,7 @@ class TestIntegrationPresets < Minitest::Test
   # widths 25, 50, 100
   # formats webp, original
   def test_picture_files
-    File.unstub(:exist?)
+    # File.unstub(:exist?)
     tested('auto rms.jpg')
 
     files = rms_file_array(@widths, %w[webp jpg])
@@ -33,8 +33,8 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-46a48b.webp 25w,' \
-      ' /generated/rms-50-46a48b.webp 50w, /generated/rms-100-46a48b.webp 100w'
+    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
+      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -70,8 +70,8 @@ class TestIntegrationPresets < Minitest::Test
   def test_pixel_ratio
     output = tested 'pixel_ratio rms.jpg'
 
-    correct = '/generated/rms-10-46a48b.jpg 1.0x,'\
-      ' /generated/rms-20-46a48b.jpg 2.0x, /generated/rms-30-46a48b.jpg 3.0x'
+    correct = '/generated/rms-10-9ffc043fa.jpg 1.0x,'\
+      ' /generated/rms-20-9ffc043fa.jpg 2.0x, /generated/rms-30-9ffc043fa.jpg 3.0x'
 
     assert_equal correct, output.at_css('img')['srcset']
   end
@@ -149,8 +149,8 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
 
-    ss1 = '/generated/spx-10-2e8bb3.jpg 10w,' \
-      ' /generated/spx-20-2e8bb3.jpg 20w, /generated/spx-30-2e8bb3.jpg 30w'
+    ss1 = '/generated/spx-10-3e829c5a4.jpg 10w,' \
+      ' /generated/spx-20-3e829c5a4.jpg 20w, /generated/spx-30-3e829c5a4.jpg 30w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -163,8 +163,8 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-46a48b.webp 25w,' \
-      ' /generated/rms-50-46a48b.webp 50w, /generated/rms-100-46a48b.webp 100w'
+    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
+      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
 
     assert_equal ss1, sources[0]['data-srcset']
     assert_equal std_rms_ss, sources[1]['data-srcset']
@@ -227,7 +227,7 @@ class TestIntegrationPresets < Minitest::Test
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
     output = tested 'fallback rms.jpg 1:3'
-    correct = rms_url(width: 30, format: 'webp', crop: 'MEY')
+    correct = '/generated/rms-30-f091d4dbe.webp'
 
     assert_includes @stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['src']
@@ -269,7 +269,7 @@ class TestIntegrationPresets < Minitest::Test
   def test_quality_base
     tested 'quality rms.jpg'
 
-    i = Image.open(rms_filename)
+    i = Image.open('/tmp/jpt/generated/rms-100-057d429d6.jpg')
     assert_equal 30, i.data['quality'].to_i
   end
 
@@ -277,7 +277,7 @@ class TestIntegrationPresets < Minitest::Test
   def test_format_quality
     tested 'format_quality rms.jpg'
 
-    i = Image.open(rms_filename)
+    i = Image.open('/tmp/jpt/generated/rms-100-21174d9bb.jpg')
     assert_equal 45, i.data['quality'].to_i
   end
 
@@ -288,11 +288,12 @@ class TestIntegrationPresets < Minitest::Test
       '69b6f2a0390503b855f0ea0e31338dfd3da3238af18e657c201c7bb0dd1dab34'
     correct_spx_digest =
       '707744953a4dfb5495d8225942eb63e9361dd21b9aa1bb7786100f857d7e7050'
+
     generated_rms_digest =
-      MiniMagick::Image.open(rms_filename(crop: 'GVR')).signature
+      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').signature
 
     generated_spx_digest =
-      MiniMagick::Image.open(spx_filename(crop: 'GU2')).signature
+      MiniMagick::Image.open('/tmp/jpt/generated/spx-100-8d935ea90.jpg').signature
 
     assert_equal correct_rms_digest, generated_rms_digest
     assert_equal correct_spx_digest, generated_spx_digest

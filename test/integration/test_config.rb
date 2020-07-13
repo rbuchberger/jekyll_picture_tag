@@ -46,8 +46,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -59,8 +59,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -72,8 +72,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -90,9 +90,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_absolute_urls
     @pconfig['relative_url'] = false
 
-    ss = 'example.com/generated/rms-25-46a48b.jpg 25w,' \
-      ' example.com/generated/rms-50-46a48b.jpg 50w,' \
-      ' example.com/generated/rms-100-46a48b.jpg 100w'
+    ss = 'example.com/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' example.com/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' example.com/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -100,9 +100,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_baseurl
     @jconfig['baseurl'] = 'blog'
 
-    ss = '/blog/generated/rms-25-46a48b.jpg 25w, ' \
-    '/blog/generated/rms-50-46a48b.jpg 50w,' \
-    ' /blog/generated/rms-100-46a48b.jpg 100w'
+    ss = '/blog/generated/rms-25-9ffc043fa.jpg 25w, ' \
+    '/blog/generated/rms-50-9ffc043fa.jpg 50w,' \
+    ' /blog/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -111,9 +111,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn
     @context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
     @pconfig['cdn_url'] = 'cdn.net'
-    ss = 'cdn.net/generated/rms-25-46a48b.jpg 25w,' \
-      ' cdn.net/generated/rms-50-46a48b.jpg 50w,' \
-      ' cdn.net/generated/rms-100-46a48b.jpg 100w'
+    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -122,9 +122,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn_env
     @pconfig['cdn_url'] = 'cdn.net'
     @pconfig['cdn_environments'] = ['development']
-    ss = 'cdn.net/generated/rms-25-46a48b.jpg 25w,' \
-      ' cdn.net/generated/rms-50-46a48b.jpg 50w,' \
-      ' cdn.net/generated/rms-100-46a48b.jpg 100w'
+    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -140,8 +140,8 @@ class TestIntegrationConfig < Minitest::Test
   # small source in srcset
   def test_small_source
     output = tested 'too_large rms.jpg'
-    src = '/generated/rms-100-46a48b.jpg'
-    ss = '/generated/rms-100-46a48b.jpg 100w'
+    src = '/generated/rms-100-9ffc043fa.jpg'
+    ss = '/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert @stderr.include? 'rms.jpg'
     assert_equal src, output.at_css('img')['src']
@@ -155,5 +155,6 @@ class TestIntegrationConfig < Minitest::Test
   end
 
   def test_fast_build
+    skip
   end
 end
