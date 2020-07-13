@@ -8,7 +8,9 @@ class GeneratedImageTest < Minitest::Test
     @destfile = '/tmp/jpt/img-100-aaaaaa.webp'
     PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
     PictureTag.stubs(:fast_build?).returns(false)
+    PictureTag.stubs(:quality).returns(75)
     File.stubs(:exist?).with(@destfile).returns true
+    Cache::Generated.stubs(:new).returns({ width: 100, height: 100 })
 
     @source_stub = SourceImageStub.new(base_name: 'img',
                                        name: '/tmp/jpt/img.jpg',
@@ -30,12 +32,12 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def test_name
-    assert_equal 'img-100-aaaaaa.webp', tested.name
+    assert_equal 'img-100-e391bf5cd.webp', tested.name
   end
 
   # absolute filename
   def test_absolute_filename
-    assert_equal '/tmp/jpt/img-100-aaaaaa.webp',
+    assert_equal '/tmp/jpt/img-100-e391bf5cd.webp',
                  tested.absolute_filename
   end
 

@@ -8,6 +8,8 @@ class GeneratedImageMissingTest < Minitest::Test
     @destfile = '/home/loser/generated/img-100-xxxxxx.webp'
     PictureTag.stubs(:dest_dir).returns('/home/loser/generated')
     PictureTag.stubs(:fast_build?).returns(false)
+    PictureTag.stubs(:quality).returns(75)
+    Cache::Generated.stubs(:new).returns({ width: 200, height: 200 })
     File.stubs(:exist?)
         .with(@destfile).returns false
 
@@ -31,6 +33,6 @@ class GeneratedImageMissingTest < Minitest::Test
   end
 
   def test_name
-    assert_equal 'img-100-xxxxxx.webp', tested.name
+    assert_equal 'img-100-8fa2c9181.webp', tested.name
   end
 end
