@@ -17,7 +17,7 @@ module TestHelper
   TEST_DIR = __dir__
   include JekyllStub
 
-  ImageStruct = Struct.new(:width)
+  ImageStruct = Struct.new(:width, :height)
   TokenStub = Struct.new(:line_number, :locale)
   ConfigStub = Struct.new(:source_dir)
   SourceImageStub = Struct.new(
