@@ -13,22 +13,20 @@ module PictureTag
       @media_preset = media_preset
 
       @missing = missing?
-    end
-
-    def width
-      @width ||= if @missing
-                   999_999
-                 else
-                   image.width
-                 end
+      check_cache
     end
 
     def digest
-      @digest ||= if @missing
-                    'x' * 6
-                  else
-                    Digest::MD5.hexdigest(File.read(@name))[0..5]
-                  end
+      @digest ||= cache[:digest] || ''
+    end
+
+    def width
+      @width ||= cache[:width] || 999_999
+    end
+
+    def height
+      @height ||= cache[:height] || 999_999
+    end
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def name
@@ -49,16 +47,10 @@ module PictureTag
 
     private
 
-    def image
-      @image ||= Image.open(@name)
+    def cache
+      @cache ||= Cache::Source.new(@shortname)
     end
 
-    # Turn a relative filename into an absolute one, and make sure it exists.
-    def grab_file(source_file)
-      source_name = File.join(PictureTag.source_dir, source_file)
-
-      if File.exist? source_name
-        @missing = false
     def missing?
       if File.exist? name
         false
@@ -72,6 +64,11 @@ module PictureTag
       end
     end
 
+    def check_cache
+      return if @missing
+      return if cache[:digest] && PictureTag.fast_build?
+
+      update_cache if source_digest != cache[:digest]
     end
 
     def missing_image_warning(source_name)
@@ -79,9 +76,23 @@ module PictureTag
         Could not find #{source_name}. Your site will have broken images in it.
         Continuing.
       HEREDOC
+    def update_cache
+      cache[:digest] = source_digest
+      cache[:width] = image.width
+      cache[:height] = image.height
+
+      cache.write
     end
 
     def missing_image_error(source_name)
+    def image
+      @image ||= Image.open(name)
+    end
+
+    def source_digest
+      @source_digest ||= Digest::MD5.hexdigest(File.read(name))
+    end
+
       <<~HEREDOC
         Jekyll Picture Tag could not find #{source_name}. You can force the
         build to continue anyway by setting "picture: ignore_missing_images:
