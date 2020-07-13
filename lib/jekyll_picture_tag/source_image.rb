@@ -3,12 +3,13 @@ module PictureTag
   # advantage by storing expensive file reads and writes in instance variables,
   # to be reused by many different generated images.
   class SourceImage
-    attr_reader :name, :shortname, :missing, :media_preset
+    attr_reader :shortname, :missing, :media_preset
     include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)
+      # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
+      #                                  ^^^^^^^^^^^^^^^^^^^^^^
       @shortname = relative_filename
-      @name = grab_file relative_filename
       @media_preset = media_preset
     end
 
@@ -26,17 +27,22 @@ module PictureTag
                   else
                     Digest::MD5.hexdigest(File.read(@name))[0..5]
                   end
+    # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
+    # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    def name
+      @name ||= File.join(PictureTag.source_dir, @shortname)
     end
 
-    # Includes path relative to default source folder and the original filename.
+    # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
+    #                                  ^^^^^^^^^^^^^^^^^^
     def base_name
       @shortname.delete_suffix File.extname(@shortname)
     end
 
-    # File exention
+    # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
+    #                                                     ^^^
     def ext
-      # [1..-1] will strip the leading period.
-      @ext ||= File.extname(@name)[1..-1].downcase
+      @ext ||= File.extname(name)[1..-1].downcase
     end
 
     private
