@@ -27,6 +27,7 @@ module PictureTag
     def height
       @height ||= cache[:height] || 999_999
     end
+
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def name
@@ -71,11 +72,6 @@ module PictureTag
       update_cache if source_digest != cache[:digest]
     end
 
-    def missing_image_warning(source_name)
-      <<~HEREDOC
-        Could not find #{source_name}. Your site will have broken images in it.
-        Continuing.
-      HEREDOC
     def update_cache
       cache[:digest] = source_digest
       cache[:width] = image.width
@@ -84,7 +80,6 @@ module PictureTag
       cache.write
     end
 
-    def missing_image_error(source_name)
     def image
       @image ||= Image.open(name)
     end
@@ -93,11 +88,14 @@ module PictureTag
       @source_digest ||= Digest::MD5.hexdigest(File.read(name))
     end
 
+    def missing_image_warning
+      "JPT Could not find #{name}. Your site will have broken images. Continuing."
+    end
+
+    def missing_image_error
       <<~HEREDOC
-        Jekyll Picture Tag could not find #{source_name}. You can force the
-        build to continue anyway by setting "picture: ignore_missing_images:
-        true" in "_config.yml". This setting can also accept a jekyll build
-        environment, or an array of environments.
+        Could not find #{name}. You can force the build to continue anyway by
+        setting "picture: ignore_missing_images: true" in "_config.yml".
       HEREDOC
     end
   end
