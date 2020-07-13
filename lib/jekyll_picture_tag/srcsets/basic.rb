@@ -78,7 +78,7 @@ module PictureTag
 
       def source_width
         @source_width ||= if PictureTag.crop(@media)
-                            target_files.first.cropped_source_width
+                            target_files.first.source_width
                           else
                             @source_image.width
                           end

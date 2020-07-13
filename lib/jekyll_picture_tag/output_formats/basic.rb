@@ -119,7 +119,7 @@ module PictureTag
 
       def source_width
         if PictureTag.crop
-          fallback_candidate.cropped_source_width
+          fallback_candidate.source_width
         else
           source.width
         end

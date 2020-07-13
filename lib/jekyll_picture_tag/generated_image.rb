@@ -1,5 +1,4 @@
 require 'mini_magick'
-require 'base32'
 
 module PictureTag
   # Represents a generated image file.
@@ -32,7 +31,7 @@ module PictureTag
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
     #                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def name
-      name_left + digest + name_right
+      @name ||= "#{@source.base_name}-#{@width}-#{id}.#{@format}"
     end
 
     # https://example.com/assets/images/myimage-100-123abc.jpg
@@ -41,56 +40,47 @@ module PictureTag
       ImgURI.new(name).to_s
     end
 
-    def cropped_source_width
-      image.width
+    # Post crop
+    def source_width
+      update_cache unless cache[:width]
+
+      cache[:width]
+    end
+
+    # Post crop
+    def source_height
+      update_cache unless cache[:height]
+
+      cache[:height]
     end
 
     private
 
-    # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
-    #                                    ^^^^^^^^^^^^^^^^^^^^^^^
-    def name_left
-      "#{@source.base_name}-#{@width}-"
+    # We exclude width and format from the cache name, since it isn't specific to them.
+    def cache
+      @cache ||= Cache::Generated.new("#{@source.base_name}-#{id}")
     end
 
-    # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
-    #                                                           ^^^^^^
-    def digest
-      guess_digest if !@source.digest_guess && PictureTag.fast_build?
+    def update_cache
+      return if @source.missing
 
-      @source.digest
+      # Ensure it's generated:
+      image
+
+      cache[:width] = @source_dimensions[:width]
+      cache[:height] = @source_dimensions[:height]
+
+      cache.write
     end
 
-    # /home/dave/my_blog/_site/generated/somefolder/myimage-100-123abc.jpg
-    #                                                                 ^^^^
-    def name_right
-      crop_code + '.' + @format
+    # Hash all inputs and truncate, so we know when they change without getting too long.
+    # /home/dave/my_blog/_site/generated/somefolder/myimage-100-1234abcde.jpg
+    #                                                           ^^^^^^^^^
+    def id
+      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity, quality].join)[0..8]
     end
 
-    # Hash the crop settings, so we can detect when they change.  We use a
-    # base32 encoding scheme to pack more information into fewer characters,
-    # without dealing with various filesystem naming limitations that would crop
-    # up using base64 (such as NTFS being case insensitive).
-    def crop_code
-      return '' unless @crop
-
-      Base32.encode(
-        Digest::MD5.hexdigest(@crop + @gravity)
-      )[0..2]
-    end
-
-
-
-    def dest_glob
-
-    end
-
-    def generate_image
-      puts 'Generating new image file: ' + name
-      process_image
-      write_image
-    end
-
+    # Post crop, before resizing and reformatting
     def image
       @image ||= open_image
     end
@@ -105,7 +95,19 @@ module PictureTag
         end
       end
 
+      @source_dimensions = { width: image_base.width, height: image_base.height }
+
       image_base
+    end
+
+    def generate_image
+      puts 'Generating new image file: ' + name
+      process_image
+      write_image
+    end
+
+    def quality
+      PictureTag.quality(@format)
     end
 
     def process_image
@@ -115,7 +117,7 @@ module PictureTag
       end
 
       image.format @format
-      image.quality PictureTag.quality(@format)
+      image.quality quality
     end
 
     def write_image
