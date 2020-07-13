@@ -119,16 +119,11 @@ module PictureTag
     end
 
     def write_image
-      # Make sure destination directory exists:
-      FileUtils.mkdir_p(dest_dir) unless Dir.exist?(dest_dir)
+      FileUtils.mkdir_p(File.dirname(absolute_filename))
 
       image.write absolute_filename
 
       FileUtils.chmod(0o644, absolute_filename)
-    end
-
-    def dest_dir
-      File.dirname absolute_filename
     end
 
     def process_format(format)
