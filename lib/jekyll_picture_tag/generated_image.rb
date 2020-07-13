@@ -4,6 +4,7 @@ module PictureTag
   # Represents a generated image file.
   class GeneratedImage
     attr_reader :width, :format
+
     include MiniMagick
 
     def initialize(source_file:, width:, format:, crop: nil, gravity: '')

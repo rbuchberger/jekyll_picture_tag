@@ -4,6 +4,7 @@ module PictureTag
   # to be reused by many different generated images.
   class SourceImage
     attr_reader :shortname, :missing, :media_preset
+
     include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)

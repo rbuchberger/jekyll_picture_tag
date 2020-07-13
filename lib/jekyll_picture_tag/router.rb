@@ -9,6 +9,7 @@ module PictureTag
   # gets big, I'll refactor.
   module Router
     attr_accessor :instructions, :context
+
     # Context forwarding
 
     # Global site data
