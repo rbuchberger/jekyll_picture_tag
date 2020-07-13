@@ -79,29 +79,10 @@ module PictureTag
       )[0..2]
     end
 
-    # Used for the fast build option: look for a file which matches everything
-    # we know about the destination file without calculating a digest on the
-    # source file, and if it exists we assume it's the right one.
-    def guess_digest
-      matches = dest_glob
-      return unless matches.length == 1
 
-      # Start and finish of the destination image's hash value
-      finish = -name_right.length
-      start = finish - 6
 
-      # The source image keeps track of this guess, so we hand it off:
-      @source.digest_guess = matches.first[start...finish]
-    end
-
-    # Returns a list of images which are probably correct.
     def dest_glob
-      query = File.join(
-        PictureTag.dest_dir,
-        name_left + '?' * 6 + name_right
-      )
 
-      Dir.glob query
     end
 
     def generate_image

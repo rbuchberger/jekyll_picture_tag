@@ -21,14 +21,6 @@ class TestSourceImage < Minitest::Test
     assert_equal ('a'..'f').to_a.join, @tested.digest
   end
 
-  def test_digest_guess
-    @tested.digest_guess = 'abc123'
-    PictureTag.stubs(:fast_build?).returns(true)
-
-    Digest::MD5.expects(:hexdigest).never
-    assert_equal 'abc123', @tested.digest
-  end
-
   def test_base_name
     assert_equal 'img', @tested.base_name
   end
