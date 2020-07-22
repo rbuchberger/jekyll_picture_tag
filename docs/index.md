@@ -35,7 +35,7 @@ markup_presets:
   default:
     formats: [webp, original]
 ```
-
+**Note:** Order matters! `[webp, jpg]` will offer the browser webp-images first. The browser will pick the *first* format it can work with. So if the order is reversed `[jpg, webp]` it will use the jpg image before the webp.
 
 ### Here's a more complete demonstration:
 
