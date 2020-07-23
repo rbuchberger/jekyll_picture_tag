@@ -155,6 +155,13 @@ class TestIntegrationConfig < Minitest::Test
   end
 
   def test_fast_build
-    skip
+    File.unstub(:exist?)
+    @pconfig['fast_build'] = true
+
+    tested 'rms.jpg' # Call once to ensure files and caches exist
+
+    PictureTag::SourceImage.any_instance.expects(:source_digest).never
+
+    tested 'rms.jpg'
   end
 end
