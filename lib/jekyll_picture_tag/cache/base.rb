@@ -49,12 +49,6 @@ module PictureTag
         File.dirname(@base_name)
       end
 
-      # /home/dave/my_blog/.jekyll-cache/jpt/(cache_dir)/assets/myimage.jpg.json
-      # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-      def directory
-        File.join(base_directory, sub_directory)
-      end
-
       # /home/dave/my_blog/.jekyll-cache/jpt/somefolder/myimage.jpg.json
       # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       def filename
