@@ -31,7 +31,7 @@ module PictureTag
 
       def data
         @data ||= if File.exist?(filename)
-                    JSON.parse(File.read(filename))
+                    JSON.parse(File.read(filename)).transform_keys(&:to_sym)
                   else
                     template
                   end
