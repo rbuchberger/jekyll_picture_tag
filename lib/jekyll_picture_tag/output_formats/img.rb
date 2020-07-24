@@ -14,10 +14,20 @@ module PictureTag
 
         add_srcset(img, srcset)
         add_sizes(img, srcset)
+        add_dimensions(img, srcset)
 
         img.attributes << PictureTag.html_attributes['parent']
 
         img
+      end
+
+      def add_dimensions(img, srcset)
+        return unless PictureTag.preset['dimension_attributes']
+
+        img.attributes << {
+          width: srcset.width_attribute,
+          height: srcset.height_attribute
+        }
       end
     end
   end
