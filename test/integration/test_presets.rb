@@ -2,6 +2,7 @@ require_relative './test_integration_helper'
 require 'mini_magick'
 
 # This class focuses on testing various output formats and their configurations.
+# The preset names are defined in test/stubs/jekyll.rb
 class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
   include MiniMagick
@@ -297,5 +298,26 @@ class TestIntegrationPresets < Minitest::Test
 
     assert_equal correct_rms_digest, generated_rms_digest
     assert_equal correct_spx_digest, generated_spx_digest
+  end
+
+  def test_dimension_attributes_basic
+    output = tested 'dimension_attributes rms.jpg'
+
+    assert_equal '100', output.at_css('img')['width']
+    assert_equal '89', output.at_css('img')['height']
+  end
+
+  def test_dimension_attributes_cropped
+    output = tested 'dimension_attributes rms.jpg 2:1'
+
+    assert_equal '100', output.at_css('img')['width']
+    assert_equal '50', output.at_css('img')['height']
+  end
+
+  def test_dimension_attributes_multiformat
+    output = tested 'dimension_attributes_multiformat rms.jpg'
+
+    assert_equal '100', output.at_css('img')['width']
+    assert_equal '89', output.at_css('img')['height']
   end
 end

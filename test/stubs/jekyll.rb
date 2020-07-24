@@ -209,13 +209,21 @@ module JekyllStub
           'media_gravity' => {
             'mobile' => 'northwest'
           }
+        },
+
+        'dimension_attributes' => {
+          'dimension_attributes' => true
+        },
+
+        'dimension_attributes_multiformat' => {
+          'dimension_attributes' => true,
+          'formats' => %w[original webp]
         }
       },
 
       'media_presets' => {
         'mobile' => 'max-width: 600px'
       }
-
     }
   end
 end
