@@ -3,6 +3,8 @@
 
 # How to use the Liquid Tag:
 
+This section describes how to use JPT's liquid tag; what options it takes and what kind of information you can pass through it to influence the form of the final HTML-markup.
+
 ## Format:
 
 {% raw %}
@@ -12,10 +14,21 @@
 The only required argument is the base image. Line breaks and extra spaces are fine, and you can
 use liquid variables anywhere.
 
+The `preset` determines the actual HTML code that gets written to your files;
+it is basically a recipy that takes information that you provide in the
+liquid tag and turns it into HTML markup. When the `preset` is omitted
+default settings will be used, in the simplest case resulting in an `img`-tag
+containing an srcset pointing to your newly generated image sizes. You are
+free to override the `default` preset and define your own presets, giving
+full flexibility in what JPT will write to your files. See [markup preset]({{
+site.baseurl }}/presets#markup-presets) for more information on this.
+
 ## Examples:
 
 {% raw %}
 `{% picture example.jpg %}`
+
+`{% picture {{ page.example_liquid_picture_var }} %}`
 
 `{% picture thumbnail example.jpg 1:1 --alt Example Image %}`
 
@@ -47,7 +60,7 @@ Given in order:
 
   Select a [markup preset]({{ site.baseurl }}/presets#markup-presets), or omit to use the `default` preset. Presets
   are collections of settings that determine nearly everything about JPT's output, from the image
-  formats used to the exact format your markup will take.
+  formats used to the exact format your final HTML-markup will take.
 
 - **Base Image** (Required)
 
@@ -141,3 +154,4 @@ Given in order:
 
     `--parent` will be applied to the `<picture>` if present, otherwise the `<img>`; useful when
     using an `auto` output format.
+  **Note:** Attributes that are set in the liquid picture tag, but don't occur in the used `preset` will be ignored (e.g. adding `--picture class="cool-css"` with a preset that does not write a html `<picture>` tag).
