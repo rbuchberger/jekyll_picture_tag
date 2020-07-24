@@ -23,6 +23,7 @@ module PictureTag
         @format ||= files.first.format
       end
 
+      # GeneratedImage class
       def files
         @files ||= build_files
       end

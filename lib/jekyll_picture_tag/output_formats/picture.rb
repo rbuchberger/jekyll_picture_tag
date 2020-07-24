@@ -3,6 +3,8 @@ module PictureTag
     # Represents a <picture> tag, enclosing at least 2 <source> tags and an
     # <img> tag.
     class Picture < Basic
+      private
+
       def srcsets
         @srcsets ||= build_srcsets
       end

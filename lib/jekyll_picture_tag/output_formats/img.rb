@@ -3,6 +3,8 @@ module PictureTag
     # Represents a bare <img> tag with a srcset attribute.
     # Used when <picture> is unnecessary.
     class Img < Basic
+      private
+
       def srcset
         @srcset ||= build_srcset(
           PictureTag.source_images.first, PictureTag.formats.first

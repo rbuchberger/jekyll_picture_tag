@@ -6,6 +6,10 @@ module PictureTag
     class Basic
       include ObjectiveElements
 
+      def to_s
+        wrap(base_markup).to_s
+      end
+
       # Used for both the fallback image, and for the complete markup.
       def build_base_img
         img = SingleTag.new 'img'
@@ -21,10 +25,6 @@ module PictureTag
         add_alt(img, attributes['alt'])
 
         img
-      end
-
-      def to_s
-        wrap(base_markup).to_s
       end
 
       private
@@ -86,6 +86,8 @@ module PictureTag
         image
       end
 
+      # It's only a candidate, because we don't know if the fallback width
+      # setting is larger than the source file.
       def fallback_candidate
         @fallback_candidate ||= GeneratedImage.new(
           source_file: PictureTag.source_images.first,
