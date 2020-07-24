@@ -51,6 +51,14 @@ module PictureTag
         "(#{PictureTag.media_presets[@media]})"
       end
 
+      def width_attribute
+        files.first.source_width.to_s
+      end
+
+      def height_attribute
+        files.first.source_height.to_s
+      end
+
       private
 
       def build_files
