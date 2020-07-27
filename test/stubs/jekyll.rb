@@ -218,6 +218,16 @@ module JekyllStub
         'dimension_attributes_multiformat' => {
           'dimension_attributes' => true,
           'formats' => %w[original webp]
+        },
+
+        'dimension_attributes_replace_values' => {
+          'dimension_attributes' => true,
+          'attributes' => {
+            'img' => {
+              'height' => 'auto'
+            }
+          }
+
         }
       },
 

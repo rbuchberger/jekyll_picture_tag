@@ -320,4 +320,13 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal '100', output.at_css('img')['width']
     assert_equal '89', output.at_css('img')['height']
   end
+
+  # If width and height are set in the preset, they should be overridden rather
+  # than appended.
+  def test_dimension_attributes_replace_values
+    output = tested 'dimension_attributes_replace_values rms.jpg'
+
+    assert_equal '100', output.at_css('img')['width']
+    assert_equal '89', output.at_css('img')['height']
+  end
 end
