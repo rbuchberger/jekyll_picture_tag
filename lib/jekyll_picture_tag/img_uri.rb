@@ -8,6 +8,7 @@ module PictureTag
   # image. Call to_s on it to get the link.
   class ImgURI
     attr_reader :filename, :source_image
+
     def initialize(filename, source_image: false)
       @source_image = source_image
       @filename = filename

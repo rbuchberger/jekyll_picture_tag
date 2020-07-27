@@ -23,6 +23,7 @@ module PictureTag
         @format ||= files.first.format
       end
 
+      # GeneratedImage class
       def files
         @files ||= build_files
       end
@@ -49,6 +50,14 @@ module PictureTag
       # Generates an HTML attribute
       def media_attribute
         "(#{PictureTag.media_presets[@media]})"
+      end
+
+      def width_attribute
+        files.first.source_width.to_s
+      end
+
+      def height_attribute
+        files.first.source_height.to_s
       end
 
       private
@@ -78,7 +87,7 @@ module PictureTag
 
       def source_width
         @source_width ||= if PictureTag.crop(@media)
-                            target_files.first.cropped_source_width
+                            target_files.first.source_width
                           else
                             @source_image.width
                           end

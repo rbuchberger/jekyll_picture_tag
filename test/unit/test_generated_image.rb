@@ -8,7 +8,9 @@ class GeneratedImageTest < Minitest::Test
     @destfile = '/tmp/jpt/img-100-aaaaaa.webp'
     PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
     PictureTag.stubs(:fast_build?).returns(false)
+    PictureTag.stubs(:quality).returns(75)
     File.stubs(:exist?).with(@destfile).returns true
+    Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
 
     @source_stub = SourceImageStub.new(base_name: 'img',
                                        name: '/tmp/jpt/img.jpg',
@@ -19,8 +21,8 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def tested
-    GeneratedImage
-      .new(source_file: @source_stub, width: 100, format: 'webp')
+    @tested ||= GeneratedImage
+                .new(source_file: @source_stub, width: 100, format: 'webp')
   end
 
   def test_init_existing_dest
@@ -30,12 +32,12 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def test_name
-    assert_equal 'img-100-aaaaaa.webp', tested.name
+    assert_equal 'img-100-e391bf5cd.webp', tested.name
   end
 
   # absolute filename
   def test_absolute_filename
-    assert_equal '/tmp/jpt/img-100-aaaaaa.webp',
+    assert_equal '/tmp/jpt/img-100-e391bf5cd.webp',
                  tested.absolute_filename
   end
 
@@ -52,21 +54,20 @@ class GeneratedImageTest < Minitest::Test
     assert_equal 'jpg', format
   end
 
-  def test_digest_guess_existing_dest
-    Dir.stubs(:glob).with('/tmp/jpt/img-100-??????.webp').returns([@destfile])
-    PictureTag.stubs(:fast_build?).returns(true)
-
-    tested.absolute_filename
-
-    assert_equal 'aaaaaa', @source_stub.digest_guess
+  def test_source_width
+    assert_equal tested.source_width, 100
   end
 
-  def test_digest_guess_missing_dest
-    Dir.stubs(:glob).with('/tmp/jpt/img-100-??????.webp').returns([])
-    PictureTag.stubs(:fast_build?).returns(true)
+  def test_source_height
+    assert_equal tested.source_height, 80
+  end
 
-    @source_stub.expects(:digest_guess=).never
+  def test_uri
+    uri_stub = Object.new
 
-    tested.absolute_filename
+    ImgURI.expects(:new).with(tested.name).returns(uri_stub)
+    uri_stub.expects(:to_s)
+
+    tested.uri
   end
 end

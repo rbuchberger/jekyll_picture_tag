@@ -3,7 +3,13 @@ module PictureTag
     # Represents a <picture> tag, enclosing at least 2 <source> tags and an
     # <img> tag.
     class Picture < Basic
+      private
+
       def srcsets
+        @srcsets ||= build_srcsets
+      end
+
+      def build_srcsets
         formats = PictureTag.formats
         # Source images are provided in reverse order and must be flipped:
         images = PictureTag.source_images.reverse
@@ -35,6 +41,22 @@ module PictureTag
         source.type = srcset.mime_type
 
         source
+      end
+
+      def build_base_img
+        img = super
+
+        # Only add source dimensions if there is a single source image.
+        # Currently you can't use both art direction and intrinsic image sizes.
+        if PictureTag.preset['dimension_attributes'] &&
+           PictureTag.source_images.length == 1
+          img.attributes << {
+            width: srcsets.first.width_attribute,
+            height: srcsets.first.height_attribute
+          }
+        end
+
+        img
       end
 
       def base_markup

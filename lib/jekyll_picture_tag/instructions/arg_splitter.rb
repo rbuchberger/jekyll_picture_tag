@@ -51,9 +51,10 @@ module PictureTag
       end
 
       def handle_special(char)
-        if char == '\\'
+        case char
+        when '\\'
           @escaped = true
-        elsif char == '"'
+        when '"'
           @in_quotes = !@in_quotes
           @word << char
         end

@@ -46,8 +46,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -59,8 +59,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -72,8 +72,8 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-xxxxxx.jpg 25w,' \
-      ' /generated/asdf-50-xxxxxx.jpg 50w, /generated/asdf-100-xxxxxx.jpg 100w'
+    ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
+      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert @stderr.include? 'asdf.jpg'
@@ -90,9 +90,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_absolute_urls
     @pconfig['relative_url'] = false
 
-    ss = 'example.com/generated/rms-25-46a48b.jpg 25w,' \
-      ' example.com/generated/rms-50-46a48b.jpg 50w,' \
-      ' example.com/generated/rms-100-46a48b.jpg 100w'
+    ss = 'example.com/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' example.com/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' example.com/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -100,9 +100,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_baseurl
     @jconfig['baseurl'] = 'blog'
 
-    ss = '/blog/generated/rms-25-46a48b.jpg 25w, ' \
-    '/blog/generated/rms-50-46a48b.jpg 50w,' \
-    ' /blog/generated/rms-100-46a48b.jpg 100w'
+    ss = '/blog/generated/rms-25-9ffc043fa.jpg 25w, ' \
+    '/blog/generated/rms-50-9ffc043fa.jpg 50w,' \
+    ' /blog/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -111,9 +111,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn
     @context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
     @pconfig['cdn_url'] = 'cdn.net'
-    ss = 'cdn.net/generated/rms-25-46a48b.jpg 25w,' \
-      ' cdn.net/generated/rms-50-46a48b.jpg 50w,' \
-      ' cdn.net/generated/rms-100-46a48b.jpg 100w'
+    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -122,9 +122,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn_env
     @pconfig['cdn_url'] = 'cdn.net'
     @pconfig['cdn_environments'] = ['development']
-    ss = 'cdn.net/generated/rms-25-46a48b.jpg 25w,' \
-      ' cdn.net/generated/rms-50-46a48b.jpg 50w,' \
-      ' cdn.net/generated/rms-100-46a48b.jpg 100w'
+    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -140,8 +140,8 @@ class TestIntegrationConfig < Minitest::Test
   # small source in srcset
   def test_small_source
     output = tested 'too_large rms.jpg'
-    src = '/generated/rms-100-46a48b.jpg'
-    ss = '/generated/rms-100-46a48b.jpg 100w'
+    src = '/generated/rms-100-9ffc043fa.jpg'
+    ss = '/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert @stderr.include? 'rms.jpg'
     assert_equal src, output.at_css('img')['src']
@@ -155,24 +155,13 @@ class TestIntegrationConfig < Minitest::Test
   end
 
   def test_fast_build
-    File.stubs(:exist?).returns(true)
+    File.unstub(:exist?)
     @pconfig['fast_build'] = true
 
-    Digest::MD5.expects(:hexdigest).never
-    Dir.expects(:glob)
-       .with('/tmp/jpt/generated/rms-800-??????.jpg')
-       .returns(['/tmp/jpt/generated/rms-800-46a48b.jpg'])
+    tested 'rms.jpg' # Call once to ensure files and caches exist
 
-    output = tested 'rms.jpg'
-    assert_equal std_rms_ss, output.at_css('img')['srcset']
-  end
+    PictureTag::SourceImage.any_instance.expects(:source_digest).never
 
-  # When building images which already exist, source image width should never be
-  # called because it's a huge performance hit.
-  def test_no_width_check
-    File.stubs(:exist?).returns(true)
-    SourceImage.any_instance.expects(:width).never
-
-    tested
+    tested 'rms.jpg'
   end
 end

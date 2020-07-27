@@ -8,6 +8,7 @@ class TestSourceImageMissing < Minitest::Test
     PictureTag.stubs(:source_dir).returns('/home/loser/')
     PictureTag.stubs(:continue_on_missing?).returns(true)
     PictureTag.stubs(:fast_build?).returns(false)
+    Cache::Source.stubs(:new).returns({ width: nil, height: nil, digest: nil })
     Utils.stubs(:warning)
     File.stubs(:exist?).with('/home/loser/img.jpg').returns(false)
 
@@ -16,12 +17,16 @@ class TestSourceImageMissing < Minitest::Test
 
   # digest_missing
   def test_digest
-    assert_equal 'x' * 6, @tested.digest
+    assert_equal '', @tested.digest
   end
 
   # size missing
   def test_width
     assert_equal 999_999, @tested.width
+  end
+
+  def test_height
+    assert_equal 999_999, @tested.height
   end
 
   def test_warning

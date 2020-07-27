@@ -17,7 +17,7 @@ module TestHelper
   TEST_DIR = __dir__
   include JekyllStub
 
-  ImageStruct = Struct.new(:width)
+  ImageStruct = Struct.new(:width, :height)
   TokenStub = Struct.new(:line_number, :locale)
   ConfigStub = Struct.new(:source_dir)
   SourceImageStub = Struct.new(
@@ -42,7 +42,12 @@ module TestHelper
   )
 
   SrcsetStub = Struct.new(
+    # Rubocop complains about overriding the to_s method, which would
+    # ordinaraily cause problems but as we're using it here to stub an existing
+    # to_s method it's fine.
+    # rubocop:disable Lint/StructNewOverride
     :sizes, :to_s, :media, :mime_type, :media_attribute
+    # rubocop:enable Lint/StructNewOverride
   )
 
   def nomarkdown_wrapped?(string)

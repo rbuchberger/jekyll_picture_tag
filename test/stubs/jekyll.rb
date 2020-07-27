@@ -1,7 +1,7 @@
 # Tools to stub the jekyll and liquid interfaces
 module JekyllStub
   ContextStub = Struct.new(:environments, :registers)
-  SiteStub = Struct.new(:config, :data, :source, :dest)
+  SiteStub = Struct.new(:config, :data, :source, :dest, :cache_dir)
 
   def build_defaults
     @widths = [25, 50, 100]
@@ -17,6 +17,7 @@ module JekyllStub
     @data = { 'picture' => @pdata }
     @page = { 'ext' => 'html' }
     @site_source = TestHelper::TEST_DIR
+    @cache_dir = '/tmp/jpt/cache'
   end
 
   def build_context_stub
@@ -31,7 +32,7 @@ module JekyllStub
 
   def build_site_stub
     @site = SiteStub.new(
-      @jconfig, @data, @site_source, @site_dest
+      @jconfig, @data, @site_source, @site_dest, @cache_dir
     )
   end
 
@@ -208,13 +209,31 @@ module JekyllStub
           'media_gravity' => {
             'mobile' => 'northwest'
           }
+        },
+
+        'dimension_attributes' => {
+          'dimension_attributes' => true
+        },
+
+        'dimension_attributes_multiformat' => {
+          'dimension_attributes' => true,
+          'formats' => %w[original webp]
+        },
+
+        'dimension_attributes_replace_values' => {
+          'dimension_attributes' => true,
+          'attributes' => {
+            'img' => {
+              'height' => 'auto'
+            }
+          }
+
         }
       },
 
       'media_presets' => {
         'mobile' => 'max-width: 600px'
       }
-
     }
   end
 end

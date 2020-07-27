@@ -3,6 +3,7 @@ module PictureTag
     # Handles the specific tag image set to construct.
     class Preset
       attr_reader :name
+
       def initialize(name)
         @name = name
         @content = build_preset
