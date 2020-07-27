@@ -1,6 +1,11 @@
 ---
 ---
 # Release History
+* 1.11.0 July 27, 2020
+  * **Width and height attribute support!** Begone, page reflow.
+  * Cache image information between builds
+  * Change image naming format. This update will trigger all images to be regenerated, so you may
+    want to delete your generated images folder beforehand.
 * 1.10.2 July 6, 2020
   * Bugfix for fallback image files not actually getting generated
 * 1.10.1 July 2, 2020

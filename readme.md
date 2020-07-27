@@ -43,14 +43,15 @@ https://rbuchberger.github.io/jekyll_picture_tag/releases
 
 Latest versions: 
 
-* 1.10.0 May 11, 2020
-  * **Image Cropping support!** access the power of ImageMagick's `crop` function.
-  * Don't issue a warning when `default` preset is not found.
-  * Documentation improvements
 * 1.10.1 July 2, 2020
   * Bugfix for erroneously regenerated images
 * 1.10.2 July 6, 2020
   * Bugfix for fallback image files not actually getting generated
+* 1.11.0 July 27, 2020
+  * **Width and height attribute support!** Begone, page reflow.
+  * Cache image information between builds
+  * Change image naming format. This update will trigger all images to be regenerated, so you may
+    want to delete your generated images folder beforehand.
 
 ## Help Wanted
 
