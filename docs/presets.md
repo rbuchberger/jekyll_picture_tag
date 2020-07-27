@@ -295,7 +295,37 @@ width (thumbnails and icons). To use a multiplier-based srcset, set `pixel_ratio
   If you don't give a setting for a particular format it'll fall back to the `quality` setting
   above, and if you don't set _that_ it'll default to 75.
 
-* **HTML Attributes**
+* **Width & Height attributes (Anti-Loading-Jank)**
+
+  _Format:_
+
+  ```yml
+  dimension_attributes: true | false
+  ```
+
+  _Example:_
+
+  ```yml
+  dimension_attributes: true
+  ```
+
+  _Default:_ `false`
+
+  Prevent page reflow (aka jank) while images are loading, by adding `width` and `height` attributes
+  to the `<img>` tag in the correct aspect ratio.
+
+  For an explanation of why and how you want to do this, [here](https://youtu.be/4-d_SoCHeWE) is a
+  great explanation.
+
+  Caveats: 
+    * You need `width: 100%;` and `height: auto;` (or vice versa) set in CSS on the `<img>`
+      tags, or they will be stretched weirdly.
+    * This works on `<img>` tags and `<picture>` tags when offering images in multiple widths and
+      formats, but it does not work if you are using art direction (in other words, if you have
+      multiple source images). This is because these attributes can only be applied to the `<img>`
+      tag, of which there is exactly one.
+
+* **Arbitrary HTML Attributes**
 
   _Format:_
 
