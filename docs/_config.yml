@@ -5,3 +5,5 @@ description: Images for Jekyll, done correctly.
 lang: en-US
 
 baseurl: '/jekyll_picture_tag'
+readme_index: 
+  with_frontmatter: true
