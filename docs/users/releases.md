@@ -1,4 +1,5 @@
 ---
+sort: 8
 ---
 # Release History
 * 1.11.0 July 27, 2020
