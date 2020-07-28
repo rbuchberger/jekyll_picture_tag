@@ -1,6 +1,9 @@
 ---
+sort: 4
 ---
-# /_data/picture.yml
+# Examples
+
+## /_data/picture.yml
 
 These are example settings- I mostly made them up off the top of my head. You
 probably don't want to just copy-paste them. The full documentation
