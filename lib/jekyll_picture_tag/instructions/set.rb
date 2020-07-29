@@ -27,7 +27,7 @@ module PictureTag
       # These are our Media Query presets. It's really just a hash, and there
       # are no default values, so extracting this to its own class is overkill.
       def media_presets
-        PictureTag.site.data.dig('picture', 'media_presets') || {}
+        search_data('media_queries') || search_data('media_presets') || {}
       end
 
       def source_images
@@ -51,6 +51,10 @@ module PictureTag
       end
 
       private
+
+      def search_data(key)
+        PictureTag.site.data.dig('picture', key)
+      end
 
       def build_source_images
         source_names = params.source_names
