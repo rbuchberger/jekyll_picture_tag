@@ -13,4 +13,4 @@ value you give it. This will override automatic source image linking, if you
 have enabled it.
 
 **Note**: If you get either mangled HTML or extra {::nomarkdown} tags when
-using this, read [here]({{ site.baseurl }}/notes).
+using this, read [here]({{ site.baseurl }}/users/notes/kramdown_bug).

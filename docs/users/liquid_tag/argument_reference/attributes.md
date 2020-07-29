@@ -36,7 +36,7 @@ the liquid tag, but they can be given in any order.
 `<img>`; useful when using an `auto` output format.
 
 ```note
-Attributes that are set here for elements which don't occur in the used `preset`
-will be ignored (e.g. adding `--picture class="cool-css"` with a preset that
-does not use a `<picture>` tag).
+Attributes that are set here for elements which don't occur in the selected
+markup format will be ignored (e.g. adding `--picture class="cool-css"` with a
+preset that does not use a `<picture>` tag).
 ```

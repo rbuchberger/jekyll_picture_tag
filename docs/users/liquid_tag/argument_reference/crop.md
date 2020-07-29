@@ -35,6 +35,12 @@ running off the side of the image. Pay attention.
 For detailed documentation, see ImageMagick's
 [crop](http://www.imagemagick.org/script/command-line-options.php#crop) tool.
 
+## Examples
+
+- `16:9`
+- `1:1 west`
+- `3:2+20+50 northeast`
+
 ```note
 If you do a lot of trial and error with these, it's a good idea to manually
 delete your generated images folder more often as each change will build a new

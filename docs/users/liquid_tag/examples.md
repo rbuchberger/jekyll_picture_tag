@@ -1,11 +1,10 @@
 ---
-sort: 2
 ---
 # Examples
 
 {% raw %}
 
-  * Basic form, will use the markup preset named 'default': 
+  * Basic form, will use the preset named 'default': 
   ```
   {% picture example.jpg %}
   ```
@@ -15,13 +14,13 @@ sort: 2
   {% picture example.jpg --alt Alt Text %}
   ```
 
-  * Select a `markup_preset` (defined in `_data/picture.yml`:
+  * Select a `preset` (defined in `_data/picture.yml`:
   ```
   {% picture my_preset example.jpg %}
   ```
 
   * Show different images on different devices. (Note that `mobile` must be set
-  to some media query under `media_presets:` in `_data/picture.yml`.
+  to some media query under `media_queries:` in `_data/picture.yml`.
   ```
   {% picture example.jpg mobile: example_cropped.jpg %}
   ```
@@ -31,8 +30,8 @@ sort: 2
   {% picture {{ page.some_liquid_variable }} %}
   ```
 
-  * Select the blog_index markup preset, use liquid variables, and wrap the
-  image in an anchor tag (link):
+  * Select the blog_index preset, use liquid variables, and wrap the image in an
+  anchor tag (link):
   ```
   {% picture blog_index {{ post.image }} --link {{ post.url }} %}
   ```
