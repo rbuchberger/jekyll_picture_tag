@@ -39,7 +39,7 @@ https://rbuchberger.github.io/jekyll_picture_tag/
 
 ## Changelog:
 
-https://rbuchberger.github.io/jekyll_picture_tag/releases
+https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Latest versions: 
 
