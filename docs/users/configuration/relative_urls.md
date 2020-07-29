@@ -11,4 +11,5 @@ sort: 6
 *Default*: `true`
 
 Whether to use relative (`/generated/test(...).jpg`) or absolute
-(`https://example.com/generated/test(...).jpg`) urls in your src and srcset attributes.
+(`https://example.com/generated/test(...).jpg`) urls in your src and srcset
+attributes.

@@ -4,6 +4,9 @@ sort: 1
 
 # Directories
 
+Define where JPT should look for source images, and where it should place
+generated images.
+
 ## Source
 
 *Format:* `source: (directory)`
