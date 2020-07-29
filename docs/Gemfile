@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'github-pages', group: :jekyll_plugins
-gem 'jekyll-theme-slate'
+group :jekyll_plugins do
+  gem 'github-pages'
+  gem 'jekyll-rtd-theme'
+end

@@ -81,9 +81,13 @@ module PictureTag
       end
 
       def grab_data_file
+        search_data('presets') || search_data('markup_presets') || no_preset
+      end
+
+      def search_data(key)
         PictureTag.site
                   .data
-                  .dig('picture', 'markup_presets', @name) || no_preset
+                  .dig('picture', key, @name)
       end
 
       def no_preset

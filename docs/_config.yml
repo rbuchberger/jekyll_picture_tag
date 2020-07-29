@@ -1,13 +1,9 @@
-theme: jekyll-theme-slate
+remote_theme: rundocs/jekyll-rtd-theme
+
 title: Jekyll Picture Tag
+description: Images for Jekyll, done correctly.
+lang: en-US
 
-url: ''
 baseurl: '/jekyll_picture_tag'
-
-defaults:
-  - 
-    scope: 
-      path: ''
-    values:
-      layout: directory
-  
+readme_index: 
+  with_frontmatter: true
