@@ -57,7 +57,7 @@ module JekyllStub
 
   def picture_data_stub
     {
-      'markup_presets' => {
+      'presets' => {
         'default' => {
           'widths' => @widths
         },
@@ -231,7 +231,7 @@ module JekyllStub
         }
       },
 
-      'media_presets' => {
+      'media_queries' => {
         'mobile' => 'max-width: 600px'
       }
     }
