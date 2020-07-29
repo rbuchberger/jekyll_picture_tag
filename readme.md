@@ -52,11 +52,16 @@ Latest versions:
   * Cache image information between builds
   * Change image naming format. This update will trigger all images to be regenerated, so you may
     want to delete your generated images folder beforehand.
+* 1.12.0 July 30, 2020
+  * Documentation overhaul. Now with 87% less scrolling!
+  * Rename `markup_presets` and `media_presets` to `presets` and
+    `media_queries`. The old names were bad and caused confusion. The old names
+    will continue to work until the next major version is released.
 
 ## Help Wanted
 
 Writing code is only part of the job; often the harder part is knowing what needs to be changed. Any
 and all feedback is greatly appreciated, especially in regards to documentation. What are your pain
 points? See the [contributing
-guidelines](https://rbuchberger.github.io/jekyll_picture_tag/contributing), or the
+guidelines](https://rbuchberger.github.io/jekyll_picture_tag/devs/contributing), or the
 [issues](https://github.com/rbuchberger/jekyll_picture_tag/issues) page for more.
