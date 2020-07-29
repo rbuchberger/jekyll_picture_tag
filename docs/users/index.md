@@ -2,6 +2,6 @@
 sort: 1
 ---
 
-# Docs
+# Usage
 
 {% include list.liquid %}
