@@ -35,6 +35,18 @@
   ```
   {% picture blog_index {{ post.image }} --link {{ post.url }} %}
   ```
+    N.B. If the image path is coming from a liquid variable then you have two problems to guard against.
+    * __Spaces__: you need to wrap the inner tag in "" to stop a path with spaces being interpretted as two or more arguments:
+    ```
+    {% picture blog_index "{{ post.image }}" %}
+    ```
+    * __Nulls__: you need to wrap whole tag in a logic block to stop an uncaught Liquid exception:
+    ```
+    {% if post.image %} 
+      {% picture blog_index "{{ post.image }}" %}
+    {% endif %}
+    ```
+  
 
   * Add arbitrary HTML attributes:
   ```
