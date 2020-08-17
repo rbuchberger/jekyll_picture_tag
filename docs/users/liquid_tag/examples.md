@@ -40,9 +40,9 @@
     ```
     {% picture blog_index "{{ post.image }}" %}
     ```
-    * __Nulls__: you need to wrap whole tag in a logic block to stop an uncaught Liquid exception:
+    * __Nulls & Blanks__: you need to wrap whole tag in a logic block to stop an uncaught Liquid exception:
     ```
-    {% if post.image %} 
+    {% if post.image && post.image != "" %} 
       {% picture blog_index "{{ post.image }}" %}
     {% endif %}
     ```
