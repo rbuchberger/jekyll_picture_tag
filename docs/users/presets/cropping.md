@@ -23,10 +23,10 @@ _Format:_
 _Example:_
 
 ```yaml
-    crop: 16:9
+    crop: '16:9'
     media_crop:
-      tablet: 3:2
-      mobile: 1:1
+      tablet: '3:2'
+      mobile: '1:1'
 ```
 
 Crop geometry, given either generally or for specific media presets. The
