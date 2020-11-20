@@ -112,13 +112,8 @@ module PictureTag
     end
 
     def process_image
-      image.combine_options do |i|
-        i.resize "#{@width}x"
-        i.strip
-      end
-
-      image.format @format
-      image.quality quality
+      image.format(@format, 0, { resize: "#{@width}x", quality: quality })
+      image.strip
     end
 
     def write_image
