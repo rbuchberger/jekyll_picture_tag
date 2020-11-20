@@ -67,4 +67,8 @@ module TestHelper
   def errors_ok?(output)
     output.errors.none? { |e| e.code != 801 }
   end
+
+  def aspect_float(width, height)
+    width.to_f / height
+  end
 end
