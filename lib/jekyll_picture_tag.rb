@@ -1,15 +1,13 @@
 require 'jekyll'
 require 'objective_elements'
 
-require_relative 'jekyll_picture_tag/generated_image'
+require_relative 'jekyll_picture_tag/cache'
+require_relative 'jekyll_picture_tag/images'
 require_relative 'jekyll_picture_tag/instructions'
 require_relative 'jekyll_picture_tag/output_formats'
-require_relative 'jekyll_picture_tag/source_image'
+require_relative 'jekyll_picture_tag/router'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
-require_relative 'jekyll_picture_tag/img_uri'
-require_relative 'jekyll_picture_tag/router'
-require_relative 'jekyll_picture_tag/cache'
 
 # Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski   : @robwierzbowski
