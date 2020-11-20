@@ -35,8 +35,8 @@ module PictureTag
       @name ||= "#{@source.base_name}-#{@width}-#{id}.#{@format}"
     end
 
-    # https://example.com/assets/images/myimage-100-123abc.jpg
-    #                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    # https://example.com/assets/somefolder/myimage-100-123abc.jpg
+    #                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def uri
       ImgURI.new(name).to_s
     end
@@ -103,25 +103,17 @@ module PictureTag
 
     def generate_image
       puts 'Generating new image file: ' + name
-      process_image
-      write_image
-    end
 
-    def quality
-      PictureTag.quality(@format)
-    end
-
-    def process_image
       image.format(@format, 0, { resize: "#{@width}x", quality: quality })
-      image.strip
-    end
-
-    def write_image
       FileUtils.mkdir_p(File.dirname(absolute_filename))
 
       image.write absolute_filename
 
       FileUtils.chmod(0o644, absolute_filename)
+    end
+
+    def quality
+      PictureTag.quality(@format)
     end
 
     def process_format(format)
