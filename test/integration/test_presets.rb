@@ -283,21 +283,18 @@ class TestIntegrationPresets < Minitest::Test
   end
 
   def test_crop
+    # Crop preset should crop desktop to 3:2 and mobile to 16:9. Test images are
+    # around 1:1 (but not exactly)
     tested 'crop rms.jpg mobile: spx.jpg'
 
-    correct_rms_digest =
-      '69b6f2a0390503b855f0ea0e31338dfd3da3238af18e657c201c7bb0dd1dab34'
-    correct_spx_digest =
-      '707744953a4dfb5495d8225942eb63e9361dd21b9aa1bb7786100f857d7e7050'
+    rms_dimensions =
+      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').dimensions
 
-    generated_rms_digest =
-      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').signature
+    spx_dimensions =
+      MiniMagick::Image.open('/tmp/jpt/generated/spx-100-8d935ea90.jpg').dimensions
 
-    generated_spx_digest =
-      MiniMagick::Image.open('/tmp/jpt/generated/spx-100-8d935ea90.jpg').signature
-
-    assert_equal correct_rms_digest, generated_rms_digest
-    assert_equal correct_spx_digest, generated_spx_digest
+    assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
+    assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03
   end
 
   def test_dimension_attributes_basic
