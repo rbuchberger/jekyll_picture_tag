@@ -66,12 +66,10 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal correct, output.at_css('img')['srcset']
 
-    correct_digest =
-      '257f0cdf64bc05b1e474265216ec85994d3123e609b812ed75d875610a85455c'
-    generated_digest =
-      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-8d4abac33.jpg').signature
+    generated_dimensions =
+      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-8d4abac33.jpg').dimensions
 
-    assert_equal correct_digest, generated_digest
+    assert_in_delta aspect_float(10, 1), aspect_float(*generated_dimensions), 0.03
   end
 
   # Make sure that when cropping images, we don't enlarge widths

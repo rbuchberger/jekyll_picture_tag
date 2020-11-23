@@ -40,9 +40,24 @@ module PictureTag
         setting_lookup('widths', 'media', media)
       end
 
-      # Image quality setting, possibly dependent on format.
-      def quality(format = nil)
-        setting_lookup('quality', 'format', format)
+      # Image quality setting. Surprisingly complicated; can depend on both format and width.
+      def quality(format = nil, width = nil)
+        setting = setting_lookup('quality', 'format', format)
+
+        return setting unless setting.is_a? Hash
+
+        parse_quality_hash(setting, width)
+      end
+
+      def parse_quality_hash(points, width)
+        # The points can be given in any order.
+        low, high = *points.keys.map(&:to_i).sort
+
+        case width
+        when 0..low then points[low]
+        when low..high then Utils.interpolate(points.keys, points.values, width)
+        when high..999_999 then points[high]
+        end
       end
 
       # Gravity setting (for imagemagick cropping)

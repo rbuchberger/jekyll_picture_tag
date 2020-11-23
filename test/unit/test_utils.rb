@@ -77,4 +77,14 @@ class TestUtils < Minitest::Test
   def test_titleize
     assert_equal Utils.titleize('snake_case'), 'SnakeCase'
   end
+
+  # Had to bust out my old TI-86 to work this one out!
+  def test_interpolate
+    xvals = [10, 30]
+    yvals = [25, 35]
+
+    assert_in_delta 43.5, Utils.interpolate(xvals, yvals, 47), 0.01
+    assert_in_delta 26.5, Utils.interpolate(xvals, yvals, 13), 0.01
+    assert_in_delta 70, Utils.interpolate(xvals, yvals, 100), 0.01
+  end
 end

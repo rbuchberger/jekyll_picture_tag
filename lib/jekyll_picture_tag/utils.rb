@@ -63,6 +63,20 @@ module PictureTag
       def titleize(input)
         input.split('_').map(&:capitalize).join
       end
+
+      # Linear interpolator. Pass it 2 values in the x array, 2 values
+      # in the y array, and an x value, returns a y value.
+      def interpolate(xvals, yvals, xval)
+        xvals.map!(&:to_f)
+        yvals.map!(&:to_f)
+
+        # Slope
+        m = (yvals.last - yvals.first) / (xvals.last - xvals.first)
+        # Value of y when x=0
+        b = yvals.first - (m * xvals.first)
+        # y = mx + b
+        (m * xval) + b
+      end
     end
   end
 end

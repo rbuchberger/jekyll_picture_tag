@@ -43,20 +43,12 @@ https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Latest versions: 
 
-* 1.10.1 July 2, 2020
-  * Bugfix for erroneously regenerated images
-* 1.10.2 July 6, 2020
-  * Bugfix for fallback image files not actually getting generated
-* 1.11.0 July 27, 2020
-  * **Width and height attribute support!** Begone, page reflow.
-  * Cache image information between builds
-  * Change image naming format. This update will trigger all images to be regenerated, so you may
-    want to delete your generated images folder beforehand.
-* 1.12.0 July 30, 2020
-  * Documentation overhaul. Now with 87% less scrolling!
-  * Rename `markup_presets` and `media_presets` to `presets` and
-    `media_queries`. The old names were bad and caused confusion. The old names
-    will continue to work until the next major version is released.
+* 1.13.0 November 23, 2020
+  * Add image quality interpolation; allows for variable image quality based on image size.
+  * Bugfix: Perform format, resize, and quality changes simultaneously rather than individually.
+    * Allows for actual lossless webp: simply set quality to 100.
+    * Improves fresh (no cached images) build times by ~15%
+    * Fix problems with poor image quality.
 
 ## Help Wanted
 

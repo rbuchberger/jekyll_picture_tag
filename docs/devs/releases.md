@@ -1,6 +1,12 @@
 ---
 ---
 # Release History
+* 1.13.0 November 23, 2020
+  * Add image quality interpolation; allows for variable image quality based on image size.
+  * Bugfix: Perform format, resize, and quality changes simultaneously rather than individually.
+    * Allows for actual lossless webp: simply set quality to 100.
+    * Improves fresh (no cached images) build times by ~15%
+    * Fix problems with poor image quality.
 * 1.12.0 July 30, 2020
   * Documentation overhaul. Now with 87% less scrolling!
   * Rename `markup_presets` and `media_presets` to `presets` and
