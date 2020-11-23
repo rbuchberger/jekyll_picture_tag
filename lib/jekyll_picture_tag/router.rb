@@ -108,8 +108,8 @@ module PictureTag
       preset.nomarkdown?
     end
 
-    def quality(format)
-      preset.quality(format)
+    def quality(format, width)
+      preset.quality(format, width)
     end
   end
 end
