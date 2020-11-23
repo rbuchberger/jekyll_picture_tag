@@ -113,7 +113,7 @@ module PictureTag
     end
 
     def quality
-      PictureTag.quality(@format)
+      PictureTag.quality(@format, @width)
     end
 
     def process_format(format)
