@@ -46,12 +46,17 @@ module PictureTag
 
         return setting unless setting.is_a? Hash
 
-        low, high = *setting.keys.map(&:to_i)
+        parse_quality_hash(setting, width)
+      end
+
+      def parse_quality_hash(points, width)
+        # The points can be given in any order.
+        low, high = *points.keys.map(&:to_i).sort
 
         case width
-        when 0..low then setting.values.first
-        when low..high then Utils.interpolate(setting.keys, setting.values, width)
-        when high..999_999 then setting.values.last
+        when 0..low then points[low]
+        when low..high then Utils.interpolate(points.keys, points.values, width)
+        when high..999_999 then points[high]
         end
       end
 
