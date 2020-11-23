@@ -59,12 +59,20 @@ class PresetTest < Minitest::Test
   end
 
   # quality default
-  def test_quality_default
+  def test_quality_global_constant
     assert_equal 30, tested('quality').quality('jpg')
   end
 
-  def test_quality_media
+  def test_quality_media_constant
     assert_equal 45, tested('quality').quality('webp')
+  end
+
+  def test_quality_calculated
+    assert_equal 50, tested('calculated_quality').quality(nil, 25)
+    assert_equal 50, tested('calculated_quality').quality(nil, 50)
+    assert_equal 75, tested('calculated_quality').quality(nil, 75)
+    assert_equal 100, tested('calculated_quality').quality(nil, 100)
+    assert_equal 100, tested('calculated_quality').quality(nil, 150)
   end
 
   def test_missing_preset

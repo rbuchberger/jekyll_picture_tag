@@ -200,6 +200,13 @@ module JekyllStub
           }
         },
 
+        'calculated_quality' => {
+          'quality' => {
+            '50' => 50,
+            '100' => 100
+          }
+        },
+
         'crop' => {
           'crop' => '3:2',
           'media_crop' => {
