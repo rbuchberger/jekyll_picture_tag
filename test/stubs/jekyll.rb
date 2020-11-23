@@ -202,8 +202,15 @@ module JekyllStub
 
         'calculated_quality' => {
           'quality' => {
-            '50' => 50,
-            '100' => 100
+            50 => 50,
+            100 => 100
+          }
+        },
+
+        'calculated_quality_reverse' => {
+          'quality' => {
+            100 => 100,
+            50 => 50
           }
         },
 
