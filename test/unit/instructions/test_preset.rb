@@ -75,6 +75,15 @@ class PresetTest < Minitest::Test
     assert_equal 100, tested('calculated_quality').quality(nil, 150)
   end
 
+  # Order should not matter.
+  def test_quality_calculated_reverse
+    assert_equal 50, tested('calculated_quality_reverse').quality(nil, 25)
+    assert_equal 50, tested('calculated_quality_reverse').quality(nil, 50)
+    assert_equal 75, tested('calculated_quality_reverse').quality(nil, 75)
+    assert_equal 100, tested('calculated_quality_reverse').quality(nil, 100)
+    assert_equal 100, tested('calculated_quality_reverse').quality(nil, 150)
+  end
+
   def test_missing_preset
     config_stub = Object.new
     config_stub.stubs(:[]).returns('data_dir')
