@@ -326,4 +326,18 @@ class TestIntegrationPresets < Minitest::Test
     assert_equal '100', output.at_css('img')['width']
     assert_equal '89', output.at_css('img')['height']
   end
+
+  # We don't have an easy way to verify output image quality; the best we can do
+  # is make sure you don't get any errors when running it.
+  def test_calculated_quality
+    assert_silent do
+      tested 'calculated_quality rms.jpg'
+    end
+  end
+
+  def test_calculated_quality_reverse
+    assert_silent do
+      tested 'calculated_quality_reverse rms.jpg'
+    end
+  end
 end
