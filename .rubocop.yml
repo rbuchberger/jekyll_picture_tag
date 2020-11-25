@@ -1,3 +1,8 @@
+# Exclude unimportant files
+AllCops:
+  Exclude:
+    - 'bin/**/*'
+
 # Disabled
 Style/FrozenStringLiteralComment:
   Enabled: false
