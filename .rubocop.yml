@@ -84,3 +84,33 @@ Style/SingleArgumentDig:
   Enabled: true
 Style/SlicingWithRange:
   Enabled: true
+Layout/BeginEndAlignment: # (new in 0.91)
+  Enabled: true
+Lint/ConstantDefinitionInBlock: # (new in 0.91)
+  Enabled: true
+Lint/DuplicateRequire: # (new in 0.90)
+  Enabled: true
+Lint/EmptyFile: # (new in 0.90)
+  Enabled: true
+Lint/HashCompareByIdentity: # (new in 0.93)
+  Enabled: true
+Lint/IdentityComparison: # (new in 0.91)
+  Enabled: true
+Lint/RedundantSafeNavigation: # (new in 0.93)
+  Enabled: true
+Lint/TrailingCommaInAttributeDeclaration: # (new in 0.90)
+  Enabled: true
+Lint/UselessMethodDefinition: # (new in 0.90)
+  Enabled: true
+Lint/UselessTimes: # (new in 0.91)
+  Enabled: true
+Style/ClassEqualityComparison: # (new in 0.93)
+  Enabled: true
+Style/CombinableLoops: # (new in 0.90)
+  Enabled: true
+Style/KeywordParametersOrder: # (new in 0.90)
+  Enabled: true
+Style/RedundantSelfAssignment: # (new in 0.90)
+  Enabled: true
+Style/SoleNestedConditional: # (new in 0.89)
+  Enabled: true
