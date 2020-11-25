@@ -4,10 +4,19 @@ sort: 2
 
 # Docs
 
-They run on github pages, which is based on jekyll. You can preview as you edit:
+They run on github pages, which is based on jekyll. You can preview as you edit; first the setup:
 
-0. Follow the [setup instructions](setup)
-1. `$ cd docs`
-2. `$ bundle install`
-3. `$ bundle exec jekyll serve`
-4. In a web browser, navigate to `localhost:4000/jekyll_picture_tag/`
+``` sh
+$ git clone git@github.com:rbuchberger/jekyll_picture_tag.git # if you haven't already
+$ cd jekyll_picture_tag/docs
+$ direnv allow # (optional)
+$ bundle install --binstubs
+```
+
+To preview: 
+
+``` sh
+$ jekyll serve --livereload # (prefix with `bundle exec` if necessary)
+```
+
+* In a web browser, navigate to `localhost:4000/jekyll_picture_tag/`
