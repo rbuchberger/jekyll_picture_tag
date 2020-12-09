@@ -38,6 +38,8 @@ jobs:
 
     - run: sudo make install
       working-directory: ./imagemagick
+    - name: Checkout repo
+      uses: actions/checkout@v2
 
     - name: Install Ruby
       # Version taken from .ruby-version file
@@ -45,8 +47,6 @@ jobs:
       with: 
         bundler-cache: true
 
-    - name: Checkout repo
-      uses: actions/checkout@v2
 
     - name: Install Ruby dependencies
       run: bundle install
