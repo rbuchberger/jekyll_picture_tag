@@ -47,8 +47,8 @@ jobs:
     - name: Install required gems
       run: bundle install
 
-    # - name: Run tests
-    #   run: bundle exec rake test
+    - name: Run tests
+      run: bundle exec rake test
 
     # - name: Check formatting
     #   run: bundle exec rake rubocop
