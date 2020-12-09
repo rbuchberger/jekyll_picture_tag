@@ -19,9 +19,10 @@ jobs:
       run: sudo apt install webp libopenjp2-tools
 
     - name: Build Imagemagick 7
-      working-directory: ~/imagemagick
+      working-directory: ~/
       run: |
-        git clone git@github.com:ImageMagick/ImageMagick.git ./ --branch '$imagemagick_version'
+        git clone git@github.com:ImageMagick/ImageMagick.git imagemagick --branch '$imagemagick_version'
+        cd imagemagick
         ./configure
         make
 
