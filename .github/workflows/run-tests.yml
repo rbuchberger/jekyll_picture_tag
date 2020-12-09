@@ -22,7 +22,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ./imagemagick
-        key: imagemagick-{{ env.imagemagick_version }}
+        key: imagemagick-${{ env.imagemagick_version }}
 
     - name: Install imagemagick
       run: |
