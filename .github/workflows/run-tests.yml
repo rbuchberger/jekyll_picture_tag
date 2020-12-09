@@ -10,21 +10,22 @@ jobs:
   test:
     name: Run tests and check formatting
     runs-on: ubuntu-latest
+    env:
+      imagemagick_version: 7.0.10-46
 
     steps:
 
     # - name: Install system dependencies
     #   run: sudo apt install webp libopenjp2-tools
 
-    - run: git clone git@github.com:ImageMagick/ImageMagick.git imagemagick --branch 7.0.10-46
-      working-directory: 
+    # Make sure the env works:
+    - run: echo "$imagemagick_version"
 
+    - run: git clone 'https://github.com/ImageMagick/ImageMagick' imagemagick --branch 7.0.10-46
     - run: ./configure
       working-directory: ~/imagemagick
-
     - run: make
       working-directory: ./imagemagick
-
     - run: make check
       working-directory: ./imagemagick
 
