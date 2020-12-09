@@ -15,40 +15,53 @@ jobs:
 
     steps:
 
-    - name: Install system dependencies
-      run: sudo apt install webp libwebp6 libopenjp2-tools
+    # - name: Install system dependencies
+    #   run: sudo apt install webp libwebp6 libopenjp2-tools
+    - run: mkdir -p cache-test
+    - run: ls cache-test
+    - run: touch cache-test/test1
 
     - uses: actions/cache@v2
       with:
-        path: ./imagemagick
-        key: imagemagick-${{ env.imagemagick_version }}
+        path: cache-test
+        key: test1
+        # key: imagemagick-${{ env.imagemagick_version }}
 
-    - name: Install imagemagick
-      run: |
-        mkdir imagemagick
-        cd imagemagick
-        git status || git clone 'https://github.com/ImageMagick/ImageMagick' ./ --branch "$imagemagick_version"
-        ./configure
-        make
-        sudo make install
-        sudo ldconfig /usr/local/lib
+    - run: ls cache-test
+    - run: touch cache-test/test2
 
-    - run: convert --version
+    # - uses: actions/cache@v2
+    #   with:
+    #     path: ./imagemagick
+    #     key: imagemagick-${{ env.imagemagick_version }}
 
-    - name: Checkout repo
-      uses: actions/checkout@v2
+    # - name: Install imagemagick
+    #   run: |
+    #     mkdir imagemagick
+    #     cd imagemagick
+    #     pwd
+    #     git status || git clone 'https://github.com/ImageMagick/ImageMagick' ./ --branch "$imagemagick_version"
+    #     ./configure
+    #     make
+    #     sudo make install
+    #     sudo ldconfig /usr/local/lib
+
+    # - run: convert --version
+
+    # - name: Checkout repo
+    #   uses: actions/checkout@v2
 
     # Version taken from .ruby-version file
-    - name: Install Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
+    # - name: Install Ruby
+    #   uses: ruby/setup-ruby@v1
+    #   with:
+    #     bundler-cache: true
 
-    - name: Install required gems
-      run: bundle install
+    # - name: Install required gems
+    #   run: bundle install
 
-    - name: Run tests
-      run: bundle exec rake test
+    # - name: Run tests
+    #   run: bundle exec rake test
 
     # - name: Check formatting
     #   run: bundle exec rake rubocop
