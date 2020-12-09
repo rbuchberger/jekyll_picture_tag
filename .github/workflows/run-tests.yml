@@ -18,16 +18,14 @@ jobs:
     # - name: Install system dependencies
     #   run: sudo apt install webp libopenjp2-tools
 
-    # Make sure the env works:
-    # - run: echo "$imagemagick_version"
-
     - run: git clone 'https://github.com/ImageMagick/ImageMagick' imagemagick --branch "$imagemagick_version"
-    - run: ./configure
+      name: Clone Imagemagick
+    - name: Install imagemagick
       working-directory: ./imagemagick
-    - run: make
-      working-directory: ./imagemagick
-    - run: make check
-      working-directory: ./imagemagick
+      run: |
+        ./configure
+        make
+        sudo make install
 
     # - name: Cache Imagemagick build
     #   uses: actions/cache@v2
@@ -36,8 +34,6 @@ jobs:
     #     # Key is the imagemagick version.
     #     key: imagemagick-{{ env.imagemagick_version }}
 
-    - run: sudo make install
-      working-directory: ./imagemagick
     - name: Checkout repo
       uses: actions/checkout@v2
 
