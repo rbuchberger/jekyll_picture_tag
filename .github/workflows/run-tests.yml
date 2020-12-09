@@ -16,7 +16,7 @@ jobs:
     steps:
 
     - name: Install system dependencies
-      run: apt install webp libopenjp2-tools
+      run: sudo apt install webp libopenjp2-tools
 
     - name: Build Imagemagick 7
       working-directory: ~/imagemagick
@@ -33,7 +33,7 @@ jobs:
 
     - name: Install ImageMagick 7
       working-directory: ~/imagemagick
-      run: make install
+      run: sudo make install
 
     - name: Install Ruby
       # Version taken from .ruby-version file
