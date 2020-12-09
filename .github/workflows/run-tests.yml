@@ -27,8 +27,9 @@ jobs:
 
     - name: Cache Imagemagick build
       uses: actions/cache@v2
-      path: ~/imagemagick
-      key: ${{ env.imagemagick_version }}
+      with: 
+        path: ~/imagemagick
+        key: ${{ env.imagemagick_version }}
 
     - name: Install ImageMagick 7
       working-directory: ~/imagemagick
