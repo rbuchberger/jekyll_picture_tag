@@ -16,27 +16,27 @@ jobs:
     # - name: Install system dependencies
     #   run: sudo apt install webp libopenjp2-tools
 
-    - run: git clone git@github.com:ImageMagick/ImageMagick.git ~/imagemagick --branch 7.0.10-46
-      working-directory: ~/
+    - run: git clone git@github.com:ImageMagick/ImageMagick.git imagemagick --branch 7.0.10-46
+      working-directory: 
 
     - run: ./configure
       working-directory: ~/imagemagick
 
     - run: make
-      working-directory: ~/imagemagick
+      working-directory: ./imagemagick
 
     - run: make check
-      working-directory: ~/imagemagick
+      working-directory: ./imagemagick
 
     # - name: Cache Imagemagick build
     #   uses: actions/cache@v2
     #   with: 
-    #     path: ~/imagemagick
+    #     path: ./imagemagick
     #     # Key is the imagemagick version.
     #     key: 7.0.10-46
 
     - run: sudo make install
-      working-directory: ~/imagemagick
+      working-directory: ./imagemagick
 
     - name: Install Ruby
       # Version taken from .ruby-version file
