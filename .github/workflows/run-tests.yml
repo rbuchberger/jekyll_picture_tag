@@ -18,10 +18,10 @@ jobs:
     - name: Install system dependencies
       run: sudo apt install webp libwebp6 libopenjp2-tools
 
-    - uses: actions/cache@v2
-      with:
-        path: imagemagick
-        key: imagick-${{ env.imagemagick_version }}
+    # - uses: actions/cache@v2
+    #   with:
+    #     path: imagemagick
+    #     key: imagick-${{ env.imagemagick_version }}
 
     - name: Install imagemagick
       run: |
@@ -45,11 +45,11 @@ jobs:
       with:
         bundler-cache: true
 
-    # - name: Install required gems
-    #   run: bundle install
+    - name: Install required gems
+      run: bundle install
 
-    # - name: Run tests
-    #   run: bundle exec rake test
+    - name: Run tests
+      run: bundle exec rake test
 
     # - name: Check formatting
     #   run: bundle exec rake rubocop
