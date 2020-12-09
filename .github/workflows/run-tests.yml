@@ -36,8 +36,8 @@ jobs:
 
     - run: convert --version
 
-    # - name: Checkout repo
-    #   uses: actions/checkout@v2
+    - name: Checkout repo
+      uses: actions/checkout@v2
 
     # Version taken from .ruby-version file
     - name: Install Ruby
