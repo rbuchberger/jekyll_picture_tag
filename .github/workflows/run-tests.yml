@@ -10,26 +10,29 @@ jobs:
   test:
     name: Run tests and check formatting
     runs-on: ubuntu-latest
+    env: 
+      imagemagick_version: 7.0.10-46
+
     steps:
 
+    - name: Install system dependencies
+      run: apt install webp libopenjp2-tools
+
     - name: Build Imagemagick 7
-      uses: actions/cache@v2
-      path: ~/imagemagick
-      env: 
-        imagemagick_version: 7.0.10-46
-      key: ${{ env.imagemagick_version }}
       working-directory: ~/imagemagick
       run: |
         git clone git@github.com:ImageMagick/ImageMagick.git ./ --branch '$imagemagick_version'
         ./configure
         make
 
+    - name: Cache Imagemagick build
+      uses: actions/cache@v2
+      path: ~/imagemagick
+      key: ${{ env.imagemagick_version }}
+
     - name: Install ImageMagick 7
       working-directory: ~/imagemagick
       run: make install
-
-    - name: Install system dependencies
-      run: apt install webp libopenjp2-tools
 
     - name: Install Ruby
       # Version taken from .ruby-version file
