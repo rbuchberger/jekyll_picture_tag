@@ -16,7 +16,7 @@ jobs:
     steps:
 
     - name: Install system dependencies
-      run: sudo apt install webp libopenjp2-tools
+      run: sudo apt install webp libwebp6 libopenjp2-tools
 
     - uses: actions/cache@v2
       with:
