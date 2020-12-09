@@ -24,8 +24,6 @@ jobs:
         path: ./imagemagick
         key: imagemagick-{{ env.imagemagick_version }}
 
-    - run:
-
     - name: Install imagemagick
       working-directory: ./imagemagick
       run: |
