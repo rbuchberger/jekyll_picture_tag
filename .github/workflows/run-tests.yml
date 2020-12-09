@@ -10,8 +10,6 @@ jobs:
   test:
     name: Run tests and check formatting
     runs-on: ubuntu-latest
-    env: 
-      imagemagick_version: 7.0.10-46
 
     steps:
 
@@ -21,7 +19,7 @@ jobs:
     - name: Build Imagemagick 7
       working-directory: ~/
       run: |
-        git clone git@github.com:ImageMagick/ImageMagick.git imagemagick --branch "$imagemagick_version"
+        git clone git@github.com:ImageMagick/ImageMagick.git imagemagick --branch 7.0.10-46
         cd imagemagick
         ./configure
         make
@@ -30,7 +28,8 @@ jobs:
       uses: actions/cache@v2
       with: 
         path: ~/imagemagick
-        key: ${{ env.imagemagick_version }}
+        # Key is the imagemagick version.
+        key: 7.0.10-46
 
     - name: Install ImageMagick 7
       working-directory: ~/imagemagick
