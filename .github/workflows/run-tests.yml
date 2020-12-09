@@ -27,12 +27,11 @@ jobs:
         make
         sudo make install
 
-    # - name: Cache Imagemagick build
-    #   uses: actions/cache@v2
-    #   with: 
-    #     path: ./imagemagick
-    #     # Key is the imagemagick version.
-    #     key: imagemagick-{{ env.imagemagick_version }}
+    - name: Cache Imagemagick build
+      uses: actions/cache@v2
+      with:
+        path: ./imagemagick
+        key: imagemagick-{{ env.imagemagick_version }}
 
     - name: Checkout repo
       uses: actions/checkout@v2
