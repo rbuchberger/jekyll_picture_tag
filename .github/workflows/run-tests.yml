@@ -15,11 +15,10 @@ jobs:
 
     steps:
 
-    # - name: Install system dependencies
-    #   run: sudo apt install webp libopenjp2-tools
+    - name: Install system dependencies
+      run: sudo apt install webp libopenjp2-tools
 
-    - name: Cache Imagemagick build
-      uses: actions/cache@v2
+    - uses: actions/cache@v2
       with:
         path: ./imagemagick
         key: imagemagick-${{ env.imagemagick_version }}
