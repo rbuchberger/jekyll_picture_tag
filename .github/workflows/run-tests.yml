@@ -20,6 +20,7 @@ jobs:
 
     - run: git clone 'https://github.com/ImageMagick/ImageMagick' imagemagick --branch "$imagemagick_version"
       name: Clone Imagemagick
+
     - name: Install imagemagick
       working-directory: ./imagemagick
       run: |
@@ -36,14 +37,13 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v2
 
+    # Version taken from .ruby-version file
     - name: Install Ruby
-      # Version taken from .ruby-version file
       uses: ruby/setup-ruby@v1
-      with: 
+      with:
         bundler-cache: true
 
-
-    - name: Install Ruby dependencies
+    - name: Install required gems
       run: bundle install
 
     - name: Run tests
@@ -51,3 +51,4 @@ jobs:
 
     - name: Check formatting
       run: bundle exec rake rubocop
+
