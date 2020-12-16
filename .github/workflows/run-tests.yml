@@ -18,6 +18,9 @@ jobs:
     - name: Install system dependencies
       run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
 
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
     - uses: actions/cache@v2
       with:
         path: imagemagick
@@ -27,9 +30,6 @@ jobs:
       run: bash install_imagemagick.sh
 
     - run: convert --version
-
-    - name: Checkout repo
-      uses: actions/checkout@v2
 
     # Version taken from .ruby-version file
     - name: Install Ruby
