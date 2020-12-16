@@ -7,55 +7,45 @@ on:
     branches: [ master ]
 
 jobs:
-  tests:
+  setup: 
     runs-on: ubuntu-latest
     env:
       imagemagick_version: 7.0.10-46
 
     steps:
 
-    - name: Install system dependencies
-      run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
+      - name: Install system dependencies
+        run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
 
-    - name: Checkout repo
-      uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
 
-    - uses: actions/cache@v2
-      with:
-        path: imagemagick
-        key: imagick1-${{ env.imagemagick_version }}
+      - uses: actions/cache@v2
+        with:
+          path: imagemagick
+          key: imagick1-${{ env.imagemagick_version }}
 
-    - name: Install imagemagick
-      run: bash install_imagemagick.sh
+      - name: Install imagemagick
+        run: bash install_imagemagick.sh
 
-    # Version taken from .ruby-version file
-    - name: Install Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
+      # Version taken from .ruby-version file
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-    - name: Install required gems
-      run: bundle install
+      - name: Install required gems
+        run: bundle install
 
-    - name: Run tests
-      run: rake test
+  tests:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - run: rake test
 
   formatting:
     runs-on: ubuntu-latest
-
-    - name: Checkout repo
-      uses: actions/checkout@v2
-
-    - name: Install Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-
-    - name: Install required gems
-      run: bundle install
-
-    - name: Run tests
-      run: bundle exec rake test
-
-    - name: Check formatting
-      run: rubocop
+    needs: setup
+    steps: 
+      - run: rubocop
