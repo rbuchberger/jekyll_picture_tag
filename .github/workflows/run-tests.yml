@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run tests and check formatting
+    name: Run tests, check formatting
     runs-on: ubuntu-latest
     env:
       imagemagick_version: 7.0.10-46
@@ -28,8 +28,6 @@ jobs:
 
     - name: Install imagemagick
       run: bash install_imagemagick.sh
-
-    - run: convert --version
 
     # Version taken from .ruby-version file
     - name: Install Ruby
