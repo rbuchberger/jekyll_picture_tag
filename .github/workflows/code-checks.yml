@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  setup: 
+  checks:
     runs-on: ubuntu-latest
     env:
       imagemagick_version: 7.0.10-46
@@ -37,6 +37,6 @@ jobs:
       - name: Install required gems
         run: bundle install
 
-      - run: rake test
+      - run: bundle exec rake test
 
-      - run: rubocop
+      - run: bundle exec rubocop
