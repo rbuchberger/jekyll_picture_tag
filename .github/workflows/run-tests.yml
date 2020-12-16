@@ -32,7 +32,7 @@ jobs:
         ./configure
         make
         sudo make install
-        # sudo ldconfig /usr/local/lib
+        sudo ldconfig /usr/local/lib
 
     - run: convert --version
 
