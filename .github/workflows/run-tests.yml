@@ -43,5 +43,5 @@ jobs:
     - name: Run tests
       run: bundle exec rake test
 
-    # - name: Check formatting
-    #   run: bundle exec rake rubocop
+    - name: Check formatting
+      run: bundle exec rake rubocop
