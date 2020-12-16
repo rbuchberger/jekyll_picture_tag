@@ -24,15 +24,7 @@ jobs:
     #     key: imagick-${{ env.imagemagick_version }}
 
     - name: Install imagemagick
-      run: |
-        mkdir imagemagick
-        cd imagemagick
-        pwd
-        git status || git clone 'https://github.com/ImageMagick/ImageMagick' ./ --branch "$imagemagick_version"
-        ./configure
-        make
-        sudo make install
-        sudo ldconfig /usr/local/lib
+      run: bash install_imagemagick.sh
 
     - run: convert --version
 
