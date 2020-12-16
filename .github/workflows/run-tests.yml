@@ -16,7 +16,7 @@ jobs:
     steps:
 
     - name: Install system dependencies
-      run: sudo apt install webp libwebp6 libopenjp2-tools
+      run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
 
     # - uses: actions/cache@v2
     #   with:
@@ -32,7 +32,7 @@ jobs:
         ./configure
         make
         sudo make install
-        sudo ldconfig /usr/local/lib
+        # sudo ldconfig /usr/local/lib
 
     - run: convert --version
 
