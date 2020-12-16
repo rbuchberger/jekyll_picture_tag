@@ -1,4 +1,4 @@
-name: Run Tests
+name: 'Tests & Formatting'
 
 on:
   push:
@@ -7,8 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
-    name: Run tests, check formatting
+  tests:
     runs-on: ubuntu-latest
     env:
       imagemagick_version: 7.0.10-46
@@ -39,7 +38,24 @@ jobs:
       run: bundle install
 
     - name: Run tests
+      run: rake test
+
+  formatting:
+    runs-on: ubuntu-latest
+
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Install Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+
+    - name: Install required gems
+      run: bundle install
+
+    - name: Run tests
       run: bundle exec rake test
 
     - name: Check formatting
-      run: bundle exec rake rubocop
+      run: rubocop
