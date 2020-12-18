@@ -6,10 +6,25 @@ require:
   - rubocop-rake
 
 AllCops:
-  Exclude:
-    - '**/bin/**/*'
+  Include:
+    - 'lib/**/*.rb'
+    - 'test/**/*.rb'
+    - 'Gemfile'
+    - 'Rakefile'
+    - '*.gemspec'
 
-# Disabled
+  Exclude:
+    - '**/.bundle/*'
+    - '**/.git/*'
+    - '**/.github/*'
+    - '**/bin/**/*'
+    - '**/coverage/**/*'
+    - '**/docs/**/*'
+    - '**/imagemagick/*'
+    - '**/pkg/**/*'
+    - '**/vendor/**/*'
+
+# Disabled Cops
 Style/FrozenStringLiteralComment:
   Enabled: false
 
