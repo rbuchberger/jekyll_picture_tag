@@ -29,11 +29,16 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'minitest', '~> 5.11'
+  spec.add_development_dependency 'minitest-rg'
   spec.add_development_dependency 'mocha', '~> 1.9'
   spec.add_development_dependency 'nokogiri', '~> 1.10'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 12.3'
-  spec.add_development_dependency 'rubocop', '~> 0.8'
+  spec.add_development_dependency 'rubocop', '~> 1.0'
+  spec.add_development_dependency 'rubocop-minitest', '~> 0.10'
+  spec.add_development_dependency 'rubocop-performance', '~> 1.9'
+  spec.add_development_dependency 'rubocop-rake', '~> 0.5'
+
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'solargraph'
 
