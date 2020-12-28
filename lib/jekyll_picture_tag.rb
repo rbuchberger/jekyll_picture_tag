@@ -60,7 +60,7 @@ module PictureTag
     def render(context)
       setup(context)
 
-      if PictureTag.disabled?
+      if PictureTag.disabled? || @raw_params.empty?
         ''
       else
         PictureTag.output_class.new.to_s
