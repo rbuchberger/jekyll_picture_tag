@@ -135,4 +135,10 @@ class TestIntegrationParams < Minitest::Test
     assert_equal ss, img['srcset']
     assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
   end
+
+  def test_empty_params
+    output = tested_base ''
+
+    assert output.empty?
+  end
 end
