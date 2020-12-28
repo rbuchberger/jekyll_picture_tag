@@ -5,6 +5,9 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    # Run weekly; github deletes caches that haven't been used in a week.
+    - cron: '0 0 * * 0'
 
 jobs:
   checks:
