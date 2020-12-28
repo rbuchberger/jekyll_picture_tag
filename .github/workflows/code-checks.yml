@@ -1,0 +1,40 @@
+name: 'Tests & Formatting'
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    env:
+      imagemagick_version: 7.0.10-46
+
+    steps:
+
+      - name: Install system dependencies
+        run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: imagemagick
+          key: imagick1-${{ env.imagemagick_version }}
+
+      - name: Install imagemagick
+        run: bash install_imagemagick.sh
+
+      # Version taken from .ruby-version file.
+      # Also runs bundle install.
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - run: bundle exec rake test
+
+      - run: bundle exec rubocop
