@@ -139,6 +139,7 @@ class TestIntegrationParams < Minitest::Test
   def test_empty_params
     output = tested_base ''
 
-    assert output.empty?
+    assert_empty output
+    refute_empty @stderr
   end
 end
