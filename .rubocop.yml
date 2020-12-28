@@ -1,4 +1,30 @@
-# Disabled
+inherit_from: .rubocop_todo.yml
+
+# Exclude unimportant files
+require:
+  - rubocop-minitest
+  - rubocop-rake
+
+AllCops:
+  Include:
+    - 'lib/**/*.rb'
+    - 'test/**/*.rb'
+    - 'Gemfile'
+    - 'Rakefile'
+    - '*.gemspec'
+
+  Exclude:
+    - '**/.bundle/*'
+    - '**/.git/*'
+    - '**/.github/*'
+    - '**/bin/**/*'
+    - '**/coverage/**/*'
+    - '**/docs/**/*'
+    - '**/imagemagick/*'
+    - '**/pkg/**/*'
+    - '**/vendor/**/*'
+
+# Disabled Cops
 Style/FrozenStringLiteralComment:
   Enabled: false
 
@@ -7,75 +33,60 @@ Style/StringConcatenation:
 
 # New cops, enabled. We aren't using the 'NewCops' setting because then rubocop
 # updates can break our CI.
-Layout/EmptyLinesAroundAttributeAccessor:
+
+Lint/DuplicateBranch: # (new in 1.3)
   Enabled: true
-Layout/SpaceAroundMethodCallOperator:
+Lint/DuplicateRegexpCharacterClassElement: # (new in 1.1)
   Enabled: true
-Lint/BinaryOperatorWithIdenticalOperands:
+Lint/EmptyBlock: # (new in 1.1)
   Enabled: true
-Lint/DeprecatedOpenSSLConstant:
+Lint/EmptyClass: # (new in 1.3)
   Enabled: true
-Lint/DuplicateElsifCondition:
+Lint/NoReturnInBeginEndBlocks: # (new in 1.2)
   Enabled: true
-Lint/DuplicateRescueException:
+Lint/ToEnumArguments: # (new in 1.1)
   Enabled: true
-Lint/EmptyConditionalBody:
+Lint/UnexpectedBlockArity: # (new in 1.5)
   Enabled: true
-Lint/FloatComparison:
+Lint/UnmodifiedReduceAccumulator: # (new in 1.1)
   Enabled: true
-Lint/MissingSuper:
+Style/ArgumentsForwarding: # (new in 1.1)
   Enabled: true
-Lint/MixedRegexpCaptureTypes:
+Style/CollectionCompact: # (new in 1.2)
   Enabled: true
-Lint/OutOfRangeRegexpRef:
+Style/DocumentDynamicEvalDefinition: # (new in 1.1)
   Enabled: true
-Lint/RaiseException:
+Style/NegatedIfElseCondition: # (new in 1.2)
   Enabled: true
-Lint/SelfAssignment:
+Style/NilLambda: # (new in 1.3)
   Enabled: true
-Lint/StructNewOverride:
+Style/RedundantArgument: # (new in 1.4)
   Enabled: true
-Lint/TopLevelReturnWithArgument:
+Style/SwapValues: # (new in 1.1)
   Enabled: true
-Lint/UnreachableLoop:
+Minitest/AssertInDelta: # (new in 0.10)
   Enabled: true
-Style/AccessorGrouping:
+Minitest/AssertionInLifecycleHook: # (new in 0.10)
   Enabled: true
-Style/ArrayCoercion:
+Minitest/AssertKindOf: # (new in 0.10)
   Enabled: true
-Style/BisectedAttrAccessor:
+Minitest/AssertOutput: # (new in 0.10)
   Enabled: true
-Style/CaseLikeIf:
+Minitest/AssertPathExists: # (new in 0.10)
   Enabled: true
-Style/ExplicitBlockArgument:
+Minitest/AssertSilent: # (new in 0.10)
   Enabled: true
-Style/ExponentialNotation:
+Minitest/LiteralAsActualArgument: # (new in 0.10)
   Enabled: true
-Style/GlobalStdStream:
+Minitest/MultipleAssertions: # (new in 0.10)
   Enabled: true
-Style/HashAsLastArrayItem:
+Minitest/RefuteInDelta: # (new in 0.10)
   Enabled: true
-Style/HashEachMethods:
+Minitest/RefuteKindOf: # (new in 0.10)
   Enabled: true
-Style/HashLikeCase:
+Minitest/RefutePathExists: # (new in 0.10)
   Enabled: true
-Style/HashTransformKeys:
+Minitest/TestMethodName: # (new in 0.10)
   Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Style/OptionalBooleanParameter:
-  Enabled: true
-Style/RedundantAssignment:
-  Enabled: true
-Style/RedundantFetchBlock:
-  Enabled: true
-Style/RedundantFileExtensionInRequire:
-  Enabled: true
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-Style/RedundantRegexpEscape:
-  Enabled: true
-Style/SingleArgumentDig:
-  Enabled: true
-Style/SlicingWithRange:
+Minitest/UnspecifiedException: # (new in 0.10)
   Enabled: true
