@@ -5,6 +5,7 @@ module PictureTag
     module DataAttributes
       require 'victor'
       require 'base64'
+
       def base_markup
         build_noscript(super)
       end
@@ -13,10 +14,12 @@ module PictureTag
 
       def add_src(element, image)
         element.attributes << { 'data-src' => image.uri }
-        element.attributes << { 'src' => placeholder } if PictureTag.preset['svg_placeholder']
+
+        return unless PictureTag.preset['svg_placeholder']
+
+        element.attributes << { 'src' => placeholder(image.source_width, image.source_height) }
       end
 
-      def placeholder
       def placeholder(width, height)
         svg = Victor::SVG.new({
                                 template: :html,
