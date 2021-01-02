@@ -1,4 +1,5 @@
 /.bundle/
+/docs/.bundle/
 /.yardoc
 /Gemfile.lock
 /_yardoc/
@@ -13,3 +14,5 @@ jekyll-picture-tag.iml
 /docs/_site/
 /docs/.jekyll-cache/
 /docs/.sass-cache/
+/bin/
+/docs/bin/

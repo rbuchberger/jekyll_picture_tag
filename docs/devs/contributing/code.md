@@ -2,7 +2,9 @@
 sort: 4
 ---
 
-# Code Guidelines
+# Code
+
+## Guidelines
 
 * Generally, go for straightforward and readable rather than terse and clever. I'm not actually a
   very good programmer; I need simple code that's easy to understand.
@@ -38,7 +40,7 @@ criteria:
 
 * No rubocop warnings
 
-### Thanks!
+## Thanks!
 
 As I said, don't let any of the rules & guidelines scare you away. They're the rules for merging
 into master, not submitting a pull request. I'm thrilled to receive any help at all.

@@ -50,6 +50,7 @@ module PictureTag
     # care about the params (arguments passed to the liquid tag). Jekyll makes
     # no attempt to parse them; they're given as a string.
     def initialize(tag_name, raw_params, tokens)
+      Utils.warning 'You have called JPT without any arguments.' if raw_params.empty?
       @raw_params = raw_params
       super
     end
@@ -60,7 +61,7 @@ module PictureTag
     def render(context)
       setup(context)
 
-      if PictureTag.disabled?
+      if PictureTag.disabled? || @raw_params.empty?
         ''
       else
         PictureTag.output_class.new.to_s
