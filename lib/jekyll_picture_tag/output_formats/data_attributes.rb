@@ -16,8 +16,8 @@ module PictureTag
         )
       end
 
-      def add_src(element, uri)
-        element.attributes << { 'data-src' => uri }
+      def add_src(element, image)
+        element.attributes << { 'data-src' => image.uri }
         element.attributes << { 'src' => placeholder } if PictureTag.preset['svg_placeholder']
       end
 
