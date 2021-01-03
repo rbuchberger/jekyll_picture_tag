@@ -92,8 +92,11 @@ module PictureTag
 
     def image_base
       @image_base ||= Image.open(@source.name).combine_options do |i|
-        i.auto_orient
-        i.strip
+        if PictureTag.preset['strip_metadata']
+          i.auto_orient
+          i.strip
+        end
+
         if @crop
           i.gravity @gravity
           i.crop @crop
