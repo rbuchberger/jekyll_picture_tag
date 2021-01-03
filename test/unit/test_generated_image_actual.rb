@@ -84,4 +84,17 @@ class GeneratedImageActualTest < MiniTest::Test
 
     tested.source_width
   end
+
+  def test_strip_metadata
+    # pestka.jpg has exif data.
+    file = tested('pestka')
+    file.generate
+
+    exif_data = MiniMagick::Image.open(file.absolute_filename)
+                                 .data['properties']
+                                 .keys
+                                 .select { |key| key =~ /^exif:/ }
+
+    assert_empty exif_data
+  end
 end
