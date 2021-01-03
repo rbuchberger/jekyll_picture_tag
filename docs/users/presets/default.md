@@ -1,5 +1,5 @@
 ---
-sort: 13
+sort: 14
 ---
 
 # Default preset
@@ -20,4 +20,5 @@ presets:
     data_sizes: true
     gravity: center
     dimension_attributes: false
+    strip_metadata: true
 ```

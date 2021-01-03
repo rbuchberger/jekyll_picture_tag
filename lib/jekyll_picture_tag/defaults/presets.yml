@@ -9,3 +9,4 @@ quality: 75
 data_sizes: true
 gravity: center
 dimension_attributes: false
+strip_metadata: true
