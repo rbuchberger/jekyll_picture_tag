@@ -81,24 +81,23 @@ module PictureTag
       @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity, quality].join)[0..8]
     end
 
-    # Post crop, before resizing and reformatting
     def image
-      @image ||= open_image
+      return @image if defined? @image
+
+      # Post crop, before resizing and reformatting
+      @source_dimensions = { width: image_base.width, height: image_base.height }
+
+      @image = image_base
     end
 
-    def open_image
-      image_base = Image.open(@source.name)
-      image_base.combine_options do |i|
+    def image_base
+      @image_base ||= Image.open(@source.name).combine_options do |i|
         i.auto_orient
         if @crop
           i.gravity @gravity
           i.crop @crop
         end
       end
-
-      @source_dimensions = { width: image_base.width, height: image_base.height }
-
-      image_base
     end
 
     def generate_image
