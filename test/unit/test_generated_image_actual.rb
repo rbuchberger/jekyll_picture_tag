@@ -38,7 +38,8 @@ class GeneratedImageActualTest < MiniTest::Test
       quality: 75,
       fast_build?: false,
       gravity: 'center',
-      site: site_stub
+      site: site_stub,
+      preset: { 'strip_metadata' => true }
     }
   end
 
