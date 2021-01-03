@@ -8,7 +8,11 @@ class TestCache < Minitest::Test
   include TestHelper
 
   def setup
-    PictureTag.stubs(:site).returns(build_site_stub)
+    PictureTag.stubs(:site).returns(Object.new)
+    PictureTag.site.stubs({
+                            cache_dir: '/tmp/',
+                            config: {}
+                          })
   end
 
   def tested(name = 'img.jpg')
