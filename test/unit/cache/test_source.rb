@@ -62,4 +62,14 @@ class TestCache < Minitest::Test
 
     assert_path_exists('/tmp/jpt/source/somedir/img.jpg.json')
   end
+
+  # Jekyll has a flag to disable caching; we must respect it.
+  def test_disable_disk_cache
+    PictureTag.site.config['disable_disk_cache'] = true
+
+    tested[:width] = 100
+    tested.write
+
+    refute_path_exists('/tmp/jpt/source/img.jpg.json')
+  end
 end
