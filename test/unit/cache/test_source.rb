@@ -23,48 +23,43 @@ class TestCache < Minitest::Test
     FileUtils.rm_rf '/tmp/jpt/'
   end
 
-  # Initialize empty
   def test_initialize_empty
     assert_nil tested[:width]
   end
 
-  # Store data
   def test_data_store
     tested[:width] = 100
 
     assert tested[:width] = 100
   end
 
-  # Reject bad key
   def test_reject_bad_key
     assert_raises ArgumentError do
       tested[:asdf] = 100
     end
   end
 
-  # Write data
   def test_write_data
     tested[:width] = 100
     tested.write
 
-    assert File.exist? '/tmp/jpt/cache/img.jpg.json'
+    assert_path_exists('/tmp/jpt/source/img.jpg.json')
   end
 
-  # Retrieve data
   def test_retrieve_data
     tested[:width] = 100
     tested.write
 
-    assert_equal Cache::Source.new('img.jpg')[:width], 100
+    assert_equal(100, Cache::Source.new('img.jpg')[:width])
   end
 
   # Handles filenames with directories in them
   def test_subdirectory_name
-    tested('somedir/img.jpg.json')
+    tested('somedir/img.jpg')
     tested[:width] = 100
     tested[:height] = 100
     tested.write
 
-    assert File.exist? '/tmp/jpt/cache/somedir/img.jpg.json'
+    assert_path_exists('/tmp/jpt/source/somedir/img.jpg.json')
   end
 end
