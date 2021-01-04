@@ -7,7 +7,8 @@ class ImgUriTest < Minitest::Test
   def setup
     @pconfig = {
       'source' => 'source-dir',
-      'output' => 'output-dir'
+      'output' => 'output-dir',
+      'baseurl_key' => 'baseurl'
     }
 
     @config = {
