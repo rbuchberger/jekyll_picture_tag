@@ -52,6 +52,20 @@ class ImgUriTest < Minitest::Test
     assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
   end
 
+  def test_ignore_baseurl
+    @config['baseurl'] = 'some-baseurl'
+    @pconfig['ignore_baseurl'] = true
+
+    assert_equal 'example.com/output-dir/img.jpg', tested
+  end
+
+  def test_baseurl_key
+    @pconfig['baseurl_key'] = 'foo'
+    @config['foo'] = 'some-baseurl'
+
+    assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
+  end
+
   # source image
   def test_source_image
     assert_equal 'example.com/source-dir/img.jpg',
