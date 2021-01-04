@@ -41,7 +41,9 @@ module PictureTag
     #                     ^^^^^^^^^^^^^
     # |     domain       |  baseurl   |       directory       | filename
     def baseurl
-      PictureTag.config['baseurl'] || ''
+      return '' if PictureTag.pconfig['ignore_baseurl']
+
+      PictureTag.config[PictureTag.pconfig['baseurl_key']] || ''
     end
 
     # https://example.com/my-base-path/assets/generated-images/image.jpg
