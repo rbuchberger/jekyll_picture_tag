@@ -1,5 +1,5 @@
 ---
-sort: 8
+sort: 6
 ---
 
 # Kramdown Fix
