@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-performance', '~> 1.9'
   spec.add_development_dependency 'rubocop-rake', '~> 0.5'
 
-  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov', '~> 0.20.0'
   spec.add_development_dependency 'solargraph'
 
   spec.add_dependency 'addressable', '~> 2.6'
