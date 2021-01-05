@@ -52,8 +52,8 @@ class TestIntegrationParams < Minitest::Test
     assert_equal 'parent', pic['class']
     assert_equal '11', pic['data-awesomeness']
     assert_equal 'Alternate Text', img['alt']
-    assert img['class'].include? 'implicit'
-    assert img['class'].include? 'img'
+    assert_includes img['class'], 'implicit'
+    assert_includes img['class'], 'img'
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
@@ -78,7 +78,7 @@ class TestIntegrationParams < Minitest::Test
     correct = '/generated/rms-25-3ef76e91f.jpg 25w, '\
               '/generated/rms-45-3ef76e91f.jpg 45w'
 
-    assert @stderr.include? 'rms.jpg'
+    assert_includes @stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['srcset']
   end
 
@@ -94,7 +94,7 @@ class TestIntegrationParams < Minitest::Test
     tested 'too_large rms.jpg'
 
     tested 'too_large spx.jpg'
-    assert @stderr.include? 'spx.jpg'
+    assert_includes @stderr, 'spx.jpg'
   end
 
   def test_link
@@ -102,7 +102,7 @@ class TestIntegrationParams < Minitest::Test
 
     refute output.errors.any?
     assert_equal 'example.com', output.at_css('a')['href']
-    assert output.at_css('a').children.include? output.at_css('img')
+    assert_includes output.at_css('a').children, output.at_css('img')
   end
 
   # Test an image with a space in it

@@ -23,7 +23,7 @@ class TestIntegrationPresets < Minitest::Test
 
     files = rms_file_array(@widths, %w[webp jpg])
     assert(files.all? { |f| File.exist?(f) })
-    assert @stdout.include? 'Generating'
+    assert_includes @stdout, 'Generating'
   end
 
   # widths 25, 50, 100

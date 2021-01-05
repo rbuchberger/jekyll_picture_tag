@@ -28,7 +28,7 @@ class TestIntegrationConfig < Minitest::Test
   def test_warning
     tested 'too_large rms.jpg'
 
-    assert @stderr.include? 'rms.jpg'
+    assert_includes @stderr, 'rms.jpg'
   end
 
   # suppress warnings
@@ -50,7 +50,7 @@ class TestIntegrationConfig < Minitest::Test
       ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
-    assert @stderr.include? 'asdf.jpg'
+    assert_includes @stderr, 'asdf.jpg'
   end
 
   def test_missing_source_array
@@ -63,7 +63,7 @@ class TestIntegrationConfig < Minitest::Test
       ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
-    assert @stderr.include? 'asdf.jpg'
+    assert_includes @stderr, 'asdf.jpg'
   end
 
   def test_missing_source_string
@@ -76,7 +76,7 @@ class TestIntegrationConfig < Minitest::Test
       ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
-    assert @stderr.include? 'asdf.jpg'
+    assert_includes @stderr, 'asdf.jpg'
   end
 
   def test_missing_source_nocontinue
@@ -133,7 +133,7 @@ class TestIntegrationConfig < Minitest::Test
   def test_missing_preset
     tested('asdf rms.jpg')
 
-    assert @stderr.include? 'asdf'
+    assert_includes @stderr, 'asdf'
   end
 
   # small src (fallback)
@@ -143,7 +143,7 @@ class TestIntegrationConfig < Minitest::Test
     src = '/generated/rms-100-9ffc043fa.jpg'
     ss = '/generated/rms-100-9ffc043fa.jpg 100w'
 
-    assert @stderr.include? 'rms.jpg'
+    assert_includes @stderr, 'rms.jpg'
     assert_equal src, output.at_css('img')['src']
     assert_equal ss, output.at_css('img')['srcset']
   end
