@@ -22,7 +22,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal rms_url, img['src']
     assert_equal std_rms_ss, img['srcset']
-    assert File.exist? rms_filename
+    assert_path_exists(rms_filename)
   end
 
   # Make sure it doesn't overwrite existing files
@@ -118,7 +118,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
+    assert_path_exists('/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg')
   end
 
   def test_quoted_whitespace
@@ -133,7 +133,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
+    assert_path_exists('/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg')
   end
 
   def test_empty_params

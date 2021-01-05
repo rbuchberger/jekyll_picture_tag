@@ -8,15 +8,6 @@
 
 # Offense count: 7
 # Cop supports --auto-correct.
-Minitest/AssertPathExists:
-  Exclude:
-    - 'test/integration/test_params.rb'
-    - 'test/integration/test_presets.rb'
-    - 'test/unit/cache/source.rb'
-    - 'test/unit/test_generated_image_actual.rb'
-
-# Offense count: 7
-# Cop supports --auto-correct.
 Minitest/LiteralAsActualArgument:
   Exclude:
     - 'test/integration/test_config.rb'

@@ -222,7 +222,7 @@ class TestIntegrationPresets < Minitest::Test
     File.unstub :exist?
     tested 'fallback rms.jpg'
 
-    assert File.exist? rms_filename(width: 35, format: 'webp')
+    assert_path_exists(rms_filename(width: 35, format: 'webp'))
   end
 
   # Ensure fallback images aren't enlarged when cropped.

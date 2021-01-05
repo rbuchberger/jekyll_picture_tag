@@ -65,7 +65,7 @@ class GeneratedImageActualTest < MiniTest::Test
       tested.generate
     end
 
-    assert File.exist? tested.absolute_filename
+    assert_path_exists(tested.absolute_filename)
 
     width = MiniMagick::Image.open(tested.absolute_filename).width
 
