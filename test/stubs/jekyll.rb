@@ -16,7 +16,7 @@ module JekyllStub
                  'url' => 'example.com' }
     @data = { 'picture' => @pdata }
     @page = { 'ext' => 'html' }
-    @site_source = TestHelper::TEST_DIR
+    @site_source = File.join TestHelper::TEST_DIR, 'image_files'
     @cache_dir = '/tmp/jpt/cache'
   end
 
