@@ -6,6 +6,7 @@ require:
   - rubocop-rake
 
 AllCops:
+  NewCops: enable
   Include:
     - 'lib/**/*.rb'
     - 'test/**/*.rb'
@@ -24,69 +25,10 @@ AllCops:
     - '**/pkg/**/*'
     - '**/vendor/**/*'
 
+
 # Disabled Cops
 Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/StringConcatenation:
   Enabled: false
-
-# New cops, enabled. We aren't using the 'NewCops' setting because then rubocop
-# updates can break our CI.
-
-Lint/DuplicateBranch: # (new in 1.3)
-  Enabled: true
-Lint/DuplicateRegexpCharacterClassElement: # (new in 1.1)
-  Enabled: true
-Lint/EmptyBlock: # (new in 1.1)
-  Enabled: true
-Lint/EmptyClass: # (new in 1.3)
-  Enabled: true
-Lint/NoReturnInBeginEndBlocks: # (new in 1.2)
-  Enabled: true
-Lint/ToEnumArguments: # (new in 1.1)
-  Enabled: true
-Lint/UnexpectedBlockArity: # (new in 1.5)
-  Enabled: true
-Lint/UnmodifiedReduceAccumulator: # (new in 1.1)
-  Enabled: true
-Style/ArgumentsForwarding: # (new in 1.1)
-  Enabled: true
-Style/CollectionCompact: # (new in 1.2)
-  Enabled: true
-Style/DocumentDynamicEvalDefinition: # (new in 1.1)
-  Enabled: true
-Style/NegatedIfElseCondition: # (new in 1.2)
-  Enabled: true
-Style/NilLambda: # (new in 1.3)
-  Enabled: true
-Style/RedundantArgument: # (new in 1.4)
-  Enabled: true
-Style/SwapValues: # (new in 1.1)
-  Enabled: true
-Minitest/AssertInDelta: # (new in 0.10)
-  Enabled: true
-Minitest/AssertionInLifecycleHook: # (new in 0.10)
-  Enabled: true
-Minitest/AssertKindOf: # (new in 0.10)
-  Enabled: true
-Minitest/AssertOutput: # (new in 0.10)
-  Enabled: true
-Minitest/AssertPathExists: # (new in 0.10)
-  Enabled: true
-Minitest/AssertSilent: # (new in 0.10)
-  Enabled: true
-Minitest/LiteralAsActualArgument: # (new in 0.10)
-  Enabled: true
-Minitest/MultipleAssertions: # (new in 0.10)
-  Enabled: true
-Minitest/RefuteInDelta: # (new in 0.10)
-  Enabled: true
-Minitest/RefuteKindOf: # (new in 0.10)
-  Enabled: true
-Minitest/RefutePathExists: # (new in 0.10)
-  Enabled: true
-Minitest/TestMethodName: # (new in 0.10)
-  Enabled: true
-Minitest/UnspecifiedException: # (new in 0.10)
-  Enabled: true
