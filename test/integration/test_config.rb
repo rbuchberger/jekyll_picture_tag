@@ -82,7 +82,7 @@ class TestIntegrationConfig < Minitest::Test
   def test_missing_source_nocontinue
     File.unstub(:exist?)
 
-    assert_raises do
+    assert_raises ArgumentError do
       tested 'asdf.jpg'
     end
   end

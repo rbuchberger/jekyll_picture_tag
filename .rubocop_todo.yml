@@ -9,8 +9,3 @@
 # Offense count: 2
 Minitest/MultipleAssertions:
   Max: 5
-
-# Offense count: 1
-Minitest/UnspecifiedException:
-  Exclude:
-    - 'test/integration/test_config.rb'
