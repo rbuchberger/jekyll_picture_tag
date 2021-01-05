@@ -11,3 +11,6 @@ Metrics/ModuleLength:
 
 Metrics/AbcSize:
   Enabled: false
+
+Minitest/TestMethodName:
+  Enabled: false

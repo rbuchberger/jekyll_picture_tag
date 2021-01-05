@@ -10,18 +10,6 @@
 Minitest/MultipleAssertions:
   Max: 5
 
-# Offense count: 10
-# Cop supports --auto-correct.
-Minitest/TestMethodName:
-  Exclude:
-    - 'test/unit/instructions/test_config.rb'
-    - 'test/unit/instructions/test_preset.rb'
-    - 'test/unit/instructions/test_tag_parser.rb'
-    - 'test/unit/test_generated_image.rb'
-    - 'test/unit/test_generated_image_actual.rb'
-    - 'test/unit/test_generated_image_missing.rb'
-    - 'test/unit/test_img_uri.rb'
-
 # Offense count: 1
 Minitest/UnspecifiedException:
   Exclude:
