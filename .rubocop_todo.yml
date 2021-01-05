@@ -6,13 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Minitest/AssertEmpty:
-  Exclude:
-    - 'test/integration/test_config.rb'
-    - 'test/integration/test_params.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 Minitest/AssertIncludes:

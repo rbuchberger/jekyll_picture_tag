@@ -16,7 +16,7 @@ class TestIntegrationParams < Minitest::Test
   # Basic functionality test, default settings
   def test_defaults
     output = tested
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
 
@@ -108,7 +108,7 @@ class TestIntegrationParams < Minitest::Test
   # Test an image with a space in it
   def test_escaped_whitespace
     output = tested('rms\ with\ space.jpg')
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'
@@ -123,7 +123,7 @@ class TestIntegrationParams < Minitest::Test
 
   def test_quoted_whitespace
     output = tested('"rms with space.jpg"')
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'

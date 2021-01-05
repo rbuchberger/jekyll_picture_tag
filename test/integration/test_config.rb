@@ -36,7 +36,7 @@ class TestIntegrationConfig < Minitest::Test
     @pconfig['suppress_warnings'] = true
     tested 'too_large rms.jpg'
 
-    assert @stderr.empty?
+    assert_empty @stderr
   end
 
   # continue on missing
