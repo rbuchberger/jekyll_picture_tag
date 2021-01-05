@@ -16,13 +16,13 @@ class TestIntegrationParams < Minitest::Test
   # Basic functionality test, default settings
   def test_defaults
     output = tested
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
 
     assert_equal rms_url, img['src']
     assert_equal std_rms_ss, img['srcset']
-    assert File.exist? rms_filename
+    assert_path_exists(rms_filename)
   end
 
   # Make sure it doesn't overwrite existing files
@@ -52,8 +52,8 @@ class TestIntegrationParams < Minitest::Test
     assert_equal 'parent', pic['class']
     assert_equal '11', pic['data-awesomeness']
     assert_equal 'Alternate Text', img['alt']
-    assert img['class'].include? 'implicit'
-    assert img['class'].include? 'img'
+    assert_includes img['class'], 'implicit'
+    assert_includes img['class'], 'img'
     assert(sources.all? { |s| s['class'] == 'source' })
   end
 
@@ -78,7 +78,7 @@ class TestIntegrationParams < Minitest::Test
     correct = '/generated/rms-25-3ef76e91f.jpg 25w, '\
               '/generated/rms-45-3ef76e91f.jpg 45w'
 
-    assert @stderr.include? 'rms.jpg'
+    assert_includes @stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['srcset']
   end
 
@@ -94,7 +94,7 @@ class TestIntegrationParams < Minitest::Test
     tested 'too_large rms.jpg'
 
     tested 'too_large spx.jpg'
-    assert @stderr.include? 'spx.jpg'
+    assert_includes @stderr, 'spx.jpg'
   end
 
   def test_link
@@ -102,13 +102,13 @@ class TestIntegrationParams < Minitest::Test
 
     refute output.errors.any?
     assert_equal 'example.com', output.at_css('a')['href']
-    assert output.at_css('a').children.include? output.at_css('img')
+    assert_includes output.at_css('a').children, output.at_css('img')
   end
 
   # Test an image with a space in it
   def test_escaped_whitespace
     output = tested('rms\ with\ space.jpg')
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'
@@ -118,12 +118,12 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
+    assert_path_exists('/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg')
   end
 
   def test_quoted_whitespace
     output = tested('"rms with space.jpg"')
-    assert output.errors.empty?
+    assert_empty output.errors
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9ffc043fa.jpg'
@@ -133,7 +133,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert File.exist? '/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg'
+    assert_path_exists('/tmp/jpt/generated/rms with space-100-9ffc043fa.jpg')
   end
 
   def test_empty_params

@@ -68,20 +68,20 @@ class PresetTest < Minitest::Test
   end
 
   def test_quality_calculated
-    assert_equal 50, tested('calculated_quality').quality(nil, 25)
-    assert_equal 50, tested('calculated_quality').quality(nil, 50)
-    assert_equal 75, tested('calculated_quality').quality(nil, 75)
-    assert_equal 100, tested('calculated_quality').quality(nil, 100)
-    assert_equal 100, tested('calculated_quality').quality(nil, 150)
+    results = [25, 50, 75, 100, 150].map do |value|
+      tested('calculated_quality').quality(nil, value)
+    end
+
+    assert_equal [50, 50, 75, 100, 100], results
   end
 
   # Order should not matter.
   def test_quality_calculated_reverse
-    assert_equal 50, tested('calculated_quality_reverse').quality(nil, 25)
-    assert_equal 50, tested('calculated_quality_reverse').quality(nil, 50)
-    assert_equal 75, tested('calculated_quality_reverse').quality(nil, 75)
-    assert_equal 100, tested('calculated_quality_reverse').quality(nil, 100)
-    assert_equal 100, tested('calculated_quality_reverse').quality(nil, 150)
+    results = [25, 50, 75, 100, 150].map do |value|
+      tested('calculated_quality_reverse').quality(nil, value)
+    end
+
+    assert_equal [50, 50, 75, 100, 100], results
   end
 
   def test_missing_preset

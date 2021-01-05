@@ -65,11 +65,11 @@ class GeneratedImageActualTest < MiniTest::Test
       tested.generate
     end
 
-    assert File.exist? tested.absolute_filename
+    assert_path_exists(tested.absolute_filename)
 
     width = MiniMagick::Image.open(tested.absolute_filename).width
 
-    assert_equal width, 50
+    assert_equal(50, width)
   end
 
   def test_dest_dir_missing
