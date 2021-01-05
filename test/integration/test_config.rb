@@ -151,7 +151,7 @@ class TestIntegrationConfig < Minitest::Test
   def test_disabled
     @pconfig['disabled'] = ['development']
 
-    assert_equal tested_base, ''
+    assert_equal('', tested_base)
   end
 
   def test_fast_build

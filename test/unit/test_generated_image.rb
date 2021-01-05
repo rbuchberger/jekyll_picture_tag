@@ -55,11 +55,11 @@ class GeneratedImageTest < Minitest::Test
   end
 
   def test_source_width
-    assert_equal tested.source_width, 100
+    assert_equal(100, tested.source_width)
   end
 
   def test_source_height
-    assert_equal tested.source_height, 80
+    assert_equal(80, tested.source_height)
   end
 
   def test_uri

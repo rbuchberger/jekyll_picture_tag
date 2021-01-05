@@ -6,16 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 7
-# Cop supports --auto-correct.
-Minitest/LiteralAsActualArgument:
-  Exclude:
-    - 'test/integration/test_config.rb'
-    - 'test/unit/cache/source.rb'
-    - 'test/unit/test_generated_image.rb'
-    - 'test/unit/test_generated_image_actual.rb'
-    - 'test/unit/test_utils.rb'
-
 # Offense count: 2
 Minitest/MultipleAssertions:
   Max: 5
