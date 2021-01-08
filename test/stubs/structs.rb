@@ -1,9 +1,13 @@
 module Stubs
   module Structs
-    # Internal classes
+    # Jekyll Picture Tag classes:
 
     ConfigStub =
       Struct.new(:source_dir)
+
+    GeneratedImageStub =
+      Struct.new(:name, :width, :uri, :format, :exists?, :generate, keyword_init:
+                 true)
 
     # Rubocop doesn't want us to override to_s in a struct. Since it's for a test
     # stub, it's fine.
@@ -16,11 +20,8 @@ module Stubs
       Struct.new(:base_name, :name, :missing, :digest, :ext, :width, :shortname,
                  :media_preset, :digest_guess, keyword_init: true)
 
-    GeneratedImageStub =
-      Struct.new(:name, :width, :uri, :format, :exists?, :generate, keyword_init:
-                 true)
+    # Jekyll classes:
 
-    # External classes
     SiteStub =
       Struct.new(:config, :data, :source, :dest, :cache_dir)
 
@@ -30,8 +31,12 @@ module Stubs
     TokenStub =
       Struct.new(:line_number, :locale)
 
+    # Objective Elements classes:
+
     SingleTagStub =
       Struct.new(:name, :attributes)
+
+    # MiniMagick classes:
 
     ImageStub =
       Struct.new(:width, :height)
