@@ -1,5 +1,5 @@
 require 'test_helper'
-require_relative './test_helper_output'
+require_relative './output_format_test_helper'
 
 class TestPicture < Minitest::Test
   include PictureTag
