@@ -2,9 +2,6 @@ require 'test_helper'
 class PresetTest < Minitest::Test
   include PictureTag
   include TestHelper
-  include JekyllStub
-  # Honestly, this one is more a test of my stubs than a test of the logic.
-  # The preset stubs can be found in test/stubs/jekyll.rb
 
   def setup
     build_defaults

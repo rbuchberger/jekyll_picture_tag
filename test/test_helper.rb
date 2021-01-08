@@ -11,45 +11,12 @@ require 'mocha/minitest'
 require 'pry'
 require 'nokogiri'
 require 'jekyll_picture_tag'
-require_relative 'stubs/jekyll'
+require_relative 'stubs'
 
 # This module gives us a basic setup to run our tests.
 module TestHelper
   TEST_DIR = __dir__
-  include JekyllStub
-
-  ImageStruct = Struct.new(:width, :height)
-  TokenStub = Struct.new(:line_number, :locale)
-  ConfigStub = Struct.new(:source_dir)
-  SourceImageStub = Struct.new(
-    :base_name,
-    :name,
-    :missing,
-    :digest,
-    :ext,
-    :width,
-    :shortname,
-    :media_preset,
-    :digest_guess,
-    keyword_init: true
-  )
-
-  GeneratedImageStub = Struct.new(
-    :name, :width, :uri, :format, :exists?, :generate, keyword_init: true
-  )
-
-  SingleTagStub = Struct.new(
-    :name, :attributes
-  )
-
-  SrcsetStub = Struct.new(
-    # Rubocop complains about overriding the to_s method, which would
-    # ordinaraily cause problems but as we're using it here to stub an existing
-    # to_s method it's fine.
-    # rubocop:disable Lint/StructNewOverride
-    :sizes, :to_s, :media, :mime_type, :media_attribute
-    # rubocop:enable Lint/StructNewOverride
-  )
+  include Stubs
 
   def nomarkdown_wrapped?(string)
     # rubocop:disable Style/RegexpLiteral

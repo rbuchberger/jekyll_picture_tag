@@ -9,7 +9,7 @@ class TestSourceImage < Minitest::Test
     PictureTag.stubs(:fast_build?).returns(false)
     Cache::Source.stubs(:new).returns(cache_stub)
     File.stubs(:read)
-    MiniMagick::Image.stubs(:open).returns(ImageStruct.new(50, 60))
+    MiniMagick::Image.stubs(:open).returns(ImageStub.new(50, 60))
     Digest::MD5.stubs(:hexdigest)
                .returns('abc123')
     File.stubs(:exist?).returns(true)

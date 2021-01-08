@@ -2,7 +2,6 @@ require 'test_helper'
 class ConfigTest < Minitest::Test
   include PictureTag
   include TestHelper
-  include JekyllStub
 
   def setup
     build_defaults
