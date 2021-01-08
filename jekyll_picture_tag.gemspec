@@ -34,12 +34,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'nokogiri', '~> 1.10'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake', '~> 12.3'
-  spec.add_development_dependency 'rubocop', '~> 1.0'
-  spec.add_development_dependency 'rubocop-minitest', '~> 0.10'
-  spec.add_development_dependency 'rubocop-performance', '~> 1.9'
-  spec.add_development_dependency 'rubocop-rake', '~> 0.5'
+  spec.add_development_dependency 'rubocop', '~> 1.7.0'
+  spec.add_development_dependency 'rubocop-minitest', '~> 0.10.0'
+  spec.add_development_dependency 'rubocop-performance', '~> 1.9.0'
+  spec.add_development_dependency 'rubocop-rake', '~> 0.5.0'
 
-  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov', '~> 0.20.0'
   spec.add_development_dependency 'solargraph'
 
   spec.add_dependency 'addressable', '~> 2.6'

@@ -9,3 +9,5 @@ picture:
   ignore_missing_images: false
   disabled: false
   fast_build: false
+  ignore_baseurl: false
+  baseurl_key: 'baseurl'

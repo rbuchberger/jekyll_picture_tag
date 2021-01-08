@@ -1,5 +1,5 @@
 ---
-sort: 7
+sort: 5
 ---
 
 # Disable Jekyll Picture Tag

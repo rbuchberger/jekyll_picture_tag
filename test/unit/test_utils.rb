@@ -57,7 +57,7 @@ class TestUtils < Minitest::Test
     PictureTag.stubs(:formats).returns([1, 2, 3, 4])
     PictureTag.stubs(:source_images).returns(a: 'a', b: 'b')
 
-    assert_equal Utils.count_srcsets, 8
+    assert_equal(8, Utils.count_srcsets)
   end
 
   # test_markdown_page?
@@ -75,7 +75,7 @@ class TestUtils < Minitest::Test
   end
 
   def test_titleize
-    assert_equal Utils.titleize('snake_case'), 'SnakeCase'
+    assert_equal('SnakeCase', Utils.titleize('snake_case'))
   end
 
   # Had to bust out my old TI-86 to work this one out!
