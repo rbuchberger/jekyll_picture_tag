@@ -1,6 +1,13 @@
 ---
 ---
 # Release History
+* 1.14.0 January 10, 2021
+  * Gracefully handle empty tag arguments.
+  * Re-add metadata stripping. I removed it inadvertently when refactoring; now
+    there's a test and a setting to turn it off.
+  * Respect Jekyll's `--disable-disk-cache` argument.
+  * Add baseurl configuration, allowing increased plugin support (such as I18n via `jekyll-multiple-languages-plugin`)
+  * Tooling & test suite maintenance and improvements.
 * 1.13.0 November 23, 2020
   * Add image quality interpolation; allows for variable image quality based on image size.
   * Bugfix: Perform format, resize, and quality changes simultaneously rather than individually.
@@ -49,12 +56,12 @@
   * link_source will now target the base source image, rather than finding the
     biggest one.
   * Remove fastimage dependency, add addressable dependency.
-  * Moderately significant refactoring and code cleanup 
+  * Moderately significant refactoring and code cleanup
   * Decent set of tests added
 * 1.6.0 Jul  2, 2019:
   * Missing Preset warning respects `data_dir` setting
   * Add `continue_on_missing` option
-* 1.5.0 Jun 26, 2019: 
+* 1.5.0 Jun 26, 2019:
   * better `{::nomarkdown}` necessity detection
   * allow user to override `{::nomarkdown}` autodetection
 * 1.4.0 Jun 26, 2019:
@@ -77,7 +84,7 @@
   * auto-orient images before stripping metadata
 * 1.0.2 Jan 18, 2019: Fix ruby version specification
 * 1.0.1 Jan 13, 2019: Added ruby version checking
-* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See the 
+* **1.0.0** Nov 27, 2018: Rewrite from the ground up. See the
 * [migration guide]({{ site.baseurl }}/users/notes/migration).
 * 0.2.2 Aug  2, 2013: Bugfixes
 * 0.2.1 Jul 17, 2013: Refactor again, add Liquid parsing.
