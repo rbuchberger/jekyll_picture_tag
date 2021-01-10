@@ -26,7 +26,7 @@ class GeneratedImageActualTest < MiniTest::Test
   # Actual test image source file
   def source_image(basename, ext)
     @source_image ||= SourceImageStub.new(base_name: basename,
-                                          name: File.join(TEST_DIR, "#{basename}.#{ext}"),
+                                          name: File.join(TEST_DIR, 'image_files', "#{basename}.#{ext}"),
                                           missing: false,
                                           digest: 'r' * 6,
                                           ext: ext)

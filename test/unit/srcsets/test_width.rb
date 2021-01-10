@@ -1,4 +1,4 @@
-require_relative 'test_helper_srcsets'
+require_relative 'srcsets_test_helper'
 
 class TestSrcsetWidth < Minitest::Test
   include TestHelperSrcset
