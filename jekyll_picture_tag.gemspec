@@ -46,6 +46,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mime-types', '~> 3.0'
   spec.add_dependency 'mini_magick', '~> 4.0'
   spec.add_dependency 'objective_elements', '~> 1.1'
+  spec.add_dependency 'ruby-vips', '~> 2.0.17'
 
   spec.add_runtime_dependency 'jekyll', '< 5'
 end
