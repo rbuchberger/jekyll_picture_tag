@@ -5,7 +5,7 @@ module PictureTag
   class SourceImage
     attr_reader :shortname, :missing, :media_preset
 
-    include MiniMagick
+    # include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)
       # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
@@ -82,7 +82,7 @@ module PictureTag
     end
 
     def image
-      @image ||= Image.open(name)
+      @image ||= Vips::Image.new_from_file(name)
     end
 
     def source_digest

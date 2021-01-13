@@ -5,7 +5,7 @@ module PictureTag
   class GeneratedImage
     attr_reader :width, :format
 
-    include MiniMagick
+    # include MiniMagick
 
     def initialize(source_file:, width:, format:, crop: nil, gravity: '')
       @source = source_file
