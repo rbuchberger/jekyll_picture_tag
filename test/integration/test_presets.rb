@@ -263,7 +263,7 @@ class TestIntegrationPresets < Minitest::Test
       end
     end
 
-    files = Dir.entries(File.join(temp_dir, 'generated'))
+    files = Dir.entries(temp_dir('generated'))
 
     formats.each do |format|
       assert_equal(
@@ -280,7 +280,7 @@ class TestIntegrationPresets < Minitest::Test
 
     tested 'quality rms.jpg'
 
-    i = Image.new_from_file(File.join(temp_dir, 'generated/rms-100-057d429d6.jpg'))
+    i = Image.new_from_file(temp_dir('generated/rms-100-057d429d6.jpg'))
 
     assert_equal 30, i.data['quality'].to_i
   end
@@ -291,7 +291,7 @@ class TestIntegrationPresets < Minitest::Test
 
     tested 'format_quality rms.jpg'
 
-    i = Image.new_from_file(File.join(temp_dir, 'generated/rms-100-21174d9bb.jpg'))
+    i = Image.new_from_file(temp_dir('generated/rms-100-21174d9bb.jpg'))
     assert_equal 45, i.data['quality'].to_i
   end
 
@@ -302,10 +302,10 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      Image.new_from_file(File.join(temp_dir, 'generated/rms-100-3c1fa27c4.jpg')).size
+      Image.new_from_file(temp_dir('generated/rms-100-3c1fa27c4.jpg')).size
 
     spx_dimensions =
-      Image.new_from_file(File.join(temp_dir, 'generated/spx-100-8d935ea90.jpg')).size
+      Image.new_from_file(temp_dir('generated/spx-100-8d935ea90.jpg')).size
 
     assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
     assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03
