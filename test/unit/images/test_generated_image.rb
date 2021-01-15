@@ -5,15 +5,15 @@ class GeneratedImageTest < Minitest::Test
   include TestHelper
 
   def setup
-    @destfile = '/tmp/jpt/img-100-aaaaaa.webp'
-    PictureTag.stubs(:dest_dir).returns('/tmp/jpt')
+    @destfile = temp_dir 'img-100-aaaaaa.webp'
+    PictureTag.stubs(:dest_dir).returns(temp_dir)
     PictureTag.stubs(:fast_build?).returns(false)
     PictureTag.stubs(:quality).returns(75)
     File.stubs(:exist?).with(@destfile).returns true
     Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
 
     @source_stub = SourceImageStub.new(base_name: 'img',
-                                       name: '/tmp/jpt/img.jpg',
+                                       name: temp_dir('img.jpg'),
                                        missing: false,
                                        digest: 'a' * 6,
                                        ext: 'jpg',
@@ -37,7 +37,7 @@ class GeneratedImageTest < Minitest::Test
 
   # absolute filename
   def test_absolute_filename
-    assert_equal '/tmp/jpt/img-100-e391bf5cd.webp',
+    assert_equal temp_dir('img-100-e391bf5cd.webp'),
                  tested.absolute_filename
   end
 

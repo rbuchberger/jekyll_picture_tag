@@ -39,4 +39,8 @@ module TestHelper
   def aspect_float(width, height)
     width.to_f / height
   end
+
+  def temp_dir(child_path = '')
+    File.join '/tmp/jpt', child_path
+  end
 end

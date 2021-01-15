@@ -20,7 +20,7 @@ class TestCache < Minitest::Test
   end
 
   def teardown
-    FileUtils.rm_rf '/tmp/jpt/'
+    FileUtils.rm_rf temp_dir
   end
 
   def test_initialize_empty
@@ -43,7 +43,7 @@ class TestCache < Minitest::Test
     tested[:width] = 100
     tested.write
 
-    assert_path_exists('/tmp/jpt/source/img.jpg.json')
+    assert_path_exists(temp_dir('source/img.jpg.json'))
   end
 
   def test_retrieve_data
@@ -60,7 +60,7 @@ class TestCache < Minitest::Test
     tested[:height] = 100
     tested.write
 
-    assert_path_exists('/tmp/jpt/source/somedir/img.jpg.json')
+    assert_path_exists(temp_dir('source/somedir/img.jpg.json'))
   end
 
   # Jekyll has a flag to disable caching; we must respect it.
@@ -70,6 +70,6 @@ class TestCache < Minitest::Test
     tested[:width] = 100
     tested.write
 
-    refute_path_exists('/tmp/jpt/source/img.jpg.json')
+    refute_path_exists(temp_dir('source/img.jpg.json'))
   end
 end

@@ -7,7 +7,7 @@ module Stubs
       @pdata = picture_data_stub
 
       @jekyll_env = 'development'
-      @site_dest = '/tmp/jpt'
+      @site_dest = temp_dir
       @jconfig = { 'picture' => @pconfig,
                    'keep_files' => [],
                    'destination' => @site_dest,
@@ -15,7 +15,7 @@ module Stubs
       @data = { 'picture' => @pdata }
       @page = { 'ext' => 'html' }
       @site_source = File.join TestHelper::TEST_DIR, 'image_files'
-      @cache_dir = '/tmp/jpt/cache'
+      @cache_dir = temp_dir('cache')
     end
 
     def picture_data_stub

@@ -26,7 +26,7 @@ module TestIntegrationHelper
   end
 
   def rms_filename(width: 100, format: 'jpg')
-    '/tmp/jpt' + rms_url(width: width, format: format)
+    File.join temp_dir, rms_url(width: width, format: format)
   end
 
   def rms_url(width: 100, format: 'jpg')
@@ -38,7 +38,7 @@ module TestIntegrationHelper
   end
 
   def spx_filename(width: 100, format: 'jpg', crop: '')
-    '/tmp/jpt' + spx_url(width: width, format: format, crop: crop)
+    File.join temp_dir, spx_url(width: width, format: format, crop: crop)
   end
 
   def std_spx_ss
@@ -68,6 +68,6 @@ module TestIntegrationHelper
   end
 
   def cleanup_files
-    FileUtils.rm_rf('/tmp/jpt/')
+    FileUtils.rm_rf(temp_dir)
   end
 end
