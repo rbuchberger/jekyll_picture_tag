@@ -36,7 +36,7 @@ module Stubs
     SingleTagStub =
       Struct.new(:name, :attributes)
 
-    # MiniMagick classes:
+    # Image handling backend:
 
     ImageStub =
       Struct.new(:width, :height)

@@ -67,7 +67,7 @@ class GeneratedImageActualTest < MiniTest::Test
 
     assert_path_exists(tested.absolute_filename)
 
-    width = MiniMagick::Image.open(tested.absolute_filename).width
+    width = Vips::Image.new_from_file(tested.absolute_filename).width
 
     assert_equal(50, width)
   end
@@ -91,11 +91,23 @@ class GeneratedImageActualTest < MiniTest::Test
     file = tested('pestka')
     file.generate
 
-    exif_data = MiniMagick::Image.open(file.absolute_filename)
-                                 .data['properties']
-                                 .keys
-                                 .select { |key| key =~ /^exif:/ }
+    exif_data = Vips::Image.new_from_file(file.absolute_filename)
+                           .get_fields
+                           .select { |key| key =~ /^exif:/ }
 
     assert_empty exif_data
+  end
+
+  def test_no_strip_metadata
+    PictureTag.preset['strip_metadata' => false]
+
+    file = tested('pestka')
+    file.generate
+
+    exif_data = Vips::Image.new_from_file(file.absolute_filename)
+                           .get_fields
+                           .select { |key| key =~ /^exif:/ }
+
+    refute_empty exif_data
   end
 end

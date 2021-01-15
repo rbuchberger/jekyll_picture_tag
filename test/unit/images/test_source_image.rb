@@ -9,7 +9,7 @@ class TestSourceImage < Minitest::Test
     PictureTag.stubs(:fast_build?).returns(false)
     Cache::Source.stubs(:new).returns(cache_stub)
     File.stubs(:read)
-    MiniMagick::Image.stubs(:open).returns(ImageStub.new(50, 60))
+    Vips::Image.stubs(:new_from_file).returns(ImageStub.new(50, 60))
     Digest::MD5.stubs(:hexdigest)
                .returns('abc123')
     File.stubs(:exist?).returns(true)
@@ -63,8 +63,8 @@ class TestSourceImage < Minitest::Test
     image_stub = Object.new
     image_stub.stubs(:width).returns(88)
 
-    MiniMagick::Image
-      .stubs(:open).with('/home/loser/img.jpg').returns(image_stub)
+    Vips::Image
+      .stubs(:new_from_file).with('/home/loser/img.jpg').returns(image_stub)
 
     assert_equal 88, tested.width
   end
@@ -73,8 +73,8 @@ class TestSourceImage < Minitest::Test
     image_stub = Object.new
     image_stub.stubs(:height).returns(100)
 
-    MiniMagick::Image
-      .stubs(:open).with('/home/loser/img.jpg').returns(image_stub)
+    Vips::Image
+      .stubs(:new_from_file).with('/home/loser/img.jpg').returns(image_stub)
 
     assert_equal 100, tested.height
   end

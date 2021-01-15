@@ -1,11 +1,11 @@
 require_relative './test_integration_helper'
-require 'mini_magick'
+require 'vips'
 
 # This class focuses on testing various output formats and their configurations.
 # The preset names are defined in test/stubs/jekyll.rb
 class TestIntegrationPresets < Minitest::Test
   include TestIntegrationHelper
-  include MiniMagick
+  include Vips
 
   def setup
     base_stubs
@@ -270,7 +270,8 @@ class TestIntegrationPresets < Minitest::Test
   def test_quality_base
     tested 'quality rms.jpg'
 
-    i = Image.open('/tmp/jpt/generated/rms-100-057d429d6.jpg')
+    i = Image.new_from_file('/tmp/jpt/generated/rms-100-057d429d6.jpg')
+
     assert_equal 30, i.data['quality'].to_i
   end
 
@@ -278,7 +279,7 @@ class TestIntegrationPresets < Minitest::Test
   def test_format_quality
     tested 'format_quality rms.jpg'
 
-    i = Image.open('/tmp/jpt/generated/rms-100-21174d9bb.jpg')
+    i = Image.new_from_file('/tmp/jpt/generated/rms-100-21174d9bb.jpg')
     assert_equal 45, i.data['quality'].to_i
   end
 
@@ -288,10 +289,10 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').dimensions
+      Image.new_from_file('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').size
 
     spx_dimensions =
-      MiniMagick::Image.open('/tmp/jpt/generated/spx-100-8d935ea90.jpg').dimensions
+      Image.new_from_file('/tmp/jpt/generated/spx-100-8d935ea90.jpg').size
 
     assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
     assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03

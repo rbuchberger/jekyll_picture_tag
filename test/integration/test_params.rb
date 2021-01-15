@@ -30,7 +30,7 @@ class TestIntegrationParams < Minitest::Test
     FileUtils.mkdir_p '/tmp/jpt/generated'
     @widths.each { |w| FileUtils.touch rms_filename(width: w) }
 
-    MiniMagick::Image.any_instance.expects(:write).never
+    Vips::Image.any_instance.expects(:write_to_file).never
 
     tested
   end
@@ -67,7 +67,7 @@ class TestIntegrationParams < Minitest::Test
     assert_equal correct, output.at_css('img')['srcset']
 
     generated_dimensions =
-      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-8d4abac33.jpg').dimensions
+      Vips::Image.new_from_file('/tmp/jpt/generated/rms-100-8d4abac33.jpg').size
 
     assert_in_delta aspect_float(10, 1), aspect_float(*generated_dimensions), 0.03
   end
