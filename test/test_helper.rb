@@ -40,7 +40,7 @@ module TestHelper
     width.to_f / height
   end
 
-  def temp_dir(child_path = '')
-    File.join '/tmp/jpt', child_path
+  def temp_dir(*descendents)
+    File.join '/tmp/jpt', *descendents
   end
 end
