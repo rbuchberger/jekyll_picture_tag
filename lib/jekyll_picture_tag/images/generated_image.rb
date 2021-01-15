@@ -1,11 +1,11 @@
-require 'mini_magick'
+require 'ruby-vips'
 
 module PictureTag
   # Represents a generated image file.
   class GeneratedImage
     attr_reader :width, :format
 
-    include MiniMagick
+    # include MiniMagick
 
     def initialize(source_file:, width:, format:, crop: nil, gravity: '')
       @source = source_file
@@ -91,26 +91,29 @@ module PictureTag
     end
 
     def image_base
-      @image_base ||= Image.open(@source.name).combine_options do |i|
-        if PictureTag.preset['strip_metadata']
-          i.auto_orient
-          i.strip
-        end
-
-        if @crop
-          i.gravity @gravity
-          i.crop @crop
-        end
-      end
+      @image_base = Vips::Image.new_from_file @source.name
     end
 
     def generate_image
       puts 'Generating new image file: ' + name
 
-      image.format(@format, 0, { resize: "#{@width}x", quality: quality })
       FileUtils.mkdir_p(File.dirname(absolute_filename))
+      thumb_init_opts = {}
 
-      image.write absolute_filename
+      if @crop
+        thumb_init_opts[:crop] = :attention # from Vips::Interesting
+      end
+
+      thumb = Vips::Image.thumbnail @source.name, @width, thumb_init_opts
+
+      thumb_output_opts = {}
+
+      if PictureTag.preset['strip_metadata']
+        thumb.autorot
+        thumb_output_opts[:strip] = true
+      end
+
+      thumb.write_to_file absolute_filename, thumb_output_opts
 
       FileUtils.chmod(0o644, absolute_filename)
     end
