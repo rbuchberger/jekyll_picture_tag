@@ -1,28 +1,24 @@
 require 'test_helper'
 
 # These tests involve actual image files. That goes a bit beyond a basic unit
-# test, but I believe it makes these tests far more valuable, and it's actually
-# easier to use real images than to try and stub everything you need to simulate
-# them. Since they're tiny, it doesn't add noticable runtime either.
+# test, it's actually easier to use real images than to try and stub everything
+# you need to simulate them. Since they're tiny, they're fast, too.
 class GeneratedImageActualTest < MiniTest::Test
   include PictureTag
   include TestHelper
 
+  # Lifecycle
+
   def setup
-    GeneratedImage.any_instance.stubs(:puts)
     PictureTag.stubs(config)
+    GeneratedImage.any_instance.stubs(:puts)
   end
 
-  def config
-    {
-      dest_dir: temp_dir,
-      quality: 75,
-      fast_build?: false,
-      gravity: 'center',
-      site: site_stub,
-      preset: { 'strip_metadata' => true }
-    }
+  def teardown
+    FileUtils.rm_r temp_dir if Dir.exist? temp_dir
   end
+
+  # Helpers
 
   def tested(basename = 'rms', ext = 'jpg')
     @tested ||= GeneratedImage.new(
@@ -30,17 +26,25 @@ class GeneratedImageActualTest < MiniTest::Test
     )
   end
 
-  def teardown
-    FileUtils.rm_r temp_dir if Dir.exist? temp_dir
+  def config
+    {
+      site: site_stub,
+      dest_dir: temp_dir,
+      quality: 75,
+      fast_build?: false,
+      gravity: 'center',
+      preset: { 'strip_metadata' => true }
+    }
   end
 
   # Actual test image source file
   def source_image(basename, ext)
-    @source_image ||= SourceImageStub.new(base_name: basename,
-                                          name: File.join(TEST_DIR, 'image_files', "#{basename}.#{ext}"),
-                                          missing: false,
-                                          digest: 'r' * 6,
-                                          ext: ext)
+    SourceImageStub.new(base_name: basename, name: source_name(basename, ext),
+                        missing: false, digest: 'r' * 6, ext: ext)
+  end
+
+  def source_name(basename, ext)
+    File.join(TEST_DIR, 'image_files', "#{basename}.#{ext}")
   end
 
   def site_stub
@@ -50,25 +54,29 @@ class GeneratedImageActualTest < MiniTest::Test
     stub
   end
 
-  def make_dest_dir
-    FileUtils.mkdir_p(temp_dir)
-  end
+  # Tests
 
   def test_generate_image
-    make_dest_dir
+    tested.generate
 
+    assert_path_exists(tested.absolute_filename)
+  end
+
+  def test_generation_message
     assert_output do
       tested.generate
     end
+  end
 
-    assert_path_exists(tested.absolute_filename)
+  def test_image_resize
+    tested.generate
 
     width = Vips::Image.new_from_file(tested.absolute_filename).width
 
     assert_equal(50, width)
   end
 
-  def test_dest_dir_missing
+  def test_create_dest_dir
     tested.generate
 
     assert Dir.exist? temp_dir
