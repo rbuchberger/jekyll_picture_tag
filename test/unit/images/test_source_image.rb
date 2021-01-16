@@ -5,14 +5,20 @@ class TestSourceImage < Minitest::Test
   include TestHelper
 
   def setup
-    PictureTag.stubs(:source_dir).returns('/home/loser/')
-    PictureTag.stubs(:fast_build?).returns(false)
+    # JPT stubs
+    PictureTag.stubs(config)
     Cache::Source.stubs(:new).returns(cache_stub)
+    # Core stubs
     File.stubs(:read)
-    Vips::Image.stubs(:new_from_file).returns(ImageStub.new(50, 60))
-    Digest::MD5.stubs(:hexdigest)
-               .returns('abc123')
     File.stubs(:exist?).returns(true)
+    Digest::MD5.stubs(:hexdigest).returns('abc123')
+
+    # External library stubs
+    Vips::Image.stubs(:new_from_file).returns(ImageStub.new(50, 60))
+  end
+
+  def config
+    { source_dir: '/home/loser', fast_build?: false }
   end
 
   def cache_stub
