@@ -1,18 +1,15 @@
 require 'test_helper'
 
 # Source cache and generated cache don't differ in functionality, just
-# information format. These unit tests give sufficient coverage for both, as well
-# as the Cache::Base module.
+# information format. These unit tests give sufficient coverage for both,
+# as well as the Cache::Base module.
 class TestCache < Minitest::Test
   include PictureTag
   include TestHelper
 
   def setup
-    PictureTag.stubs(:site).returns(Object.new)
-    PictureTag.site.stubs({
-                            cache_dir: '/tmp/',
-                            config: {}
-                          })
+    PictureTag.stubs(site: Object.new)
+    PictureTag.site.stubs(cache_dir: '/tmp/', config: {})
   end
 
   def tested(name = 'img.jpg')
