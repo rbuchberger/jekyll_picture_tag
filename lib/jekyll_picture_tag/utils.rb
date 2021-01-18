@@ -23,7 +23,7 @@ module PictureTag
     class << self
       # Configure Jekyll to keep our generated files
       def keep_files
-        dest_dir = PictureTag.config['picture']['output']
+        dest_dir = PictureTag.pconfig['output']
 
         # Chop a slash off the end, if it's there. Doesn't work otherwise.
         dest_dir = dest_dir[0..-2] if dest_dir =~ %r{/\z}
@@ -35,7 +35,7 @@ module PictureTag
 
       # Print a warning to the console
       def warning(message)
-        return if PictureTag.config['picture']['suppress_warnings']
+        return if PictureTag.pconfig['suppress_warnings']
 
         warn 'Jekyll Picture Tag Warning: '.yellow + message
       end
