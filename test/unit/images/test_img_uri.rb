@@ -3,29 +3,36 @@ class ImgUriTest < Minitest::Test
   include PictureTag
   include TestHelper
 
-  def setup
-    @pconfig = {
-      'source' => 'source-dir',
-      'output' => 'output-dir',
-      'baseurl_key' => 'baseurl'
-    }
+  # Lifecycle
 
-    @config = {
-      'url' => 'example.com'
-    }
-    PictureTag.stubs(
+  def setup
+    PictureTag.stubs config
+  end
+
+  # Helpers
+
+  def config
+    {
       cdn?: false,
-      pconfig: @pconfig,
-      config: @config
-    )
+      pconfig: {
+        'source' => 'source-dir',
+        'output' => 'output-dir',
+        'baseurl_key' => 'baseurl'
+      },
+      config: {
+        'url' => 'example.com'
+      }
+    }
   end
 
   def tested(param = 'img.jpg', source_image: false)
     ImgURI.new(param, source_image: source_image).to_s
   end
 
+  # Tests
+
   def test_relative
-    @pconfig['relative_url'] = true
+    PictureTag.pconfig['relative_url'] = true
 
     assert_equal '/output-dir/img.jpg', tested
   end
@@ -35,28 +42,28 @@ class ImgUriTest < Minitest::Test
   end
 
   def test_cdn
-    PictureTag.stubs(:cdn?).returns true
-    @pconfig['cdn_url'] = 'some-cdn.net'
+    PictureTag.stubs(cdn?: true)
+    PictureTag.pconfig['cdn_url'] = 'some-cdn.net'
 
     assert_equal 'some-cdn.net/output-dir/img.jpg', tested
   end
 
   def test_baseurl
-    @config['baseurl'] = 'some-baseurl'
+    PictureTag.config['baseurl'] = 'some-baseurl'
 
     assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
   end
 
   def test_ignore_baseurl
-    @config['baseurl'] = 'some-baseurl'
-    @pconfig['ignore_baseurl'] = true
+    PictureTag.config['baseurl'] = 'some-baseurl'
+    PictureTag.pconfig['ignore_baseurl'] = true
 
     assert_equal 'example.com/output-dir/img.jpg', tested
   end
 
   def test_baseurl_key
-    @pconfig['baseurl_key'] = 'foo'
-    @config['foo'] = 'some-baseurl'
+    PictureTag.pconfig['baseurl_key'] = 'foo'
+    PictureTag.config['foo'] = 'some-baseurl'
 
     assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
   end
