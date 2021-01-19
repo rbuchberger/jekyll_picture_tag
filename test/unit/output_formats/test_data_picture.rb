@@ -1,17 +1,18 @@
-require_relative './output_format_test_helper'
+require_relative 'output_format_test_helper'
 
+# Most of this functionality is capured in a normal Picture output; we only
+# focus on the places where they differ.
 class TestDataPicture < Minitest::Test
-  include PictureTag
-  include TestHelper
   include OutputFormatTestHelper
 
   def setup
     base_stubs
-
-    @tested = OutputFormats::DataPicture.new
   end
 
-  # basic picture element
+  def tested
+    @tested ||= OutputFormats::DataPicture.new
+  end
+
   def test_picture
     correct = <<~HEREDOC
       <picture>
@@ -20,12 +21,12 @@ class TestDataPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # multiple of both
-  def test_picture_multiple
-    four_source_setup
+  def test_multiple_formats
+    PictureTag.formats.prepend 'webp'
+    PictureTag.source_images << media_source_stub
 
     correct = <<~HEREDOC
       <picture>
@@ -37,12 +38,12 @@ class TestDataPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
   # pixel ratio srcsets
   def test_picture_pixelratio
-    pixel_ratio_setup
+    PictureTag.preset.merge! pixel_ratio_preset
     stub_pixel_srcset
 
     correct = <<~HEREDOC
@@ -52,7 +53,7 @@ class TestDataPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
   # sizes attr
@@ -66,6 +67,6 @@ class TestDataPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 end

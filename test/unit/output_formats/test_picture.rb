@@ -1,18 +1,22 @@
-require 'test_helper'
-require_relative './output_format_test_helper'
+require_relative 'output_format_test_helper'
 
 class TestPicture < Minitest::Test
-  include PictureTag
-  include TestHelper
   include OutputFormatTestHelper
+
+  # Lifecycle
 
   def setup
     base_stubs
-
-    @tested = OutputFormats::Picture.new
   end
 
-  # basic picture element
+  # Helpers
+
+  def tested
+    @tested ||= OutputFormats::Picture.new
+  end
+
+  # Test cases
+
   def test_picture
     correct = <<~HEREDOC
       <picture>
@@ -21,12 +25,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # one source multiple formats
   def test_multiple_formats
-    two_format_setup
+    PictureTag.formats.prepend 'webp'
 
     correct = <<~HEREDOC
       <picture>
@@ -36,12 +39,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # one format multiple sources
   def test_multiple_images
-    two_image_setup
+    PictureTag.source_images << media_source_stub
 
     correct = <<~HEREDOC
       <picture>
@@ -51,12 +53,12 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # multiple of both
   def test_picture_multiple
-    four_source_setup
+    PictureTag.source_images << media_source_stub
+    PictureTag.formats.prepend 'webp'
 
     correct = <<~HEREDOC
       <picture>
@@ -68,12 +70,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # pixel ratio srcsets
   def test_picture_pixelratio
-    pixel_ratio_setup
+    PictureTag.preset.merge! pixel_ratio_preset
     stub_pixel_srcset
 
     correct = <<~HEREDOC
@@ -83,12 +84,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # picture attrs
   def test_picture_attrs
-    PictureTag.stubs(:html_attributes).returns('picture' => 'class="picture"')
+    PictureTag.html_attributes.merge!('picture' => 'class="picture"')
 
     correct = <<~HEREDOC
       <picture class="picture">
@@ -97,12 +97,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # parent attrs
   def test_parent_attrs
-    PictureTag.stubs(:html_attributes).returns('parent' => 'class="parent"')
+    PictureTag.html_attributes.merge!('parent' => 'class="parent"')
 
     correct = <<~HEREDOC
       <picture class="parent">
@@ -111,12 +110,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # alt text
   def test_alt_text
-    PictureTag.stubs(:html_attributes).returns('alt' => 'alt text')
+    PictureTag.html_attributes.merge!('alt' => 'alt text')
 
     correct = <<~HEREDOC
       <picture>
@@ -125,18 +123,17 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # all element attrs (given)
   def test_multiple_attrs
-    PictureTag.stubs(:html_attributes).returns(
-      'picture' => 'class="picture"',
-      'parent' => 'class="parent"',
-      'source' => 'class="source"',
-      'img' => 'class="img"',
-      'alt' => 'alt text'
-    )
+    PictureTag.html_attributes.merge!({
+                                        'picture' => 'class="picture"',
+                                        'parent' => 'class="parent"',
+                                        'source' => 'class="source"',
+                                        'img' => 'class="img"',
+                                        'alt' => 'alt text'
+                                      })
 
     correct = <<~HEREDOC
       <picture class="picture parent">
@@ -145,10 +142,9 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # sizes attr
   def test_sizes_srcset
     stub_sizes_srcset
 
@@ -159,12 +155,11 @@ class TestPicture < Minitest::Test
       </picture>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # anchor tag wrapper
   def test_anchor
-    PictureTag.stubs(:html_attributes).returns('link' => 'some url')
+    PictureTag.html_attributes.merge!({ 'link' => 'some url' })
 
     correct = <<~HEREDOC
       <a href="some url">
@@ -175,20 +170,20 @@ class TestPicture < Minitest::Test
       </a>
     HEREDOC
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 
-  # nomarkdown
-
   def test_nomarkdown
-    PictureTag.stubs(:nomarkdown? => true,
-                     'html_attributes' => { 'link' => 'some url' })
+    PictureTag.html_attributes.merge!({ 'link' => 'some url' })
+    PictureTag.stubs(nomarkdown?: true)
 
     correct = <<~HEREDOC
-      {::nomarkdown}<a href="some url"><picture><source srcset="ss" type="original"><img src="good_url"></picture></a>{:/nomarkdown}
+      {::nomarkdown}
+      <a href="some url"><picture><source srcset="ss" type="original"><img src="good_url"></picture></a>
+      {:/nomarkdown}
     HEREDOC
     correct.delete!("\n")
 
-    assert_equal correct, @tested.to_s
+    assert_equal correct, tested.to_s
   end
 end
