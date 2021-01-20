@@ -70,7 +70,8 @@ class TestIntegrationParams < Minitest::Test
     generated_dimensions =
       Vips::Image.new_from_file(temp_dir('generated/rms-100-8d4abac33.jpg')).size
 
-    assert_in_delta aspect_float(10, 1), aspect_float(*generated_dimensions), 0.03
+    assert_in_delta aspect_float(10, 1), aspect_float(*generated_dimensions),
+                    0.03
   end
 
   # Make sure that when cropping images, we don't enlarge widths

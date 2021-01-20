@@ -78,14 +78,16 @@ module PictureTag
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-1234abcde.jpg
     #                                                           ^^^^^^^^^
     def id
-      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity, quality].join)[0..8]
+      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity,
+                                     quality].join)[0..8]
     end
 
     def image
       return @image if defined? @image
 
       # Post crop, before resizing and reformatting
-      @source_dimensions = { width: image_base.width, height: image_base.height }
+      @source_dimensions = { width: image_base.width,
+                             height: image_base.height }
 
       @image = image_base
     end
