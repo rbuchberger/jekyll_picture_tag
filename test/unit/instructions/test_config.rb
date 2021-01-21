@@ -4,17 +4,16 @@ class ConfigTest < Minitest::Test
   include TestHelper
 
   def setup
-    site_source = 'jekyll_source'
-    jconfig['destination'] = 'jekyll_dest'
+    config_dot_yml['destination'] = 'jekyll_dest'
     pconfig['source'] = 'jpt_source'
     pconfig['output'] = 'jpt_dest'
+    PictureTag.stubs(context: context, site: site)
   end
 
   def tested
-    PictureTag.stubs(:context).returns(context)
-    PictureTag.stubs(:site).returns(site)
+    Instructions::Configuration.new
+  end
 
-    PictureTag::Instructions::Configuration.new
   end
 
   def test_defaults
