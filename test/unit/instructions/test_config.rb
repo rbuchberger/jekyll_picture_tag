@@ -3,18 +3,27 @@ class ConfigTest < Minitest::Test
   include PictureTag
   include TestHelper
 
+  # Lifecycle
+
   def setup
     config_dot_yml['destination'] = 'jekyll_dest'
     pconfig['source'] = 'jpt_source'
     pconfig['output'] = 'jpt_dest'
+
     PictureTag.stubs(context: context, site: site)
   end
+
+  # Helpers
 
   def tested
     Instructions::Configuration.new
   end
 
+  def site_source
+    'jekyll_source'
   end
+
+  # Test cases
 
   def test_defaults
     assert tested['picture']['relative_url']
@@ -27,7 +36,7 @@ class ConfigTest < Minitest::Test
   end
 
   def test_nomarkdown_off
-    Utils.stubs(:markdown_page?).returns(true)
+    Utils.stubs(markdown_page?: true)
     pconfig['nomarkdown'] = false
 
     refute tested.nomarkdown?
