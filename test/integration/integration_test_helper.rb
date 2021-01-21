@@ -11,10 +11,12 @@ module IntegrationTestHelper
     stub_liquid
   end
 
+  # Parsed by Nokogiri, for easier analysis.
   def tested(params = 'rms.jpg')
     Nokogiri::HTML(tested_base(params))
   end
 
+  # Raw output from the tag.
   def tested_base(params = 'rms.jpg')
     output = ''
     @stdout, @stderr = capture_io do
@@ -43,13 +45,15 @@ module IntegrationTestHelper
   end
 
   def std_spx_ss
-    '/generated/spx-25-3e829c5a4.jpg 25w,' \
-       ' /generated/spx-50-3e829c5a4.jpg 50w, /generated/spx-100-3e829c5a4.jpg 100w'
+    '/generated/spx-25-3e829c5a4.jpg 25w, ' \
+    '/generated/spx-50-3e829c5a4.jpg 50w, ' \
+    '/generated/spx-100-3e829c5a4.jpg 100w'
   end
 
   def std_rms_ss
-    '/generated/rms-25-9ffc043fa.jpg 25w,' \
-      ' /generated/rms-50-9ffc043fa.jpg 50w, /generated/rms-100-9ffc043fa.jpg 100w'
+    '/generated/rms-25-9ffc043fa.jpg 25w, ' \
+    '/generated/rms-50-9ffc043fa.jpg 50w, ' \
+    '/generated/rms-100-9ffc043fa.jpg 100w'
   end
 
   def rms_file_array(widths, formats)
