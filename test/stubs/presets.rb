@@ -5,48 +5,6 @@ module Stubs
       @widths ||= [25, 50, 100]
     end
 
-    def pconfig
-      @pconfig ||= {}
-    end
-
-    def pdata
-      @pdata ||= {
-        'presets' => presets,
-        'media_queries' => media_queries
-      }
-    end
-
-    def jekyll_env
-      @jekyll_env ||= 'development'
-    end
-
-    def site_dest
-      @site_dest ||= temp_dir
-    end
-
-    def jconfig
-      @jconfig ||= { 'picture' => pconfig,
-                     'keep_files' => [],
-                     'destination' => site_dest,
-                     'url' => 'example.com' }
-    end
-
-    def data
-      @data ||= { 'picture' => pdata }
-    end
-
-    def page
-      @page ||= { 'ext' => 'html' }
-    end
-
-    def site_source
-      @site_source ||= File.join TestHelper::TEST_DIR, 'image_files'
-    end
-
-    def cache_dir
-      @cache_dir ||= temp_dir('cache')
-    end
-
     def media_queries
       { 'mobile' => 'max-width: 600px' }
     end

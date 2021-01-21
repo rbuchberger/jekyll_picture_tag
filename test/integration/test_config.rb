@@ -94,7 +94,7 @@ class TestIntegrationConfig < Minitest::Test
   end
 
   def test_baseurl
-    jconfig['baseurl'] = 'blog'
+    config_dot_yml['baseurl'] = 'blog'
 
     ss = '/blog/generated/rms-25-9ffc043fa.jpg 25w, ' \
     '/blog/generated/rms-50-9ffc043fa.jpg 50w,' \
