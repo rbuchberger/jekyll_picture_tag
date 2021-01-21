@@ -1,7 +1,10 @@
 require 'test_helper'
+# Stubs and helpers for end-to-end tests
 module IntegrationTestHelper
   include PictureTag
   include TestHelper
+
+  attr_reader :stdout, :stderr
 
   def base_stubs
     build_defaults

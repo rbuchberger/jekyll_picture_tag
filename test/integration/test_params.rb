@@ -81,7 +81,7 @@ class TestIntegrationParams < Minitest::Test
     correct = '/generated/rms-25-3ef76e91f.jpg 25w, '\
               '/generated/rms-45-3ef76e91f.jpg 45w'
 
-    assert_includes @stderr, 'rms.jpg'
+    assert_includes stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['srcset']
   end
 
@@ -97,7 +97,7 @@ class TestIntegrationParams < Minitest::Test
     tested 'too_large rms.jpg'
 
     tested 'too_large spx.jpg'
-    assert_includes @stderr, 'spx.jpg'
+    assert_includes stderr, 'spx.jpg'
   end
 
   def test_link
@@ -143,6 +143,6 @@ class TestIntegrationParams < Minitest::Test
     output = tested_base ''
 
     assert_empty output
-    refute_empty @stderr
+    refute_empty stderr
   end
 end
