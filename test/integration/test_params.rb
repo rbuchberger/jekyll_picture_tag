@@ -1,9 +1,9 @@
-require_relative './test_integration_helper'
+require_relative 'integration_test_helper'
 
 # This is for testing various tag params. It pulls in presets to make sure
 # they're checked correctly, but it's focused on tag arguments.
 class TestIntegrationParams < Minitest::Test
-  include TestIntegrationHelper
+  include IntegrationTestHelper
 
   def setup
     base_stubs

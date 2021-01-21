@@ -1,6 +1,6 @@
-require_relative './test_integration_helper'
+require_relative 'integration_test_helper'
 class TestIntegrationConfig < Minitest::Test
-  include TestIntegrationHelper
+  include IntegrationTestHelper
 
   def setup
     base_stubs

@@ -1,5 +1,5 @@
 require 'test_helper'
-module TestIntegrationHelper
+module IntegrationTestHelper
   include PictureTag
   include TestHelper
 

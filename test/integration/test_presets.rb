@@ -1,10 +1,10 @@
-require_relative './test_integration_helper'
+require_relative 'integration_test_helper'
 require 'vips'
 
 # This class focuses on testing various output formats and their configurations.
 # The preset names are defined in test/stubs/jekyll.rb
 class TestIntegrationPresets < Minitest::Test
-  include TestIntegrationHelper
+  include IntegrationTestHelper
   include Vips
 
   def setup
