@@ -10,14 +10,11 @@ class ConfigTest < Minitest::Test
     @jconfig['destination'] = 'jekyll_dest'
     @pconfig['source'] = 'jpt_source'
     @pconfig['output'] = 'jpt_dest'
-
-    build_site_stub
-    build_context_stub
   end
 
   def tested
-    PictureTag.stubs(:context).returns(@context)
-    PictureTag.stubs(:site).returns(@site)
+    PictureTag.stubs(:context).returns(context)
+    PictureTag.stubs(:site).returns(site)
 
     PictureTag::Instructions::Configuration.new
   end

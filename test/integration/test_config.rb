@@ -109,7 +109,7 @@ class TestIntegrationConfig < Minitest::Test
 
   # cdn url
   def test_cdn
-    @context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
+    context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
     @pconfig['cdn_url'] = 'cdn.net'
     ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
       ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \

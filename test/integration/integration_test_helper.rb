@@ -5,8 +5,6 @@ module IntegrationTestHelper
 
   def base_stubs
     build_defaults
-    build_site_stub
-    build_context_stub
     stub_liquid
   end
 
@@ -19,7 +17,7 @@ module IntegrationTestHelper
     @stdout, @stderr = capture_io do
       output = PictureTag::Picture
                .send(:new, 'picture', params, TokenStub.new(true, 'some stub'))
-               .render(@context)
+               .render(context)
     end
 
     output

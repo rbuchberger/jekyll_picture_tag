@@ -3,20 +3,23 @@ module Stubs
   include Presets
   include Structs
 
-  def build_context_stub
+  def context
+    @context ||= build_context
+  end
+
+  def build_context
     environments = [{ 'jekyll' => { 'environment' => @jekyll_env } }]
     registers = {
-      site: @site,
+      site: site,
       page: @page
     }
 
-    @context = ContextStub.new(environments, registers)
+    ContextStub.new(environments, registers)
   end
 
-  def build_site_stub
-    @site = SiteStub.new(
-      @jconfig, @data, @site_source, @site_dest, @cache_dir
-    )
+  def site
+    @site ||= SiteStub.new(@jconfig, @data, @site_source, @site_dest,
+                           @cache_dir)
   end
 
   def stub_liquid

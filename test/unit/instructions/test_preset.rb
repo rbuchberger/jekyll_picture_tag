@@ -5,13 +5,11 @@ class PresetTest < Minitest::Test
 
   def setup
     build_defaults
-    build_site_stub
-    build_context_stub
   end
 
   def tested(name = 'default')
-    PictureTag.stubs(:context).returns(@context)
-    PictureTag.stubs(:site).returns(@site)
+    PictureTag.stubs(:context).returns(context)
+    PictureTag.stubs(:site).returns(site)
 
     PictureTag::Instructions::Preset.new(name)
   end

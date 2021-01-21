@@ -23,7 +23,7 @@ class TestIntegrationPresets < Minitest::Test
 
     files = rms_file_array(@widths, %w[webp jpg])
     assert(files.all? { |f| File.exist?(f) })
-    assert_includes @stdout, 'Generating'
+    assert_includes stdout, 'Generating'
   end
 
   # widths 25, 50, 100
@@ -232,7 +232,7 @@ class TestIntegrationPresets < Minitest::Test
     output = tested 'fallback rms.jpg 1:3'
     correct = '/generated/rms-30-f091d4dbe.webp'
 
-    assert_includes @stderr, 'rms.jpg'
+    assert_includes stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['src']
   end
 
