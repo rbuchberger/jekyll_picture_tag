@@ -4,13 +4,10 @@ class PresetTest < Minitest::Test
   include TestHelper
 
   def setup
-    build_defaults
+    PictureTag.stubs(context: context, site: site)
   end
 
   def tested(name = 'default')
-    PictureTag.stubs(:context).returns(context)
-    PictureTag.stubs(:site).returns(site)
-
     PictureTag::Instructions::Preset.new(name)
   end
 

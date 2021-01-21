@@ -6,8 +6,7 @@ module IntegrationTestHelper
 
   attr_reader :stdout, :stderr
 
-  def base_stubs
-    build_defaults
+  def setup
     stub_liquid
   end
 

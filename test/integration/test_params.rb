@@ -5,10 +5,6 @@ require_relative 'integration_test_helper'
 class TestIntegrationParams < Minitest::Test
   include IntegrationTestHelper
 
-  def setup
-    base_stubs
-  end
-
   def teardown
     cleanup_files
   end
@@ -28,7 +24,7 @@ class TestIntegrationParams < Minitest::Test
   # Make sure it doesn't overwrite existing files
   def test_with_existing
     FileUtils.mkdir_p temp_dir('generated')
-    @widths.each { |w| FileUtils.touch rms_filename(width: w) }
+    widths.each { |w| FileUtils.touch rms_filename(width: w) }
 
     Vips::Image.any_instance.expects(:write_to_file).never
 

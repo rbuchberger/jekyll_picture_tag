@@ -7,10 +7,6 @@ class TestIntegrationPresets < Minitest::Test
   include IntegrationTestHelper
   include Vips
 
-  def setup
-    base_stubs
-  end
-
   def teardown
     cleanup_files
   end
@@ -21,7 +17,7 @@ class TestIntegrationPresets < Minitest::Test
     # File.unstub(:exist?)
     tested('auto rms.jpg')
 
-    files = rms_file_array(@widths, %w[webp jpg])
+    files = rms_file_array(widths, %w[webp jpg])
     assert(files.all? { |f| File.exist?(f) })
     assert_includes stdout, 'Generating'
   end

@@ -8,18 +8,17 @@ module Stubs
   end
 
   def build_context
-    environments = [{ 'jekyll' => { 'environment' => @jekyll_env } }]
+    environments = [{ 'jekyll' => { 'environment' => jekyll_env } }]
     registers = {
       site: site,
-      page: @page
+      page: page
     }
 
     ContextStub.new(environments, registers)
   end
 
   def site
-    @site ||= SiteStub.new(@jconfig, @data, @site_source, @site_dest,
-                           @cache_dir)
+    @site ||= SiteStub.new(jconfig, data, site_source, site_dest, cache_dir)
   end
 
   def stub_liquid
