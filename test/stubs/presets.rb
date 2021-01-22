@@ -1,26 +1,8 @@
 module Stubs
   # Handles stubbed picture configuration
   module Presets
-    def build_defaults
-      @widths = [25, 50, 100]
-      @pconfig = {}
-      @pdata = picture_data_stub
-
-      @jekyll_env = 'development'
-      @site_dest = temp_dir
-      @jconfig = { 'picture' => @pconfig,
-                   'keep_files' => [],
-                   'destination' => @site_dest,
-                   'url' => 'example.com' }
-      @data = { 'picture' => @pdata }
-      @page = { 'ext' => 'html' }
-      @site_source = File.join TestHelper::TEST_DIR, 'image_files'
-      @cache_dir = temp_dir('cache')
-    end
-
-    def picture_data_stub
-      { 'presets' => presets,
-        'media_queries' => media_queries }
+    def widths
+      @widths ||= [25, 50, 100]
     end
 
     def media_queries
@@ -30,34 +12,34 @@ module Stubs
     def presets
       {
         'default' => {
-          'widths' => @widths
+          'widths' => widths
         },
 
         'auto' => {
-          'widths' => @widths,
+          'widths' => widths,
           'formats' => %w[webp original]
         },
 
         'data_auto' => {
           'markup' => 'data_auto',
-          'widths' => @widths,
+          'widths' => widths,
           'formats' => %w[webp original]
         },
 
         'data_img' => {
           'markup' => 'data_img',
-          'widths' => @widths
+          'widths' => widths
         },
 
         'data_picture' => {
           'markup' => 'data_picture',
-          'widths' => @widths,
+          'widths' => widths,
           'formats' => %w[webp original]
         },
 
         'data_img_no_size' => {
           'markup' => 'data_img',
-          'widths' => @widths,
+          'widths' => widths,
           'sizes' => {
             'mobile' => '80vw'
           },
@@ -67,7 +49,7 @@ module Stubs
 
         'data_img_yes_size' => {
           'markup' => 'data_img',
-          'widths' => @widths,
+          'widths' => widths,
           'sizes' => {
             'mobile' => '80vw'
           },
@@ -82,12 +64,12 @@ module Stubs
 
         'img' => {
           'markup' => 'img',
-          'widths' => @widths
+          'widths' => widths
         },
 
         'naked_srcset' => {
           'markup' => 'naked_srcset',
-          'widths' => @widths
+          'widths' => widths
         },
 
         'sizes' => {
@@ -104,7 +86,7 @@ module Stubs
 
         'attributes' => {
           'formats' => %w[webp original],
-          'widths' => @widths,
+          'widths' => widths,
           'attributes' => {
             'parent' => 'class="parent"',
             'alt' => 'Alternate Text',
@@ -116,12 +98,12 @@ module Stubs
         },
 
         'link_source' => {
-          'widths' => @widths,
+          'widths' => widths,
           'link_source' => true
         },
 
         'media_widths' => {
-          'widths' => @widths,
+          'widths' => widths,
           'media_widths' => {
             'mobile' => [10, 20, 30]
           }
@@ -129,18 +111,18 @@ module Stubs
 
         'data_noscript' => {
           'markup' => 'data_img',
-          'widths' => @widths,
+          'widths' => widths,
           'noscript' => true
         },
 
         'fallback' => {
-          'widths' => @widths,
+          'widths' => widths,
           'fallback_width' => 35,
           'fallback_format' => 'webp'
         },
 
         'nomarkdown' => {
-          'widths' => @widths,
+          'widths' => widths,
           'nomarkdown' => true
         },
 
