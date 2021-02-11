@@ -1,3 +1,5 @@
+<img src="logo.png" alt="jekyll picture tag logo" width="250"/>
+
 # Jekyll Picture Tag
 
 ![Tests & Formatting](https://github.com/rbuchberger/jekyll_picture_tag/workflows/Tests%20&%20Formatting/badge.svg)
