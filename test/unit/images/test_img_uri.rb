@@ -14,10 +14,10 @@ class ImgUriTest < Minitest::Test
   def config
     {
       cdn?: false,
+      relative_url: true,
       pconfig: {
         'source' => 'source-dir',
-        'output' => 'output-dir',
-        'baseurl_key' => 'baseurl'
+        'output' => 'output-dir'
       },
       config: {
         'url' => 'example.com'
@@ -32,49 +32,33 @@ class ImgUriTest < Minitest::Test
   # Tests
 
   def test_relative
-    PictureTag.pconfig['relative_url'] = true
-
     assert_equal '/output-dir/img.jpg', tested
   end
 
   def test_absolute
+    PictureTag.stubs(relative_url: false)
     assert_equal 'example.com/output-dir/img.jpg', tested
   end
 
   def test_cdn
-    PictureTag.stubs(cdn?: true)
-    PictureTag.pconfig['cdn_url'] = 'some-cdn.net'
+    PictureTag.stubs(cdn?: true, cdn_url: 'https://some-cdn.net')
 
-    assert_equal 'some-cdn.net/output-dir/img.jpg', tested
+    assert_equal 'https://some-cdn.net/output-dir/img.jpg', tested
   end
 
   def test_baseurl
-    PictureTag.config['baseurl'] = 'some-baseurl'
+    PictureTag.stubs(baseurl: 'some-baseurl')
 
-    assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
-  end
-
-  def test_ignore_baseurl
-    PictureTag.config['baseurl'] = 'some-baseurl'
-    PictureTag.pconfig['ignore_baseurl'] = true
-
-    assert_equal 'example.com/output-dir/img.jpg', tested
-  end
-
-  def test_baseurl_key
-    PictureTag.pconfig['baseurl_key'] = 'foo'
-    PictureTag.config['foo'] = 'some-baseurl'
-
-    assert_equal 'example.com/some-baseurl/output-dir/img.jpg', tested
+    assert_equal '/some-baseurl/output-dir/img.jpg', tested
   end
 
   def test_source_image
-    assert_equal 'example.com/source-dir/img.jpg',
+    assert_equal '/source-dir/img.jpg',
                  tested('img.jpg', source_image: true)
   end
 
   def test_url_encoding
     param = 'white space.jpg'
-    assert_equal 'example.com/output-dir/white%20space.jpg', tested(param)
+    assert_equal '/output-dir/white%20space.jpg', tested(param)
   end
 end
