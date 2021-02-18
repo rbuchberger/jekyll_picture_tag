@@ -40,6 +40,9 @@ Gem::Specification.new do |spec|
   # ruby-vips interfaces with libvips.
   spec.add_runtime_dependency 'ruby-vips', '~> 2.0.17'
 
+  # libvips handles all image processing operations.
+  spec.requirements << 'libvips'
+
   # Development dependencies are not installed when using this gem. You can
   # ignore these, unless you are working on JPT itself.
   spec.add_development_dependency 'bundler', '~> 2.0'
@@ -53,7 +56,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-minitest', '~> 0.10.0'
   spec.add_development_dependency 'rubocop-performance', '~> 1.9.0'
   spec.add_development_dependency 'rubocop-rake', '~> 0.5.0'
-
   spec.add_development_dependency 'simplecov', '~> 0.20.0'
   spec.add_development_dependency 'solargraph'
 end
