@@ -18,7 +18,7 @@ module PictureTag
     # |     domain       |  baseurl   |       directory       | filename
     def to_s
       Addressable::URI.escape(
-        File.join(domain, baseurl, directory, @filename)
+        File.join(domain, PictureTag.baseurl, directory, @filename)
       )
     end
 
@@ -29,21 +29,12 @@ module PictureTag
     # |     domain       |  baseurl   |    j-p-t output dir   | filename
     def domain
       if PictureTag.cdn?
-        PictureTag.pconfig['cdn_url']
-      elsif PictureTag.pconfig['relative_url']
+        PictureTag.cdn_url
+      elsif PictureTag.relative_url
         ''
       else
         PictureTag.config['url'] || ''
       end
-    end
-
-    # https://example.com/my-base-path/assets/generated-images/image.jpg
-    #                     ^^^^^^^^^^^^^
-    # |     domain       |  baseurl   |       directory       | filename
-    def baseurl
-      return '' if PictureTag.pconfig['ignore_baseurl']
-
-      PictureTag.config[PictureTag.pconfig['baseurl_key']] || ''
     end
 
     # https://example.com/my-base-path/assets/generated-images/image.jpg

@@ -62,7 +62,7 @@ class TestCache < Minitest::Test
 
   # Jekyll has a flag to disable caching; we must respect it.
   def test_disable_disk_cache
-    PictureTag.site.config['disable_disk_cache'] = true
+    PictureTag.stubs(config: { 'disable_disk_cache' => true })
 
     tested[:width] = 100
     tested.write

@@ -20,7 +20,7 @@ module PictureTag
 
       # Call after updating data.
       def write
-        return if PictureTag.site.config['disable_disk_cache']
+        return if PictureTag.config['disable_disk_cache']
 
         FileUtils.mkdir_p(File.join(base_directory, sub_directory))
 
