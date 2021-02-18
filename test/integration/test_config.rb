@@ -106,21 +106,21 @@ class TestIntegrationConfig < Minitest::Test
   # cdn url
   def test_cdn
     context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
-    pconfig['cdn_url'] = 'cdn.net'
-    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
-      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
-      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
+    pconfig['cdn_url'] = 'https://cdn.net'
+    ss = 'https://cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' https://cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' https://cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
 
   # cdn environments
   def test_cdn_env
-    pconfig['cdn_url'] = 'cdn.net'
+    pconfig['cdn_url'] = 'https://cdn.net'
     pconfig['cdn_environments'] = ['development']
-    ss = 'cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
-      ' cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
-      ' cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
+    ss = 'https://cdn.net/generated/rms-25-9ffc043fa.jpg 25w,' \
+      ' https://cdn.net/generated/rms-50-9ffc043fa.jpg 50w,' \
+      ' https://cdn.net/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
