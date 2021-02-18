@@ -10,6 +10,10 @@ module Stubs
     end
 
     def presets
+      @presets ||= build_presets
+    end
+
+    def build_presets
       {
         'default' => {
           'widths' => widths
