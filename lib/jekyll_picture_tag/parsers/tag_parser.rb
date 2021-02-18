@@ -1,5 +1,5 @@
 module PictureTag
-  module Instructions
+  module Parsers
     # Tag Parsing Responsibilities:
     #
     #  {% picture mypreset a.jpg 3:2 mobile: b.jpg --alt "Alt" --link "/" %}

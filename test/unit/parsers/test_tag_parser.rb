@@ -8,7 +8,7 @@ class TagParserTest < Minitest::Test
   end
 
   def tested(params = 'img.jpg')
-    Instructions::TagParser.new(params)
+    Parsers::TagParser.new(params)
   end
 
   # default preset name
