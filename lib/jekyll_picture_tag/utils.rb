@@ -64,6 +64,10 @@ module PictureTag
         input.split('_').map(&:capitalize).join
       end
 
+      def snakeize(input)
+        input.scan(/[A-Z][a-z]+/).map(&:downcase).join('_')
+      end
+
       # Linear interpolator. Pass it 2 values in the x array, 2 values
       # in the y array, and an x value, returns a y value.
       def interpolate(xvals, yvals, xval)

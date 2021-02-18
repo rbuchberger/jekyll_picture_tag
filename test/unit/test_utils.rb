@@ -76,4 +76,8 @@ class TestUtils < Minitest::Test
     assert_in_delta 26.5, Utils.interpolate(xvals, yvals, 13), 0.01
     assert_in_delta 70, Utils.interpolate(xvals, yvals, 100), 0.01
   end
+
+  def test_snakeize
+    assert_equal 'snake_case', Utils.snakeize('SnakeCase')
+  end
 end
