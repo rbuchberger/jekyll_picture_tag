@@ -1,3 +1,5 @@
+<img src="logo.png" alt="jekyll picture tag logo" width="250"/>
+
 # Jekyll Picture Tag
 
 ![Tests & Formatting](https://github.com/rbuchberger/jekyll_picture_tag/workflows/Tests%20&%20Formatting/badge.svg)
@@ -26,7 +28,7 @@ different image entirely.
 
 **Developer Sanity:** If you want to serve multiple images in multiple formats and resolutions, you
 have a litany of markup to write and a big pile of images to generate and organize. Jekyll Picture
-Tag is your responsive images minion - give it simple instructions and it'll handle the rest. 
+Tag is your responsive images minion - give it simple instructions and it'll handle the rest.
 
 ## Features
 
@@ -43,14 +45,15 @@ https://rbuchberger.github.io/jekyll_picture_tag/
 
 https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
-Latest versions: 
+Recent releases:
 
-* 1.13.0 November 23, 2020
-  * Add image quality interpolation; allows for variable image quality based on image size.
-  * Bugfix: Perform format, resize, and quality changes simultaneously rather than individually.
-    * Allows for actual lossless webp: simply set quality to 100.
-    * Improves fresh (no cached images) build times by ~15%
-    * Fix problems with poor image quality.
+* 1.14.0 January 10, 2021
+  * Gracefully handle empty tag arguments.
+  * Re-add metadata stripping. I removed it inadvertently when refactoring; now
+    there's a test and a setting to turn it off.
+  * Respect Jekyll's `--disable-disk-cache` argument.
+  * Add baseurl configuration, allowing increased plugin support (such as I18n via `jekyll-multiple-languages-plugin`)
+  * Tooling & test suite maintenance and improvements.
 
 ## Help Wanted
 
