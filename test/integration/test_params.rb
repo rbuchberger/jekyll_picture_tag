@@ -54,7 +54,6 @@ class TestIntegrationParams < Minitest::Test
   end
 
   def test_crop
-    skip
     output = tested('rms.jpg 10:1 north')
 
     correct = '/generated/rms-25-8d4abac33.jpg 25w,'\
@@ -64,9 +63,11 @@ class TestIntegrationParams < Minitest::Test
     assert_equal correct, output.at_css('img')['srcset']
 
     generated_dimensions =
-      Vips::Image.new_from_file(temp_dir('generated/rms-100-8d4abac33.jpg')).size
+      Vips::Image.new_from_file(temp_dir('generated/rms-100-8d4abac33.jpg'))
+                 .size
 
-    assert_in_delta aspect_float(10, 1), aspect_float(*generated_dimensions),
+    assert_in_delta aspect_float(10, 1),
+                    aspect_float(*generated_dimensions),
                     0.03
   end
 

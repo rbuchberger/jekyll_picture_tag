@@ -244,7 +244,6 @@ class TestIntegrationPresets < Minitest::Test
   # convert from each to each, make sure nothing breaks.
   def test_conversions
     # Vips can't handle jp2 in my setup right now. Need to troubleshoot.
-    skip
 
     File.unstub(:exist?)
     formats = %w[jpg png webp gif]
@@ -292,7 +291,6 @@ class TestIntegrationPresets < Minitest::Test
   end
 
   def test_crop
-    skip
     # Crop preset should crop desktop to 3:2 and mobile to 16:9. Test images are
     # around 1:1 (but not exactly)
     tested 'crop rms.jpg mobile: spx.jpg'
