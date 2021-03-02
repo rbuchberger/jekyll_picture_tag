@@ -21,6 +21,32 @@ module PictureTag
       @digest ||= cache[:digest] || ''
     end
 
+    def crop?
+      !PictureTag.crop(media_preset).nil?
+    end
+
+    def crop_dimensions
+      [cropped_width, cropped_height]
+    end
+
+    def cropped_width
+      return width unless crop?
+
+      [width, (height * cropped_aspect)].min.round
+    end
+
+    def cropped_height
+      return height unless crop?
+
+      [height, (width / cropped_aspect)].min.round
+    end
+
+    def cropped_aspect
+      return Utils.aspect_float(width, height) unless crop?
+
+      Utils.aspect_float(*PictureTag.crop(media_preset).split(':').map(&:to_f))
+    end
+
     def width
       @width ||= cache[:width] || 999_999
     end
