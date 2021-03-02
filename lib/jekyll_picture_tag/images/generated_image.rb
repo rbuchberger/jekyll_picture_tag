@@ -1,9 +1,10 @@
 require 'ruby-vips'
 
 module PictureTag
-  # Represents a generated image file.
+  # Represents a generated image, but not the file itself. Its purpose is to
+  # make its properties available for query, and hand them off to the ImageFile
+  # class for generation.
   class GeneratedImage
-    # include MiniMagick
     attr_reader :width
 
     def initialize(source_file:, width:, format:, crop: nil, gravity: '')
@@ -61,9 +62,11 @@ module PictureTag
     def quality
       PictureTag.quality(format, width)
     end
+
     private
 
-    # We exclude width and format from the cache name, since it isn't specific to them.
+    # We exclude width and format from the cache name, since it isn't specific
+    # to them.
     def cache
       @cache ||= Cache::Generated.new("#{@source.base_name}-#{id}")
     end
@@ -80,7 +83,8 @@ module PictureTag
       cache.write
     end
 
-    # Hash all inputs and truncate, so we know when they change without getting too long.
+    # Hash all inputs and truncate, so we know when they change without getting
+    # too long.
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-1234abcde.jpg
     #                                                           ^^^^^^^^^
     def id
