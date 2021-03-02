@@ -81,6 +81,10 @@ module PictureTag
         # y = mx + b
         (m * xval) + b
       end
+
+      def aspect_float(width, height)
+        width.to_f / height
+      end
     end
   end
 end
