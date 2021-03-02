@@ -3,16 +3,19 @@ require 'ruby-vips'
 module PictureTag
   # Represents a generated image file.
   class GeneratedImage
-    attr_reader :width, :format
-
     # include MiniMagick
+    attr_reader :width
 
     def initialize(source_file:, width:, format:, crop: nil, gravity: '')
       @source = source_file
       @width  = width
-      @format = process_format format
+      @raw_format = format
       @crop = crop
       @gravity = gravity
+    end
+
+    def format
+      @format ||= process_format(@raw_format)
     end
 
     def exists?
@@ -55,6 +58,9 @@ module PictureTag
       cache[:height]
     end
 
+    def quality
+      PictureTag.quality(format, width)
+    end
     private
 
     # We exclude width and format from the cache name, since it isn't specific to them.
@@ -93,35 +99,11 @@ module PictureTag
     end
 
     def image_base
-      @image_base = Vips::Image.new_from_file @source.name
+      @image_base ||= Vips::Image.new_from_file @source.name
     end
 
     def generate_image
-      puts 'Generating new image file: ' + name
-
-      FileUtils.mkdir_p(File.dirname(absolute_filename))
-      thumb_init_opts = {}
-
-      if @crop
-        thumb_init_opts[:crop] = :attention # from Vips::Interesting
-      end
-
-      thumb = Vips::Image.thumbnail @source.name, @width, thumb_init_opts
-
-      thumb_output_opts = {}
-
-      if PictureTag.preset['strip_metadata']
-        thumb.autorot
-        thumb_output_opts[:strip] = true
-      end
-
-      thumb.write_to_file absolute_filename, thumb_output_opts
-
-      FileUtils.chmod(0o644, absolute_filename)
-    end
-
-    def quality
-      PictureTag.quality(@format, @width)
+      ImageFile.new(@source, self)
     end
 
     def process_format(format)
