@@ -227,8 +227,6 @@ class TestIntegrationPresets < Minitest::Test
 
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
-    skip
-
     output = tested 'fallback rms.jpg 1:3'
     correct = '/generated/rms-30-f091d4dbe.webp'
 
@@ -317,7 +315,6 @@ class TestIntegrationPresets < Minitest::Test
   end
 
   def test_dimension_attributes_cropped
-    skip
     output = tested 'dimension_attributes rms.jpg 2:1'
 
     assert_equal '100', output.at_css('img')['width']

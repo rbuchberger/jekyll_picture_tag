@@ -18,7 +18,7 @@ class TestSourceImage < Minitest::Test
   end
 
   def config
-    { source_dir: '/home/loser', fast_build?: false }
+    { source_dir: '/home/loser', fast_build?: false, crop: nil }
   end
 
   def cache_stub

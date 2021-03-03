@@ -73,7 +73,6 @@ class TestIntegrationParams < Minitest::Test
 
   # Make sure that when cropping images, we don't enlarge widths
   def test_crop_width_check
-    skip
     output = tested('rms.jpg 1:2')
     correct = '/generated/rms-25-3ef76e91f.jpg 25w, '\
               '/generated/rms-45-3ef76e91f.jpg 45w'

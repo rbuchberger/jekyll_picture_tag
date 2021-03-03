@@ -25,7 +25,8 @@ class TestSourceImageMissing < Minitest::Test
     {
       source_dir: temp_dir('does', 'not', 'exist'),
       continue_on_missing?: true,
-      fast_build?: false
+      fast_build?: false,
+      crop: nil
     }
   end
 
