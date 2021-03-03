@@ -269,29 +269,6 @@ class TestIntegrationPresets < Minitest::Test
     end
   end
 
-  def test_quality_base
-    skip
-
-    # LibVips can't determine image quality; it's not just metadata. Need
-    # another way to determine this; maybe by file size?
-
-    tested 'quality rms.jpg'
-
-    i = Image.new_from_file(temp_dir('generated/rms-100-057d429d6.jpg'))
-
-    assert_equal 30, i.data['quality'].to_i
-  end
-
-  # Apparently mini_magick can only read quality from jpegs.
-  def test_format_quality
-    skip
-
-    tested 'format_quality rms.jpg'
-
-    i = Image.new_from_file(temp_dir('generated/rms-100-21174d9bb.jpg'))
-    assert_equal 45, i.data['quality'].to_i
-  end
-
   def test_crop
     # Crop preset should crop desktop to 3:2 and mobile to 16:9. Test images are
     # around 1:1 (but not exactly)
