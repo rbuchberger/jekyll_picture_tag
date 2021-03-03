@@ -119,22 +119,14 @@ module PictureTag
         PictureTag.source_images.first
       end
 
-      def source_width
-        if PictureTag.crop
-          fallback_candidate.source_width
-        else
-          source.width
-        end
-      end
-
       def checked_fallback_width
         target = PictureTag.fallback_width
 
-        if target > source_width
+        if target > source.width
           Utils.warning "#{source.shortname} is smaller than the " \
-            "requested fallback width of #{target}px. Using #{source_width}" \
+            "requested fallback width of #{target}px. Using #{source.width}" \
             ' px instead.'
-          source_width
+          source.width
         else
           target
         end

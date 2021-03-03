@@ -53,11 +53,11 @@ module PictureTag
       end
 
       def width_attribute
-        files.first.source_width.to_s
+        source_image.width.to_s
       end
 
       def height_attribute
-        files.first.source_height.to_s
+        source_image.height.to_s
       end
 
       private
