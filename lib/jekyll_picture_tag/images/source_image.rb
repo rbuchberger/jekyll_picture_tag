@@ -25,34 +25,26 @@ module PictureTag
       !PictureTag.crop(media_preset).nil?
     end
 
-    def crop_dimensions
-      [cropped_width, cropped_height]
-    end
-
-    def cropped_width
-      return width unless crop?
-
-      [width, (height * cropped_aspect)].min.round
-    end
-
-    def cropped_height
-      return height unless crop?
-
-      [height, (width / cropped_aspect)].min.round
-    end
-
-    def cropped_aspect
-      return Utils.aspect_float(width, height) unless crop?
-
-      Utils.aspect_float(*PictureTag.crop(media_preset).split(':').map(&:to_f))
+    def dimensions
+      [width, height]
     end
 
     def width
-      @width ||= cache[:width] || 999_999
+      return raw_width unless crop?
+
+      [raw_width, (raw_height * cropped_aspect)].min.round
     end
 
     def height
-      @height ||= cache[:height] || 999_999
+      return raw_height unless crop?
+
+      [raw_height, (raw_width / cropped_aspect)].min.round
+    end
+
+    def cropped_aspect
+      return Utils.aspect_float(raw_width, raw_height) unless crop?
+
+      Utils.aspect_float(*PictureTag.crop(media_preset).split(':').map(&:to_f))
     end
 
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
@@ -74,6 +66,16 @@ module PictureTag
     end
 
     private
+
+    # pre-crop
+    def raw_width
+      @raw_width ||= cache[:width] || 999_999
+    end
+
+    # pre-crop
+    def raw_height
+      @raw_height ||= cache[:height] || 999_999
+    end
 
     def cache
       @cache ||= Cache::Source.new(@shortname)

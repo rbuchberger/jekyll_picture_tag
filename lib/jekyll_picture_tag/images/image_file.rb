@@ -75,11 +75,11 @@ module PictureTag
     end
 
     def crop(image)
-      image.smartcrop(*source.crop_dimensions)
+      image.smartcrop(*source.dimensions)
     end
 
     def scale_value
-      base.width.to_f / source.cropped_width
+      base.width.to_f / source.width
     end
 
     def mkdir

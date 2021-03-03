@@ -48,8 +48,8 @@ class TestImageFile < Minitest::Test
     {
       name: source_filename(*args),
       crop?: false,
-      cropped_width: source_image.width,
-      cropped_height: source_image.height
+      width: source_image.width,
+      height: source_image.height
     }
   end
 
