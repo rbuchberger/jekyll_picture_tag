@@ -27,4 +27,12 @@ class TestInstructions < Minitest::Test
     tested.stubs(coerce: 'coerced')
     assert_equal 'coerced', tested.value
   end
+
+  def test_env_arg
+    subject = PictureTag::Instructions::EnvInstruction.new
+    # Env instructions dont' accept numbers
+    subject.stubs(source: 42)
+
+    assert_raises(ArgumentError) { subject.value }
+  end
 end
