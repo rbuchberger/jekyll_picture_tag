@@ -1,7 +1,7 @@
 require 'simplecov'
 require 'minitest/rg'
 
-SimpleCov.minimum_coverage_by_file 100
+SimpleCov.minimum_coverage_by_file 90
 SimpleCov.start do
   add_filter '/test/'
 end
