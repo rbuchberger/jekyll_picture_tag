@@ -19,7 +19,7 @@ module Stubs
     SourceImageStub =
       Struct.new(:base_name, :name, :missing, :digest, :ext, :width, :shortname,
                  :media_preset, :digest_guess, :crop?, :cropped_width,
-                 :cropped_height, :crop_dimensions, keyword_init: true)
+                 :dimensions, keyword_init: true)
 
     # Jekyll classes:
 

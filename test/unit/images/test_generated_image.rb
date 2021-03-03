@@ -11,6 +11,7 @@ class GeneratedImageTest < Minitest::Test
     PictureTag.stubs(config)
     File.stubs(:exist?).with(destfile).returns true
     Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
+    ImageFile.stubs(:new)
   end
 
   # Helpers
@@ -32,7 +33,8 @@ class GeneratedImageTest < Minitest::Test
     @source_stub ||= SourceImageStub.new(base_name: 'img',
                                          name: temp_dir('img.jpg'),
                                          missing: false, digest: 'a' * 6,
-                                         ext: 'jpg', digest_guess: nil)
+                                         ext: 'jpg', digest_guess: nil,
+                                         crop?: false)
   end
 
   # Tests
