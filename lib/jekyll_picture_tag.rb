@@ -51,7 +51,7 @@ module PictureTag
     # care about the params (arguments passed to the liquid tag). Jekyll makes
     # no attempt to parse them; they're given as a string.
     def initialize(tag_name, raw_params, tokens)
-      PictureTag.raw_params = raw_params
+      @raw_params = raw_params
       super
     end
 
@@ -75,6 +75,7 @@ module PictureTag
     def setup(context)
       PictureTag.clear_instructions
       PictureTag.context = context
+      PictureTag.raw_params = @raw_params
 
       # We need to explicitly prevent jekyll from overwriting our generated
       # image files:
