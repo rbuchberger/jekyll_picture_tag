@@ -43,7 +43,8 @@ class TestIntegrationConfig < Minitest::Test
     output = tested 'asdf.jpg'
 
     ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
-      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
+      ' /generated/asdf-50-e555e4f8b.jpg 50w,' \
+      ' /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -56,7 +57,8 @@ class TestIntegrationConfig < Minitest::Test
     output = tested 'asdf.jpg'
 
     ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
-      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
+      ' /generated/asdf-50-e555e4f8b.jpg 50w,' \
+      ' /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -69,7 +71,8 @@ class TestIntegrationConfig < Minitest::Test
     output = tested 'asdf.jpg'
 
     ss = '/generated/asdf-25-e555e4f8b.jpg 25w,' \
-      ' /generated/asdf-50-e555e4f8b.jpg 50w, /generated/asdf-100-e555e4f8b.jpg 100w'
+      ' /generated/asdf-50-e555e4f8b.jpg 50w,' \
+      ' /generated/asdf-100-e555e4f8b.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -96,8 +99,8 @@ class TestIntegrationConfig < Minitest::Test
   def test_baseurl
     config_dot_yml['baseurl'] = 'blog'
 
-    ss = '/blog/generated/rms-25-9ffc043fa.jpg 25w, ' \
-    '/blog/generated/rms-50-9ffc043fa.jpg 50w,' \
+    ss = '/blog/generated/rms-25-9ffc043fa.jpg 25w,' \
+    ' /blog/generated/rms-50-9ffc043fa.jpg 50w,' \
     ' /blog/generated/rms-100-9ffc043fa.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']

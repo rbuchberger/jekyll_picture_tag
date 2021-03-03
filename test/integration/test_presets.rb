@@ -31,7 +31,8 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
     ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
+      ' /generated/rms-50-9ffc043fa.webp 50w,' \
+      ' /generated/rms-100-9ffc043fa.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -68,7 +69,8 @@ class TestIntegrationPresets < Minitest::Test
     output = tested 'pixel_ratio rms.jpg'
 
     correct = '/generated/rms-10-9ffc043fa.jpg 1.0x,'\
-      ' /generated/rms-20-9ffc043fa.jpg 2.0x, /generated/rms-30-9ffc043fa.jpg 3.0x'
+      ' /generated/rms-20-9ffc043fa.jpg 2.0x,' \
+      ' /generated/rms-30-9ffc043fa.jpg 3.0x'
 
     assert_equal correct, output.at_css('img')['srcset']
   end
@@ -147,7 +149,8 @@ class TestIntegrationPresets < Minitest::Test
     sources = output.css('source')
 
     ss1 = '/generated/spx-10-3e829c5a4.jpg 10w,' \
-      ' /generated/spx-20-3e829c5a4.jpg 20w, /generated/spx-30-3e829c5a4.jpg 30w'
+      ' /generated/spx-20-3e829c5a4.jpg 20w,' \
+      ' /generated/spx-30-3e829c5a4.jpg 30w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -161,7 +164,8 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
     ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
+      ' /generated/rms-50-9ffc043fa.webp 50w,' \
+      ' /generated/rms-100-9ffc043fa.webp 100w'
 
     assert_equal ss1, sources[0]['data-srcset']
     assert_equal std_rms_ss, sources[1]['data-srcset']

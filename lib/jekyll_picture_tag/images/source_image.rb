@@ -118,7 +118,8 @@ module PictureTag
     end
 
     def missing_image_warning
-      "JPT Could not find #{name}. Your site will have broken images. Continuing."
+      "JPT Could not find #{name}. " \
+        'Your site will have broken images. Continuing.'
     end
 
     def missing_image_error
