@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: Install system dependencies
-        run: sudo apt install libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev imagemagick libvips-tools
+        run: sudo apt install libjpeg-dev webp libpng-dev libavif-bin libopenjpip7 imagemagick libvips-tools
 
       - name: Checkout repo
         uses: actions/checkout@v2
