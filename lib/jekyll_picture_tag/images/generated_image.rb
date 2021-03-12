@@ -7,12 +7,12 @@ module PictureTag
   class GeneratedImage
     attr_reader :width
 
-    def initialize(source_file:, width:, format:, crop: nil, gravity: '')
+    def initialize(source_file:, width:, format:, crop: nil, keep: '')
       @source = source_file
       @width  = width
       @raw_format = format
       @crop = crop
-      @gravity = gravity
+      @keep = keep
     end
 
     def format
@@ -88,7 +88,7 @@ module PictureTag
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-1234abcde.jpg
     #                                                           ^^^^^^^^^
     def id
-      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity,
+      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @keep,
                                      quality].join)[0..8]
     end
 

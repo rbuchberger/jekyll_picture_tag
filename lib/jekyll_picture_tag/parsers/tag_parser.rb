@@ -9,17 +9,16 @@ module PictureTag
     # string), hands them to ArgSplitter (which breaks them up into an array of
     # words), extracts the preset name (if present), source image name(s),
     # associated media queries (if present), and image-related arguments such as
-    # crop and gravity. HTML attributes are handed off to its respective class
+    # crop and keep. HTML attributes are handed off to its respective class
     # (as 'leftovers')
     #
     # Media presets and source names are stored as arrays in their correct
-    # orders. Gravities and geometries are stored in a hash, keyed by their
+    # orders. Crop settings are stored in a hash, keyed by their
     # relevant media presets. Note that the base image will have a media preset
     # of nil, which is a perfectly fine hash key.
-    #
     class TagParser
-      attr_reader :preset_name, :source_names, :media_presets, :gravities,
-                  :geometries, :leftovers
+      attr_reader :preset_name, :source_names, :media_presets, :keep,
+                  :crop, :leftovers
 
       def initialize(raw_params)
         @raw_params = raw_params
@@ -27,8 +26,8 @@ module PictureTag
 
         @media_presets = []
         @source_names = []
-        @geometries = {}
-        @gravities = {}
+        @keep = {}
+        @crop = {}
 
         parse_params
       end
@@ -51,14 +50,18 @@ module PictureTag
       end
 
       def parse_param(param)
+        # Media query, i.e. 'mobile:'
         if param.match?(/[\w\-]+:$/)
           add_media_source
 
-        elsif Utils::GRAVITIES.include?(param.downcase)
-          @gravities[@media_presets.last] = @params.shift
+        # Smartcrop interestingness setting. We label it 'keep', since it
+        # determines what to keep when cropping.
+        elsif %w[none centre center entropy attention].include?(param.downcase)
+          @keep[@media_presets.last] = @params.shift
 
-        elsif param.match?(Utils::GEOMETRY_REGEX)
-          @geometries[@media_presets.last] = @params.shift
+        # Aspect ratio, i.e. '16:9'
+        elsif param.match?(/\A\d+:\d+\z/)
+          @crop[@media_presets.last] = @params.shift
 
         else
           raise_error(param)

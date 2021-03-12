@@ -2,24 +2,6 @@ module PictureTag
   # This is a little module to hold logic that doesn't fit other places. If it
   # starts getting big, refactor.
   module Utils
-    # These are valid ImageMagick gravity arguments (relevant to our use
-    # case):
-    GRAVITIES =
-      %w[center
-         north
-         northeast
-         east
-         southeast
-         south
-         southwest
-         west
-         northwest].freeze
-
-    # This is an attempt to recognize valid imagemagick geometry arguments
-    # with regex. It only tries to match values which don't preserve aspect
-    # ratio, as they're the ones people might actually need here.
-    GEOMETRY_REGEX = /\A\d*%?[x:]?\d*[%!]?([+-]\d+){,2}\Z/i.freeze
-
     class << self
       # Configure Jekyll to keep our generated files
       def keep_files

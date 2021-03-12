@@ -18,7 +18,7 @@ presets:
     link_source: false
     quality: 75
     data_sizes: true
-    gravity: center
+    keep: attention
     dimension_attributes: false
     strip_metadata: true
 ```

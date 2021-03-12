@@ -110,7 +110,7 @@ module PictureTag
           width: width,
           format: @input_format,
           crop: PictureTag.crop(@media),
-          gravity: PictureTag.gravity(@media)
+          keep: PictureTag.keep(@media)
         )
       end
     end

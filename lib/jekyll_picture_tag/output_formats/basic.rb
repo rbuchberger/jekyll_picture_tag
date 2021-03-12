@@ -78,7 +78,7 @@ module PictureTag
           format: PictureTag.fallback_format,
           width: checked_fallback_width,
           crop: PictureTag.crop,
-          gravity: PictureTag.gravity
+          keep: PictureTag.keep
         )
 
         image.generate
@@ -94,7 +94,7 @@ module PictureTag
           format: PictureTag.fallback_format,
           width: PictureTag.fallback_width,
           crop: PictureTag.crop,
-          gravity: PictureTag.gravity
+          keep: PictureTag.keep
         )
       end
 

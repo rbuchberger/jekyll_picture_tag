@@ -27,7 +27,7 @@ module PictureTag
     class Crop < ConditionalInstruction
       def source
         super.merge(
-          { params: PictureTag.params.geometries }
+          { params: PictureTag.params.crop }
         )
       end
 
@@ -50,12 +50,12 @@ module PictureTag
       end
     end
 
-    # Which gravity to use for a given media query. Can be given either in
-    # params or preset.
-    class Gravity < ConditionalInstruction
+    # Which vips interestingness setting to use for a given media query. Can be
+    # given either in params or preset.
+    class Keep < ConditionalInstruction
       def source
         super.merge(
-          { params: PictureTag.params.gravities }
+          { params: PictureTag.params.keep }
         )
       end
 
@@ -66,7 +66,7 @@ module PictureTag
       end
 
       def setting_basename
-        'gravity'
+        'keep'
       end
 
       def setting_prefix
