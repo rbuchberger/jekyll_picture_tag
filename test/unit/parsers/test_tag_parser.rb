@@ -47,24 +47,14 @@ class TagParserTest < Minitest::Test
     assert_equal 'white space.jpg', tested(params).source_names.first
   end
 
-  def test_gravity
-    params = 'img.jpg southeast 3:2 mobile: img.jpg 4:3 center'
-    correct = {
-      nil => 'southeast',
-      'mobile' => 'center'
-    }
-
-    assert_equal correct, tested(params).gravities
-  end
-
-  def test_geometry
-    params = 'img.jpg southeast 3:2 mobile: img.jpg 4:3-10+20 center'
+  def test_aspect
+    params = 'img.jpg entropy 3:2 mobile: img.jpg 4:3 center'
     correct = {
       nil => '3:2',
-      'mobile' => '4:3-10+20'
+      'mobile' => '4:3'
     }
 
-    assert_equal correct, tested(params).geometries
+    assert_equal correct, tested(params).crop
   end
 
   def test_leftovers

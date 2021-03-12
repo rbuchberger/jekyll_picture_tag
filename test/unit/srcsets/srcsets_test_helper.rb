@@ -28,10 +28,10 @@ module SrcsetTestHelper
   end
 
   def stub_generated(width, returns, format = 'original', crop: nil,
-                     gravity: 'center')
+                     keep: 'center')
     GeneratedImage.stubs(:new)
                   .with(source_file: source_image, width: width,
-                        format: format, crop: crop, gravity: gravity)
+                        format: format, crop: crop, keep: keep)
                   .returns(returns)
   end
 end

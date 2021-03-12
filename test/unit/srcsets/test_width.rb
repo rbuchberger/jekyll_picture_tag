@@ -8,7 +8,7 @@ class TestSrcsetWidth < Minitest::Test
   end
 
   def config
-    { widths: [100, 200, 300], crop: nil, gravity: 'center' }
+    { widths: [100, 200, 300], crop: nil, keep: 'center' }
   end
 
   def stub_picturetag_sizes

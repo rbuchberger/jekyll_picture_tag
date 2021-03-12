@@ -9,9 +9,8 @@ class GeneratedImageTest < Minitest::Test
 
   def setup
     PictureTag.stubs(config)
-    File.stubs(:exist?).with(destfile).returns true
+    GeneratedImage.any_instance.stubs(exists?: true)
     Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
-    ImageFile.stubs(:new)
   end
 
   # Helpers
@@ -40,9 +39,17 @@ class GeneratedImageTest < Minitest::Test
   # Tests
 
   def test_init_existing_dest
-    GeneratedImage.any_instance.expects(:generate).never
+    ImageFile.expects(:new).never
 
-    tested
+    tested.generate
+  end
+
+  def test_init_missing_dest
+    GeneratedImage.any_instance.stubs(exists?: false)
+
+    ImageFile.expects(:new).once
+
+    tested.generate
   end
 
   def test_name

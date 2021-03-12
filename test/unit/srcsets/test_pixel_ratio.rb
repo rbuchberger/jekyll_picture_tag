@@ -8,7 +8,7 @@ class TestSrcsetPixelRatio < Minitest::Test
   end
 
   def config
-    { gravity: 'center', crop: nil, preset: {
+    { keep: 'center', crop: nil, preset: {
       'pixel_ratios' => [1, 1.5, 2, 3],
       'base_width' => 100
     } }

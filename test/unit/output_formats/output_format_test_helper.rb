@@ -20,7 +20,7 @@ module OutputFormatTestHelper
       fallback_format: 'fallback format',
       fallback_width: 100,
       crop: nil,
-      gravity: 'center',
+      keep: 'center',
       html_attributes: {},
       nomarkdown?: false
     }

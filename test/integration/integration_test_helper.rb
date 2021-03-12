@@ -32,11 +32,11 @@ module IntegrationTestHelper
   end
 
   def rms_url(width: 100, format: 'jpg')
-    "/generated/rms-#{width}-9ffc043fa.#{format}"
+    "/generated/rms-#{width}-9f9ef26e5.#{format}"
   end
 
   def spx_url(width: 100, format: 'jpg')
-    "/generated/spx-#{width}-3e829c5a4.#{format}"
+    "/generated/spx-#{width}-d1ce901d6.#{format}"
   end
 
   def spx_filename(width: 100, format: 'jpg', crop: '')
@@ -44,15 +44,15 @@ module IntegrationTestHelper
   end
 
   def std_spx_ss
-    '/generated/spx-25-3e829c5a4.jpg 25w, ' \
-    '/generated/spx-50-3e829c5a4.jpg 50w, ' \
-    '/generated/spx-100-3e829c5a4.jpg 100w'
+    '/generated/spx-25-d1ce901d6.jpg 25w, ' \
+    '/generated/spx-50-d1ce901d6.jpg 50w, ' \
+    '/generated/spx-100-d1ce901d6.jpg 100w'
   end
 
   def std_rms_ss
-    '/generated/rms-25-9ffc043fa.jpg 25w, ' \
-    '/generated/rms-50-9ffc043fa.jpg 50w, ' \
-    '/generated/rms-100-9ffc043fa.jpg 100w'
+    '/generated/rms-25-9f9ef26e5.jpg 25w, ' \
+    '/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+    '/generated/rms-100-9f9ef26e5.jpg 100w'
   end
 
   def rms_file_array(widths, formats)

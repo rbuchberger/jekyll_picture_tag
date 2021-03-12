@@ -37,7 +37,7 @@ class TestImageFile < Minitest::Test
       width: 10,
       format: format,
       crop: nil,
-      gravity: nil,
+      keep: nil,
       quality: 75,
       absolute_filename: filename,
       name: dest_name

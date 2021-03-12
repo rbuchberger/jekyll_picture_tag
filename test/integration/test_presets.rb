@@ -30,9 +30,9 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w,' \
-      ' /generated/rms-100-9ffc043fa.webp 100w'
+    ss1 = '/generated/rms-25-9f9ef26e5.webp 25w,' \
+      ' /generated/rms-50-9f9ef26e5.webp 50w,' \
+      ' /generated/rms-100-9f9ef26e5.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -68,9 +68,9 @@ class TestIntegrationPresets < Minitest::Test
   def test_pixel_ratio
     output = tested 'pixel_ratio rms.jpg'
 
-    correct = '/generated/rms-10-9ffc043fa.jpg 1.0x,'\
-      ' /generated/rms-20-9ffc043fa.jpg 2.0x,' \
-      ' /generated/rms-30-9ffc043fa.jpg 3.0x'
+    correct = '/generated/rms-10-9f9ef26e5.jpg 1.0x,'\
+      ' /generated/rms-20-9f9ef26e5.jpg 2.0x,' \
+      ' /generated/rms-30-9f9ef26e5.jpg 3.0x'
 
     assert_equal correct, output.at_css('img')['srcset']
   end
@@ -148,9 +148,9 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
 
-    ss1 = '/generated/spx-10-3e829c5a4.jpg 10w,' \
-      ' /generated/spx-20-3e829c5a4.jpg 20w,' \
-      ' /generated/spx-30-3e829c5a4.jpg 30w'
+    ss1 = '/generated/spx-10-d1ce901d6.jpg 10w,' \
+      ' /generated/spx-20-d1ce901d6.jpg 20w,' \
+      ' /generated/spx-30-d1ce901d6.jpg 30w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -163,9 +163,9 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w,' \
-      ' /generated/rms-100-9ffc043fa.webp 100w'
+    ss1 = '/generated/rms-25-9f9ef26e5.webp 25w,' \
+      ' /generated/rms-50-9f9ef26e5.webp 50w,' \
+      ' /generated/rms-100-9f9ef26e5.webp 100w'
 
     assert_equal ss1, sources[0]['data-srcset']
     assert_equal std_rms_ss, sources[1]['data-srcset']
@@ -228,7 +228,7 @@ class TestIntegrationPresets < Minitest::Test
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
     output = tested 'fallback rms.jpg 1:3'
-    correct = '/generated/rms-30-f091d4dbe.webp'
+    correct = '/generated/rms-30-fa54552de.webp'
 
     assert_includes stderr, 'rms.jpg'
     assert_equal correct, output.at_css('img')['src']
@@ -275,10 +275,10 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      Image.new_from_file(temp_dir('generated/rms-100-3c1fa27c4.jpg')).size
+      Image.new_from_file(temp_dir('generated/rms-100-4ccd7bac1.jpg')).size
 
     spx_dimensions =
-      Image.new_from_file(temp_dir('generated/spx-100-8d935ea90.jpg')).size
+      Image.new_from_file(temp_dir('generated/spx-100-63d4bc0d5.jpg')).size
 
     assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
     assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03

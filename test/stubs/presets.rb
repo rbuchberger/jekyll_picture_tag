@@ -176,9 +176,9 @@ module Stubs
           'media_crop' => {
             'mobile' => '16:9'
           },
-          'gravity' => 'north',
-          'media_gravity' => {
-            'mobile' => 'northwest'
+          'keep' => 'center',
+          'media_keep' => {
+            'mobile' => 'entropy'
           }
         },
 
