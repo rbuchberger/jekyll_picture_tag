@@ -76,6 +76,8 @@ module PictureTag
     end
 
     def generate_image
+      return if @source.missing
+
       ImageFile.new(@source, self)
     end
 
