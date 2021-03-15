@@ -275,7 +275,7 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      Image.new_from_file(temp_dir('generated/rms-100-4ccd7bac1.jpg')).size
+      Image.new_from_file(temp_dir('generated/rms-100-ced21b33d.jpg')).size
 
     spx_dimensions =
       Image.new_from_file(temp_dir('generated/spx-100-63d4bc0d5.jpg')).size
