@@ -67,9 +67,7 @@ presets:
     size: 500px
 ```
 
-Imagemagick can easily crop images to an aspect ratio, though you should **read
-the whole installation guide before using this feature**. With the above preset,
-if you write this:
+Cropping images is easy! With the above preset, if you write this:
 
 {% raw %}
 `{% picture test.jpg 3:2 mobile: test2.jpg 1:1 --alt Alternate Text %}`
@@ -124,7 +122,7 @@ switching problems *solved*, with a one-liner and a nicely readable config file
 that is 1/3 as long as the output markup. Lighthouse is happy, and you don't
 even need to crop things yourself.
 
-That isn't a complete demonstration of Jekyll Picture Tag's feature set; it can
-(among other things) add width & height attributes to prevent page reflow, add a
-link to the source image (or anywhere else), and adjust image quality. See the
-docs for more.
+This is far from a complete demonstration of Jekyll Picture Tag's feature set;
+it can (among other things) add width & height attributes to prevent page
+reflow, add a link to the source image (or anywhere else), and adjust image
+quality. See the docs for more.
