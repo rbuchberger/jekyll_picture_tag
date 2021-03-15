@@ -75,7 +75,8 @@ module PictureTag
     end
 
     def crop(image)
-      image.smartcrop(*source.dimensions)
+      image.smartcrop(*source.dimensions,
+                      interesting: PictureTag.keep(@source.media_preset))
     end
 
     def scale_value
