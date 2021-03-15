@@ -4,19 +4,15 @@ sort: 5
 
 # Cropping
 
-**Check the warning in the 
-[installation guide]({{ site.baseurl }}/users/installation) 
-before using this feature.**
-
 ## Crop & Media Crop
 
 _Format:_
 
 ```yaml
-    crop: (geometery)
+    crop: (aspect ratio)
     media_crop:
-      (media_preset): (geometry)
-      (media_preset): (geometry)
+      (media_preset): (aspect ratio)
+      (media_preset): (aspect ratio)
       (...)
 ```
 
@@ -29,33 +25,36 @@ _Example:_
       mobile: '1:1'
 ```
 
-Crop geometry, given either generally or for specific media presets. The
+Crop aspect ratio, given either generally or for specific media presets. The
 hierarchy is: `tag argument` > `media_crop:` > `crop:`.
 
-This setting accepts the same arguments as the `crop geometry` 
+This setting accepts the same arguments as the `crop` 
 [tag parameter]({{ site.baseurl }}/users/liquid_tag/argument_reference/crop).
 
-## Gravity & Media Gravity
+## Keep & Media Keep
 
 ```yaml
-    gravity: (gravity)
-    media_gravity:
-      (media_preset): (gravity)
-      (media_preset): (gravity)
+    keep: (measure)
+    media_keep:
+      (media_preset): (measure)
+      (media_preset): (measure)
       (...)
 ```
 
 _Example:_
 
 ```yaml
-    gravity: north
+    keep: attention
     media_gravity:
-      tablet: east
-      mobile: southwest
+      tablet: entropy
+      mobile: center
 ```
 
-Crop gravity, given either generally or for specific media presets. The hierarchy is:
-`tag argument` > `media_gravity:` > `gravity:` > `center` (default).
+Which part of the image to keep when cropping, given either generally or for specific media presets.
+The hierarchy is: `tag argument` > `media_keep:` > `keep:` > `attention` (default).
 
-This setting accepts the same arguments as the `crop gravity` 
-[tag parameter]({{ site.baseurl }}/users/liquid_tag/argument_reference/crop).
+This setting accepts the same arguments as the `keep` [tag parameter]({{ site.baseurl
+}}/users/liquid_tag/argument_reference/crop):
+* `center` or `centre`
+* `attention`
+* `entropy`

@@ -53,18 +53,15 @@
   {% picture example.jpg --picture class="some classes" --img id="example" %}
   ```
 
-  ```warning
-  Read the whole installation guide before using the crop feature.
+  * Crop to a 16:9 aspect ratio (Will keep the part of the image "most likely to
+    draw human attention"):
   ```
-
-  * Crop to a 16:9 aspect ratio, keeping the top:
-  ```
-  {% picture example.jpg 16:9 north %}
+  {% picture example.jpg 16:9 %}
   ```
 
   * Crop to a 1:1 aspect ratio, keeping the middle, with alt text:
   ```
-  {% picture thumbnail example.jpg 1:1 --alt Example Image %}
+  {% picture thumbnail example.jpg 1:1 center --alt Example Image %}
   ```
 
   * Crop the same image multiple times:
@@ -82,9 +79,9 @@
     {% 
       picture
       hero
-      example.jpg 16:9 east
-      tablet: example2.jpg 3:2 east
-      mobile: example3.jpg 1:1-50+0 east
+      example.jpg 16:9 entropy
+      tablet: example2.jpg 3:2
+      mobile: example3.jpg 1:1
       --alt Happy Puppy
       --picture class="hero"
       --link /
