@@ -1,8 +1,5 @@
 require 'test_helper'
 
-# Source cache and generated cache don't differ in functionality, just
-# information format. These unit tests give sufficient coverage for both,
-# as well as the Cache::Base module.
 class TestCache < Minitest::Test
   include PictureTag
   include TestHelper
@@ -13,7 +10,7 @@ class TestCache < Minitest::Test
   end
 
   def tested(name = 'img.jpg')
-    @tested ||= Cache::Source.new(name)
+    @tested ||= Cache.new(name)
   end
 
   def teardown
@@ -21,13 +18,13 @@ class TestCache < Minitest::Test
   end
 
   def test_initialize_empty
-    assert_nil tested[:width]
+    assert_nil tested[:digest]
   end
 
   def test_data_store
-    tested[:width] = 100
+    tested[:digest] = 'scruffer pupper'
 
-    assert tested[:width] = 100
+    assert tested[:digest] = 'scruffer pupper'
   end
 
   def test_reject_bad_key
@@ -37,36 +34,35 @@ class TestCache < Minitest::Test
   end
 
   def test_write_data
-    tested[:width] = 100
+    tested[:digest] = 'scruffer pupper'
     tested.write
 
-    assert_path_exists temp_dir('source/img.jpg.json')
+    assert_path_exists temp_dir('img.jpg.json')
   end
 
   def test_retrieve_data
-    tested[:width] = 100
+    tested[:digest] = 'scruffer pupper'
     tested.write
 
-    assert_equal 100, Cache::Source.new('img.jpg')[:width]
+    assert_equal 'scruffer pupper', Cache.new('img.jpg')[:digest]
   end
 
   # Handles filenames with directories in them
   def test_subdirectory_name
     tested('somedir/img.jpg')
-    tested[:width] = 100
-    tested[:height] = 100
+    tested[:digest] = 'abc123'
     tested.write
 
-    assert_path_exists temp_dir('source/somedir/img.jpg.json')
+    assert_path_exists temp_dir('somedir/img.jpg.json')
   end
 
   # Jekyll has a flag to disable caching; we must respect it.
   def test_disable_disk_cache
     PictureTag.stubs(config: { 'disable_disk_cache' => true })
 
-    tested[:width] = 100
+    tested[:digest] = 'asdf'
     tested.write
 
-    refute_path_exists temp_dir('source/img.jpg.json')
+    refute_path_exists temp_dir('img.jpg.json')
   end
 end

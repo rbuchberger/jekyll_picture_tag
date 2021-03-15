@@ -47,16 +47,12 @@ module PictureTag
 
     # Post crop
     def source_width
-      update_cache unless cache[:width]
-
-      cache[:width]
+      image.width
     end
 
     # Post crop
     def source_height
-      update_cache unless cache[:height]
-
-      cache[:height]
+      image.height
     end
 
     def quality
@@ -64,24 +60,6 @@ module PictureTag
     end
 
     private
-
-    # We exclude width and format from the cache name, since it isn't specific
-    # to them.
-    def cache
-      @cache ||= Cache::Generated.new("#{@source.base_name}-#{id}")
-    end
-
-    def update_cache
-      return if @source.missing
-
-      # Ensure it's generated:
-      image
-
-      cache[:width] = @source_dimensions[:width]
-      cache[:height] = @source_dimensions[:height]
-
-      cache.write
-    end
 
     # Hash all inputs and truncate, so we know when they change without getting
     # too long.

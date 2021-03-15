@@ -12,7 +12,7 @@ class TestSourceImageMissing < Minitest::Test
   def setup
     PictureTag.stubs(config)
     Utils.stubs(:warning)
-    Cache::Source.stubs(:new).returns({ width: nil, height: nil, digest: nil })
+    Cache.stubs(:new).returns({ digest: nil })
   end
 
   # Helpers

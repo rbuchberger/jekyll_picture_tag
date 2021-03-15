@@ -10,7 +10,6 @@ class GeneratedImageTest < Minitest::Test
   def setup
     PictureTag.stubs(config)
     GeneratedImage.any_instance.stubs(exists?: true)
-    Cache::Generated.stubs(:new).returns({ width: 100, height: 80 })
   end
 
   # Helpers
@@ -71,14 +70,6 @@ class GeneratedImageTest < Minitest::Test
              .format
 
     assert_equal 'jpg', format
-  end
-
-  def test_source_width
-    assert_equal 100, tested.source_width
-  end
-
-  def test_source_height
-    assert_equal 80, tested.source_height
   end
 
   def test_uri

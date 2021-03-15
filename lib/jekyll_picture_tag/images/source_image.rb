@@ -69,16 +69,16 @@ module PictureTag
 
     # pre-crop
     def raw_width
-      @raw_width ||= cache[:width] || 999_999
+      @raw_width ||= @missing ? 999_999 : image.width
     end
 
     # pre-crop
     def raw_height
-      @raw_height ||= cache[:height] || 999_999
+      @raw_height ||= @missing ? 999_999 : image.height
     end
 
     def cache
-      @cache ||= Cache::Source.new(@shortname)
+      @cache ||= Cache.new(@shortname)
     end
 
     def missing?
@@ -103,8 +103,6 @@ module PictureTag
 
     def update_cache
       cache[:digest] = source_digest
-      cache[:width] = image.width
-      cache[:height] = image.height
 
       cache.write
     end

@@ -7,7 +7,7 @@ class TestSourceImage < Minitest::Test
   def setup
     # JPT stubs
     PictureTag.stubs(config)
-    Cache::Source.stubs(:new).returns(cache_stub)
+    Cache.stubs(:new).returns(cache_stub)
     # Core stubs
     File.stubs(:read)
     File.stubs(:exist?).returns(true)
@@ -22,7 +22,7 @@ class TestSourceImage < Minitest::Test
   end
 
   def cache_stub
-    @cache_stub ||= { width: 88, height: 100, digest: 'abc123' }
+    @cache_stub ||= { digest: 'abc123' }
   end
 
   def tested
@@ -46,8 +46,6 @@ class TestSourceImage < Minitest::Test
     cache_stub[:digest] = 'bad info'
 
     cache_stub.expects(:[]=).with(:digest, 'abc123')
-    cache_stub.expects(:[]=).with(:width, 50)
-    cache_stub.expects(:[]=).with(:height, 60)
     cache_stub.expects(:write)
 
     tested
