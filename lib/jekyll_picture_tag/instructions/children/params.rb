@@ -62,7 +62,16 @@ module PictureTag
       def coerce(media = nil)
         raise ArgumentError unless valid?
 
-        source[:params][media] || super(media)
+        lookup[source[:params][media] || super(media)]
+      end
+
+      def lookup
+        {
+          'center' => :centre,
+          'centre' => :centre,
+          'attention' => :attention,
+          'entropy' => :entropy
+        }
       end
 
       def setting_basename
