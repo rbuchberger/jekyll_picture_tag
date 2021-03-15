@@ -76,9 +76,7 @@ module PictureTag
         image = GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: checked_fallback_width,
-          crop: PictureTag.crop,
-          keep: PictureTag.keep
+          width: checked_fallback_width
         )
 
         image.generate
@@ -92,9 +90,7 @@ module PictureTag
         @fallback_candidate ||= GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width,
-          crop: PictureTag.crop,
-          keep: PictureTag.keep
+          width: PictureTag.fallback_width
         )
       end
 

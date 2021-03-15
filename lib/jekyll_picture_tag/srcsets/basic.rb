@@ -108,9 +108,7 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @input_format,
-          crop: PictureTag.crop(@media),
-          keep: PictureTag.keep(@media)
+          format: @input_format
         )
       end
     end
