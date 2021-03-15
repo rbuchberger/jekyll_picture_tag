@@ -67,20 +67,12 @@ module PictureTag
       @id ||= Digest::MD5.hexdigest(settings.join)[0..8]
     end
 
-    def image
-      return @image if defined? @image
-
-      # Post crop, before resizing and reformatting
-      @source_dimensions = { width: image_base.width,
-                             height: image_base.height }
-
-      @image = image_base
     def settings
       [@source.digest, @source.crop, @source.keep, quality]
     end
 
-    def image_base
-      @image_base ||= Vips::Image.new_from_file @source.name
+    def image
+      @image ||= Vips::Image.new_from_file @source.name
     end
 
     def generate_image
