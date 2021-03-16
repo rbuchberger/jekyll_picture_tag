@@ -136,9 +136,9 @@ module Stubs
         },
 
         'formats' => {
-          'widths' => [100],
-          'fallback_width' => 100,
-          'formats' => %w[jpg jp2 png webp gif]
+          'widths' => [20],
+          'fallback_width' => 20,
+          'formats' => %w[jpg jp2 png webp gif avif]
         },
 
         'quality' => {

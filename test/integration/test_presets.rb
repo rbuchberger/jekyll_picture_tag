@@ -241,14 +241,11 @@ class TestIntegrationPresets < Minitest::Test
     assert nomarkdown_wrapped? output
   end
 
-  # format conversions
-  # formats: jpg, jp2, png, webp, gif
   # convert from each to each, make sure nothing breaks.
   def test_conversions
-    # Vips can't handle jp2 in my setup right now. Need to troubleshoot.
-
     File.unstub(:exist?)
-    formats = %w[jpg png webp gif]
+    formats = supported_formats
+    presets['formats']['formats'] = formats
 
     formats.each do |input_format|
       output = tested "formats rms.#{input_format}"
@@ -256,7 +253,8 @@ class TestIntegrationPresets < Minitest::Test
       sources = output.css('source')
       formats.each do |output_format|
         mime = MIME::Types.type_for(output_format).first.to_s
-        assert(sources.any? { |source| source['type'] == mime })
+        assert(sources.any? { |source| source['type'] == mime },
+               "Failed to generate a source with type #{mime}")
       end
     end
 

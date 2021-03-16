@@ -90,7 +90,7 @@ class TestImageFile < Minitest::Test
 
   # Verify we can convert to and from all the formats we care about
   def test_format_conversions
-    formats = %w[jpg png webp gif avif jp2]
+    formats = supported_formats
 
     formats.each do |input_format|
       restub_source('rms', input_format)
