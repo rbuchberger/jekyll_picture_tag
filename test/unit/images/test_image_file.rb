@@ -6,8 +6,17 @@ class TestImageFile < Minitest::Test
   # Lifecycle
 
   def setup
-    PictureTag.stubs(preset: { 'strip_metadata' => true })
+    PictureTag.stubs(preset: preset)
     ImageFile.any_instance.stubs(:puts)
+  end
+
+  def preset
+    {
+      'strip_metadata' => true,
+      'image_options' => {
+        'avif' => { 'compression' => 'av1' }
+      }
+    }
   end
 
   def teardown
