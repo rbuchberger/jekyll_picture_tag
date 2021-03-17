@@ -11,7 +11,7 @@ module PictureTag
       private
 
       def content
-        @content ||= setting_merge(defaults, PictureTag.site.config)
+        @content ||= setting_merge(DEFAULT_CONFIG, PictureTag.site.config)
       end
 
       def setting_merge(default, jekyll)
@@ -22,17 +22,6 @@ module PictureTag
             config_setting
           end
         end
-      end
-
-      def defaults
-        # Jekyll Picture Tag Default settings
-        YAML.safe_load(
-          File.read(
-            File.join(
-              ROOT_PATH, 'jekyll_picture_tag/defaults/global.yml'
-            )
-          )
-        )
       end
     end
   end
