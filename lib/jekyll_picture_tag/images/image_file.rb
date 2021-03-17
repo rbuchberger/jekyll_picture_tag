@@ -55,7 +55,6 @@ module PictureTag
         image.write_to_file(base.absolute_filename, **write_opts)
       rescue Vips::Error
         # If vips can't handle it, fall back to imagemagick.
-        binding.pry unless @base.format == 'jp2'
         opts = write_opts.transform_keys do |key|
           key == :Q ? :quality : key
         end
