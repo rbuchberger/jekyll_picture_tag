@@ -9,6 +9,7 @@ require_relative 'jekyll_picture_tag/parsers'
 require_relative 'jekyll_picture_tag/router'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
+require_relative 'jekyll_picture_tag/defaults/presets'
 
 # Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski   : @robwierzbowski
