@@ -35,6 +35,26 @@ module IntegrationTestHelper
     "/generated/rms-#{width}-9f9ef26e5.#{format}"
   end
 
+  def url_matcher(name: 'rms', width: 100, format: 'jpg')
+    %r{/generated/#{name}-#{width}-[a-f0-9]{9}.#{format}}
+  end
+
+  # Width srcset matcher
+  def srcset_matcher_w(name: 'rms', widths: [25, 50, 100], format: 'jpg')
+    array = widths.map do |width|
+      "/generated\/#{name}-#{width}-[a-f0-9]{9}.#{format} #{width}w"
+    end
+    Regexp.new(array.join(', '))
+  end
+
+  # Pixel ratio srcset matcher
+  def srcset_matcher_p(name: 'rms', base: 10, ratios: [1, 2, 3], format: 'jpg')
+    array = ratios.map do |ratio|
+      "/generated\/#{name}-#{base * ratio}-[a-f0-9]{9}.#{format} #{ratio.to_f}x"
+    end
+    Regexp.new(array.join(', '))
+  end
+
   def spx_url(width: 100, format: 'jpg')
     "/generated/spx-#{width}-d1ce901d6.#{format}"
   end

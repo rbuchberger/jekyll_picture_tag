@@ -14,11 +14,10 @@ class TestIntegrationPresets < Minitest::Test
   # widths 25, 50, 100
   # formats webp, original
   def test_picture_files
-    # File.unstub(:exist?)
     tested('auto rms.jpg')
+    files = Dir.glob(temp_dir('generated' + '/*'))
 
-    files = rms_file_array(widths, %w[webp jpg])
-    assert(files.all? { |f| File.exist?(f) })
+    assert_equal(6, files.length)
     assert_includes stdout, 'Generating'
   end
 
@@ -30,9 +29,9 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9f9ef26e5.webp 25w,' \
-      ' /generated/rms-50-9f9ef26e5.webp 50w,' \
-      ' /generated/rms-100-9f9ef26e5.webp 100w'
+    ss1 = '/generated/rms-25-c87b11253.webp 25w,' \
+      ' /generated/rms-50-c87b11253.webp 50w,' \
+      ' /generated/rms-100-c87b11253.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -68,11 +67,11 @@ class TestIntegrationPresets < Minitest::Test
   def test_pixel_ratio
     output = tested 'pixel_ratio rms.jpg'
 
-    correct = '/generated/rms-10-9f9ef26e5.jpg 1.0x,'\
-      ' /generated/rms-20-9f9ef26e5.jpg 2.0x,' \
-      ' /generated/rms-30-9f9ef26e5.jpg 3.0x'
+    # correct = '/generated/rms-10-c87b11253.jpg 1.0x,'\
+    #   ' /generated/rms-20-c87b11253.jpg 2.0x,' \
+    #   ' /generated/rms-30-c87b11253.jpg 3.0x'
 
-    assert_equal correct, output.at_css('img')['srcset']
+    assert_match srcset_matcher_p, output.at_css('img')['srcset']
   end
 
   # data_ output with sizes attr, yes data-sizes
@@ -163,11 +162,8 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9f9ef26e5.webp 25w,' \
-      ' /generated/rms-50-9f9ef26e5.webp 50w,' \
-      ' /generated/rms-100-9f9ef26e5.webp 100w'
 
-    assert_equal ss1, sources[0]['data-srcset']
+    assert_match srcset_matcher_w(format: 'webp'), sources[0]['data-srcset']
     assert_equal std_rms_ss, sources[1]['data-srcset']
 
     assert_equal 'image/webp', sources[0]['type']
@@ -212,9 +208,9 @@ class TestIntegrationPresets < Minitest::Test
   # fallback width and format
   def test_fallback
     output = tested 'fallback rms.jpg'
-    correct = rms_url(width: 35, format: 'webp')
 
-    assert_equal correct, output.at_css('img')['src']
+    assert_match url_matcher(format: 'webp', width: 35),
+                 output.at_css('img')['src']
   end
 
   # Fallback is actually generated
@@ -222,16 +218,18 @@ class TestIntegrationPresets < Minitest::Test
     File.unstub :exist?
     tested 'fallback rms.jpg'
 
-    assert_path_exists(rms_filename(width: 35, format: 'webp'))
+    files = Dir.glob(temp_dir('generated') + '/rms-35-?????????.webp')
+
+    assert_equal 1, files.length
   end
 
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
     output = tested 'fallback rms.jpg 1:3'
-    correct = '/generated/rms-30-fa54552de.webp'
 
     assert_includes stderr, 'rms.jpg'
-    assert_equal correct, output.at_css('img')['src']
+    assert_match url_matcher(format: 'webp', width: 30),
+                 output.at_css('img')['src']
   end
 
   # nomarkdown override
