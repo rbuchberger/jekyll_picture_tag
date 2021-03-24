@@ -68,10 +68,15 @@ sacrificing image quality for low-density screens. Taking the example settings a
   * A 500px image will use a quality of 90.
 
 
+## Image Format Options
 
   _Format:_
 
   ```yaml
+  image_options: 
+    format:
+      setting1: value
+      setting2: value
       (...)
     (...)
   ```
@@ -79,9 +84,27 @@ sacrificing image quality for low-density screens. Taking the example settings a
   _Example:_
 
   ```yaml
+  image_options:
+    webp:
+      lossless: true
   ```
+
+  _Default:_
 
   ```yaml
+  image_options:
+    avif: 
+      compression: av1
+      speed: 8
   ```
 
+Control the write options passed to libvips for each image output format. To see a list of options
+available for a given image format, search for the method `vips_(format)save` in
+[this](https://libvips.github.io/libvips/API/current/VipsForeignSave.html) API documentation. For
+example, png options can be found by searching for `vips_pngsave()`, leading
+[here](https://libvips.github.io/libvips/API/current/VipsForeignSave.html#vips-pngsave). See the
+optional arguments. 
 
+For all formats, note that
+- `Q:` (quality) is handled by the settings above.
+- `strip` is handled by the `strip_metadata` setting documented above.
