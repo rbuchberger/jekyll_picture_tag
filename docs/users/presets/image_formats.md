@@ -4,9 +4,9 @@ sort: 3
 
 # Image Formats
 
-_Format:_ `format: [format1, format2, (...)]`
+_Format:_ `formats: [format1, format2, (...)]`
 
-_Example:_ `format: [webp, original]`
+_Example:_ `formats: [webp, original]`
 
 _Default_: `original`
 
