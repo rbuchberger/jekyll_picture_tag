@@ -27,26 +27,17 @@
 
   * Use liquid variables:
   ```
-  {% picture {{ page.some_liquid_variable }} %}
+  {% picture "{{ page.some_liquid_variable }}" %}
   ```
 
   * Select the blog_index preset, use liquid variables, and wrap the image in an
   anchor tag (link):
   ```
-  {% picture blog_index {{ post.image }} --link {{ post.url }} %}
+  {% picture blog_index "{{ post.image }}" --link {{ post.url }} %}
   ```
-    N.B. If the image path is coming from a liquid variable then you have two problems to guard against.
-    * __Spaces__: you need to wrap the inner tag in "" to stop a path with spaces being interpretted as two or more arguments:
-    ```
-    {% picture blog_index "{{ post.image }}" %}
-    ```
-    * __Nulls & Blanks__: you need to wrap whole tag in a logic block to stop an uncaught Liquid exception:
-    ```
-    {% if post.image && post.image != "" %} 
-      {% picture blog_index "{{ post.image }}" %}
-    {% endif %}
-    ```
-  
+
+   **Note:** If the image path is coming from a liquid variable then you should guard against spaces
+   by wrapping the inner tag in quotes, as in the previous examples.
 
   * Add arbitrary HTML attributes:
   ```
