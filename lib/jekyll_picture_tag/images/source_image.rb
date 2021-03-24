@@ -70,7 +70,7 @@ module PictureTag
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
     #                                                     ^^^
     def ext
-      @ext ||= File.extname(name)[1..-1].downcase
+      @ext ||= File.extname(name)[1..].downcase
     end
 
     private
