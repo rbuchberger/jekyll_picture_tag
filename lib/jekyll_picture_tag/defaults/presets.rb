@@ -8,7 +8,6 @@ module PictureTag
                      'link_source' => false,
                      'quality' => 75,
                      'format_quality' => { 'webp' => 50,
-                                           'jpg' => 75,
                                            'avif' => 30,
                                            'jp2' => 30 },
                      'data_sizes' => true,
@@ -26,20 +25,25 @@ module PictureTag
 
     'jpt-lazy' => { 'markup' => 'data_auto',
                     'noscript' => true,
+                    'formats' => %w[webp original],
                     'attributes' => { 'parent' => 'class="lazy"' } },
 
     'jpt-loaded' => { 'formats' => %w[avif jp2 webp original],
                       'dimension_attributes' => true },
 
-    'jpt-direct' => { 'markup' => 'direct_url' },
+    'jpt-direct' => { 'markup' => 'direct_url',
+                      'fallback_format' => 'webp',
+                      'fallback_width' => 600 },
 
     'jpt-thumbnail' => { 'base_width' => 250,
                          'pixel_ratios' => [1, 1.5, 2],
-                         'formats' => %w[webp original] },
+                         'formats' => %w[webp original],
+                         'fallback_width' => 250,
+                         'attributes' => { 'picture' => 'class="icon"' } },
 
     'jpt-avatar' => { 'base_width' => 100,
                       'pixel_ratios' => [1, 1.5, 2],
-                      'formats' => %w[webp original],
+                      'fallback_width' => 100,
                       'crop' => '1:1' }
   }.freeze
 
