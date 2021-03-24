@@ -1,15 +1,11 @@
-require_relative './test_integration_helper'
-require 'mini_magick'
+require_relative 'integration_test_helper'
+require 'vips'
 
 # This class focuses on testing various output formats and their configurations.
 # The preset names are defined in test/stubs/jekyll.rb
 class TestIntegrationPresets < Minitest::Test
-  include TestIntegrationHelper
-  include MiniMagick
-
-  def setup
-    base_stubs
-  end
+  include IntegrationTestHelper
+  include Vips
 
   def teardown
     cleanup_files
@@ -18,12 +14,11 @@ class TestIntegrationPresets < Minitest::Test
   # widths 25, 50, 100
   # formats webp, original
   def test_picture_files
-    # File.unstub(:exist?)
     tested('auto rms.jpg')
+    files = Dir.glob(temp_dir('generated' + '/*'))
 
-    files = rms_file_array(@widths, %w[webp jpg])
-    assert(files.all? { |f| File.exist?(f) })
-    assert_includes @stdout, 'Generating'
+    assert_equal(6, files.length)
+    assert_includes stdout, 'Generating'
   end
 
   # widths 25, 50, 100
@@ -34,8 +29,9 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
+    ss1 = '/generated/rms-25-c87b11253.webp 25w,' \
+      ' /generated/rms-50-c87b11253.webp 50w,' \
+      ' /generated/rms-100-c87b11253.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -71,10 +67,11 @@ class TestIntegrationPresets < Minitest::Test
   def test_pixel_ratio
     output = tested 'pixel_ratio rms.jpg'
 
-    correct = '/generated/rms-10-9ffc043fa.jpg 1.0x,'\
-      ' /generated/rms-20-9ffc043fa.jpg 2.0x, /generated/rms-30-9ffc043fa.jpg 3.0x'
+    # correct = '/generated/rms-10-c87b11253.jpg 1.0x,'\
+    #   ' /generated/rms-20-c87b11253.jpg 2.0x,' \
+    #   ' /generated/rms-30-c87b11253.jpg 3.0x'
 
-    assert_equal correct, output.at_css('img')['srcset']
+    assert_match srcset_matcher_p, output.at_css('img')['srcset']
   end
 
   # data_ output with sizes attr, yes data-sizes
@@ -150,8 +147,9 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
 
-    ss1 = '/generated/spx-10-3e829c5a4.jpg 10w,' \
-      ' /generated/spx-20-3e829c5a4.jpg 20w, /generated/spx-30-3e829c5a4.jpg 30w'
+    ss1 = '/generated/spx-10-d1ce901d6.jpg 10w,' \
+      ' /generated/spx-20-d1ce901d6.jpg 20w,' \
+      ' /generated/spx-30-d1ce901d6.jpg 30w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -164,10 +162,8 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-9ffc043fa.webp 25w,' \
-      ' /generated/rms-50-9ffc043fa.webp 50w, /generated/rms-100-9ffc043fa.webp 100w'
 
-    assert_equal ss1, sources[0]['data-srcset']
+    assert_match srcset_matcher_w(format: 'webp'), sources[0]['data-srcset']
     assert_equal std_rms_ss, sources[1]['data-srcset']
 
     assert_equal 'image/webp', sources[0]['type']
@@ -212,9 +208,9 @@ class TestIntegrationPresets < Minitest::Test
   # fallback width and format
   def test_fallback
     output = tested 'fallback rms.jpg'
-    correct = rms_url(width: 35, format: 'webp')
 
-    assert_equal correct, output.at_css('img')['src']
+    assert_match url_matcher(format: 'webp', width: 35),
+                 output.at_css('img')['src']
   end
 
   # Fallback is actually generated
@@ -222,16 +218,18 @@ class TestIntegrationPresets < Minitest::Test
     File.unstub :exist?
     tested 'fallback rms.jpg'
 
-    assert_path_exists(rms_filename(width: 35, format: 'webp'))
+    files = Dir.glob(temp_dir('generated') + '/rms-35-?????????.webp')
+
+    assert_equal 1, files.length
   end
 
   # Ensure fallback images aren't enlarged when cropped.
   def test_cropped_fallback
     output = tested 'fallback rms.jpg 1:3'
-    correct = '/generated/rms-30-f091d4dbe.webp'
 
-    assert_includes @stderr, 'rms.jpg'
-    assert_equal correct, output.at_css('img')['src']
+    assert_includes stderr, 'rms.jpg'
+    assert_match url_matcher(format: 'webp', width: 30),
+                 output.at_css('img')['src']
   end
 
   # nomarkdown override
@@ -241,12 +239,11 @@ class TestIntegrationPresets < Minitest::Test
     assert nomarkdown_wrapped? output
   end
 
-  # format conversions
-  # formats: jpg, jp2, png, webp, gif
   # convert from each to each, make sure nothing breaks.
   def test_conversions
     File.unstub(:exist?)
-    formats = %w[jpg png webp gif]
+    formats = supported_formats
+    presets['formats']['formats'] = formats
 
     formats.each do |input_format|
       output = tested "formats rms.#{input_format}"
@@ -254,11 +251,12 @@ class TestIntegrationPresets < Minitest::Test
       sources = output.css('source')
       formats.each do |output_format|
         mime = MIME::Types.type_for(output_format).first.to_s
-        assert(sources.any? { |source| source['type'] == mime })
+        assert(sources.any? { |source| source['type'] == mime },
+               "Failed to generate a source with type #{mime}")
       end
     end
 
-    files = Dir.entries('/tmp/jpt/generated/')
+    files = Dir.entries(temp_dir('generated'))
 
     formats.each do |format|
       assert_equal(
@@ -267,31 +265,16 @@ class TestIntegrationPresets < Minitest::Test
     end
   end
 
-  def test_quality_base
-    tested 'quality rms.jpg'
-
-    i = Image.open('/tmp/jpt/generated/rms-100-057d429d6.jpg')
-    assert_equal 30, i.data['quality'].to_i
-  end
-
-  # Apparently mini_magick can only read quality from jpegs.
-  def test_format_quality
-    tested 'format_quality rms.jpg'
-
-    i = Image.open('/tmp/jpt/generated/rms-100-21174d9bb.jpg')
-    assert_equal 45, i.data['quality'].to_i
-  end
-
   def test_crop
     # Crop preset should crop desktop to 3:2 and mobile to 16:9. Test images are
     # around 1:1 (but not exactly)
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      MiniMagick::Image.open('/tmp/jpt/generated/rms-100-3c1fa27c4.jpg').dimensions
+      Image.new_from_file(temp_dir('generated/rms-100-ced21b33d.jpg')).size
 
     spx_dimensions =
-      MiniMagick::Image.open('/tmp/jpt/generated/spx-100-8d935ea90.jpg').dimensions
+      Image.new_from_file(temp_dir('generated/spx-100-63d4bc0d5.jpg')).size
 
     assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
     assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03

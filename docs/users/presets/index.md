@@ -14,26 +14,6 @@ the `_data/` directory as well.
 Any settings which are specific to particular markup formats are documented on
 their respective markup format page.
 
-## Required Knowledge
-
-If you don't know the difference between resolution switching and art direction,
-stop now and learn responsive images. Ideally, write a few yourself until you
-understand them.
-
-Here are some good guides:
-
-* [MDN Responsive Images guide](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
-* [CSS Tricks Guide to Reponsive Images](https://css-tricks.com/a-guide-to-the-responsive-images-syntax-in-html/)
-* [Cloud 4 - Responsive Images 101](https://cloudfour.com/thinks/responsive-images-101-definitions/)
-
-## Media Queries
-
-**Media queries are not presets**, but they are used when writing them. They are
-defined in `_data/picture.yml` alongside presets. More information
-[here](media_queries).
-
-## Presets
-
 _General Format:_
 
 ```yaml
@@ -65,37 +45,93 @@ presets:
     noscript: true
 ```
 
-Each entry is a pre-defined collection of settings to build a given chunk of
-text (usually HTML) and its respective images. You can select one as the first
-argument given to the tag:
+## Media Queries
 
-{% raw %}
-`{% picture my-preset image.jpg %}`
-{% endraw %}
+**Media queries are not presets**, but they are used when writing them. They are
+defined in `_data/picture.yml` alongside presets. They look like this:
 
-The `default` preset will be used if none is specified. A preset name can't
-contain a `.` (period). You can create as many as you like.
+```yaml
+# _data/picture.yml
 
-```note
-`media_queries` and `presets` used to be called `media_presets` and
-`markup_presets`.  These names were causing some confusion, so they were
-changed. The old names will continue working for the forseeable future, at least
-until the next major version update.
+media_queries:
+  (name): '(media query)'
+  (name): '(media query)'
+  (name): '(media query)'
 ```
 
-## Markup Format
+Example:
 
-The high level, overall markup format is controlled with the `markup:` setting,
-documented [here](markup_formats).
+```yaml
+media_queries:
+  full_width: 'min-width: 901px'
+  tablet: 'min-width: 601px'
+  mobile: 'max-width: 600px'
+```
 
-## Choosing a Srcset format
+More information [here](media_queries).
+
+## How to write a preset
+
+### 0. Pick a name
+
+* Preset names should be a single word, and they can't contain periods.
+* `default` is used when you don't specify one in a liquid tag.
+* Anything beginning with `jpt-` is off limits.
+
+### 1. Pick a Markup Format
+
+The high level, overall markup format is controlled with the `markup:` setting, documented
+[here](markup_formats). You probably want the default setting of `auto`, unless you're doing some
+form of post-processing.
+
+If you have a lot of images below-the-fold, consider setting up lazy-loading with an appropriate
+javascript library (there are tons) and `data_auto`.
+
+### 2. Choose a srcset format.
  
-For images that are different sizes on different screens (most images), use a
-[width-based srcset](width_srcsets) (which is the default). 
+For images that are different sizes on different screens (most images), use a [width-based
+srcset](width_srcsets) (which is the default). When using this format, it's important to create a
+sizes attribute, documented at the link above.
 
-Use a [pixel-ratio srcset](pixel_ratio_srcsets) when the image will always be
-the same size, regardless of screen width (thumbnails and icons). 
+Use a [pixel-ratio srcset](pixel_ratio_srcsets) when the image will always be the same size,
+regardless of screen width (thumbnails, avatars, icons, etc). 
 
-## Settings reference
+### 3. Choose a set of image widths.
+
+For width-based srcsets, set `widths:`. For pixel-ratio srcsets, set `base_width:` and
+`pixel_ratios:`. You want 3-6 sizes that cover a wide range of devices.
+
+### 4. Choose a set of image formats.
+
+Accomplish this by setting `formats: [format1, format2, etc...]`
+
+* `webp` has [broad support](https://caniuse.com/?search=webp) and is an obvious choice.
+* `avif` has [bad](https://caniuse.com/?search=avif) (but improving) support, and for some reason is slow to generate, but gets better
+  file sizes than webp.
+* `jp2` is [Apple's baby](https://caniuse.com/?search=jp2).
+* `original` spits out whatever you put in.
+
+Order matters; browsers will use the first one they support. 
+
+* `[webp, original]` is a good compromise of build resources, support, and performance.
+* `[webp, jp2, original]` brings Safari users along for the ride.
+* `[avif, original]` If you don't care about browsers that aren't chrome, or build time.
+* `[avif, webp, jp2, original]` might be overkill, but it keeps everyone happy.
+
+### 5. Turn on dimension attributes.
+
+This step prevents page reflow on image load (especially when lazy loading), but requires some prep.
+
+1. Make sure your CSS is correct. You need something like `width: 100%` and `height: auto` (which
+   is why they aren't turned on by default.) Without this step, you'll get crazy sizes and/or
+   stretched images.
+2. Set `dimension_attributes: true`
+
+### 6. Make any other changes you need
+
+Here's a list of all preset settings available:
 
 {% include list.liquid %}
+
+(Note that the `data_*` output formats have a few special options, documented on their respective
+pages.)

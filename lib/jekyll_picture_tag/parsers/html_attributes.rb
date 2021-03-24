@@ -1,5 +1,5 @@
 module PictureTag
-  module Instructions
+  module Parsers
     # Handles HTML attributes, sourced from configuration and the liquid tag,
     # sent to various elements.
     # Stored as a hash, with string keys.

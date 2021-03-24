@@ -1,6 +1,6 @@
 ---
 ---
-# Migrating from versions < 1.0
+# Migrating from 0.x to 1.x
 
 This document details the changes from previous versions (Everything before 1.0), and how to migrate
 an existing site to the new version. It won't be updated to reflect new features -- it simply

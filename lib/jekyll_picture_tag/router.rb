@@ -1,115 +1,57 @@
 module PictureTag
   # The rest of the application doesn't care where the instruction logic
-  # resides. The following module 'routes' method calls to the right place, so
-  # the rest of the application can just call 'PictureTag.(some method)'
-
-  # At first I thought I'd do some sweet dynamic metaprogramming here, but it
-  # ended up complicated and clever, rather than convenient and understandable.
-  # This way is not strictly DRY, but it's straightforward and readable. If it
-  # gets big, I'll refactor.
+  # resides. This module 'routes' method calls to the right place, so
+  # information consumers can just call 'PictureTag.(some method)'
+  #
+  # This is accomplished with a bit of metaprogramming, which is hopefully not
+  # unnecessarily clever or complicated. Missing methods are converted to class
+  # names, which are looked up under the Instructions module namespace.
+  #
+  # Instantiated Instructions are stored in a hash, keyed by method name.
   module Router
-    attr_accessor :instructions, :context
+    # These two attributes encompass everything passed in by Jekyll.
+    attr_accessor :raw_params, :context
 
-    # Context forwarding
-
-    # Global site data
-    def site
-      @context.registers[:site]
+    def method_missing(method_name, *args)
+      if instruction_exists?(method_name)
+        instruction(method_name).value(*args)
+      else
+        super
+      end
     end
 
-    # Page which tag is called from
-    def page
-      @context.registers[:page]
+    def respond_to_missing?(method_name, *args)
+      instruction_exists?(method_name) || super
     end
 
-    # Instructions forwarding
-
-    def config
-      @instructions.config
+    # Required at least for testing; instructions are persisted between tags
+    # otherwise.
+    def clear_instructions
+      instructions.clear
     end
 
-    def preset
-      @instructions.preset
+    private
+
+    def instruction(method_name)
+      instructions[method_name] ||= instruction_class(method_name).new
     end
 
-    def media_presets
-      @instructions.media_presets
+    def instructions
+      @instructions ||= {}
     end
 
-    def html_attributes
-      @instructions.html_attributes
+    def instruction_exists?(method_name)
+      Object.const_defined? instruction_class_name(method_name.to_sym)
     end
 
-    def output_class
-      @instructions.output_class
+    # Class names can't contain question marks, so we strip them.
+    def instruction_class(method_name)
+      Object.const_get instruction_class_name(method_name)
     end
 
-    def source_images
-      @instructions.source_images
-    end
-
-    def crop(media = nil)
-      @instructions.crop(media)
-    end
-
-    def gravity(media = nil)
-      @instructions.gravity(media)
-    end
-
-    # Config Forwarding
-
-    def source_dir
-      config.source_dir
-    end
-
-    def dest_dir
-      config.dest_dir
-    end
-
-    def continue_on_missing?
-      config.continue_on_missing?
-    end
-
-    def cdn?
-      config.cdn?
-    end
-
-    def pconfig
-      config.pconfig
-    end
-
-    def disabled?
-      config.disabled?
-    end
-
-    def fast_build?
-      config.fast_build?
-    end
-
-    # Preset forwarding
-
-    def widths(media)
-      preset.widths(media)
-    end
-
-    def formats
-      preset.formats
-    end
-
-    def fallback_format
-      preset.fallback_format
-    end
-
-    def fallback_width
-      preset.fallback_width
-    end
-
-    def nomarkdown?
-      preset.nomarkdown?
-    end
-
-    def quality(format, width)
-      preset.quality(format, width)
+    def instruction_class_name(method_name)
+      'PictureTag::Instructions::' +
+        Utils.titleize(method_name.to_s.delete_suffix('?'))
     end
   end
 end

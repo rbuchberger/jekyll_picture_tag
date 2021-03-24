@@ -11,25 +11,15 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
-    env:
-      imagemagick_version: 7.0.10-46
+    runs-on: ubuntu-20.04
 
     steps:
 
       - name: Install system dependencies
-        run: sudo apt install build-essential libxml2-dev libjpeg-dev libwebp-dev libpng-dev libopenjp2-7-dev
+        run: sudo apt install libjpeg-dev webp libpng-dev libavifile-0.7c2 libopenjpip7 imagemagick libvips-tools
 
       - name: Checkout repo
         uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: imagemagick
-          key: imagick1-${{ env.imagemagick_version }}
-
-      - name: Install imagemagick
-        run: bash install_imagemagick.sh
 
       # Version taken from .ruby-version file.
       # Also runs bundle install.

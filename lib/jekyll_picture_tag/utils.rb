@@ -2,28 +2,10 @@ module PictureTag
   # This is a little module to hold logic that doesn't fit other places. If it
   # starts getting big, refactor.
   module Utils
-    # These are valid ImageMagick gravity arguments (relevant to our use
-    # case):
-    GRAVITIES =
-      %w[center
-         north
-         northeast
-         east
-         southeast
-         south
-         southwest
-         west
-         northwest].freeze
-
-    # This is an attempt to recognize valid imagemagick geometry arguments
-    # with regex. It only tries to match values which don't preserve aspect
-    # ratio, as they're the ones people might actually need here.
-    GEOMETRY_REGEX = /\A\d*%?[x:]?\d*[%!]?([+-]\d+){,2}\Z/i.freeze
-
     class << self
       # Configure Jekyll to keep our generated files
       def keep_files
-        dest_dir = PictureTag.config['picture']['output']
+        dest_dir = PictureTag.pconfig['output']
 
         # Chop a slash off the end, if it's there. Doesn't work otherwise.
         dest_dir = dest_dir[0..-2] if dest_dir =~ %r{/\z}
@@ -35,7 +17,7 @@ module PictureTag
 
       # Print a warning to the console
       def warning(message)
-        return if PictureTag.config['picture']['suppress_warnings']
+        return if PictureTag.pconfig['suppress_warnings']
 
         warn 'Jekyll Picture Tag Warning: '.yellow + message
       end
@@ -64,6 +46,10 @@ module PictureTag
         input.split('_').map(&:capitalize).join
       end
 
+      def snakeize(input)
+        input.scan(/[A-Z][a-z]+/).map(&:downcase).join('_')
+      end
+
       # Linear interpolator. Pass it 2 values in the x array, 2 values
       # in the y array, and an x value, returns a y value.
       def interpolate(xvals, yvals, xval)
@@ -76,6 +62,10 @@ module PictureTag
         b = yvals.first - (m * xvals.first)
         # y = mx + b
         (m * xval) + b
+      end
+
+      def aspect_float(width, height)
+        width.to_f / height
       end
     end
   end

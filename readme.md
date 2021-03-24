@@ -1,4 +1,4 @@
-<img src="logo.png" alt="jekyll picture tag logo" width="250"/>
+![Logo](docs/logo.svg)
 
 # Jekyll Picture Tag
 

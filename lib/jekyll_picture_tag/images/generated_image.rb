@@ -1,18 +1,20 @@
-require 'mini_magick'
+require 'ruby-vips'
 
 module PictureTag
-  # Represents a generated image file.
+  # Represents a generated image, but not the file itself. Its purpose is to
+  # make its properties available for query, and hand them off to the ImageFile
+  # class for generation.
   class GeneratedImage
-    attr_reader :width, :format
+    attr_reader :width
 
-    include MiniMagick
-
-    def initialize(source_file:, width:, format:, crop: nil, gravity: '')
+    def initialize(source_file:, width:, format:)
       @source = source_file
       @width  = width
-      @format = process_format format
-      @crop = crop
-      @gravity = gravity
+      @raw_format = format
+    end
+
+    def format
+      @format ||= process_format(@raw_format)
     end
 
     def exists?
@@ -43,80 +45,40 @@ module PictureTag
 
     # Post crop
     def source_width
-      update_cache unless cache[:width]
-
-      cache[:width]
+      image.width
     end
 
     # Post crop
     def source_height
-      update_cache unless cache[:height]
+      image.height
+    end
 
-      cache[:height]
+    def quality
+      PictureTag.quality(format, width)
     end
 
     private
 
-    # We exclude width and format from the cache name, since it isn't specific to them.
-    def cache
-      @cache ||= Cache::Generated.new("#{@source.base_name}-#{id}")
-    end
-
-    def update_cache
-      return if @source.missing
-
-      # Ensure it's generated:
-      image
-
-      cache[:width] = @source_dimensions[:width]
-      cache[:height] = @source_dimensions[:height]
-
-      cache.write
-    end
-
-    # Hash all inputs and truncate, so we know when they change without getting too long.
+    # Hash all inputs and truncate, so we know when they change without getting
+    # too long.
     # /home/dave/my_blog/_site/generated/somefolder/myimage-100-1234abcde.jpg
     #                                                           ^^^^^^^^^
     def id
-      @id ||= Digest::MD5.hexdigest([@source.digest, @crop, @gravity, quality].join)[0..8]
+      @id ||= Digest::MD5.hexdigest(settings.join)[0..8]
+    end
+
+    def settings
+      [@source.digest, @source.crop, @source.keep, quality]
     end
 
     def image
-      return @image if defined? @image
-
-      # Post crop, before resizing and reformatting
-      @source_dimensions = { width: image_base.width, height: image_base.height }
-
-      @image = image_base
-    end
-
-    def image_base
-      @image_base ||= Image.open(@source.name).combine_options do |i|
-        if PictureTag.preset['strip_metadata']
-          i.auto_orient
-          i.strip
-        end
-
-        if @crop
-          i.gravity @gravity
-          i.crop @crop
-        end
-      end
+      @image ||= Vips::Image.new_from_file @source.name
     end
 
     def generate_image
-      puts 'Generating new image file: ' + name
+      return if @source.missing
 
-      image.format(@format, 0, { resize: "#{@width}x", quality: quality })
-      FileUtils.mkdir_p(File.dirname(absolute_filename))
-
-      image.write absolute_filename
-
-      FileUtils.chmod(0o644, absolute_filename)
-    end
-
-    def quality
-      PictureTag.quality(@format, @width)
+      ImageFile.new(@source, self)
     end
 
     def process_format(format)

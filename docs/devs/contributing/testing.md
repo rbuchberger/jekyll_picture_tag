@@ -21,14 +21,3 @@ The primary way to run these checks is `rake`:
   in the `coverage` directory.
 * The tests use the `/tmp/` directory directly, which I'm pretty sure means it won't work on
   Windows. This is fixable, so if that gets in your way just ask.
-
-### Docker
-
-The tests use some features of ImageMagick 7 which are not supported by version 6. If it's
-inconvenient to install version 7, the following commands will build and run the tests in a docker
-container:
-
-```bash
-$ docker build . -t jpt
-$ docker run -t jpt
-```

@@ -1,5 +1,5 @@
 module PictureTag
-  module Instructions
+  module Parsers
     # This class takes in the arguments passed to the liquid tag, and splits it
     # up into 'words' (correctly handling quotes and backslash escapes.)
     #

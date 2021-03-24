@@ -5,7 +5,7 @@ module PictureTag
   class SourceImage
     attr_reader :shortname, :missing, :media_preset
 
-    include MiniMagick
+    # include MiniMagick
 
     def initialize(relative_filename, media_preset = nil)
       # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
@@ -21,12 +21,38 @@ module PictureTag
       @digest ||= cache[:digest] || ''
     end
 
+    def crop
+      PictureTag.crop(media_preset)
+    end
+
+    def crop?
+      !crop.nil?
+    end
+
+    def keep
+      PictureTag.keep(media_preset)
+    end
+
+    def dimensions
+      [width, height]
+    end
+
     def width
-      @width ||= cache[:width] || 999_999
+      return raw_width unless crop?
+
+      [raw_width, (raw_height * cropped_aspect)].min.round
     end
 
     def height
-      @height ||= cache[:height] || 999_999
+      return raw_height unless crop?
+
+      [raw_height, (raw_width / cropped_aspect)].min.round
+    end
+
+    def cropped_aspect
+      return Utils.aspect_float(raw_width, raw_height) unless crop?
+
+      Utils.aspect_float(*crop.split(':').map(&:to_f))
     end
 
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
@@ -44,13 +70,23 @@ module PictureTag
     # /home/dave/my_blog/assets/images/somefolder/myimage.jpg
     #                                                     ^^^
     def ext
-      @ext ||= File.extname(name)[1..-1].downcase
+      @ext ||= File.extname(name)[1..].downcase
     end
 
     private
 
+    # pre-crop
+    def raw_width
+      @raw_width ||= @missing ? 999_999 : image.width
+    end
+
+    # pre-crop
+    def raw_height
+      @raw_height ||= @missing ? 999_999 : image.height
+    end
+
     def cache
-      @cache ||= Cache::Source.new(@shortname)
+      @cache ||= Cache.new(@shortname)
     end
 
     def missing?
@@ -75,14 +111,12 @@ module PictureTag
 
     def update_cache
       cache[:digest] = source_digest
-      cache[:width] = image.width
-      cache[:height] = image.height
 
       cache.write
     end
 
     def image
-      @image ||= Image.open(name)
+      @image ||= Vips::Image.new_from_file(name)
     end
 
     def source_digest
@@ -90,7 +124,8 @@ module PictureTag
     end
 
     def missing_image_warning
-      "JPT Could not find #{name}. Your site will have broken images. Continuing."
+      "JPT Could not find #{name}. " \
+        'Your site will have broken images. Continuing.'
     end
 
     def missing_image_error

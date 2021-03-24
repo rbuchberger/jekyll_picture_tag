@@ -53,11 +53,11 @@ module PictureTag
       end
 
       def width_attribute
-        files.first.source_width.to_s
+        source_image.width.to_s
       end
 
       def height_attribute
-        files.first.source_height.to_s
+        source_image.height.to_s
       end
 
       private
@@ -86,11 +86,7 @@ module PictureTag
       end
 
       def source_width
-        @source_width ||= if PictureTag.crop(@media)
-                            target_files.first.source_width
-                          else
-                            @source_image.width
-                          end
+        source_image.width
       end
 
       def target_files
@@ -112,9 +108,7 @@ module PictureTag
         GeneratedImage.new(
           source_file: @source_image,
           width: width,
-          format: @input_format,
-          crop: PictureTag.crop(@media),
-          gravity: PictureTag.gravity(@media)
+          format: @input_format
         )
       end
     end

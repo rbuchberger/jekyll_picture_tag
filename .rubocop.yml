@@ -23,6 +23,8 @@ AllCops:
     - '**/pkg/**/*'
     - '**/vendor/**/*'
 
+Layout/LineLength:
+  Max: 80
 
 # Disabled Cops
 Style/FrozenStringLiteralComment:

@@ -1,7 +1,7 @@
 require 'simplecov'
 require 'minitest/rg'
 
-SimpleCov.minimum_coverage_by_file 100
+SimpleCov.minimum_coverage_by_file 90
 SimpleCov.start do
   add_filter '/test/'
 end
@@ -38,5 +38,25 @@ module TestHelper
 
   def aspect_float(width, height)
     width.to_f / height
+  end
+
+  def temp_dir(*descendents)
+    File.join '/tmp/jpt', *descendents
+  end
+
+  # We're having trouble with tests failing because whatever system is running
+  # them doesn't support some image format. This returns an array of image
+  # formats which we care about, and which are locally supported.
+  def supported_formats
+    output = `vips --list` + `convert --version`
+
+    formats = %w[jpg png webp gif jp2 avif].select do |format|
+      output.include? format
+    end
+
+    # Sanity check
+    raise 'Not enough locally supported formats' unless formats.length >= 3
+
+    formats
   end
 end

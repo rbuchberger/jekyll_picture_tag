@@ -5,18 +5,24 @@ class TestSourceImage < Minitest::Test
   include TestHelper
 
   def setup
-    PictureTag.stubs(:source_dir).returns('/home/loser/')
-    PictureTag.stubs(:fast_build?).returns(false)
-    Cache::Source.stubs(:new).returns(cache_stub)
+    # JPT stubs
+    PictureTag.stubs(config)
+    Cache.stubs(:new).returns(cache_stub)
+    # Core stubs
     File.stubs(:read)
-    MiniMagick::Image.stubs(:open).returns(ImageStub.new(50, 60))
-    Digest::MD5.stubs(:hexdigest)
-               .returns('abc123')
     File.stubs(:exist?).returns(true)
+    Digest::MD5.stubs(:hexdigest).returns('abc123')
+
+    # External library stubs
+    Vips::Image.stubs(:new_from_file).returns(ImageStub.new(50, 60))
+  end
+
+  def config
+    { source_dir: '/home/loser', fast_build?: false, crop: nil }
   end
 
   def cache_stub
-    @cache_stub ||= { width: 88, height: 100, digest: 'abc123' }
+    @cache_stub ||= { digest: 'abc123' }
   end
 
   def tested
@@ -40,8 +46,6 @@ class TestSourceImage < Minitest::Test
     cache_stub[:digest] = 'bad info'
 
     cache_stub.expects(:[]=).with(:digest, 'abc123')
-    cache_stub.expects(:[]=).with(:width, 50)
-    cache_stub.expects(:[]=).with(:height, 60)
     cache_stub.expects(:write)
 
     tested
@@ -63,8 +67,8 @@ class TestSourceImage < Minitest::Test
     image_stub = Object.new
     image_stub.stubs(:width).returns(88)
 
-    MiniMagick::Image
-      .stubs(:open).with('/home/loser/img.jpg').returns(image_stub)
+    Vips::Image
+      .stubs(:new_from_file).with('/home/loser/img.jpg').returns(image_stub)
 
     assert_equal 88, tested.width
   end
@@ -73,8 +77,8 @@ class TestSourceImage < Minitest::Test
     image_stub = Object.new
     image_stub.stubs(:height).returns(100)
 
-    MiniMagick::Image
-      .stubs(:open).with('/home/loser/img.jpg').returns(image_stub)
+    Vips::Image
+      .stubs(:new_from_file).with('/home/loser/img.jpg').returns(image_stub)
 
     assert_equal 100, tested.height
   end

@@ -1,32 +1,48 @@
 require 'test_helper'
 
+# This tests source images which have no corresponding source file. The fact
+# that we have different test scenarios for the same class shows that it is
+# doing too much and needs refactoring.
 class TestSourceImageMissing < Minitest::Test
   include PictureTag
   include TestHelper
 
-  def setup
-    PictureTag.stubs(:source_dir).returns('/home/loser/')
-    PictureTag.stubs(:continue_on_missing?).returns(true)
-    PictureTag.stubs(:fast_build?).returns(false)
-    Cache::Source.stubs(:new).returns({ width: nil, height: nil, digest: nil })
-    Utils.stubs(:warning)
-    File.stubs(:exist?).with('/home/loser/img.jpg').returns(false)
+  # Lifecycle
 
-    @tested = SourceImage.new('img.jpg')
+  def setup
+    PictureTag.stubs(config)
+    Utils.stubs(:warning)
+    Cache.stubs(:new).returns({ digest: nil })
   end
 
-  # digest_missing
+  # Helpers
+
+  def tested
+    @tested ||= SourceImage.new('img.jpg')
+  end
+
+  def config
+    {
+      source_dir: temp_dir('does', 'not', 'exist'),
+      continue_on_missing?: true,
+      fast_build?: false,
+      crop: nil
+    }
+  end
+
+  # Tests
+
   def test_digest
-    assert_equal '', @tested.digest
+    assert_equal '', tested.digest
   end
 
   # size missing
   def test_width
-    assert_equal 999_999, @tested.width
+    assert_equal 999_999, tested.width
   end
 
   def test_height
-    assert_equal 999_999, @tested.height
+    assert_equal 999_999, tested.height
   end
 
   def test_warning
@@ -35,8 +51,7 @@ class TestSourceImageMissing < Minitest::Test
     SourceImage.new('img.jpg')
   end
 
-  # grab_file missing
-  def test_grab_missing_file
+  def test_detect_missing_file
     assert SourceImage.new('img.jpg').missing
   end
 end

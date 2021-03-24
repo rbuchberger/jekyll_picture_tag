@@ -5,9 +5,12 @@ require_relative 'jekyll_picture_tag/cache'
 require_relative 'jekyll_picture_tag/images'
 require_relative 'jekyll_picture_tag/instructions'
 require_relative 'jekyll_picture_tag/output_formats'
+require_relative 'jekyll_picture_tag/parsers'
 require_relative 'jekyll_picture_tag/router'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
+require_relative 'jekyll_picture_tag/defaults/presets'
+require_relative 'jekyll_picture_tag/defaults/global'
 
 # Title: Jekyll Picture Tag
 # Authors: Rob Wierzbowski   : @robwierzbowski
@@ -50,7 +53,6 @@ module PictureTag
     # care about the params (arguments passed to the liquid tag). Jekyll makes
     # no attempt to parse them; they're given as a string.
     def initialize(tag_name, raw_params, tokens)
-      Utils.warning 'You have called JPT without any arguments.' if raw_params.empty?
       @raw_params = raw_params
       super
     end
@@ -61,7 +63,9 @@ module PictureTag
     def render(context)
       setup(context)
 
-      if PictureTag.disabled? || @raw_params.empty?
+      if PictureTag.disabled? || PictureTag.raw_params.empty?
+        Utils.warning 'You have called JPT without any arguments.'
+
         ''
       else
         PictureTag.output_class.new.to_s
@@ -71,11 +75,9 @@ module PictureTag
     private
 
     def setup(context)
+      PictureTag.clear_instructions
       PictureTag.context = context
-
-      # Now that we have both the tag parameters and the context object, we can
-      # build our instruction set.
-      PictureTag.instructions = Instructions::Set.new(@raw_params)
+      PictureTag.raw_params = @raw_params
 
       # We need to explicitly prevent jekyll from overwriting our generated
       # image files:

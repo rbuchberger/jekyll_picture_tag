@@ -76,9 +76,7 @@ module PictureTag
         image = GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: checked_fallback_width,
-          crop: PictureTag.crop,
-          gravity: PictureTag.gravity
+          width: checked_fallback_width
         )
 
         image.generate
@@ -92,9 +90,7 @@ module PictureTag
         @fallback_candidate ||= GeneratedImage.new(
           source_file: PictureTag.source_images.first,
           format: PictureTag.fallback_format,
-          width: PictureTag.fallback_width,
-          crop: PictureTag.crop,
-          gravity: PictureTag.gravity
+          width: PictureTag.fallback_width
         )
       end
 
@@ -119,22 +115,14 @@ module PictureTag
         PictureTag.source_images.first
       end
 
-      def source_width
-        if PictureTag.crop
-          fallback_candidate.source_width
-        else
-          source.width
-        end
-      end
-
       def checked_fallback_width
         target = PictureTag.fallback_width
 
-        if target > source_width
+        if target > source.width
           Utils.warning "#{source.shortname} is smaller than the " \
-            "requested fallback width of #{target}px. Using #{source_width}" \
+            "requested fallback width of #{target}px. Using #{source.width}" \
             ' px instead.'
-          source_width
+          source.width
         else
           target
         end
