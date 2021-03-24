@@ -1,7 +1,7 @@
 ---
 ---
 
-# Jekyll Picture Tag
+![](logo.svg)
 
 Responsive Images, Done Correctly.
 
@@ -31,17 +31,33 @@ Responsive Images, Done Correctly.
 
 ### "That's cool, but I just want webp."
 
-Create `_data/picture.yml`, add the following:
+Use a built-in preset!
 
-```yml
-presets:
-  default:
-    formats: [webp, original]
+{% raw %} `{% picture jpt-webp test.jpg %}` {% endraw %}
+
+```html
+<!-- Formatted for readability -->
+
+<picture>
+  <source
+    type="image/webp"
+    srcset="
+      /generated/test-400-195f7d192.webp   400w,
+      /generated/test-600-195f7d192.webp   600w,
+      /generated/test-800-195f7d192.webp   800w,
+      /generated/test-1000-195f7d192.webp 1000w
+    ">
+  <source
+    type="image/jpeg"
+    srcset="
+      /generated/test-400-195f7d.jpg   400w,
+      /generated/test-600-195f7d.jpg   600w,
+      /generated/test-800-195f7d.jpg   800w,
+      /generated/test-1000-195f7d.jpg 1000w
+    ">
+  <img src="/generated/test-800-195f7dGUW.jpg">
+</picture>
 ```
-
-**Note:** Order matters! `[webp, jpg]` will offer webp-images first.  The
-browser will pick the *first* format it can work with. So if the order is
-reversed `[jpg, webp]` it will use the jpg image before the webp.
 
 ### Here's a more complete demonstration:
 
@@ -67,7 +83,8 @@ presets:
     size: 500px
 ```
 
-Cropping images is easy! With the above preset, if you write this:
+Cropping images is easy as well; simply give an aspect ratio. With the above preset, if you write
+this:
 
 {% raw %}
 `{% picture test.jpg 3:2 mobile: test2.jpg 1:1 --alt Alternate Text %}`
