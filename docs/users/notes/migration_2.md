@@ -11,33 +11,38 @@ the new features here, except where they replace or modify existing ones.
 
 ## Libvips
 
-- Install Libvips, both in development and production.
+- Install Libvips, both in development and production. Any reasonably recent version will do.
 
 We still fall back to ImageMagick when Vips doesn't support a given image format, so there's no
 reason to uninstall it. However, we no longer require version 7. Version 6+ is fine, which makes
 deployments involving Ubuntu much easier.
 
-## Setting names changing
+## Jekyll 4.0+
 
-In `_data/picture.yml`,
-- `markup_presets` is now `presets`
-- `media_presets` is now `media_queries`.
+- Update to Jekyll 4.x
 
-Go check, especially if you've been using JPT for awhile. We renamed them several versions ago, but
-the old names were still supported until now. If you get a bunch of 'preset not found' warnings,
-this is probably why.
+We're removing support for versions of Jekyll before 4.0. I did it inadvertently awhile ago with the
+fast_build setting, now it's official. If this causes you a great deal of pain, speak up and we'll
+look into supporting older versions.
+
+## Ruby 2.6+
+
+- Ensure you're running Ruby 2.6 or later.
+
+While Jekyll supports 2.4, it's officialy EOL and 2.5 (our previous target) is in security
+maintenance only. Since I want major version releases to be as rare as possible, we're making this
+move now. Again, speak up if this causes a great deal of pain.
 
 ## Image quality & write options.
 
 - If you have set `quality:` in a preset, it will likely stop having an effect. You need to set
   `format_quality:` instead.
 
-Previously, all image formats used a default quality of 75. We have now set a default quality for 4
+Previously, all image formats used a default quality of 75. We have now set a default quality for 3
 formats:
 
 ```yml
 format_quality:
-  jpg: 75
   webp: 50
   avif: 30
   jp2: 30
@@ -59,11 +64,16 @@ presets:
         lossless: true
 ```
 
-## Naming of presets and media queries
+## Setting names changing
 
-- If you have any presets or media queries with names that start with `jpt-`, change them.
+In `_data/picture.yml`,
+- `markup_presets` is now `presets`
+- `media_presets` is now `media_queries`.
 
-We're cordoning off a namespace for built-in ones.
+Go check, especially if you've been using JPT for awhile. We renamed them several versions ago, but
+the old names were still supported until now. If you get a bunch of 'preset not found' warnings,
+this is probably why.
+
 
 ## Crop changes
 
@@ -81,3 +91,9 @@ so far.
 
 If you can't get satisfactory results with those options, you'll have to use a proper editor. JPT is
 not one, and the old crop feature went too far down the road of trying to be.
+
+## Naming of presets and media queries
+
+- If you have any presets or media queries with names that start with `jpt-`, change them.
+
+We're cordoning off a namespace for built-in ones.
