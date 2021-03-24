@@ -1,6 +1,26 @@
 ---
 ---
 # Release History
+* **2.0** (TBD)
+  * Move from ImageMagick to libvips.
+    * **MUCH MORE FASTER**. Like a lot.
+    * Will still attempt to use imagemagick if libvips cannot handle a
+      particular image format.
+    * Eliminate the ImageMagick v7 on Ubuntu pain we've been dealing with for so
+      long.
+  * Require Ruby >= 2.6
+  * Require Jekyll >= 4.0
+  * Cropping is changing; we now use vips' smartcrop function and an aspect
+    ratio. No more geometry and gravity, just an aspect ratio and an
+    optional interestingness (keep) setting.
+  * Add `format_quality` default settings for webp, avif, and jp2.
+  * Add stock presets and media queries, under the `jpt-` prefix.
+  * Add image-format-specific write options.
+  * Overhaul user input handling; we can now validate inputs and give error
+    messages which are less useless. Stronger validation will be added in future releases.
+  * Drop support for `markup_presets` and `media_presets`. They are now
+    officially and only `presets` and `media_queries`.
+  * Improve docs with an introductory tutorial and 'how-to' flow.
 * 1.14.0 January 10, 2021
   * Gracefully handle empty tag arguments.
   * Re-add metadata stripping. I removed it inadvertently when refactoring; now
