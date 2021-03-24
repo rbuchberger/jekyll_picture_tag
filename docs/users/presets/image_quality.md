@@ -67,6 +67,16 @@ sacrificing image quality for low-density screens. Taking the example settings a
   * A 200px image will use a quality of 100.
   * A 500px image will use a quality of 90.
 
+## Strip Metadata
+
+_Format:_ `strip_metadata: (true|false)`
+
+_Example:_ `strip_metadata: false`
+
+_Default:_ `true`
+
+Remove EXIF data, which can save a few tens of kilobytes per image. This is set globally, not
+per-format.
 
 ## Image Format Options
 
