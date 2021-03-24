@@ -7,6 +7,15 @@ Responsive Images, Done Correctly.
 
 ## Quick start / Demo
 
+```warning
+We're in a limbo right now, it shouldn't last more than a few days.
+
+These docs are for version 2, which is currently pre-released as 2.0.0pre1
+The latest stable release is for version 1.14. You can find those docs here: 
+
+https://github.com/rbuchberger/jekyll_picture_tag/tree/v1.14.0/docs
+```
+
 **All configuration is optional.** Here's the simplest possible use case:
 
 1. [Install]({{ site.baseurl }}/users/installation)
