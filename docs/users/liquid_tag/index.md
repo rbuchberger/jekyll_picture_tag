@@ -22,7 +22,7 @@ fine, and you can use liquid variables anywhere.
 
 * `(image)` - required.
 
-* `crop` - Geometry and gravity arguments, passed to imagemagick.
+* `crop` - Aspect ratio & keep settings.
 
 * `alternate images & crops` - Art Direction; show different images on different
   devices. Give in order of ascending specificity.
