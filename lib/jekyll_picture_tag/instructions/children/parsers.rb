@@ -32,7 +32,9 @@ module PictureTag
     # Returns user-defined media queries.
     class MediaPresets < Instruction
       def source
-        PictureTag.site.data.dig('picture', 'media_queries') || {}
+        STOCK_MEDIA_QUERIES.merge(
+          PictureTag.site.data.dig('picture', 'media_queries') || {}
+        )
       end
     end
   end
