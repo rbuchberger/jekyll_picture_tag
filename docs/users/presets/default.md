@@ -17,8 +17,16 @@ presets:
     noscript: false
     link_source: false
     quality: 75
+    format_quality:
+      webp: 50
+      avif: 30
+      jp2: 30
+    strip_metadata: true
+    image_options:
+      avif:
+        compression: av1
+        speed: 8
     data_sizes: true
     keep: attention
     dimension_attributes: false
-    strip_metadata: true
 ```
