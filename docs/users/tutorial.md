@@ -59,7 +59,11 @@ Good web developers add alt text. JPT makes this easy:
 
 Feeling cinematic? If you don't like how the image gets cropped, you can adjust it:
 
+{% raw %}
+```
 {% picture my_image.jpg 16:9 center %}
+```
+{% endraw %}
 
 Your options are `attention` (which is the default), `entropy`, and `center`.
 
