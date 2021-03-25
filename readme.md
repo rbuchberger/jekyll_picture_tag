@@ -47,6 +47,32 @@ https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Recent releases:
 
+* **2.0** March 25, 2021 - [Migration guide](https://rbuchberger.github.io/jekyll_picture_tag/users/notes/migration_2)
+  * Switch from ImageMagick to libvips.
+    * 🚀🔥🔥**MUCH MORE FASTER**🔥🔥🚀
+    * Will still attempt to use imagemagick if libvips cannot handle a
+      particular image format.
+    * Eliminate the ImageMagick v7 on Ubuntu pain we've been dealing with for so
+      long.
+  * Require Ruby >= 2.6, support Ruby 3.0
+  * Require Jekyll >= 4.0
+  * Cropping is changing.
+      * We now use the libvips
+        [smartcrop function](https://www.rubydoc.info/gems/ruby-vips/Vips/Image#smartcrop-instance_method),
+        which does some magic to keep the most useful part of the image.
+      * Geometry is renamed to 'crop', and reduced to simple aspect ratios only. (`width:height`)
+      * Gravity is gone, replaced by 'keep' which is translated to a libvips
+        [interestingness](https://www.rubydoc.info/gems/ruby-vips/Vips/Interesting) setting.
+  * Add stock presets and media queries, under the `jpt-` prefix.
+  * Add `format_quality` default settings for webp, avif, and jp2.
+  * Add image-format-specific write options.
+  * Overhaul user input handling; we can now validate inputs and give error
+    messages which are less useless. Stronger validation and nicer errors will be added in future
+    releases.
+  * Drop support for `markup_presets` and `media_presets`. They are now
+    officially and only `presets` and `media_queries`.
+  * Improve docs with an introductory tutorial and 'how-to' flow.
+
 * 1.14.0 January 10, 2021
   * Gracefully handle empty tag arguments.
   * Re-add metadata stripping. I removed it inadvertently when refactoring; now
