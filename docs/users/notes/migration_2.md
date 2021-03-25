@@ -35,8 +35,8 @@ move now. Again, speak up if this causes a great deal of pain.
 
 ## Image quality & write options.
 
-- If you have set `quality:` in a preset, it will likely stop having an effect. You need to set
-  `format_quality:` instead.
+- If you have set `quality:` in a preset, it will stop having an effect for webp, avif, and jp2
+  images. You need to set `format_quality:` instead.
 
 Previously, all image formats used a default quality of 75. We have now set a default quality for 3
 formats:
