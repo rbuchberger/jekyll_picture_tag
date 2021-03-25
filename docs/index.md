@@ -3,18 +3,14 @@
 
 ![](logo.svg)
 
-Responsive Images, Done Correctly.
+_Responsive Images, Done Correctly._
+
+**Note:** These docs are for versions >= 2.0. Documentation for the last stable 1.x version may be
+found by browsing the repository,
+[here](https://github.com/rbuchberger/jekyll_picture_tag/tree/v1.14.0/docs). This [migration
+guide](users/notes/migration_2) documents how to upgrade an existing site.
 
 ## Quick start / Demo
-
-```warning
-We're in a limbo right now, it shouldn't last more than a few days.
-
-These docs are for version 2, which is currently pre-released as 2.0.0pre1
-The latest stable release is for version 1.14. You can find those docs here: 
-
-https://github.com/rbuchberger/jekyll_picture_tag/tree/v1.14.0/docs
-```
 
 **All configuration is optional.** Here's the simplest possible use case:
 
