@@ -75,8 +75,7 @@ _Example:_ `strip_metadata: false`
 
 _Default:_ `true`
 
-Remove EXIF data, which can save a few tens of kilobytes per image. This is set globally, not
-per-format.
+Remove EXIF data, which can save a few tens of kilobytes per image. This is set for all formats.
 
 ## Image Format Options
 
@@ -113,7 +112,8 @@ available for a given image format, search for the method `vips_(format)save` in
 [this](https://libvips.github.io/libvips/API/current/VipsForeignSave.html) API documentation. For
 example, png options can be found by searching for `vips_pngsave()`, leading
 [here](https://libvips.github.io/libvips/API/current/VipsForeignSave.html#vips-pngsave). See the
-optional arguments. 
+optional arguments. `avif`'s options are under `vips_heifsave()`,
+[here](https://libvips.github.io/libvips/API/current/VipsForeignSave.html#vips-heifsave).
 
 For all formats, note that
 - `Q:` (quality) is handled by the settings above.
