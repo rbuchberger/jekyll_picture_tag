@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test)/})
   end
 
-  spec.required_ruby_version = ['>= 2.6', '< 3']
+  spec.required_ruby_version = ['>= 2.6', '< 4.0']
 
   # addressable is used to url-encode image filenames.
   spec.add_runtime_dependency 'addressable', '~> 2.6'
