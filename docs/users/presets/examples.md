@@ -1,7 +1,7 @@
 ---
-sort: 1
+sort: 2
 ---
-# Example presets
+# Examples
 
 The following example media queries & presets (except for `default`) are built-in with a `jpt-`
 prefix. For example, the `desktop` media query below can be used with `jpt-desktop`, and the `webp`
