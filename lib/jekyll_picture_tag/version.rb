@@ -1,3 +1,3 @@
 module PictureTag
-  VERSION = '2.0.0pre1'.freeze
+  VERSION = '2.0.0'.freeze
 end
