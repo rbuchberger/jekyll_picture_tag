@@ -1,6 +1,12 @@
 ---
 ---
 # Release History
+
+* 2.0.2 March 31, 2021
+  * Do not pass a quality argument when generating PNG files.
+    * It only works on newer versions of vips, breaking builds when using older
+      versions (such as when deploying to netlify.)
+    * It's not remarkably useful in the first place.
 * 2.0.1 March 31, 2021
   * Select imagemagick deliberately when appropriate, rather than simply rescuing all vips errors
     and trying again. This will stop JPT from suppressing useful vips errors.
