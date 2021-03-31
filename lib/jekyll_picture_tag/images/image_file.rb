@@ -2,6 +2,15 @@ module PictureTag
   # Basically a wrapper class for vips. Handles image operations.
   # Vips returns new images for Crop, resize, and autorotate operations.
   # Quality, metadata stripping, and format are applied on write.
+  #
+  # This deserves to be two classes and a factory, one for normal vips save and
+  # one for magicksave. This is illustrated by the fact that stubbing backend
+  # determination logic for its unit tests would basically require
+  # re-implementing it completely.
+  #
+  # I'm planning to implement standalone imagemagick as an alternative to vips,
+  # so when I add that I'll also do that refactoring. For now it works fine and
+  # it's not too bloated.
   class ImageFile
     def initialize(source, base)
       @source = source
@@ -35,13 +44,21 @@ module PictureTag
       image.autorot
     end
 
+    def handler
+      PictureTag.backend.handler_for(@base.format)
+    end
+
+    def quality_key
+      handler == :vips ? :Q : :quality
+    end
+
     def write_opts
       opts = PictureTag.preset['image_options'][@base.format] || {}
 
       opts[:strip] = PictureTag.preset['strip_metadata']
 
       # gifs don't accept a quality setting.
-      opts[:Q] = base.quality unless base.format == 'gif'
+      opts[quality_key] = base.quality unless base.format == 'gif'
 
       opts.transform_keys(&:to_sym)
     end
@@ -51,15 +68,12 @@ module PictureTag
     end
 
     def write(image)
-      begin
+      case handler
+      when :vips
         image.write_to_file(base.absolute_filename, **write_opts)
-      rescue Vips::Error
         # If vips can't handle it, fall back to imagemagick.
-        opts = write_opts.transform_keys do |key|
-          key == :Q ? :quality : key
-        end
-
-        image.magicksave(base.absolute_filename, **opts)
+      when :magick
+        image.magicksave(base.absolute_filename, **write_opts)
       end
 
       # Fix permissions. TODO - still necessary?
