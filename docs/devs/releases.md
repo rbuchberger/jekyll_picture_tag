@@ -1,6 +1,9 @@
 ---
 ---
 # Release History
+* 2.0.1 March 31, 2021
+  * Select imagemagick deliberately when appropriate, rather than simply rescuing all vips errors
+    and trying again. This will stop JPT from suppressing useful vips errors.
 * **2.0** March 25, 2021 - [Migration guide](/jekyll_picture_tag/users/notes/migration_2)
   * Switch from ImageMagick to libvips.
     * 🚀🔥🔥**MUCH MORE FASTER**🔥🔥🚀
