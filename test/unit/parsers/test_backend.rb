@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class TestImageBackend
+class TestImageBackend < Minitest::Test
   def tested
-    Parsers::ImageBackend.new
+    PictureTag::Parsers::ImageBackend.new
   end
 
   def test_vips_formats
