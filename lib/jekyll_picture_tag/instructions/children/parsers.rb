@@ -37,5 +37,12 @@ module PictureTag
         )
       end
     end
+
+    # Main job is to determine which backend should handle which image formats.
+    class Backend < Instruction
+      def source
+        PictureTag::Parsers::ImageBackend.new
+      end
+    end
   end
 end
