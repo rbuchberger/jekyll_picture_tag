@@ -47,6 +47,8 @@ https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Recent releases:
 
+* 2.0.3 April 1, 2021
+  * Improve backend format support detection
 * 2.0.2 March 31, 2021
   * Do not pass a quality argument when generating PNG files.
     * It only works on newer versions of vips, breaking builds when using older
