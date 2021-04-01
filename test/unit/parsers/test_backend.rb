@@ -12,4 +12,10 @@ class TestImageBackend < Minitest::Test
   def test_magick_formats
     assert_includes tested.magick_formats, 'jpeg'
   end
+
+  def test_error
+    assert_raises StandardError do
+      tested.handler_for('notarealformat')
+    end
+  end
 end
