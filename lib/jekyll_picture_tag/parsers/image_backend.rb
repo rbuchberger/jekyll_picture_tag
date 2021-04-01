@@ -3,9 +3,9 @@ module PictureTag
     # Returns information regarding image handlers
     class ImageBackend
       def handler_for(format)
-        if vips_formats.include? format
+        if (vips_formats & all_names(format)).any?
           :vips
-        elsif magick_formats.include? format
+        elsif (magick_formats & all_names(format)).any?
           :magick
         else
           raise "No support for generating #{format} files in this environment."
@@ -27,6 +27,19 @@ module PictureTag
                             .last
                             .delete_prefix('Delegates (built-in):')
                             .split
+      end
+
+      # Returns an array of all known names of a format, for the purposes of
+      # parsing supported output formats.
+      def all_names(format)
+        alts = alternates.select { |a| a.include? format }.flatten
+        alts.any? ? alts : [format]
+      end
+
+      private
+
+      def alternates
+        [%w[jpg jpeg], %w[avif heic heif]]
       end
     end
   end
