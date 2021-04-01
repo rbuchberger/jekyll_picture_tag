@@ -8,7 +8,7 @@ module PictureTag
         elsif (magick_formats & all_names(format)).any?
           :magick
         else
-          raise "No support for generating #{format} files in this environment."
+          raise error_string(format)
         end
       end
 
@@ -37,6 +37,14 @@ module PictureTag
       end
 
       private
+
+      def error_string(format)
+        <<~HEREDOC
+          No support for generating #{format} files in this environment!
+          Libvips known savers: #{vips_formats.join(', ')}
+          Imagemagick known savers:  #{magick_formats.join(', ')}
+        HEREDOC
+      end
 
       def alternates
         [%w[jpg jpeg], %w[avif heic heif]]
