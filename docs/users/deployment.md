@@ -23,9 +23,14 @@ you're extra motivated and cool, you could make a pull request adding that infor
 
 ## Netlify
 
-As of March 26, 2021, with version 2.0.0, Netlify is mostly broken. It only supports jpg. I want to
-support netlify as much as reasonably possible, so if a solution isn't found I'll re-add imagemagick
-as an alternate backend and offer it as a configurable setting. Until then, stick with version 1.14.
+Ensure you're using version 2.0.2 or later. No support for `jp2` or `avif` files. They have beta
+homebrew support (by setting the build command to `brew install whatever && do_your_build`), but
+attempting to install `libheif` this way runs over the time limit.
+
+```
+Libvips known savers: csv, mat, v, vips, ppm, pgm, pbm, pfm, hdr, png, jpg, jpeg, jpe, webp, tif, tiff
+Imagemagick known savers: bzlib, cairo, djvu, fftw, fontconfig, freetype, jbig, jng, jpeg, lcms, lqr, ltdl, lzma, openexr, pangocairo, png, rsvg, tiff, wmf, x, xml, zlib
+```
 
 ## AWS S3
 
