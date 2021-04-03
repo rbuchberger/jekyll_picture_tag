@@ -5,10 +5,10 @@
 
 _Responsive Images, Done Correctly._
 
-**Warning:** Deploying JPT can be tricky, especially with the new version using libvips. We depend
-on system libraries to generate images, whose presence varies greatly between different
-environments. Before investing a great deal of time, ensure that your deployment process can handle
-all image formats (both input and output) which you will use.
+**Warning:** Deploying JPT can be tricky. We depend on system libraries to generate images, whose
+presence varies greatly between different environments. Before investing a great deal of time,
+ensure that your deployment process can handle all image formats (both input and output) which you
+will use.
 
 **Note:** These docs are for versions >= 2.0. Documentation for the last stable 1.x version may be
 found by browsing the repository,

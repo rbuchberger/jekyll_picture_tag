@@ -26,9 +26,7 @@ to make things outside the scope of JPT.
   {% endraw %}
   ```
 
-- `naked_srcset`: Builds a srcset and nothing else (not even the surrounding quotes). Note that the
-  (image) `format` setting must still be an array, even if you only give it one
-  value. (This is on the list of things to improve.)
+- `naked_srcset`: Builds a srcset and nothing else (not even the surrounding quotes).
 
   ```yml
   # _data/picture.yml
@@ -37,7 +35,7 @@ to make things outside the scope of JPT.
     only_srcset:
       markup: naked_srcset
       widths: [800, 1200, 1600]
-      format: [webp]
+      formats: webp
   ```
 
   ```

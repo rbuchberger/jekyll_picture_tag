@@ -28,8 +28,11 @@ homebrew support (by setting the build command to `brew install whatever && do_y
 attempting to install `libheif` this way runs over the time limit.
 
 ```
-Libvips known savers: csv, mat, v, vips, ppm, pgm, pbm, pfm, hdr, png, jpg, jpeg, jpe, webp, tif, tiff
-Imagemagick known savers: bzlib, cairo, djvu, fftw, fontconfig, freetype, jbig, jng, jpeg, lcms, lqr, ltdl, lzma, openexr, pangocairo, png, rsvg, tiff, wmf, x, xml, zlib
+Libvips known savers: csv, mat, v, vips, ppm, pgm, pbm, pfm, hdr, png, jpg, jpeg, jpe, webp, tif,
+tiff
+
+Imagemagick known savers: bzlib, cairo, djvu, fftw, fontconfig, freetype, jbig, jng, jpeg, lcms,
+lqr, ltdl, lzma, openexr, pangocairo, png, rsvg, tiff, wmf, x, xml, zlib
 ```
 
 ## AWS S3

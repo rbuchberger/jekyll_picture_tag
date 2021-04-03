@@ -7,7 +7,7 @@ sort: 2
 These are analogous to their plain HTML counterparts, but instead of `src`,
 `srcset`, and `sizes`, you get `data-src`, `data-srcset`, and `data-sizes`. This
 allows you to use javascript for things like [lazy
-loading](https://github.com/verlok/lazyload).
+loading](https://github.com/verlok/vanilla-lazyload).
 
 - `data_picture`
 
