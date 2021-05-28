@@ -14,6 +14,16 @@ work. Anything which pulls down a git repository and builds it in some container
 extra verification. Often some image formats will be supported, while others will not without
 installing additional packages.
 
+I have created a [testing repository](https://github.com/rbuchberger/jpt_tester) for this purpose.
+It's just a barebones jekyll site with JPT, that tries to generate a bunch of image formats. Feel
+free to use it for your own test builds.
+
+```yaml
+presets:
+  default:
+    formats: [avif, webp, jp2, png, gif, original]
+```
+
 ## Help Wanted
 
 We could really use help improving this page's guidance. I've created
@@ -35,10 +45,16 @@ Imagemagick known savers: bzlib, cairo, djvu, fftw, fontconfig, freetype, jbig, 
 lqr, ltdl, lzma, openexr, pangocairo, png, rsvg, tiff, wmf, x, xml, zlib
 ```
 
+They run an old version of libvips, so cropping attention may not work the same way as it does
+locally.
+
 ## AWS S3
 
 This method has a somewhat difficult setup, but once configured it works _very_ well. Since you
 build the site locally, if your development build works then your production build will work.
+
+There is one caveat: other than the site root, links need to point to an html file. `/blog` won't
+work, you need `/blog.html` or `/blog/index.html`. If you know a way to fix this, please speak up!
 
 [This](https://aws.amazon.com/premiumsupport/knowledge-center/cloudfront-serve-static-website/) is
 the guide you want; **specifically the second option** (Using a website endpoint as the origin, with
@@ -56,8 +72,20 @@ following:
 
 (All of these depend on having the aws cli installed, with proper credentials configured.)
 
-# Github Pages
+## AWS Amplify
+
+[This](https://www.bsmth.de/blog/deploying-jekyll-github-actions-aws-amplify) article may be useful;
+I haven't gotten it to work with a full set of image formats. The default build image doesn't
+support jp2 and avif, but Amplify allows you to use a custom build image. If you take the time to
+create one which can generate jpg, png, webp, jp2, and avif files, it would be marvelous of you to
+share it.
+
+## Github Pages
 
 Github Pages only allows a very short whitelist of plugins, which sadly does not include JPT. You
 can either run it locally, then commit and push the generated files (rather than the source files),
 or just host it some other way.
+
+## Cloudflare pages
+
+They have the same restrictions as netlify: jpg, webp, and png work. jp2 and avif are no-go.
