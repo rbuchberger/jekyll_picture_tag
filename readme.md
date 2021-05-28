@@ -1,6 +1,17 @@
-![Logo](docs/logo.svg)
-
 # Jekyll Picture Tag
+
+## Help Wanted
+
+My life just got a lot busier; I'd really like a maintainer or two to help. I'm not abandoning JPT,
+I just don't have a ton of time to put into hacking on it.
+
+If you've been learning Ruby and you want to move beyond tutorials and throwaway projects, I'd love
+to hear from you. I'd be happy to help you gain experience and credibility, if you're willing to
+help me maintain this project!
+
+If you're interested, contact me: robert@buchberger.cc
+
+![Logo](docs/logo.svg)
 
 ![Tests & Formatting](https://github.com/rbuchberger/jekyll_picture_tag/workflows/Tests%20&%20Formatting/badge.svg)
 
