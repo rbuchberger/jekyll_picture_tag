@@ -18,7 +18,9 @@ If you're interested, contact me: robert@buchberger.cc
 **Responsive Images done correctly.**
 
 It's simple to throw a photo on a page and call it a day, but doing justice to users on all
-different browsers and devices is tedious and tricky. Tedious, tricky things should be automated.
+different browsers and devices is tedious and tricky. Tedious, tricky things should be automated. 
+[This blog post further elaborates on that theme.](https://robert-buchberger.com/blog/2021/responsive_images.html)
+
 
 Jekyll Picture Tag automatically builds cropped, resized, and reformatted images, builds several
 kinds of markup, offers extensive configuration while requiring none, and solves both the art
