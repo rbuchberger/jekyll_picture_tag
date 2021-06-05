@@ -13,7 +13,7 @@ subdirectories. We're using the [jekyll-rtd-theme](https://jekyll-rtd-theme.rund
 You can preview as you edit; first the setup:
 
 ``` sh
-$ git clone git@github.com:rbuchberger/jekyll_picture_tag.git # if you haven't already
+$ git clone https://github.com/rbuchberger/jekyll_picture_tag.git # if you haven't already
 $ cd jekyll_picture_tag/docs
 $ direnv allow # (optional)
 $ bundle install --binstubs # --binstubs is optional.

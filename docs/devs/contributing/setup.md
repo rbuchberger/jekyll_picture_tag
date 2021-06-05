@@ -11,7 +11,7 @@ required by any means.
 ### With asdf & direnv:
 
 ```sh
-$ git clone git@github.com:rbuchberger/jekyll_picture_tag.git
+$ git clone https://github.com/rbuchberger/jekyll_picture_tag.git
 $ cd jekyll_picture_tag
 $ direnv allow
 $ asdf install
@@ -21,7 +21,7 @@ $ bundle install --binstubs
 ### Without asdf & direnv
 
 ```sh
-$ git clone git@github.com:rbuchberger/jekyll_picture_tag.git
+$ git clone https://github.com/rbuchberger/jekyll_picture_tag.git
 $ cd jekyll_picture_tag
 # Install the correct version of ruby, with the bundler gem.
 $ bundle install
