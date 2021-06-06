@@ -13,11 +13,11 @@ sort: 1
     ```ruby
     # Gemfile
 
-    gem 'jekyll', ~> '4.0'
+    gem 'jekyll', '~> 4.0'
 
     group :jekyll_plugins do
       # (other jekyll plugins)
-      gem 'jekyll_picture_tag', ~> '2.0'
+      gem 'jekyll_picture_tag', '~> 2.0'
     end
     ```
 
