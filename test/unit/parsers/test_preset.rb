@@ -2,34 +2,29 @@ require 'test_helper'
 class PresetTest < Minitest::Test
   include PictureTag
   include TestHelper
-
-  def test_merge
-    formats = ["jpeg", "webp"]
-    original = PictureTag.site.data["picture"]["presets"]["img"]
-    PictureTag.site.data["picture"]["presets"]["default"]['formats'] = formats
-    preset = Parsers::Preset.new "img"
-    assert_equal preset['formats'], formats
-    PictureTag.site.data["picture"]["presets"]["default"].each do | key, value|
-      if original.has_key?(key)
-        assert_equal preset[key], original[key]
-      else
-        assert_equal preset[key], value
-      end
-    end
+  def setup
+    PictureTag.site.data['picture']['presets'] = build_presets
+  end
+  def test_simple
+    original = PictureTag.site.data['picture']['presets']['img']
+    assert_nil original['sizes']
+    preset = Parsers::Preset.new 'img'
+    assert_nil preset['sizes']
+  end
+  def test_inherit
+    original = PictureTag.site.data['picture']['presets']['img']
+    expected = PictureTag.site.data['picture']['presets']['sizes']['sizes']
+    refute_nil expected
+    original['inherit'] = 'sizes'
+    preset = Parsers::Preset.new 'img'
+    assert_equal preset['sizes'], expected
   end
 
-  def test_merge_gem_defaults
-    original = PictureTag.site.data["picture"]["presets"]["img"]
-    PictureTag.site.data["picture"]["presets"].delete "default"
-
-    preset = Parsers::Preset.new "img"
-    assert_equal preset['formats'], ["original"]
-    DEFAULT_PRESET.each do | key, value|
-      if original.has_key?(key)
-        assert_equal preset[key], original[key]
-      else
-        assert_equal preset[key], value
-      end
-    end
+  def test_inherit_array
+    original = PictureTag.site.data['picture']['presets']['img']
+    original['inherit'] = ['formats', 'too_large']
+    preset = Parsers::Preset.new 'img'
+    assert_equal preset['fallback_width'], 800
+    assert_equal preset['widths'], [25, 50, 100]
   end
 end

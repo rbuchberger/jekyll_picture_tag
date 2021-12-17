@@ -15,7 +15,15 @@ module PictureTag
       protected
 
       def content
-        @content ||= default_preset.merge settings
+        @content ||= begin
+          content = settings
+          parents = [content["inherit"]].flatten.compact.map do |base|
+            PictureTag.site.data.dig('picture', 'presets', base) || no_preset(base)
+          end
+          parents.reduce DEFAULT_PRESET.merge(content) do |child, parent|
+            Jekyll::Utils.deep_merge_hashes(parent, child)
+          end
+        end
       end
 
       private
@@ -31,7 +39,7 @@ module PictureTag
         @default ||= DEFAULT_PRESET.merge( PictureTag.site.data.dig('picture', 'presets', 'default') || {})
       end
 
-      def no_preset
+      def no_preset(name=@name)
         unless name == 'default'
           Utils.warning(
             <<~HEREDOC
