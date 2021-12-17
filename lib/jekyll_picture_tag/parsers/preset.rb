@@ -15,7 +15,7 @@ module PictureTag
       protected
 
       def content
-        @content ||= DEFAULT_PRESET.merge settings
+        @content ||= default_preset.merge settings
       end
 
       private
@@ -24,6 +24,11 @@ module PictureTag
         PictureTag.site.data.dig('picture', 'presets', name) ||
           STOCK_PRESETS[name] ||
           no_preset
+      end
+
+      def default_preset
+        return DEFAULT_PRESET if name == 'default'
+        @default ||= DEFAULT_PRESET.merge( PictureTag.site.data.dig('picture', 'presets', 'default') || {})
       end
 
       def no_preset
