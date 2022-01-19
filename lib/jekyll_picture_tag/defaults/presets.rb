@@ -49,9 +49,9 @@ module PictureTag
 
   STOCK_MEDIA_QUERIES = {
     'jpt-mobile' => 'max-width: 480px',
-    'jpt-tablet' => 'max-width: 768',
+    'jpt-tablet' => 'max-width: 768px',
     'jpt-laptop' => 'max-width: 1024px',
-    'jpt-desktop' => 'max-width: 1200',
-    'jpt-wide' => 'min-width: 1201'
+    'jpt-desktop' => 'max-width: 1200px',
+    'jpt-wide' => 'min-width: 1201px'
   }.freeze
 end
