@@ -82,9 +82,12 @@ share it.
 
 ## Github Pages
 
-Github Pages only allows a very short whitelist of plugins, which sadly does not include JPT. You
-can either run it locally, then commit and push the generated files (rather than the source files),
-or just host it some other way.
+GitHub Pages only allows a very short whitelist of plugins, which sadly does not include JPT. You could run it locally, then commit and push the generated site to your Pages branch. 
+
+Or use GitHub Actions to do this for you automatically. Here’s [an Actions workflow to build a JPT-enabled site and deploy it](https://gist.github.com/elstudio/38bacfe7aab63da082a418fd3a1ddb66). Commit that yaml file to the `.github/workflows` folder of your source repository, and Actions will build and deploy your site whenever you push changes to `main`.
+
+See [How to use Jekyll Picture Tag or any Jekyll plugin with GitHub Pages](https://www.elstudio.us/code/use-any-jekyll-plugin-with-github-pages) for details of how it works.
+
 
 ## Cloudflare pages
 
