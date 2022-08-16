@@ -60,6 +60,8 @@ https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Recent releases:
 
+* 2.0.4 August 16, 2021
+  * Fix backend format support detection for new versions of libvips & imagemagick
 * 2.0.3 April 1, 2021
   * Improve backend format support detection
 * 2.0.2 March 31, 2021
