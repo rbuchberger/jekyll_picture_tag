@@ -14,17 +14,19 @@ module PictureTag
 
       # Returns array of formats that vips can save to
       def vips_formats
-        @vips_formats ||= `vips -l filesave`
-                          .scan(/\.[a-z]{1,5}/)
-                          .uniq
+        @vips_formats ||= `vips -l`
+                          .split('/n')
+                          .select { |line| line.include? 'ForeignSave' }
+                          .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
                           .map { |format| format.strip.delete_prefix('.') }
+                          .uniq
       end
 
       # Returns an array of formats that imagemagick can handle.
       def magick_formats
         @magick_formats ||= `convert -version`
-                            .split("\n")
-                            .last
+                            .scan(/Delegates.*/)
+                            .first
                             .delete_prefix('Delegates (built-in):')
                             .split
       end
