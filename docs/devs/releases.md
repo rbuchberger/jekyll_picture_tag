@@ -2,7 +2,7 @@
 ---
 # Release History
 
-* 2.0.4 August 16, 2021
+* 2.0.4 August 16, 2022
   * Fix backend format support detection for new versions of libvips & imagemagick
 * 2.0.3 April 1, 2021
   * Improve backend format support detection

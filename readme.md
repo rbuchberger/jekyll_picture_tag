@@ -60,7 +60,7 @@ https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
 
 Recent releases:
 
-* 2.0.4 August 16, 2021
+* 2.0.4 August 16, 2022
   * Fix backend format support detection for new versions of libvips & imagemagick
 * 2.0.3 April 1, 2021
   * Improve backend format support detection
@@ -97,14 +97,6 @@ Recent releases:
   * Drop support for `markup_presets` and `media_presets`. They are now
     officially and only `presets` and `media_queries`.
   * Improve docs with an introductory tutorial and 'how-to' flow.
-
-* 1.14.0 January 10, 2021
-  * Gracefully handle empty tag arguments.
-  * Re-add metadata stripping. I removed it inadvertently when refactoring; now
-    there's a test and a setting to turn it off.
-  * Respect Jekyll's `--disable-disk-cache` argument.
-  * Add baseurl configuration, allowing increased plugin support (such as I18n via `jekyll-multiple-languages-plugin`)
-  * Tooling & test suite maintenance and improvements.
 
 ## Help Wanted
 
