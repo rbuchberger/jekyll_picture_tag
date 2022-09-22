@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'jekyll_picture_tag'
 
 # The fact that these stubs are so complicated is probably one of those code
 # smell things I keep hearing about.
@@ -7,6 +8,7 @@ module OutputFormatTestHelper
   include TestHelper
 
   def base_stubs
+    PictureTag::Pool.start_test_pool
     PictureTag.stubs(config)
     stub_srcsets
     stub_generated_image

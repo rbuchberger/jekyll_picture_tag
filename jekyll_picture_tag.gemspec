@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
 
   # addressable is used to url-encode image filenames.
   spec.add_runtime_dependency 'addressable', '~> 2.6'
+  # Needed for parallel excution of builds.
+  spec.add_runtime_dependency 'concurrent-ruby', '~> 1.1'
   # Jekyll versions older than 4.0 are not supported.
   spec.add_runtime_dependency 'jekyll', '~> 4.0'
   # MIME types are needed for <source> tags' type= attributes.

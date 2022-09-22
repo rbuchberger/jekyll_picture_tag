@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'jekyll_picture_tag'
 
 module SrcsetTestHelper
   include TestHelper
@@ -7,6 +8,7 @@ module SrcsetTestHelper
   def setup
     [100, 150, 200, 300].each { |i| stub_generated(i, gstub(i)) }
 
+    PictureTag::Pool.start_test_pool
     PictureTag.stubs(config)
   end
 
