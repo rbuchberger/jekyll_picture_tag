@@ -7,11 +7,15 @@ module OutputFormatTestHelper
   include PictureTag
   include TestHelper
 
-  def base_stubs
-    PictureTag::Pool.start_test_pool
+  def setup
     PictureTag.stubs(config)
     stub_srcsets
     stub_generated_image
+    PictureTag::Pool.start_pool
+  end
+
+  def before_teardown
+    PictureTag::Pool.stop_pool
   end
 
   def config

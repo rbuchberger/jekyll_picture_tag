@@ -11,8 +11,12 @@ class GeneratedImageMissingTest < Minitest::Test
   # Lifecycle
   def setup
     PictureTag.stubs(config)
-    PictureTag::Pool.start_test_pool
+    PictureTag::Pool.start_pool
     File.stubs(:exist?).with(destfile).returns(false)
+  end
+
+  def before_teardown
+    PictureTag::Pool.stop_pool
   end
 
   def tested

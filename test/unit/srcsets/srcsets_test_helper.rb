@@ -7,9 +7,12 @@ module SrcsetTestHelper
 
   def setup
     [100, 150, 200, 300].each { |i| stub_generated(i, gstub(i)) }
-
-    PictureTag::Pool.start_test_pool
+    PictureTag::Pool.start_pool
     PictureTag.stubs(config)
+  end
+
+  def before_teardown
+    PictureTag::Pool.stop_pool
   end
 
   def source_image
