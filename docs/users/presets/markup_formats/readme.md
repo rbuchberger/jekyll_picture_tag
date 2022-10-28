@@ -17,7 +17,7 @@ Example:
 ```yml
 # /_data/picture.yml
 
-markup_presets:
+presets:
   my_preset:
     markup: data_auto
 ```

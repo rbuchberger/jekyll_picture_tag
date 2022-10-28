@@ -13,7 +13,7 @@ to make things outside the scope of JPT.
   ```yml
   # _data/picture.yml
 
-  markup_presets:
+  presets:
     direct:
       markup: direct_url
       fallback_width: 800
@@ -31,7 +31,7 @@ to make things outside the scope of JPT.
   ```yml
   # _data/picture.yml
 
-  markup_presets:
+  presets:
     only_srcset:
       markup: naked_srcset
       widths: [800, 1200, 1600]
