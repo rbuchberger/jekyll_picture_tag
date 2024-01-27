@@ -14,21 +14,29 @@ module PictureTag
 
       # Returns array of formats that vips can save to
       def vips_formats
-        @vips_formats ||= `vips -l`
-                          .split('/n')
-                          .select { |line| line.include? 'ForeignSave' }
-                          .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
-                          .map { |format| format.strip.delete_prefix('.') }
-                          .uniq
+        if command?("vips")
+          @vips_formats ||= `vips -l`
+            .split("/n")
+            .select { |line| line.include? "ForeignSave" }
+            .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
+            .map { |format| format.strip.delete_prefix(".") }
+            .uniq
+        else
+          @vips_formats = []
+        end
       end
 
       # Returns an array of formats that imagemagick can handle.
       def magick_formats
-        @magick_formats ||= `convert -version`
-                            .scan(/Delegates.*/)
-                            .first
-                            .delete_prefix('Delegates (built-in):')
-                            .split
+        if command?("convert")
+          @magick_formats ||= `convert -version`
+            .scan(/Delegates.*/)
+            .first
+            .delete_prefix("Delegates (built-in):")
+            .split
+        else
+          @magick_formats = []
+        end
       end
 
       # Returns an array of all known names of a format, for the purposes of
@@ -41,15 +49,27 @@ module PictureTag
       private
 
       def error_string(format)
-        <<~HEREDOC
-          No support for generating #{format} files in this environment!
-          Libvips known savers: #{vips_formats.join(', ')}
-          Imagemagick known savers:  #{magick_formats.join(', ')}
-        HEREDOC
+        str = []
+        str << "No support for generating \"#{format}\" files in this environment!"
+        if command?("vips")
+          str << "Libvips (installed) supports: \"#{vips_formats.join(", ")}\"."
+        else
+          str << "Libvips is not installed."
+        end
+        if command?("convert")
+          str << "Imagemagick (installed) supports: \"#{magick_formats.join(", ")}\"."
+        else
+          str << "Imagemagick is not installed."
+        end
+        str.join(" ")
       end
 
       def alternates
         [%w[jpg jpeg], %w[avif heic heif]]
+      end
+
+      def command?(command)
+        system("which #{command} > /dev/null 2>&1")
       end
     end
   end
