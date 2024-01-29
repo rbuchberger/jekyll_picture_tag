@@ -14,13 +14,13 @@ module PictureTag
 
       # Returns array of formats that vips can save to
       def vips_formats
-        if command?("vips")
+        if command?('vips')
           @vips_formats ||= `vips -l`
-            .split("/n")
-            .select { |line| line.include? "ForeignSave" }
-            .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
-            .map { |format| format.strip.delete_prefix(".") }
-            .uniq
+                            .split('/n')
+                            .select { |line| line.include? 'ForeignSave' }
+                            .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
+                            .map { |format| format.strip.delete_prefix('.') }
+                            .uniq
         else
           @vips_formats = []
         end
@@ -28,12 +28,12 @@ module PictureTag
 
       # Returns an array of formats that imagemagick can handle.
       def magick_formats
-        if command?("convert")
+        if command?('convert')
           @magick_formats ||= `convert -version`
-            .scan(/Delegates.*/)
-            .first
-            .delete_prefix("Delegates (built-in):")
-            .split
+                              .scan(/Delegates.*/)
+                              .first
+                              .delete_prefix('Delegates (built-in):')
+                              .split
         else
           @magick_formats = []
         end
@@ -51,17 +51,17 @@ module PictureTag
       def error_string(format)
         str = []
         str << "No support for generating \"#{format}\" files in this environment!"
-        if command?("vips")
-          str << "Libvips (installed) supports: \"#{vips_formats.join(", ")}\"."
-        else
-          str << "Libvips is not installed."
-        end
-        if command?("convert")
-          str << "Imagemagick (installed) supports: \"#{magick_formats.join(", ")}\"."
-        else
-          str << "Imagemagick is not installed."
-        end
-        str.join(" ")
+        str << if command?('vips')
+                 "Libvips (installed) supports: \"#{vips_formats.join(', ')}\"."
+               else
+                 'Libvips is not installed.'
+               end
+        str << if command?('convert')
+                 "Imagemagick (installed) supports: \"#{magick_formats.join(', ')}\"."
+               else
+                 'Imagemagick is not installed.'
+               end
+        str.join(' ')
       end
 
       def alternates

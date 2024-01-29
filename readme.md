@@ -18,9 +18,8 @@ If you're interested, contact me: robert@buchberger.cc
 **Responsive Images done correctly.**
 
 It's simple to throw a photo on a page and call it a day, but doing justice to users on all
-different browsers and devices is tedious and tricky. Tedious, tricky things should be automated. 
+different browsers and devices is tedious and tricky. Tedious, tricky things should be automated.
 [This blog post further elaborates on that theme.](https://robert-buchberger.com/blog/2021/responsive_images.html)
-
 
 Jekyll Picture Tag automatically builds cropped, resized, and reformatted images, builds several
 kinds of markup, offers extensive configuration while requiring none, and solves both the art
@@ -50,16 +49,20 @@ Tag is your responsive images minion - give it simple instructions and it'll han
 * Configure it easily, or not at all.
 * Make Lighthouse happy.
 
-## Documentation:
+## Documentation
 
-https://rbuchberger.github.io/jekyll_picture_tag/
+<https://rbuchberger.github.io/jekyll_picture_tag/>
 
-## Changelog:
+## Changelog
 
-https://rbuchberger.github.io/jekyll_picture_tag/devs/releases
+<https://rbuchberger.github.io/jekyll_picture_tag/devs/releases>
 
 Recent releases:
 
+* 2.1.0 29 January, 2024
+  * Check whether the vips CLI is installed before trying to use it. Thanks to @philrb for
+    [#299](https://github.com/rbuchberger/jekyll_picture_tag/pull/299)
+  * Update minimum required mocha version to maintain compatibility with minitest
 * 2.0.4 August 16, 2022
   * Fix backend format support detection for new versions of libvips & imagemagick
 * 2.0.3 April 1, 2021
@@ -82,11 +85,11 @@ Recent releases:
   * Require Ruby >= 2.6, support Ruby 3.0
   * Require Jekyll >= 4.0
   * Cropping is changing.
-      * We now use the libvips
+    * We now use the libvips
         [smartcrop function](https://www.rubydoc.info/gems/ruby-vips/Vips/Image#smartcrop-instance_method),
         which does some magic to keep the most useful part of the image.
-      * Geometry is renamed to 'crop', and reduced to simple aspect ratios only. (`width:height`)
-      * Gravity is gone, replaced by 'keep' which is translated to a libvips
+    * Geometry is renamed to 'crop', and reduced to simple aspect ratios only. (`width:height`)
+    * Gravity is gone, replaced by 'keep' which is translated to a libvips
         [interestingness](https://www.rubydoc.info/gems/ruby-vips/Vips/Interesting) setting.
   * Add stock presets and media queries, under the `jpt-` prefix.
   * Add `format_quality` default settings for webp, avif, and jp2.

@@ -2,6 +2,10 @@
 ---
 # Release History
 
+* 2.1.0 29 January, 2024
+  * Check whether the vips CLI is installed before trying to use it. Thanks to @philrb for 
+    [#299](https://github.com/rbuchberger/jekyll_picture_tag/pull/299)
+  * Update minimum required mocha version to maintain compatibility with minitest
 * 2.0.4 August 16, 2022
   * Fix backend format support detection for new versions of libvips & imagemagick
 * 2.0.3 April 1, 2021
