@@ -24,11 +24,14 @@ AllCops:
     - '**/vendor/**/*'
 
 Layout/LineLength:
-  Max: 80
+  Max: 120
 
 # Disabled Cops
 Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/StringConcatenation:
+  Enabled: false
+
+Metrics/MethodLength:
   Enabled: false
