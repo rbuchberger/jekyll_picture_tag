@@ -86,7 +86,9 @@ module PictureTag
     end
 
     def resize(image)
+      image.premultiply
       image.resize(scale_value)
+      image.unpremultiply
     end
 
     def crop(image)
