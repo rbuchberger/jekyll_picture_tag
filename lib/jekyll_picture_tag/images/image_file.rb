@@ -87,8 +87,8 @@ module PictureTag
 
     def resize(image)
       if image.has_alpha?
-        image.premultiply
-        image.resize(scale_value)
+        image = image.premultiply
+        image = image.resize(scale_value)
         image.unpremultiply
       else
         image.resize(scale_value)
