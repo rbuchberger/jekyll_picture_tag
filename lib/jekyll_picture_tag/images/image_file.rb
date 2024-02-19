@@ -86,7 +86,13 @@ module PictureTag
     end
 
     def resize(image)
-      image.resize(scale_value)
+      if image.has_alpha?
+        image = image.premultiply
+        image = image.resize(scale_value)
+        image.unpremultiply
+      else
+        image.resize(scale_value)
+      end
     end
 
     def crop(image)
