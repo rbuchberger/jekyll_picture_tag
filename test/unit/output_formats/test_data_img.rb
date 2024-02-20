@@ -3,12 +3,6 @@ require_relative 'output_format_test_helper'
 class TestDataImg < Minitest::Test
   include OutputFormatTestHelper
 
-  # Lifecycle
-
-  def setup
-    base_stubs
-  end
-
   # Helpers
 
   def tested

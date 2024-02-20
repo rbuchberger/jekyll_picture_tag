@@ -3,10 +3,6 @@ require_relative 'output_format_test_helper'
 class TestNakedSrcset < Minitest::Test
   include OutputFormatTestHelper
 
-  def setup
-    base_stubs
-  end
-
   def tested
     @tested ||= OutputFormats::NakedSrcset.new
   end

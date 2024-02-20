@@ -5,10 +5,6 @@ require_relative 'output_format_test_helper'
 class TestDataPicture < Minitest::Test
   include OutputFormatTestHelper
 
-  def setup
-    base_stubs
-  end
-
   def tested
     @tested ||= OutputFormats::DataPicture.new
   end
