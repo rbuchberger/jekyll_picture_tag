@@ -59,6 +59,9 @@ Tag is your responsive images minion - give it simple instructions and it'll han
 
 Recent releases:
 
+* 2.1.1 20 July, 2024
+  * Don't provide Q setting for PPM images - thanks to @dichiban for [#309](https://github.com/rbuchberger/jekyll_picture_tag/pull/309)
+  * Fix alpha premultiplication - thanks to @KaarlisCaune for [#302](https://github.com/rbuchberger/jekyll_picture_tag/pull/302)
 * 2.1.0 29 January, 2024
   * Check whether the vips CLI is installed before trying to use it. Thanks to @philrb for
     [#299](https://github.com/rbuchberger/jekyll_picture_tag/pull/299)
