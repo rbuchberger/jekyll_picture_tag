@@ -1,7 +1,7 @@
 ---
 ---
 
-![](logo.svg)
+![](logo.png)
 
 _Responsive Images, Done Correctly._
 
