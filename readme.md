@@ -13,8 +13,6 @@ If you're interested, contact me: robert@buchberger.cc
 
 ![Logo](docs/logo.svg)
 
-![Tests & Formatting](https://github.com/rbuchberger/jekyll_picture_tag/workflows/Tests%20&%20Formatting/badge.svg)
-
 **Responsive Images done correctly.**
 
 It's simple to throw a photo on a page and call it a day, but doing justice to users on all
