@@ -11,7 +11,7 @@ help me maintain this project!
 
 If you're interested, contact me: robert@buchberger.cc
 
-![Logo](docs/logo.svg)
+![Logo](docs/logo.png)
 
 **Responsive Images done correctly.**
 
