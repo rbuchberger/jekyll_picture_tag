@@ -1,4 +1,7 @@
 require 'mime-types'
+require 'set'
+require 'concurrent-ruby'
+
 module PictureTag
   # Handles srcset generation, which also handles file generation.
   module Srcsets
@@ -62,16 +65,30 @@ module PictureTag
 
       private
 
+      # Defining a threadpool takes 5 lines, but isn't really that complex
+      # of an operation, so we disable the rubocop method length warning.
+      # rubocop:disable Metrics/MethodLength
       def build_files
         # By 'files', we mean the GeneratedImage class.
         return target_files if target_files.all?(&:exists?)
 
         # This triggers GeneratedImage to actually build an image file.
-        files = checked_targets
-        files.each(&:generate)
+        files = unique_checked_targets
+        pool = Concurrent::ThreadPoolExecutor.new(
+          min_threads: 1, max_threads: Concurrent.processor_count,
+          max_queue: 2 * Concurrent.processor_count
+        )
+        files.each do |file|
+          pool.post do
+            file.generate
+          end
+        end
+        pool.shutdown
+        pool.wait_for_termination
 
         files
       end
+      # rubocop:enable Metrics/MethodLength
 
       def checked_targets
         if target_files.any? { |f| f.width > source_width }
@@ -83,6 +100,22 @@ module PictureTag
         end
 
         files || target_files
+      end
+
+      def unique_checked_targets
+        # Because we're processing in parallel, we can't use existince
+        # in the filestystem to prevent duplicate handling of files without
+        # a race condition, so we manually track generated files here so we
+        # don't attempt to generate the same image twice.
+        seen_files = Set[]
+        unique_targets = []
+        checked_targets.each do |target|
+          unless seen_files.include?(target.name)
+            seen_files.add(target.name)
+            unique_targets.push(target)
+          end
+        end
+        unique_targets
       end
 
       def source_width
