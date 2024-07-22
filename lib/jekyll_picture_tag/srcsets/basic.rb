@@ -1,4 +1,5 @@
 require 'mime-types'
+
 module PictureTag
   # Handles srcset generation, which also handles file generation.
   module Srcsets
@@ -68,8 +69,7 @@ module PictureTag
 
         # This triggers GeneratedImage to actually build an image file.
         files = checked_targets
-        files.each(&:generate)
-
+        files.each { |file| PictureTag::Pool.generate(file) }
         files
       end
 

@@ -79,7 +79,7 @@ module PictureTag
           width: checked_fallback_width
         )
 
-        image.generate
+        PictureTag::Pool.generate(image)
 
         image
       end
