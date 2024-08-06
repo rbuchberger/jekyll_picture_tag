@@ -18,7 +18,7 @@ module PictureTag
     # of nil, which is a perfectly fine hash key.
     class TagParser
       attr_reader :preset_name, :source_names, :media_presets, :keep,
-                  :crop, :leftovers
+                  :crop, :leftovers, :css_class
 
       def initialize(raw_params)
         @raw_params = raw_params
@@ -28,6 +28,7 @@ module PictureTag
         @source_names = []
         @keep = {}
         @crop = {}
+        @css_class = ""
 
         parse_params
       end
@@ -53,6 +54,11 @@ module PictureTag
         # Media query, i.e. 'mobile:'
         if param.match?(/[\w\-]+:$/)
           add_media_source
+
+        # class for css
+        elsif param == "css"
+          @params.shift
+          @css_class = @params.shift
 
         # Smartcrop interestingness setting. We label it 'keep', since it
         # determines what to keep when cropping.
