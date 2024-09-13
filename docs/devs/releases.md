@@ -2,6 +2,8 @@
 ---
 # Release History
 
+* 2.1.2 13 September, 2024
+  * Remove overly specific version spec for ruby-vips - thanks to [@hschne](https://github.com/hschne) for [#313](https://github.com/rbuchberger/jekyll_picture_tag/pull/313)
 * 2.1.1 20 July, 2024
   * Don't provide Q setting for PPM images - thanks to @dichiban for [#309](https://github.com/rbuchberger/jekyll_picture_tag/pull/309)
   * Fix alpha premultiplication - thanks to @KaarlisCaune for [#302](https://github.com/rbuchberger/jekyll_picture_tag/pull/302)
