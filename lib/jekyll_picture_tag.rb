@@ -6,6 +6,7 @@ require_relative 'jekyll_picture_tag/images'
 require_relative 'jekyll_picture_tag/instructions'
 require_relative 'jekyll_picture_tag/output_formats'
 require_relative 'jekyll_picture_tag/parsers'
+require_relative 'jekyll_picture_tag/pool'
 require_relative 'jekyll_picture_tag/router'
 require_relative 'jekyll_picture_tag/srcsets'
 require_relative 'jekyll_picture_tag/utils'
@@ -68,7 +69,10 @@ module PictureTag
 
         ''
       else
-        PictureTag.output_class.new.to_s
+        PictureTag::Pool.start_pool
+        result = PictureTag.output_class.new.to_s
+        PictureTag::Pool.stop_pool
+        result
       end
     end
 

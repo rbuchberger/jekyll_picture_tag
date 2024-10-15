@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'jekyll_picture_tag'
 
 # The fact that these stubs are so complicated is probably one of those code
 # smell things I keep hearing about.
@@ -6,10 +7,15 @@ module OutputFormatTestHelper
   include PictureTag
   include TestHelper
 
-  def base_stubs
+  def setup
     PictureTag.stubs(config)
     stub_srcsets
     stub_generated_image
+    PictureTag::Pool.start_pool
+  end
+
+  def before_teardown
+    PictureTag::Pool.stop_pool
   end
 
   def config
