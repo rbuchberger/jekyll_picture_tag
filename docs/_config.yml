@@ -1,9 +1,9 @@
-remote_theme: rundocs/jekyll-rtd-theme
+remote_theme: rbuchberger/jekyll-rtd-theme@main
 
 title: Jekyll Picture Tag
 description: Images for Jekyll, done correctly.
 lang: en-US
 
 baseurl: '/jekyll_picture_tag'
-readme_index: 
+readme_index:
   with_frontmatter: true
