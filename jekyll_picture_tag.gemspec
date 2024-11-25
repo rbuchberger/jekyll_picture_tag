@@ -42,6 +42,8 @@ Gem::Specification.new do |spec|
 
   # libvips handles all image processing operations.
   spec.requirements << 'libvips'
+  # To call the `vips` command-line utility
+  spec.requirements << 'libvips-tools'
 
   # Development dependencies are not installed when using this gem. You can
   # ignore these, unless you are working on JPT itself.
