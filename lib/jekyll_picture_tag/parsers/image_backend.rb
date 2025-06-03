@@ -69,7 +69,12 @@ module PictureTag
       end
 
       def command?(command)
-        system("which #{command} > /dev/null 2>&1")
+        is_windows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+        if is_windows
+          system("where #{command} > NUL 2>&1")
+        else
+          system("which #{command} > /dev/null 2>&1")
+        end
       end
     end
   end
