@@ -49,7 +49,7 @@ module TestHelper
   # them doesn't support some image format. This returns an array of image
   # formats which we care about, and which are locally supported.
   def supported_formats
-    output = `vips --list` + `convert --version`
+    output = `vips --list` + `magick --version`
 
     formats = %w[jpg png webp gif jp2 avif].select do |format|
       output.include? format
