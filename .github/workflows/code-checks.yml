@@ -8,15 +8,15 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
 
       - name: Install system dependencies
-        run: sudo apt install libjpeg-dev webp libpng-dev libavifile-0.7c2 libopenjpip7 imagemagick libvips-tools
+        run: sudo apt-get update && sudo apt-get install --yes libjpeg-dev webp libpng-dev libavif-dev libheif-dev libopenjpip7 imagemagick libvips-tools build-essential
 
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Version taken from .ruby-version file.
       # Also runs bundle install.
