@@ -19,5 +19,3 @@ The primary way to run these checks is `rake`:
 * Depending on your environment, you may need to prefix all rake commands with `bundle exec`
 * Simplecov is set up -- you'll get a measurement of coverage in the test output and a nice report
   in the `coverage` directory.
-* The tests use the `/tmp/` directory directly, which I'm pretty sure means it won't work on
-  Windows. This is fixable, so if that gets in your way just ask.

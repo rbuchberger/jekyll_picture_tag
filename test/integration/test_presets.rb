@@ -15,7 +15,7 @@ class TestIntegrationPresets < Minitest::Test
   # formats webp, original
   def test_picture_files
     tested('auto rms.jpg')
-    files = Dir.glob(temp_dir('generated' + '/*'))
+    files = Dir.glob(temp_dir('generated', '*'))
 
     assert_equal(6, files.length)
     assert_includes stdout, 'Generating'
@@ -218,7 +218,7 @@ class TestIntegrationPresets < Minitest::Test
     File.unstub :exist?
     tested 'fallback rms.jpg'
 
-    files = Dir.glob(temp_dir('generated') + '/rms-35-?????????.webp')
+    files = Dir.glob(temp_dir('generated', 'rms-35-?????????.webp'))
 
     assert_equal 1, files.length
   end
@@ -271,10 +271,10 @@ class TestIntegrationPresets < Minitest::Test
     tested 'crop rms.jpg mobile: spx.jpg'
 
     rms_dimensions =
-      Image.new_from_file(temp_dir('generated/rms-100-ced21b33d.jpg')).size
+      Image.new_from_file(temp_dir('generated', 'rms-100-ced21b33d.jpg')).size
 
     spx_dimensions =
-      Image.new_from_file(temp_dir('generated/spx-100-63d4bc0d5.jpg')).size
+      Image.new_from_file(temp_dir('generated', 'spx-100-63d4bc0d5.jpg')).size
 
     assert_in_delta aspect_float(3, 2), aspect_float(*rms_dimensions), 0.03
     assert_in_delta aspect_float(16, 9), aspect_float(*spx_dimensions), 0.03

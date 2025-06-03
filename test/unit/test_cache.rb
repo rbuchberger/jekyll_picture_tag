@@ -6,7 +6,7 @@ class TestCache < Minitest::Test
 
   def setup
     PictureTag.stubs(site: Object.new)
-    PictureTag.site.stubs(cache_dir: '/tmp/', config: {})
+    PictureTag.site.stubs(cache_dir: temp_dir, config: {})
   end
 
   def tested(name = 'img.jpg')
@@ -37,7 +37,7 @@ class TestCache < Minitest::Test
     tested[:digest] = 'scruffer pupper'
     tested.write
 
-    assert_path_exists temp_dir('img.jpg.json')
+    assert_path_exists temp_dir('jpt', 'img.jpg.json')
   end
 
   def test_retrieve_data
@@ -49,11 +49,11 @@ class TestCache < Minitest::Test
 
   # Handles filenames with directories in them
   def test_subdirectory_name
-    tested('somedir/img.jpg')
+    tested(File.join('somedir', 'img.jpg'))
     tested[:digest] = 'abc123'
     tested.write
 
-    assert_path_exists temp_dir('somedir/img.jpg.json')
+    assert_path_exists temp_dir('jpt', 'somedir', 'img.jpg.json')
   end
 
   # Jekyll has a flag to disable caching; we must respect it.

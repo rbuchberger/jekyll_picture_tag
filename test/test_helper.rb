@@ -40,7 +40,9 @@ module TestHelper
   end
 
   def temp_dir(*descendents)
-    File.join '/tmp/jpt', *descendents
+    @temp_dir ||= Dir.mktmpdir
+
+    File.join(@temp_dir, *descendents)
   end
 
   # We're having trouble with tests failing because whatever system is running
