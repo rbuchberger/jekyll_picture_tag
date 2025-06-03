@@ -28,7 +28,7 @@ module IntegrationTestHelper
   end
 
   def rms_filename(width: 100, format: 'jpg')
-    File.join temp_dir, rms_url(width: width, format: format)
+    temp_dir(rms_url(width: width, format: format))
   end
 
   def rms_url(width: 100, format: 'jpg')
@@ -60,7 +60,7 @@ module IntegrationTestHelper
   end
 
   def spx_filename(width: 100, format: 'jpg', crop: '')
-    File.join temp_dir, spx_url(width: width, format: format, crop: crop)
+    temp_dir(spx_url(width: width, format: format, crop: crop))
   end
 
   def std_spx_ss

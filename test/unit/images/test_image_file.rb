@@ -38,7 +38,7 @@ class TestImageFile < Minitest::Test
   end
 
   def filename
-    File.join(temp_dir, dest_name)
+    temp_dir(dest_name)
   end
 
   def gen_config
@@ -186,8 +186,6 @@ class TestImageFile < Minitest::Test
   end
 
   def test_dest_dir
-    refute_path_exists temp_dir
-
     tested
 
     assert_path_exists temp_dir

@@ -63,7 +63,7 @@ class TestIntegrationParams < Minitest::Test
     assert_equal correct, output.at_css('img')['srcset']
 
     generated_dimensions =
-      Vips::Image.new_from_file(temp_dir('generated/rms-100-7ce20d78f.jpg'))
+      Vips::Image.new_from_file(temp_dir('generated', 'rms-100-7ce20d78f.jpg'))
                  .size
 
     assert_in_delta aspect_float(10, 1),
@@ -117,7 +117,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert_path_exists(temp_dir('generated/rms with space-100-9f9ef26e5.jpg'))
+    assert_path_exists(temp_dir('generated', 'rms with space-100-9f9ef26e5.jpg'))
   end
 
   def test_quoted_whitespace
@@ -132,7 +132,7 @@ class TestIntegrationParams < Minitest::Test
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
-    assert_path_exists(temp_dir('generated/rms with space-100-9f9ef26e5.jpg'))
+    assert_path_exists(temp_dir('generated', 'rms with space-100-9f9ef26e5.jpg'))
   end
 
   def test_empty_params
