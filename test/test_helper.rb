@@ -49,7 +49,8 @@ module TestHelper
   # them doesn't support some image format. This returns an array of image
   # formats which we care about, and which are locally supported.
   def supported_formats
-    output = `vips --list` + `magick --version`
+    magick_command = command?('magick') ? `magick` : `convert`
+    output = `vips --list` + `#{magick_command} --version`
 
     formats = %w[jpg png webp gif jp2 avif].select do |format|
       output.include? format
@@ -59,5 +60,14 @@ module TestHelper
     raise 'Not enough locally supported formats' unless formats.length >= 3
 
     formats
+  end
+
+  def command?(command)
+    is_windows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+    if is_windows
+      system("where #{command} > NUL 2>&1")
+    else
+      system("which #{command} > /dev/null 2>&1")
+    end
   end
 end

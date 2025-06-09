@@ -34,6 +34,12 @@ module PictureTag
                               .first
                               .delete_prefix('Delegates (built-in):')
                               .split
+        elsif command?('convert')
+          @magick_formats ||= `convert -version`
+                              .scan(/Delegates.*/)
+                              .first
+                              .delete_prefix('Delegates (built-in):')
+                              .split
         else
           @magick_formats = []
         end
@@ -56,7 +62,7 @@ module PictureTag
                else
                  'Libvips is not installed.'
                end
-        str << if command?('magick')
+        str << if command?('magick') || command?('convert')
                  "Imagemagick (installed) supports: \"#{magick_formats.join(', ')}\"."
                else
                  'Imagemagick is not installed.'
