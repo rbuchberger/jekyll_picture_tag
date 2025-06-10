@@ -2,13 +2,15 @@
 ---
 # Release History
 
+* 2.1.3 10 June, 2025
+  * Decide whether to call `magick` or `convert` more intelligently. This adds Windows support, without breaking JPT on Ubuntu or other distros that only ship an ancient version of ImageMagick. Thanks to [@MUmarShahbaz](https://github.com/MUmarShahbaz) for [#324](https://github.com/rbuchberger/jekyll_picture_tag/pull/324)
 * 2.1.2 13 September, 2024
   * Remove overly specific version spec for ruby-vips - thanks to [@hschne](https://github.com/hschne) for [#313](https://github.com/rbuchberger/jekyll_picture_tag/pull/313)
 * 2.1.1 20 July, 2024
   * Don't provide Q setting for PPM images - thanks to @dichiban for [#309](https://github.com/rbuchberger/jekyll_picture_tag/pull/309)
   * Fix alpha premultiplication - thanks to @KaarlisCaune for [#302](https://github.com/rbuchberger/jekyll_picture_tag/pull/302)
 * 2.1.0 29 January, 2024
-  * Check whether the vips CLI is installed before trying to use it. Thanks to @philrb for 
+  * Check whether the vips CLI is installed before trying to use it. Thanks to @philrb for
     [#299](https://github.com/rbuchberger/jekyll_picture_tag/pull/299)
   * Update minimum required mocha version to maintain compatibility with minitest
 * 2.0.4 August 16, 2022
@@ -33,11 +35,11 @@
   * Require Ruby >= 2.6, support Ruby 3.0
   * Require Jekyll >= 4.0
   * Cropping is changing.
-      * We now use the libvips
+    * We now use the libvips
         [smartcrop function](https://www.rubydoc.info/gems/ruby-vips/Vips/Image#smartcrop-instance_method),
         which does some magic to keep the most useful part of the image.
-      * Geometry is renamed to 'crop', and reduced to simple aspect ratios only. (`width:height`)
-      * Gravity is gone, replaced by 'keep' which is translated to a libvips
+    * Geometry is renamed to 'crop', and reduced to simple aspect ratios only. (`width:height`)
+    * Gravity is gone, replaced by 'keep' which is translated to a libvips
         [interestingness](https://www.rubydoc.info/gems/ruby-vips/Vips/Interesting) setting.
   * Add stock presets and media queries, under the `jpt-` prefix.
   * Add `format_quality` default settings for webp, avif, and jp2.

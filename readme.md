@@ -44,8 +44,10 @@ Tag is your responsive images minion - give it simple instructions and it'll han
 
 <https://rbuchberger.github.io/jekyll_picture_tag/devs/releases>
 
-Recent releases:
+2.0 and later releases:
 
+* 2.1.3 10 June, 2025
+  * Decide whether to call `magick` or `convert` more intelligently. This adds Windows support, without breaking JPT on Ubuntu or other distros that only ship an ancient version of ImageMagick. Thanks to [@MUmarShahbaz](https://github.com/MUmarShahbaz) for [#324](https://github.com/rbuchberger/jekyll_picture_tag/pull/324)
 * 2.1.2 13 September, 2024
   * Remove overly specific version spec for ruby-vips - thanks to [@hschne](https://github.com/hschne) for [#313](https://github.com/rbuchberger/jekyll_picture_tag/pull/313)
 * 2.1.1 20 July, 2024
