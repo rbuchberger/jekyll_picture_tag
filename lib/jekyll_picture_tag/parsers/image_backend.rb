@@ -28,7 +28,13 @@ module PictureTag
 
       # Returns an array of formats that imagemagick can handle.
       def magick_formats
-        if command?('convert')
+        if command?('magick')
+          @magick_formats ||= `magick -version`
+                              .scan(/Delegates.*/)
+                              .first
+                              .delete_prefix('Delegates (built-in):')
+                              .split
+        elsif command?('convert')
           @magick_formats ||= `convert -version`
                               .scan(/Delegates.*/)
                               .first
@@ -56,7 +62,7 @@ module PictureTag
                else
                  'Libvips is not installed.'
                end
-        str << if command?('convert')
+        str << if command?('magick') || command?('convert')
                  "Imagemagick (installed) supports: \"#{magick_formats.join(', ')}\"."
                else
                  'Imagemagick is not installed.'
@@ -69,7 +75,12 @@ module PictureTag
       end
 
       def command?(command)
-        system("which #{command} > /dev/null 2>&1")
+        is_windows = RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
+        if is_windows
+          system("where #{command} > NUL 2>&1")
+        else
+          system("which #{command} > /dev/null 2>&1")
+        end
       end
     end
   end

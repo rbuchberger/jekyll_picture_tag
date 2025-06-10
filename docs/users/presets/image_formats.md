@@ -17,5 +17,5 @@ used**. `original` does what you'd expect. To supply webp, you must have an
 imagemagick webp delegate installed. (Most package managers just name it 'webp')
 
 _Supported formats are anything which imagemagick supports, and has an installed
-delegate. See a list by running `$ convert --version`_.
+delegate. See a list by running `$ magick --version`_.
 
