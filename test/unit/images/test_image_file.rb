@@ -7,7 +7,12 @@ class TestImageFile < Minitest::Test
 
   def setup
     PictureTag.stubs(preset: preset)
+    PictureTag::Pool.start_pool
     ImageFile.any_instance.stubs(:puts)
+  end
+
+  def before_teardown
+    PictureTag::Pool.stop_pool
   end
 
   def preset
