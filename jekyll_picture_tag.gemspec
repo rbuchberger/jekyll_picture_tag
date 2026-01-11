@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test)/})
   end
 
-  spec.required_ruby_version = ['>= 2.6', '< 4.0']
+  spec.required_ruby_version = ['>= 2.6', '< 5.0']
 
   # addressable is used to url-encode image filenames.
   spec.add_runtime_dependency 'addressable', '~> 2.6'
@@ -45,13 +45,17 @@ Gem::Specification.new do |spec|
 
   # Development dependencies are not installed when using this gem. You can
   # ignore these, unless you are working on JPT itself.
-  spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'appraisal', '~> 2.5'
+  # bigdecimal and ostruct are no longer part of the default gems in Ruby 3.4+
+  spec.add_development_dependency 'bigdecimal'
+  spec.add_development_dependency 'bundler', '>= 2.0'
   spec.add_development_dependency 'minitest', '~> 5.14'
   spec.add_development_dependency 'minitest-rg'
   spec.add_development_dependency 'mocha', '~> 2.1'
   spec.add_development_dependency 'nokogiri', '~> 1.1'
+  spec.add_development_dependency 'ostruct'
   spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake', '~> 12.3'
+  spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.7.0'
   spec.add_development_dependency 'rubocop-minitest', '~> 0.10.0'
   spec.add_development_dependency 'rubocop-performance', '~> 1.9.0'

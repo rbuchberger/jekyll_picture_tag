@@ -13,7 +13,7 @@ module PictureTag
 
       def initialize(raw_params)
         @words = []
-        @word = ''
+        @word = String.new
         @in_quotes = false
         @escaped = false
 
@@ -47,7 +47,7 @@ module PictureTag
         return if @word.empty?
 
         @words << @word
-        @word = ''
+        @word = String.new
       end
 
       def handle_special(char)

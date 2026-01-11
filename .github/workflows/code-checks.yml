@@ -7,24 +7,52 @@ on:
     branches: [master]
 
 jobs:
-  checks:
+  test:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ['2.6', '3.4', '4.0']
+        include:
+          - ruby-version: '2.6'
+            appraisal: 'ruby-2.6'
+          - ruby-version: '3.4'
+            appraisal: 'ruby-3.4'
+          - ruby-version: '4.0'
+            appraisal: 'ruby-4.0'
 
     steps:
-
       - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install --yes libjpeg-dev webp libpng-dev libavif-dev libheif-dev libopenjpip7 imagemagick libvips-tools build-essential
 
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # Version taken from .ruby-version file.
-      # Also runs bundle install.
+      - name: Install Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Generate Appraisal gemfiles
+        run: bundle exec appraisal generate
+
+      - name: Install Appraisal dependencies
+        run: bundle exec appraisal ${{ matrix.appraisal }} bundle install
+
+      - name: Run tests with Appraisal
+        run: bundle exec appraisal ${{ matrix.appraisal }} rake test
+
+  rubocop:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: '3.4'
           bundler-cache: true
-
-      - run: bundle exec rake test
 
       - run: bundle exec rubocop

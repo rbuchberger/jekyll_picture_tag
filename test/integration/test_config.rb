@@ -32,7 +32,12 @@ class TestIntegrationConfig < Minitest::Test
     pconfig['suppress_warnings'] = true
     tested 'too_large rms.jpg'
 
-    assert_empty stderr
+    # Filter out Ruby 3.4+ frozen string literal warnings from external gems
+    filtered_stderr = stderr.lines.reject do |line|
+      line.include?('warning: literal string will be frozen in the future')
+    end.join
+
+    assert_empty filtered_stderr
   end
 
   # continue on missing
