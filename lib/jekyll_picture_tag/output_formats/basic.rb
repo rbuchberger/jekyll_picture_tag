@@ -62,7 +62,11 @@ module PictureTag
       end
 
       def add_alt(element, alt)
-        element.alt = alt if alt
+        # Strip surrounding double quotes from alt text.
+        # ArgSplitter includes quote delimiters in the parsed word, so
+        # --alt "Description" stores the alt value as "\"Description\"".
+        # Removing the quotes here prevents HTML-invalid alt=""..."" output.
+        element.alt = alt.delete_prefix('"').delete_suffix('"') if alt
       end
 
       def add_media(element, srcset)
