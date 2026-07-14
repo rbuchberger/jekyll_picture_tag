@@ -79,7 +79,9 @@ module PictureTag
         if is_windows
           system("where #{command} > NUL 2>&1")
         else
-          system("which #{command} > /dev/null 2>&1")
+          ENV.fetch('PATH', '/usr/local/bin:/usr/bin:/bin')
+              .split(':')
+              .any? { |dir| File.executable?(File.join(dir, command.to_s)) }
         end
       end
     end
