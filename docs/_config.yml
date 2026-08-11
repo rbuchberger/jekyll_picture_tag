@@ -7,3 +7,6 @@ lang: en-US
 baseurl: '/jekyll_picture_tag'
 readme_index:
   with_frontmatter: true
+
+exclude:
+  - agents

@@ -36,6 +36,29 @@ Tag is your responsive images minion - give it simple instructions and it'll han
 * Configure it easily, or not at all.
 * Make Lighthouse happy.
 
+## AI Policy
+
+The use of LLM powered coding tools is permitted so long as:
+
+* Any commits with any AI generated code have a trailer: `Assisted-by: <model>`
+* All changes are read completely and reviewed thoroughly by a knowledgable human before merging to
+  master. This has always been the case, but it is especially true for AI-generated code.
+* Pull request authors have done the same before submitting.
+* Any github interaction (Issue, pull request, comment, etc.) that is written and/or posted using an
+  LLM must clearly state this fact at the beginning, in bold, using a complete sentence. You should
+  describe the nature of the LLM's involvement and the amount of human effort spent. Examples:
+
+  > **This was written and posted by AI** after a 40 word prompt, 14 questions and answers,
+  > and one round of review and feedback.
+
+  > **This was translated by AI** from Polish, more or less directly.
+
+  > **This was edited by AI** for grammar and clarity, based on an input of approximately similar
+  > size.
+
+If you prefer to avoid running AI-generated code, the last version without it is is 2.1.3. You will
+be stuck on Ruby 3, but other than that it works just fine.
+
 ## Documentation
 
 <https://rbuchberger.github.io/jekyll_picture_tag/>
