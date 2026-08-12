@@ -7,7 +7,6 @@ end
 
 require 'minitest/autorun'
 require 'mocha/minitest'
-require 'pry'
 require 'nokogiri'
 require 'jekyll_picture_tag'
 require_relative 'stubs'
