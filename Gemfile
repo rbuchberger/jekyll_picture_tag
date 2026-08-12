@@ -12,9 +12,9 @@ group :development do
   gem 'mocha', '~> 2.1'
   gem 'nokogiri', '~> 1.1'
   gem 'rake', '~> 13.0'
-  gem 'rubocop', '~> 1.7.0'
-  gem 'rubocop-minitest', '~> 0.10.0'
-  gem 'rubocop-performance', '~> 1.9.0'
-  gem 'rubocop-rake', '~> 0.5.0'
+  gem 'rubocop', '~> 1.81'
+  gem 'rubocop-minitest', '~> 0.40'
+  gem 'rubocop-performance', '~> 1.26'
+  gem 'rubocop-rake', '~> 0.7'
   gem 'simplecov', '~> 0.20.0'
 end
