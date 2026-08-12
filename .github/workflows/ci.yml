@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    name: test (ruby ${{ matrix.ruby }})
+    runs-on: ${{ matrix.runs-on || 'ubuntu-latest' }}
+    continue-on-error: ${{ matrix.experimental || false }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.4", "4.0"]
+        include:
+          # setup-ruby has no 3.0 build for images newer than 22.04.
+          - ruby: "3.0"
+            runs-on: ubuntu-22.04
+          - ruby: ruby-head
+            experimental: true
+
+    steps:
+      # imagemagick is here alongside libvips because the shell-out backend is
+      # still in use.
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install --yes libjpeg-dev webp libpng-dev libavif-dev libheif-dev libopenjpip7 imagemagick libvips-tools build-essential
+
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - run: bundle exec rake test
+
+  rubocop:
+    name: rubocop
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          # Matches the version mise.toml pins, so local and CI lint agree.
+          ruby-version: "3.4"
+          bundler-cache: true
+      - run: bundle exec rubocop
