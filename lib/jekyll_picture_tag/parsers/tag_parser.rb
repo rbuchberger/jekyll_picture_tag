@@ -53,7 +53,7 @@ module PictureTag
 
       def parse_param(param)
         # Media query, i.e. 'mobile:'
-        if param.match?(/[\w\-]+:$/)
+        if param.match?(/[\w-]+:$/)
           add_media_source
 
         # Smartcrop interestingness setting. We label it 'keep', since it
@@ -92,8 +92,8 @@ module PictureTag
       end
 
       def raise_error(param)
-        raise ArgumentError, "Could not parse '#{param}' in the following "\
-          "tag: \n  {% picture #{@raw_params} %}"
+        raise ArgumentError, "Could not parse '#{param}' in the following " \
+                             "tag: \n  {% picture #{@raw_params} %}"
       end
     end
   end

@@ -26,9 +26,7 @@ module PictureTag
 
       FileUtils.mkdir_p(File.join(base_directory, sub_directory))
 
-      File.open(filename, 'w+') do |f|
-        f.write JSON.generate(data)
-      end
+      File.write(filename, JSON.generate(data))
     end
 
     private
@@ -56,7 +54,7 @@ module PictureTag
     # /home/dave/my_blog/.jekyll-cache/jpt/somefolder/myimage.jpg.json
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     def filename
-      File.join(base_directory, @base_name + '.json')
+      File.join(base_directory, "#{@base_name}.json")
     end
 
     def template

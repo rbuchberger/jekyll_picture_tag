@@ -64,9 +64,9 @@ module PictureTag
 end
 
 # Load Parents
-Dir[File.dirname(__FILE__) + '/instructions/parents/*.rb']
-  .sort.each { |file| require file }
+Dir["#{File.dirname(__FILE__)}/instructions/parents/*.rb"]
+  .each { |file| require file }
 
 # Load children:
-Dir[File.dirname(__FILE__) + '/instructions/children/*.rb']
-  .sort.each { |file| require file }
+Dir["#{File.dirname(__FILE__)}/instructions/children/*.rb"]
+  .each { |file| require file }

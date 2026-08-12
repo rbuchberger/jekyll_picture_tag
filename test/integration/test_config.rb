@@ -44,9 +44,9 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-dda159fb9.jpg 25w,' \
-      ' /generated/asdf-50-dda159fb9.jpg 50w,' \
-      ' /generated/asdf-100-dda159fb9.jpg 100w'
+    ss = '/generated/asdf-25-dda159fb9.jpg 25w, ' \
+         '/generated/asdf-50-dda159fb9.jpg 50w, ' \
+         '/generated/asdf-100-dda159fb9.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -58,9 +58,9 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-dda159fb9.jpg 25w,' \
-      ' /generated/asdf-50-dda159fb9.jpg 50w,' \
-      ' /generated/asdf-100-dda159fb9.jpg 100w'
+    ss = '/generated/asdf-25-dda159fb9.jpg 25w, ' \
+         '/generated/asdf-50-dda159fb9.jpg 50w, ' \
+         '/generated/asdf-100-dda159fb9.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -72,9 +72,9 @@ class TestIntegrationConfig < Minitest::Test
 
     output = tested 'asdf.jpg'
 
-    ss = '/generated/asdf-25-dda159fb9.jpg 25w,' \
-      ' /generated/asdf-50-dda159fb9.jpg 50w,' \
-      ' /generated/asdf-100-dda159fb9.jpg 100w'
+    ss = '/generated/asdf-25-dda159fb9.jpg 25w, ' \
+         '/generated/asdf-50-dda159fb9.jpg 50w, ' \
+         '/generated/asdf-100-dda159fb9.jpg 100w'
 
     assert_equal ss, output.at_css('img')['srcset']
     assert_includes stderr, 'asdf.jpg'
@@ -91,9 +91,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_absolute_urls
     pconfig['relative_url'] = false
 
-    ss = 'example.com/generated/rms-25-9f9ef26e5.jpg 25w,' \
-      ' example.com/generated/rms-50-9f9ef26e5.jpg 50w,' \
-      ' example.com/generated/rms-100-9f9ef26e5.jpg 100w'
+    ss = 'example.com/generated/rms-25-9f9ef26e5.jpg 25w, ' \
+         'example.com/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+         'example.com/generated/rms-100-9f9ef26e5.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -101,9 +101,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_baseurl
     config_dot_yml['baseurl'] = 'blog'
 
-    ss = '/blog/generated/rms-25-9f9ef26e5.jpg 25w,' \
-    ' /blog/generated/rms-50-9f9ef26e5.jpg 50w,' \
-    ' /blog/generated/rms-100-9f9ef26e5.jpg 100w'
+    ss = '/blog/generated/rms-25-9f9ef26e5.jpg 25w, ' \
+         '/blog/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+         '/blog/generated/rms-100-9f9ef26e5.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -112,9 +112,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn
     context.environments = [{ 'jekyll' => { 'environment' => 'production' } }]
     pconfig['cdn_url'] = 'https://cdn.net'
-    ss = 'https://cdn.net/generated/rms-25-9f9ef26e5.jpg 25w,' \
-      ' https://cdn.net/generated/rms-50-9f9ef26e5.jpg 50w,' \
-      ' https://cdn.net/generated/rms-100-9f9ef26e5.jpg 100w'
+    ss = 'https://cdn.net/generated/rms-25-9f9ef26e5.jpg 25w, ' \
+         'https://cdn.net/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+         'https://cdn.net/generated/rms-100-9f9ef26e5.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end
@@ -123,9 +123,9 @@ class TestIntegrationConfig < Minitest::Test
   def test_cdn_env
     pconfig['cdn_url'] = 'https://cdn.net'
     pconfig['cdn_environments'] = ['development']
-    ss = 'https://cdn.net/generated/rms-25-9f9ef26e5.jpg 25w,' \
-      ' https://cdn.net/generated/rms-50-9f9ef26e5.jpg 50w,' \
-      ' https://cdn.net/generated/rms-100-9f9ef26e5.jpg 100w'
+    ss = 'https://cdn.net/generated/rms-25-9f9ef26e5.jpg 25w, ' \
+         'https://cdn.net/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+         'https://cdn.net/generated/rms-100-9f9ef26e5.jpg 100w'
 
     assert_equal ss, tested.at_css('img')['srcset']
   end

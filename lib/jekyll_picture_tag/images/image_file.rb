@@ -84,7 +84,7 @@ module PictureTag
     end
 
     def notify
-      puts 'Generating new image file: ' + base.name
+      puts "Generating new image file: #{base.name}"
     end
 
     def resize(image)

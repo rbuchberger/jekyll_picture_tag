@@ -102,7 +102,7 @@ module PictureTag
       # Kramdown is super picky about the {::nomarkdown} extension-- we have to
       # strip line breaks or nothing works.
       def nomarkdown_wrapper(content)
-        "{::nomarkdown}#{content.delete("\n").gsub(/>  </, '><')}{:/nomarkdown}"
+        "{::nomarkdown}#{content.delete("\n").gsub('>  <', '><')}{:/nomarkdown}"
       end
 
       def anchor_tag(content)
@@ -122,8 +122,8 @@ module PictureTag
 
         if target > source.width
           Utils.warning "#{source.shortname} is smaller than the " \
-            "requested fallback width of #{target}px. Using #{source.width}" \
-            ' px instead.'
+                        "requested fallback width of #{target}px. Using #{source.width} " \
+                        'px instead.'
           source.width
         else
           target
