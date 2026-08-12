@@ -16,17 +16,21 @@ jobs:
       matrix:
         ruby: ["3.4", "4.0"]
         include:
-          # setup-ruby has no 3.0 build for images newer than 22.04.
           - ruby: "3.0"
             runs-on: ubuntu-22.04
-          - ruby: ruby-head
-            experimental: true
 
     steps:
-      # imagemagick is here alongside libvips because the shell-out backend is
-      # still in use.
       - name: Install system dependencies
-        run: sudo apt-get update && sudo apt-get install --yes libjpeg-dev webp libpng-dev libavif-dev libheif-dev libopenjpip7 imagemagick libvips-tools build-essential
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libjpeg-dev webp libpng-dev libavif-dev libheif-dev libopenjpip7 imagemagick libvips-tools build-essential
+
+          # libheif 1.17 (24.04) moved its codecs out into plugin packages, so
+          # the base install can read avif but not write it. 22.04 builds them
+          # in and has no such packages, hence the check.
+          if apt-cache show libheif-plugin-aomenc > /dev/null 2>&1; then
+            sudo apt-get install --yes libheif-plugin-aomenc libheif-plugin-aomdec
+          fi
 
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -43,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          # Matches the version mise.toml pins, so local and CI lint agree.
+          # Match the version in mise.toml so local dev & CI agree
           ruby-version: "3.4"
           bundler-cache: true
       - run: bundle exec rubocop
