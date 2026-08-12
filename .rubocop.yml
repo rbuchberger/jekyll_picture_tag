@@ -5,6 +5,9 @@ require:
 
 AllCops:
   NewCops: enable
+  # Lint against the oldest supported ruby: the floor in required_ruby_version.
+  # Set explicitly so it can't be inferred from .ruby-version.
+  TargetRubyVersion: 3.0
   Include:
     - 'lib/**/*.rb'
     - 'test/**/*.rb'
