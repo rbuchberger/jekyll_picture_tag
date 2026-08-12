@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   DEFAULT_PRESET = { 'markup' => 'auto',
                      'formats' => ['original'],

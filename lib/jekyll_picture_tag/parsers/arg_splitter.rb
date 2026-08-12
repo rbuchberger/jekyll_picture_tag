@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Parsers
     # This class takes in the arguments passed to the liquid tag, and splits it
@@ -13,7 +15,7 @@ module PictureTag
 
       def initialize(raw_params)
         @words = []
-        @word = ''
+        @word = +'' # Unary plus: we build this up with <<, so it can't be frozen.
         @in_quotes = false
         @escaped = false
 
@@ -47,7 +49,7 @@ module PictureTag
         return if @word.empty?
 
         @words << @word
-        @word = ''
+        @word = +''
       end
 
       def handle_special(char)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'srcsets_test_helper'
 
 class TestSrcsetWidth < Minitest::Test

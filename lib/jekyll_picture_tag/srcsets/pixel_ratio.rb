@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Srcsets
     # Creates a srcset in the "(filename) (pixel_ratio)x" format.

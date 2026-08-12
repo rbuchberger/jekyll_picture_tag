@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'output_format_test_helper'
 
 class TestNakedSrcset < Minitest::Test

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 # Stubs and helpers for end-to-end tests
 module IntegrationTestHelper

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # The rest of the application doesn't care where the instruction logic
   # resides. This module 'routes' method calls to the right place, so

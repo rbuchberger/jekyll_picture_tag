@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # picture tag with data-srcsets and such instead of src.

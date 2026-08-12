@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Since we have two gemfiles, we can't just require 'bundler/gem_tasks'. We have
 # to explicitly set its name and install them:
 

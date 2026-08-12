@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # Instructions obtain, validate, and typecast/coerce input values. These
   # inputs are either taken directly from jekyll's inputs, or handled by parsers

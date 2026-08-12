@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RouterTest < Minitest::Test
   include TestHelper
 

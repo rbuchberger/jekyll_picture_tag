@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # Handles a given source image file and its properties. Provides a speed
   # advantage by storing expensive file reads and writes in instance variables,

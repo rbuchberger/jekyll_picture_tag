@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Parsers
     # Handles the specific tag image set to construct.

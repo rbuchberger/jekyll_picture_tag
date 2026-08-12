@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Instructions
     # Builds instances of all source images.

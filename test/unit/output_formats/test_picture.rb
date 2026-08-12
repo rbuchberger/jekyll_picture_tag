@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'output_format_test_helper'
 
 class TestPicture < Minitest::Test
@@ -177,12 +179,11 @@ class TestPicture < Minitest::Test
     PictureTag.html_attributes.merge!({ 'link' => 'some url' })
     PictureTag.stubs(nomarkdown?: true)
 
-    correct = <<~HEREDOC
+    correct = <<~HEREDOC.delete("\n")
       {::nomarkdown}
       <a href="some url"><picture><source srcset="ss" type="original"><img src="good_url"></picture></a>
       {:/nomarkdown}
     HEREDOC
-    correct.delete!("\n")
 
     assert_equal correct, tested.to_s
   end

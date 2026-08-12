@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Parsers
     # Handles HTML attributes, sourced from configuration and the liquid tag,

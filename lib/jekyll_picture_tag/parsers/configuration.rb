@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Parsers
     # Global config (big picture). loads jekyll data/config files, and the j-p-t

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Tests for a generic Instruction
 class TestInstructions < Minitest::Test
   include TestHelper

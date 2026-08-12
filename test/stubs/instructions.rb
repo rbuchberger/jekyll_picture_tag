@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Instructions
     class InstructionStub

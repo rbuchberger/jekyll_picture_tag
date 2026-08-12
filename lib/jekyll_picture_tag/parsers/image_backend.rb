@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Parsers
     # Returns information regarding image handlers

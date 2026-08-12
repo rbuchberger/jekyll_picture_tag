@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'integration_test_helper'
 
 # This is for testing various tag params. It pulls in presets to make sure

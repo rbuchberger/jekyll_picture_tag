@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # Similar to Auto, but sets data-src (and so on) instead of src

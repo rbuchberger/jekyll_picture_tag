@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # The fact that these stubs are so complicated is probably one of those code

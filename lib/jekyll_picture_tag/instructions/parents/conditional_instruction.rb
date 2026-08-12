@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Instructions
     # Many inputs take a common format: a generic setting which applies all of

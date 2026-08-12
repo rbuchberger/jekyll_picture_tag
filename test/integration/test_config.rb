@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'integration_test_helper'
 class TestIntegrationConfig < Minitest::Test
   include IntegrationTestHelper

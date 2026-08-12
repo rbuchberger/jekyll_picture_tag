@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # Returns only a srcset attribute, for more custom or complicated markup.

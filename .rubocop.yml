@@ -29,9 +29,6 @@ Layout/LineLength:
   Max: 120
 
 # Disabled Cops
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 Style/StringConcatenation:
   Enabled: false
 
