@@ -8,8 +8,15 @@ Gem::Specification.new do |spec|
                         'Robert Buchberger']
   spec.email         = ['robert@buchberger.cc']
   spec.homepage      = 'https://github.com/rbuchberger/jekyll_picture_tag'
-  spec.metadata      = { 'documentation_uri' =>
-                         'https://rbuchberger.github.io/jekyll_picture_tag/' }
+  spec.metadata      = {
+    'bug_tracker_uri' =>
+      'https://github.com/rbuchberger/jekyll_picture_tag/issues',
+    'changelog_uri' =>
+      'https://github.com/rbuchberger/jekyll_picture_tag/blob/master/CHANGELOG.md',
+    'documentation_uri' => 'https://rbuchberger.github.io/jekyll_picture_tag/',
+    'rubygems_mfa_required' => 'true',
+    'source_code_uri' => 'https://github.com/rbuchberger/jekyll_picture_tag'
+  }
   spec.license       = 'BSD-3-Clause'
   spec.summary       = 'Easy responsive images for Jekyll.'
   spec.description   = <<-HEREDOC
@@ -25,16 +32,16 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test)/})
   end
 
-  spec.required_ruby_version = ['>= 2.6', '< 4.0']
+  spec.required_ruby_version = '>= 3.0'
 
   # addressable is used to url-encode image filenames.
   spec.add_runtime_dependency 'addressable', '~> 2.6'
   # Jekyll versions older than 4.0 are not supported.
-  spec.add_runtime_dependency 'jekyll', '~> 4.0'
+  spec.add_runtime_dependency 'jekyll', '>= 4.0'
   # MIME types are needed for <source> tags' type= attributes.
   spec.add_runtime_dependency 'mime-types', '~> 3.0'
   # objective_elements handles HTML generation.
-  spec.add_runtime_dependency 'objective_elements', '~> 1.1'
+  spec.add_runtime_dependency 'objective_elements', '~> 2.0'
   # rainbow is used to colorize terminal output.
   spec.add_runtime_dependency 'rainbow', '~> 3.0'
   # ruby-vips interfaces with libvips.
@@ -42,6 +49,8 @@ Gem::Specification.new do |spec|
 
   # libvips handles all image processing operations.
   spec.requirements << 'libvips'
+  # The `vips` command-line utility comes from libvips-tools.
+  spec.requirements << 'libvips-tools'
 
   # Development dependencies are not installed when using this gem. You can
   # ignore these, unless you are working on JPT itself.
