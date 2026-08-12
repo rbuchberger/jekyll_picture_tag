@@ -50,8 +50,10 @@ module TestHelper
   # them doesn't support some image format. This returns an array of image
   # formats which we care about, and which are locally supported.
   def supported_formats
-    magick_command = command?('magick') ? `magick` : `convert`
-    output = `vips --list` + `#{magick_command} --version`
+    # Imagemagick 7 renamed `convert` to `magick`, and only 6 understands the
+    # old name. Both will accept `-version` (one dash).
+    magick_command = command?('magick') ? 'magick' : 'convert'
+    output = `vips --list` + `#{magick_command} -version`
 
     formats = %w[jpg png webp gif jp2 avif].select do |format|
       output.include? format
