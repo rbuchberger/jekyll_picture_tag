@@ -64,7 +64,7 @@ module PictureTag
       def coerce(media = nil)
         raise ArgumentError unless valid?
 
-        lookup[source[:params][media] || super(media)]
+        lookup[source[:params][media] || super]
       end
 
       def lookup

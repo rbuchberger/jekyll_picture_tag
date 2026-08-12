@@ -17,7 +17,7 @@ module PictureTag
       end
 
       def class_name
-        'PictureTag::OutputFormats::' + Utils.titleize(source)
+        "PictureTag::OutputFormats::#{Utils.titleize(source)}"
       end
 
       def valid?
@@ -43,7 +43,7 @@ module PictureTag
         coerced.all? do |format|
           types = MIME::Types.type_for(format)
           format == 'original' ||
-            types.length == 1 && types.first.media_type == 'image'
+            (types.length == 1 && types.first.media_type == 'image')
         end
       end
     end
@@ -59,7 +59,7 @@ module PictureTag
       def valid?
         types = MIME::Types.type_for(coerced)
         coerced == 'original' ||
-          types.length == 1 && types.first.media_type == 'image'
+          (types.length == 1 && types.first.media_type == 'image')
       end
     end
 
@@ -134,12 +134,12 @@ module PictureTag
       end
 
       def valid_hash_keys?(hash)
-        hash.keys.all? { |k| k.is_a? String }
+        hash.keys.all?(String)
       end
 
       def valid_hash_values?(hash)
         hash.values.all? do |val|
-          val.is_a?(Array) && val.all? { |subval| subval.is_a? Integer }
+          val.is_a?(Array) && val.all?(Integer)
         end
       end
     end

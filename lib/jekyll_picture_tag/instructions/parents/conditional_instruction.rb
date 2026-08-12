@@ -37,7 +37,7 @@ module PictureTag
 
       def source
         {
-          hash: PictureTag.preset[setting_prefix + '_' + setting_name],
+          hash: PictureTag.preset["#{setting_prefix}_#{setting_name}"],
           default: PictureTag.preset[setting_name]
         }
       end

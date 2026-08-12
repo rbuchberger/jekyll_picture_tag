@@ -39,7 +39,7 @@ module PictureTag
           if word.match(/^--/)
             key = word.delete_prefix('--')
           elsif @attributes[key]
-            @attributes[key] << ' ' + word
+            @attributes[key] << " #{word}"
           else
             @attributes[key] = word
           end

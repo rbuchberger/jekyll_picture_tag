@@ -23,8 +23,8 @@ module PictureTag
       end
 
       def error_message
-        "JPT - #{setting_name} must be a boolean, an environment name," \
-          ' or an array of environment names.'
+        "JPT - #{setting_name} must be a boolean, an environment name, " \
+          'or an array of environment names.'
       end
     end
   end

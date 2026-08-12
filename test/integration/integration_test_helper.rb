@@ -44,7 +44,7 @@ module IntegrationTestHelper
   # Width srcset matcher
   def srcset_matcher_w(name: 'rms', widths: [25, 50, 100], format: 'jpg')
     array = widths.map do |width|
-      "/generated\/#{name}-#{width}-[a-f0-9]{9}.#{format} #{width}w"
+      "/generated/#{name}-#{width}-[a-f0-9]{9}.#{format} #{width}w"
     end
     Regexp.new(array.join(', '))
   end
@@ -52,7 +52,7 @@ module IntegrationTestHelper
   # Pixel ratio srcset matcher
   def srcset_matcher_p(name: 'rms', base: 10, ratios: [1, 2, 3], format: 'jpg')
     array = ratios.map do |ratio|
-      "/generated\/#{name}-#{base * ratio}-[a-f0-9]{9}.#{format} #{ratio.to_f}x"
+      "/generated/#{name}-#{base * ratio}-[a-f0-9]{9}.#{format} #{ratio.to_f}x"
     end
     Regexp.new(array.join(', '))
   end
@@ -67,14 +67,14 @@ module IntegrationTestHelper
 
   def std_spx_ss
     '/generated/spx-25-d1ce901d6.jpg 25w, ' \
-    '/generated/spx-50-d1ce901d6.jpg 50w, ' \
-    '/generated/spx-100-d1ce901d6.jpg 100w'
+      '/generated/spx-50-d1ce901d6.jpg 50w, ' \
+      '/generated/spx-100-d1ce901d6.jpg 100w'
   end
 
   def std_rms_ss
     '/generated/rms-25-9f9ef26e5.jpg 25w, ' \
-    '/generated/rms-50-9f9ef26e5.jpg 50w, ' \
-    '/generated/rms-100-9f9ef26e5.jpg 100w'
+      '/generated/rms-50-9f9ef26e5.jpg 50w, ' \
+      '/generated/rms-100-9f9ef26e5.jpg 100w'
   end
 
   def rms_file_array(widths, formats)

@@ -31,9 +31,9 @@ class TestIntegrationPresets < Minitest::Test
     assert errors_ok? output
 
     sources = output.css('source')
-    ss1 = '/generated/rms-25-c87b11253.webp 25w,' \
-      ' /generated/rms-50-c87b11253.webp 50w,' \
-      ' /generated/rms-100-c87b11253.webp 100w'
+    ss1 = '/generated/rms-25-c87b11253.webp 25w, ' \
+          '/generated/rms-50-c87b11253.webp 50w, ' \
+          '/generated/rms-100-c87b11253.webp 100w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -149,9 +149,9 @@ class TestIntegrationPresets < Minitest::Test
 
     sources = output.css('source')
 
-    ss1 = '/generated/spx-10-d1ce901d6.jpg 10w,' \
-      ' /generated/spx-20-d1ce901d6.jpg 20w,' \
-      ' /generated/spx-30-d1ce901d6.jpg 30w'
+    ss1 = '/generated/spx-10-d1ce901d6.jpg 10w, ' \
+          '/generated/spx-20-d1ce901d6.jpg 20w, ' \
+          '/generated/spx-30-d1ce901d6.jpg 30w'
 
     assert_equal ss1, sources[0]['srcset']
     assert_equal std_rms_ss, sources[1]['srcset']
@@ -262,7 +262,7 @@ class TestIntegrationPresets < Minitest::Test
 
     formats.each do |format|
       assert_equal(
-        formats.length, files.count { |f| File.extname(f) == '.' + format }
+        formats.length, files.count { |f| File.extname(f) == ".#{format}" }
       )
     end
   end

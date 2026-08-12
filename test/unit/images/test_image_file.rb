@@ -107,7 +107,7 @@ class TestImageFile < Minitest::Test
       restub_source('rms', input_format)
 
       formats.each do |output_format|
-        restub('rms.' + output_format)
+        restub("rms.#{output_format}")
 
         tested
 
@@ -168,7 +168,7 @@ class TestImageFile < Minitest::Test
 
     exif_data = Vips::Image.new_from_file(filename)
                            .get_fields
-                           .select { |key| key =~ /^exif/ }
+                           .grep(/^exif/)
 
     assert_empty exif_data
   end
@@ -182,7 +182,7 @@ class TestImageFile < Minitest::Test
 
     exif_data = Vips::Image.new_from_file(filename)
                            .get_fields
-                           .select { |key| key =~ /^exif/ }
+                           .grep(/^exif/)
 
     refute_empty exif_data
   end

@@ -58,9 +58,9 @@ class TestIntegrationParams < Minitest::Test
   def test_crop
     output = tested('rms.jpg 10:1 attention')
 
-    correct = '/generated/rms-25-7ce20d78f.jpg 25w,'\
-      ' /generated/rms-50-7ce20d78f.jpg 50w,'\
-      ' /generated/rms-100-7ce20d78f.jpg 100w'
+    correct = '/generated/rms-25-7ce20d78f.jpg 25w, ' \
+              '/generated/rms-50-7ce20d78f.jpg 50w, ' \
+              '/generated/rms-100-7ce20d78f.jpg 100w'
 
     assert_equal correct, output.at_css('img')['srcset']
 
@@ -76,7 +76,7 @@ class TestIntegrationParams < Minitest::Test
   # Make sure that when cropping images, we don't enlarge widths
   def test_crop_width_check
     output = tested('rms.jpg 1:2')
-    correct = '/generated/rms-25-7ef50a4c1.jpg 25w, '\
+    correct = '/generated/rms-25-7ef50a4c1.jpg 25w, ' \
               '/generated/rms-45-7ef50a4c1.jpg 45w'
 
     assert_includes stderr, 'rms.jpg'
@@ -113,9 +113,9 @@ class TestIntegrationParams < Minitest::Test
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9f9ef26e5.jpg'
-    ss = '/generated/rms%20with%20space-25-9f9ef26e5.jpg 25w,' \
-      ' /generated/rms%20with%20space-50-9f9ef26e5.jpg 50w,' \
-      ' /generated/rms%20with%20space-100-9f9ef26e5.jpg 100w'
+    ss = '/generated/rms%20with%20space-25-9f9ef26e5.jpg 25w, ' \
+         '/generated/rms%20with%20space-50-9f9ef26e5.jpg 50w, ' \
+         '/generated/rms%20with%20space-100-9f9ef26e5.jpg 100w'
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']
@@ -128,9 +128,9 @@ class TestIntegrationParams < Minitest::Test
 
     img = output.at_css('img')
     src = '/generated/rms%20with%20space-100-9f9ef26e5.jpg'
-    ss = '/generated/rms%20with%20space-25-9f9ef26e5.jpg 25w,' \
-      ' /generated/rms%20with%20space-50-9f9ef26e5.jpg 50w,' \
-      ' /generated/rms%20with%20space-100-9f9ef26e5.jpg 100w'
+    ss = '/generated/rms%20with%20space-25-9f9ef26e5.jpg 25w, ' \
+         '/generated/rms%20with%20space-50-9f9ef26e5.jpg 50w, ' \
+         '/generated/rms%20with%20space-100-9f9ef26e5.jpg 100w'
 
     assert_equal src, img['src']
     assert_equal ss, img['srcset']

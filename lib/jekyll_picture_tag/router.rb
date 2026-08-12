@@ -52,8 +52,7 @@ module PictureTag
     end
 
     def instruction_class_name(method_name)
-      'PictureTag::Instructions::' +
-        Utils.titleize(method_name.to_s.delete_suffix('?'))
+      "PictureTag::Instructions::#{Utils.titleize(method_name.to_s.delete_suffix('?'))}"
     end
   end
 end

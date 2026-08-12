@@ -62,8 +62,8 @@ class TagParserTest < Minitest::Test
   def test_leftovers
     correct = ['class="implicit"', '--picture', 'class="some class"']
     params =
-      'img.jpg mobile: mobile.jpg 3:2 center class="implicit"'\
-      ' --picture class="some class"'
+      'img.jpg mobile: mobile.jpg 3:2 center class="implicit" ' \
+      '--picture class="some class"'
     assert_equal correct, tested(params).leftovers
   end
 
