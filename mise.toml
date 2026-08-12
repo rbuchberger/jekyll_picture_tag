@@ -1,0 +1,4 @@
+[tools]
+# Fuzzy patch level: this is the version CI lints on, so local rubocop can't
+# disagree with CI.
+ruby = "3.4"

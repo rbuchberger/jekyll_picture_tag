@@ -35,35 +35,22 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 3.0'
 
   # addressable is used to url-encode image filenames.
-  spec.add_runtime_dependency 'addressable', '~> 2.6'
+  spec.add_dependency 'addressable', '~> 2.6'
   # Jekyll versions older than 4.0 are not supported.
-  spec.add_runtime_dependency 'jekyll', '>= 4.0'
+  spec.add_dependency 'jekyll', '>= 4.0'
   # MIME types are needed for <source> tags' type= attributes.
-  spec.add_runtime_dependency 'mime-types', '~> 3.0'
+  spec.add_dependency 'mime-types', '~> 3.0'
   # objective_elements handles HTML generation.
-  spec.add_runtime_dependency 'objective_elements', '~> 2.0'
+  spec.add_dependency 'objective_elements', '~> 2.0'
   # rainbow is used to colorize terminal output.
-  spec.add_runtime_dependency 'rainbow', '~> 3.0'
+  spec.add_dependency 'rainbow', '~> 3.0'
   # ruby-vips interfaces with libvips.
-  spec.add_runtime_dependency 'ruby-vips', '~> 2.2'
+  spec.add_dependency 'ruby-vips', '~> 2.2'
 
   # libvips handles all image processing operations.
   spec.requirements << 'libvips'
   # The `vips` command-line utility comes from libvips-tools.
   spec.requirements << 'libvips-tools'
 
-  # Development dependencies are not installed when using this gem. You can
-  # ignore these, unless you are working on JPT itself.
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'minitest', '~> 5.14'
-  spec.add_development_dependency 'minitest-rg'
-  spec.add_development_dependency 'mocha', '~> 2.1'
-  spec.add_development_dependency 'nokogiri', '~> 1.1'
-  spec.add_development_dependency 'pry'
-  spec.add_development_dependency 'rake', '~> 12.3'
-  spec.add_development_dependency 'rubocop', '~> 1.7.0'
-  spec.add_development_dependency 'rubocop-minitest', '~> 0.10.0'
-  spec.add_development_dependency 'rubocop-performance', '~> 1.9.0'
-  spec.add_development_dependency 'rubocop-rake', '~> 0.5.0'
-  spec.add_development_dependency 'simplecov', '~> 0.20.0'
+  # Development dependencies are declared in the Gemfile.
 end
