@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # Represents a bare url you can use in another context, such as a direct

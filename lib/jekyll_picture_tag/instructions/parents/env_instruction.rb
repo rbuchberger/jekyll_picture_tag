@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module Instructions
     # There are a few config settings which are environment dependent, and can

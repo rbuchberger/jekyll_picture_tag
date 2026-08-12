@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # Default settings for _config.yml
   DEFAULT_CONFIG = {

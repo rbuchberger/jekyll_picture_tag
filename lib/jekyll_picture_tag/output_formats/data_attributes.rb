@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # This is not an output format, it's a module for use in others. It allows

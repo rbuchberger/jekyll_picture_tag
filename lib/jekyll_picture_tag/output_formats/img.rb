@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # Represents a bare <img> tag with a srcset attribute.

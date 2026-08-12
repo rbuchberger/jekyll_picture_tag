@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # Contains all possible HTML output format options. Auto is considered its
   # own option.

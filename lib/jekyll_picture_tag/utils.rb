@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # This is a little module to hold logic that doesn't fit other places. If it
   # starts getting big, refactor.

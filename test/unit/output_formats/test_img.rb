@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'output_format_test_helper'
 
 class TestImg < Minitest::Test
@@ -125,10 +127,9 @@ class TestImg < Minitest::Test
     PictureTag.stubs(nomarkdown?: true)
     PictureTag.html_attributes['link'] = 'some link'
 
-    correct = <<~HEREDOC
+    correct = <<~HEREDOC.delete("\n")
       {::nomarkdown}<a href="some link"><img src="good_url" srcset="ss"></a>{:/nomarkdown}
     HEREDOC
-    correct.delete!("\n")
 
     assert_equal correct, tested.to_s
   end

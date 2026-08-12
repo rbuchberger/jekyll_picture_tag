@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   module OutputFormats
     # Represents a <picture> tag, enclosing at least 2 <source> tags and an

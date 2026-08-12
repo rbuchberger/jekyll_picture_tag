@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PictureTag
   # Basically a wrapper class for vips. Handles image operations.
   # Vips returns new images for Crop, resize, and autorotate operations.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Input validation tests
 class TestIntegrationValidation < Minitest::Test
   include IntegrationTestHelper

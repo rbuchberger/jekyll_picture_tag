@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Tools to stub the jekyll and liquid interfaces
 module Stubs
   include Presets

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'stubs/presets'
 require_relative 'stubs/structs'
 require_relative 'stubs/jekyll'

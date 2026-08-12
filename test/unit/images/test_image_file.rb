@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Tests of Image Files
 class TestImageFile < Minitest::Test
   include PictureTag
