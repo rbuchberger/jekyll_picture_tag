@@ -1,5 +1,4 @@
-# Exclude unimportant files
-require:
+plugins:
   - rubocop-minitest
   - rubocop-rake
 
