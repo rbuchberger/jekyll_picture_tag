@@ -10,3 +10,4 @@ readme_index:
 
 exclude:
   - agents
+  - adr
