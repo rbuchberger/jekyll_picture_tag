@@ -55,7 +55,9 @@ module PictureTag
     end
 
     def write_opts
-      opts = PictureTag.preset['image_options'][@base.format] || {}
+      # dup, because we add keys below and this hash may come straight out of
+      # DEFAULT_PRESET, shared by every tag in the build.
+      opts = (PictureTag.preset['image_options'][@base.format] || {}).dup
 
       opts[:strip] = PictureTag.preset['strip_metadata']
 
