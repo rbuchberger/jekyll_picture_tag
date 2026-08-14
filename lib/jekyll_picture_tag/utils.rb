@@ -69,6 +69,19 @@ module PictureTag
       def aspect_float(width, height)
         width.to_f / height
       end
+
+      # Merges a sourced setting document over the built-in defaults.
+      def deep_merge(default, override)
+        override.merge default do |_key, override_value, default_value|
+          if default_value.is_a?(Hash) && override_value.is_a?(Hash)
+            deep_merge(default_value, override_value)
+          elsif override_value.nil?
+            default_value
+          else
+            override_value
+          end
+        end
+      end
     end
   end
 end

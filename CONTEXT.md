@@ -40,8 +40,9 @@ _Avoid_: arguments, options
 
 **Sourcing**:
 Reading a setting document from its origin (`_config.yml`, `_data/picture.yml`)
-and merging it over the built-in defaults. Produces a raw document; asserts
-nothing about its contents.
+and deep merging it over the built-in defaults, so that setting one key of a
+nested setting keeps the defaults for its siblings. Produces a raw document;
+asserts nothing about its contents.
 
 **Validation**:
 Deciding whether a sourced document is acceptable, and reporting precisely why

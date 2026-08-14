@@ -17,7 +17,7 @@ module PictureTag
       protected
 
       def content
-        @content ||= DEFAULT_PRESET.merge settings
+        @content ||= Utils.deep_merge(DEFAULT_PRESET, settings)
       end
 
       private

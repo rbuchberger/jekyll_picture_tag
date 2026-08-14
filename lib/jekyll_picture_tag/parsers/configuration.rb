@@ -13,17 +13,7 @@ module PictureTag
       private
 
       def content
-        @content ||= setting_merge(DEFAULT_CONFIG, PictureTag.site.config)
-      end
-
-      def setting_merge(default, jekyll)
-        jekyll.merge default do |_key, config_setting, default_setting|
-          if default_setting.respond_to? :merge
-            setting_merge(default_setting, config_setting)
-          else
-            config_setting
-          end
-        end
+        @content ||= Utils.deep_merge(DEFAULT_CONFIG, PictureTag.site.config)
       end
     end
   end

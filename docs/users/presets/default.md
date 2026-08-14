@@ -4,6 +4,10 @@ sort: 14
 
 # Default preset
 
+Every preset is merged over these defaults, so you only need to write the settings you want to
+change. The merge is a deep one: setting `format_quality: {webp: 60}` changes the webp quality and
+leaves the avif and jp2 defaults in place.
+
 Here are the default preset settings:
 
 ```yml
