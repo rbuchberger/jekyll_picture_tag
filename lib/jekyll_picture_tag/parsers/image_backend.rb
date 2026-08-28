@@ -16,34 +16,34 @@ module PictureTag
 
       # Returns array of formats that vips can save to
       def vips_formats
-        if command?('vips')
-          @vips_formats ||= `vips -l`
-                            .split('/n')
-                            .select { |line| line.include? 'ForeignSave' }
-                            .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
-                            .map { |format| format.strip.delete_prefix('.') }
-                            .uniq
+        @vips_formats ||= if command?('vips')
+          `vips -l`
+            .split('/n')
+            .select { |line| line.include? 'ForeignSave' }
+            .flat_map { |line| line.scan(/\.[a-z]{1,5}/) }
+            .map { |format| format.strip.delete_prefix('.') }
+            .uniq
         else
-          @vips_formats = []
+          []
         end
       end
 
       # Returns an array of formats that imagemagick can handle.
       def magick_formats
-        if command?('magick')
-          @magick_formats ||= `magick -version`
-                              .scan(/Delegates.*/)
-                              .first
-                              .delete_prefix('Delegates (built-in):')
-                              .split
+        @magick_formats ||= if command?('magick')
+          `magick -version`
+            .scan(/Delegates.*/)
+            .first
+            .delete_prefix('Delegates (built-in):')
+            .split
         elsif command?('convert')
-          @magick_formats ||= `convert -version`
-                              .scan(/Delegates.*/)
-                              .first
-                              .delete_prefix('Delegates (built-in):')
-                              .split
+          `convert -version`
+            .scan(/Delegates.*/)
+            .first
+            .delete_prefix('Delegates (built-in):')
+            .split
         else
-          @magick_formats = []
+          []
         end
       end
 
@@ -81,7 +81,9 @@ module PictureTag
         if is_windows
           system("where #{command} > NUL 2>&1")
         else
-          system("which #{command} > /dev/null 2>&1")
+          ENV.fetch('PATH', '/usr/local/bin:/usr/bin:/bin')
+              .split(':')
+              .any? { |dir| File.executable?(File.join(dir, command.to_s)) }
         end
       end
     end
