@@ -74,7 +74,11 @@ Since both of these new presets merge our base preset, the final result will be 
     widths: [700, 864, 900, 1296, 1600, 1728]
 ```
 
-Note however, this is **not a deep merge**, only a shallow merge. What that means is, any values nested in the preset will be overwritten by the presence of a key. If we bring back our previous example, but add an attribute to it:
+Note however, this is **not a deep merge**, only a shallow merge. What that means is, any values nested in the preset will be overwritten by the presence of a key.
+
+`<<` is a YAML feature, not a JPT one: your YAML parser resolves it before JPT ever sees the document. It is a different mechanism from the merge JPT performs between your preset and the [default preset](default), which *is* a deep merge, and the two follow different rules.
+
+If we bring back our previous example, but add an attribute to it:
 
 ```yml
   project_showcase:

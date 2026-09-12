@@ -82,4 +82,56 @@ class TestUtils < Minitest::Test
   def test_snakeize
     assert_equal 'snake_case', Utils.snakeize('SnakeCase')
   end
+
+  def test_deep_merge_top_level
+    default = { 'quality' => 75, 'markup' => 'auto' }
+    override = { 'quality' => 30 }
+
+    assert_equal({ 'quality' => 30, 'markup' => 'auto' },
+                 Utils.deep_merge(default, override))
+  end
+
+  def test_deep_merge_keeps_unset_nested_keys
+    default = { 'format_quality' => { 'webp' => 50, 'avif' => 30, 'jp2' => 30 } }
+    override = { 'format_quality' => { 'webp' => 60 } }
+
+    assert_equal({ 'format_quality' => { 'webp' => 60,
+                                         'avif' => 30,
+                                         'jp2' => 30 } },
+                 Utils.deep_merge(default, override))
+  end
+
+  def test_deep_merge_nested_hashes
+    default = { 'image_options' => { 'avif' => { 'speed' => 8,
+                                                 'compression' => 'av1' } } }
+    override = { 'image_options' => { 'avif' => { 'speed' => 4 } } }
+
+    assert_equal({ 'image_options' => { 'avif' => { 'speed' => 4,
+                                                    'compression' => 'av1' } } },
+                 Utils.deep_merge(default, override))
+  end
+
+  # 'quality' defaults to a number, but may be set to a width => quality graph.
+  def test_deep_merge_replaces_mismatched_types
+    default = { 'quality' => 75, 'format_quality' => { 'webp' => 50 } }
+    override = { 'quality' => { 50 => 50, 100 => 100 }, 'format_quality' => 40 }
+
+    assert_equal({ 'quality' => { 50 => 50, 100 => 100 },
+                   'format_quality' => 40 },
+                 Utils.deep_merge(default, override))
+  end
+
+  # `picture:` with nothing under it parses as nil.
+  def test_deep_merge_ignores_empty_overrides
+    default = { 'picture' => { 'output' => 'generated' } }
+
+    assert_equal(default, Utils.deep_merge(default, { 'picture' => nil }))
+  end
+
+  def test_deep_merge_leaves_default_alone
+    default = { 'format_quality' => { 'webp' => 50, 'avif' => 30 } }
+    Utils.deep_merge(default, { 'format_quality' => { 'webp' => 60 } })
+
+    assert_equal({ 'format_quality' => { 'webp' => 50, 'avif' => 30 } }, default)
+  end
 end

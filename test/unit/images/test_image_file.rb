@@ -117,6 +117,18 @@ class TestImageFile < Minitest::Test
     end
   end
 
+  # Write options are built by adding keys to the preset's image_options hash,
+  # which may be DEFAULT_PRESET's own, shared by every tag in the build.
+  def test_preset_image_options_not_modified
+    options = { format => { 'optimize_coding' => true } }
+    PictureTag.stubs(preset: { 'strip_metadata' => true,
+                               'image_options' => options })
+
+    tested
+
+    assert_equal({ format => { 'optimize_coding' => true } }, options)
+  end
+
   def test_notification
     ImageFile.any_instance.unstub(:puts)
     assert_output { tested }

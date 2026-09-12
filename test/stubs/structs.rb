@@ -13,10 +13,8 @@ module Stubs
 
     # Rubocop doesn't want us to override to_s in a struct. Since it's for a
     # test stub, it's fine.
-    # rubocop:disable Lint/StructNewOverride
-    SrcsetStub =
-      Struct.new(:sizes, :to_s, :media, :mime_type, :media_attribute)
-    # rubocop:enable Lint/StructNewOverride
+    # rubocop:disable-next Lint/StructNewOverride
+    SrcsetStub = Struct.new(:sizes, :to_s, :media, :mime_type, :media_attribute)
 
     SourceImageStub =
       Struct.new(:base_name, :name, :missing, :digest, :ext, :width, :shortname,
