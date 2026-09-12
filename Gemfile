@@ -14,9 +14,7 @@ group :development do
   gem 'mocha', '~> 2.1'
   gem 'nokogiri', '~> 1.1'
   gem 'rake', '~> 13.0'
-  gem 'rubocop', '~> 1.81'
-  gem 'rubocop-minitest', '~> 0.40'
-  gem 'rubocop-performance', '~> 1.26'
-  gem 'rubocop-rake', '~> 0.7'
   gem 'simplecov', '~> 0.20.0'
 end
+
+# Rubocop and its plugins live in gemfiles/lint.gemfile.

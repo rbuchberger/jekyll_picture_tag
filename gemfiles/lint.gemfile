@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+# Linting gets its own bundle with a committed lockfile, so local rubocop and CI
+# rubocop can never disagree. The main bundle stays unlocked on purpose: the
+# test matrix should notice new jekyll and ruby-vips releases.
+gem 'rubocop', '~> 1.89'
+gem 'rubocop-minitest', '~> 0.40'
+gem 'rubocop-performance', '~> 1.26'
+gem 'rubocop-rake', '~> 0.7'

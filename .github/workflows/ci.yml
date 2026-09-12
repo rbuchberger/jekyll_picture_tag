@@ -43,6 +43,11 @@ jobs:
     name: rubocop
     runs-on: ubuntu-latest
 
+    # The lint bundle has a committed lockfile, so CI lints with exactly the
+    # versions local dev does.
+    env:
+      BUNDLE_GEMFILE: gemfiles/lint.gemfile
+
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
